@@ -76,8 +76,7 @@ END FUNCTION
 #+
 #+ @param l_email Email address to check
 #+ @return true if exists else false
-PUBLIC FUNCTION sql_checkEmail(l_email)
-	DEFINE l_email VARCHAR(60)
+PUBLIC FUNCTION sql_checkEmail(l_email VARCHAR(80)) RETURNS BOOLEAN
 	SELECT * FROM accounts WHERE email = l_email
 	IF STATUS = NOTFOUND THEN RETURN FALSE END IF
 	RETURN TRUE
@@ -89,9 +88,10 @@ END FUNCTION
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
-PRIVATE FUNCTION validate_login(l_login,l_pass)
-	DEFINE l_login LIKE accounts.email
-	DEFINE l_pass LIKE accounts.login_pass
+PRIVATE FUNCTION validate_login(
+	l_login LIKE accounts.email,
+	l_pass LIKE accounts.login_pass) RETURNS BOOLEAN
+
 	DEFINE l_acc RECORD LIKE accounts.*
 
 -- does account exist?
@@ -130,8 +130,7 @@ END FUNCTION
 #+ Forgotten password routine.
 #+
 #+ @param l_login - String - email address to send email to
-PRIVATE FUNCTION forgotten(l_login)
-	DEFINE l_login LIKE accounts.email
+PRIVATE FUNCTION forgotten( l_login LIKE accounts.email)
 	DEFINE l_acc RECORD LIKE accounts.*
 	DEFINE l_cmd, l_subj, l_body, l_b64 STRING
 	DEFINE l_ret SMALLINT
@@ -146,8 +145,8 @@ PRIVATE FUNCTION forgotten(l_login)
 		RETURN
 	END IF
 
-	IF fgl_winQuestion(%"Confirm",%"Are you sure you want to reset your password?\n\nA link will be emailed to you,\nyou will then be able to change and clicking the link.",
-			"No","Yes|No","question",0) = "No" THEN
+	IF gl_lib.gl_winQuestion(%"Confirm",%"Are you sure you want to reset your password?\n\nA link will be emailed to you,\nyou will then be able to change and clicking the link.",
+			"No","Yes|No","question") = "No" THEN
 		RETURN
 	END IF
 
@@ -175,7 +174,7 @@ PRIVATE FUNCTION forgotten(l_login)
 	ERROR "Sending Email, please wait ..."
 	CALL ui.interface.refresh()
 	RUN l_cmd RETURNING l_ret
-	CALL gl_logIt("Sendmail return:"||NVL(l_ret,"NULL"))
+	CALL gl_lib.gl_logIt("Sendmail return:"||NVL(l_ret,"NULL"))
 	IF l_ret = 0 THEN -- email send okay
 		UPDATE accounts 
 			SET (salt, pass_hash, forcepwchg, pass_expire) = 
@@ -188,8 +187,7 @@ PRIVATE FUNCTION forgotten(l_login)
 	
 END FUNCTION
 --------------------------------------------------------------------------------
-PRIVATE FUNCTION login_ver_title(l_appname,l_ver)
-	DEFINE l_appname,l_ver STRING
+PRIVATE FUNCTION login_ver_title(l_appname STRING, l_ver STRING)
 	DEFINE w ui.Window
 	DEFINE f ui.Form
 	DEFINE n om.DomNode
@@ -203,11 +201,9 @@ PRIVATE FUNCTION login_ver_title(l_appname,l_ver)
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
-PRIVATE FUNCTION passchg(l_login)
-	DEFINE l_login LIKE accounts.email
+PRIVATE FUNCTION passchg(l_login LIKE accounts.email) RETURNS BOOLEAN
 	DEFINE l_pass1, l_pass2 LIKE accounts.login_pass
-	DEFINE w ui.Window
-	DEFINE f ui.Form
+	DEFINE l_f ui.Form
 	DEFINE l_rules STRING
 	DEFINE l_acc RECORD LIKE accounts.*
 
@@ -219,9 +215,9 @@ PRIVATE FUNCTION passchg(l_login)
 								"At least 1 number\n",
 								"At least 1 symbol from the this list: ",c_sym
 
-	LET w = ui.Window.getCurrent()
-	LET f = w.getForm()
-	CALL f.setElementHidden("grp2",FALSE)
+
+	LET l_f = gl_lib.gl_getForm(NULL)
+	CALL l_f.setElementHidden("grp2",FALSE)
 	DISPLAY BY NAME l_rules, l_login
 	
 	WHILE TRUE
@@ -259,8 +255,7 @@ PRIVATE FUNCTION passchg(l_login)
 	RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
-PRIVATE FUNCTION pass_ok(l_pass)
-	DEFINE l_pass LIKE accounts.login_pass
+PRIVATE FUNCTION pass_ok( l_pass LIKE accounts.login_pass ) RETURNS BOOLEAN
 	DEFINE l_gotUp, l_gotLow, l_gotNum, l_gotSym BOOLEAN
 	DEFINE x,y SMALLINT
 
@@ -278,14 +273,14 @@ PRIVATE FUNCTION pass_ok(l_pass)
 	LET l_gotLow = FALSE
 	LET l_gotSym = FALSE
 
-	DISPLAY "Pass:",l_pass
+	--DISPLAY "Pass:",l_pass
 	FOR x = 1 TO LENGTH(l_pass)
 		IF l_pass[x] >= "0" AND l_pass[x] <= "9" THEN LET l_gotNum = TRUE CONTINUE FOR END IF
 		IF l_pass[x] >= "A" AND l_pass[x] <= "Z" THEN LET l_gotUp = TRUE CONTINUE FOR END IF
 		IF l_pass[x] >= "a" AND l_pass[x] <= "z" THEN LET l_gotLow = TRUE CONTINUE FOR END IF
 		LET y = 1
 		WHILE y <= c_sym.getLength()
-			DISPLAY "Symbol check:",l_pass[x]," sym:",c_sym.getCharAt(y)
+			--DISPLAY "Symbol check:",l_pass[x]," sym:",c_sym.getCharAt(y)
 			IF l_pass[x] = c_sym.getCharAt(y) THEN LET l_gotSym = TRUE CONTINUE FOR END IF
 			LET y = y + 1
 		END WHILE
