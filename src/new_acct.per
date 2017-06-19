@@ -71,9 +71,9 @@ COMBOBOX f009 = accounts.acct_type,INITIALIZER=pop_combo,DEFAULT=1,NOT NULL, TAB
 CHECKBOX a = accounts.active,VALUECHECKED=1,VALUEUNCHECKED=0,DEFAULT=1,NOT NULL;
 CHECKBOX b = accounts.forcepwchg, VALUECHECKED="Y", VALUEUNCHECKED="N",NOT NULL;
 
---BUTTONEDIT p001 = accounts.login_pass, INVISIBLE, VERIFY, NOT NULL, TABINDEX=8, ACTION=generate, IMAGE="fa-cog";
-BUTTON generate:generate, TEXT="Re-generate", IMAGE="fa-cog";
-EDIT p001 = accounts.login_pass, NOENTRY, FONTPITCH=FIXED, NOT NULL, TABINDEX=8, STYLE="em12";
+BUTTONEDIT p001 = accounts.login_pass, INVISIBLE, VERIFY, NOT NULL, TABINDEX=8, ACTION=generate, IMAGE="fa-cog";
+BUTTON generate:generate, TEXT="Re-generate", IMAGE="fa-cog", HIDDEN;
+--EDIT p001 = accounts.login_pass, NOENTRY, FONTPITCH=FIXED, NOT NULL, TABINDEX=8, STYLE="em12";
 
 DATEEDIT p002 = accounts.pass_expire, NOT NULL, TABINDEX=9;
 

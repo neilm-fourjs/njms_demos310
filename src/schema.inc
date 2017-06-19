@@ -1,3 +1,4 @@
-SCHEMA njm_demo
 
-CONSTANT DEF_DBNAME="njm_demo"
+# check gl_db.inc, value here should be the same!
+
+SCHEMA njm_demo

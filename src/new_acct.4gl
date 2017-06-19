@@ -12,7 +12,7 @@ FUNCTION new_acct() RETURNS STRING
 	LET l_acc.acct_id = 0
 	LET l_acc.acct_type = 1
 	LET l_acc.active = TRUE
-	LET l_acc.forcepwchg = "Y"
+	LET l_acc.forcepwchg = "N"
 	LET l_acc.pass_expire = TODAY + 6 UNITS MONTH
 
 	OPEN WINDOW new_acct WITH FORM "new_acct"
@@ -23,7 +23,7 @@ FUNCTION new_acct() RETURNS STRING
 				CALL gl_lib.gl_winMessage(%"Error",%"This Email is already registered.","exclamation")
 				NEXT FIELD email
 			ELSE
-				LET l_acc.login_pass = lib_secure.glsec_genPassword()
+				--LET l_acc.login_pass = lib_secure.glsec_genPassword()
 			END IF
 		AFTER FIELD pass_expire
 			IF l_acc.pass_expire < (TODAY + 1 UNITS MONTH) THEN
@@ -37,7 +37,7 @@ FUNCTION new_acct() RETURNS STRING
 			CALL DIALOG.setFieldActive("accounts.acct_type",FALSE)
 		ON ACTION generate
 			LET l_acc.login_pass = lib_secure.glsec_genPassword()
-			--CALL gl_lib.gl_winMessage(%"Password",SFMT(%"Your Generated Password is:\n%1\nDon't forget it!",l_acc.login_pass),"information")
+			CALL gl_lib.gl_winMessage(%"Password",SFMT(%"Your Generated Password is:\n%1\nDon't forget it!",l_acc.login_pass),"information")
 	END INPUT
 
 	CLOSE WINDOW new_acct

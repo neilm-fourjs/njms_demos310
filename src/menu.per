@@ -1,6 +1,62 @@
-LAYOUT (TEXT="Menu Demo", STYLE="center")
+
+&include "schema.inc"
+
+LAYOUT ( TEXT="Menu Screen", STYLE="main2" )
+HBOX -- (SPLITTER)
 GRID
 {
-Menu goes here
+["      "]
 }
 END -- GRID
+GRID (STYLE="menu")
+{
+ [sp1:logo                     :sp2]
+ [titl                             ]
+<T menu                             >
+ [desc                             ]
+ [desc                             ]
+ [desc                             ]
+ [desc                             ]
+ [desc                             ]
+ [desc                             ]
+ [desc                             ]
+ [desc                             ]
+<                                   >
+ [: :lb:f001                    : :]
+ [: :accept :back  :close :about: :]
+}
+END -- GRID
+GRID
+{
+["      "]
+}
+END -- GRID
+END -- HBOX
+TABLES
+sys_menus
+
+ATTRIBUTES
+IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
+IMAGE logo = FORMONLY.logo, SIZEPOLICY=INITIAL, STYLE="noborder";
+IMAGE sp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
+LABEL titl = FORMONLY.l_titl,STYLE="bold em14",JUSTIFY=CENTER;
+
+TABLE menu : menu, STYLE="menu oneclick";
+PHANTOM sys_menus.menu_key;
+PHANTOM sys_menus.m_id;
+PHANTOM sys_menus.m_pid;
+PHANTOM sys_menus.m_type;
+desc = sys_menus.m_text,STYLE="menuopts",IMAGECOLUMN=m_type;
+PHANTOM sys_menus.m_item;
+PHANTOM sys_menus.m_passw;
+
+LABEL lb : lb, TEXT=%"User:",STYLE="small";
+LABEL f001 = FORMONLY.m_user, SIZEPOLICY=DYNAMIC,STYLE="small";
+
+BUTTON accept : accept, TEXT=%"Select", IMAGE="fa-arrow-circle-right";
+BUTTON back : back, TEXT=%"Back", IMAGE="fa-arrow-circle-left";
+BUTTON close : close, TEXT="Quit", IMAGE="fa-power-off";
+BUTTON about : about, TEXT="About", IMAGE="help";
+
+INSTRUCTIONS
+SCREEN RECORD menu ( menu_key THRU m_passw )
