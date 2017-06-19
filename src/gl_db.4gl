@@ -4,6 +4,7 @@
 
 IMPORT os
 
+&include "schema.inc"
 &include "genero_lib.inc"
 &include "gl_db.inc"
 

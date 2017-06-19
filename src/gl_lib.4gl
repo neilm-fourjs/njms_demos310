@@ -23,11 +23,8 @@ IMPORT util
 
 &include "genero_lib.inc"
 
-CONSTANT C_SPLASH_DURATION = 2
-
 DEFINE gl_dbgLev SMALLINT  -- debug level: 0=None, 1=General, 2=All
 DEFINE gl_version STRING
-DEFINE gl_splash STRING
 DEFINE gl_progIcon STRING
 DEFINE gl_progName STRING -- base.application.getProgramName
 DEFINE gl_progDesc STRING
@@ -40,7 +37,7 @@ DEFINE gl_cli_osver STRING
 DEFINE gl_cli_un STRING
 DEFINE gl_cli_res STRING
 DEFINE gl_cli_dir STRING
-DEFINE gl_fe_typ, gl_fe_ver STRING
+PUBLIC DEFINE gl_fe_typ, gl_fe_ver STRING
 
 DEFINE gl_userName STRING
 DEFINE gl_app_build STRING -- Applcation Build 
@@ -48,6 +45,12 @@ DEFINE gl_app_name STRING -- Applcation Name
 
 DEFINE m_key STRING
 DEFINE m_user_agent STRING
+
+PUBLIC DEFINE gl_splash STRING
+PUBLIC DEFINE m_logDir STRING
+PUBLIC DEFINE m_logName STRING
+PUBLIC DEFINE m_logDate BOOLEAN
+
 --------------------------------------------------------------------------------
 #+ Initialize Function
 #+
@@ -140,11 +143,14 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 			GL_DBGMSG(0, "gl_init: Styles '"||m_key||"' FAILED to load!")
 		END TRY
 	END TRY
+
+{
 	LET l_key = fgl_getEnv("FJS_STYLE2")
 	IF l_key.getLength() > 1 THEN
 		CALL gl_mergeST(l_key) -- Merge this style file in with the default one.
 	END IF
 	CALL gl_addStyles() -- Add default colours and font sizes.
+}
 
 	LET l_key = fgl_getEnv("FJS_ACTIONS")
 	IF l_key.getLength() < 1 THEN LET l_key = m_key END IF
@@ -388,29 +394,30 @@ END FUNCTION --}}}
 #+
 #+ @param l_nam The name of window, if null current window node is returned.
 #+ @return ui.Window.
-FUNCTION gl_getWinNode( l_nam STRING ) --{{{
+FUNCTION gl_getWinNode( l_nam STRING ) RETURNS om.DomNode  --{{{
 	DEFINE l_win ui.Window
-
+	DEFINE l_ret om.DomNode
 	IF l_nam IS NULL THEN
 		LET l_win = ui.Window.getCurrent()
 		LET l_nam = "SCREEN"
 	ELSE
 		LET l_win = ui.Window.forName(l_nam)
 	END IF
-
 	IF l_win IS NULL THEN
 --		CALL gl_errMsg(__FILE__,__LINE__,"gl_getWinNode: Failed to get Window '"||nam||"'. ")
 		CALL gl_errMsg(__FILE__,__LINE__,SFMT(%"lib.getwinnode.error",l_nam) )
+		RETURN l_ret -- l_ret is null here
 	ELSE
-		RETURN l_win.getNode()
+		LET l_ret = l_win.getNode()
 	END IF
+	RETURN l_ret
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Return the form object for the named form.
 #+
 #+ @param l_nam name of Form, if null current Form object is returned.
 #+ @return ui.Form.
-FUNCTION gl_getForm( l_nam STRING ) --{{{
+FUNCTION gl_getForm( l_nam STRING ) RETURNS ui.Form --{{{
 	DEFINE l_win ui.Window
 	DEFINE l_frm ui.Form
 
@@ -428,7 +435,7 @@ END FUNCTION --}}}
 #+
 #+ @param l_nam name of Form, if null current Form node is returned.
 #+ @return Node.
-FUNCTION gl_getFormN( l_nam STRING ) --{{{
+FUNCTION gl_getFormN( l_nam STRING ) RETURNS om.DomNode --{{{
 	DEFINE l_frm ui.Form
 	DEFINE nl om.nodeList
 	DEFINE n om.domNode
@@ -453,52 +460,25 @@ FUNCTION gl_getFormN( l_nam STRING ) --{{{
 
 	RETURN n
 END FUNCTION --}}}
-
---------------------------------------------------------------------------------
-#+ Finds a column within a table in the xml schema.
-#+
-#+ @param tabname Table name
-#+ @param colname Colum name
-#+ @param xml_sch Your xml_schema
-#+ @return Node.
-FUNCTION gl_findXmlCol(tabname,colname, xml_sch) --{{{
-	DEFINE tabname STRING
-	DEFINE colname STRING
-	DEFINE xml_sch om.DomNode
-	DEFINE xml_cols om.NodeList
-	DEFINE xml_col om.DomNode
-
-	IF tabname IS NOT NULL THEN
-		LET xml_cols = xml_sch.selectbypath("//table[@name=\""||tabname CLIPPED||"\"]")
-		IF xml_cols IS NULL OR xml_cols.getlength() < 1 THEN
-			GL_DBGMSG(1, "glfindXmlCol: XML Error!//table[@name=\""||tabname CLIPPED||"\"]")
-			RETURN NULL
-		END IF
-		LET xml_col = xml_cols.item(1)
-	ELSE
-		LET xml_col = xml_sch
-	END IF
-
-	LET xml_cols = xml_col.selectbypath("//column[@name=\""||colname CLIPPED||"\"]")
-	IF xml_cols IS NULL OR xml_cols.getlength() < 1 THEN
-		RETURN NULL
-	END IF
-	LET xml_col = xml_cols.item(1)
-	RETURN xml_col
-
-END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Splash screen
 #+
+#+ @param l_dur > 0 for sleep then close, 0=just open window, -1=close window
 #+ @return Nothing.
-FUNCTION gl_splash() --{{{
+FUNCTION gl_splash(l_dur SMALLINT) --{{{
 	DEFINE frm,g,n om.DomNode
-	OPEN WINDOW splash AT 1,1 WITH 1 ROWS,1 COLUMNS ATTRIBUTE(STYLE="splash")
+
+	IF l_dur = -1 THEN
+		CLOSE WINDOW splash
+		RETURN
+	END IF
+
+	OPEN WINDOW splash AT 1,1 WITH 1 ROWS,1 COLUMNS ATTRIBUTE(STYLE="default noborder dialog2 bg_white")
 	LET frm = gl_genForm("splash")
 	LET g = frm.createChild("Grid")
 	LET n = g.createChild("Image")
 	CALL n.setAttribute("name","logo" )
-	CALL n.setAttribute("style","about" )
+	CALL n.setAttribute("style","noborder" )
 	CALL n.setAttribute("width","36" )
 	CALL n.setAttribute("height","8" )
 	CALL n.setAttribute("image",gl_splash )
@@ -511,8 +491,12 @@ FUNCTION gl_splash() --{{{
 	CALL n.setAttribute("stretch","both" )
 	CALL n.setAttribute("autoScale","1" )
 	CALL ui.interface.refresh()
-	SLEEP C_SPLASH_DURATION
-	CLOSE WINDOW splash
+
+	IF l_dur > 0 THEN
+		SLEEP l_dur
+		CLOSE WINDOW splash
+	END IF
+
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Set gl_userName
@@ -534,6 +518,16 @@ FUNCTION gl_userName() --{{{
 	IF l_un IS NULL THEN LET l_un = "unknown" END IF
 	CALL FGL_SETENV("GL_USERNAME",l_un)
 	LET gl_userName = l_un
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Unhide a UI element
+#+
+#+ @param l_element An element name to unhide.
+#+ @return Nothing.
+FUNCTION gl_showElement( l_element STRING )
+	DEFINE l_f ui.Form
+	LET l_f = gl_getForm(NULL)
+	CALL l_f.setElementHidden( l_element, FALSE )
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Dynamic About Window
@@ -723,7 +717,7 @@ END FUNCTION --}}}
 #+
 #+ @param ver = String : a cvs revisions string ie : $Revision: 344 $
 #+ @return String.
-FUNCTION gl_verFmt( l_ver STRING ) --{{{
+FUNCTION gl_verFmt( l_ver STRING ) RETURNS STRING --{{{
 	DEFINE x SMALLINT
 	LET x = l_ver.getIndexOf(":",1)
 	RETURN l_ver.subString(X+2, l_ver.getLength() - 1 )
@@ -1009,7 +1003,7 @@ FUNCTION gl_winQuestion(l_title STRING,
 												l_message STRING, 
 												l_ans STRING, 
 												l_items STRING, 
-												l_icon STRING) --{{{
+												l_icon STRING) RETURNS STRING --{{{
 	DEFINE l_result STRING
 	DEFINE l_toks base.STRINGTOKENIZER
 	DEFINE l_dum BOOLEAN
@@ -1426,4 +1420,122 @@ FUNCTION gl_getLinuxVer() RETURNS STRING --{{{
 	LET l_ver = c.readLine()
 	CALL c.close()
 	RETURN l_ver
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Write a message to an audit file.
+#+
+#+ @param l_mess Message to write to audit file.
+FUNCTION gl_logIt( l_mess STRING ) --{{{
+	DEFINE l_pid,l_fil STRING
+	--DEFINE x,y SMALLINT
+	DEFINE c base.Channel
+	LET l_pid = fgl_getPID()
+	--DISPLAY base.application.getProgramName()||": "||NVL(l_mess,"NULL")
+	LET c = base.Channel.create()
+	IF m_logDir IS NULL THEN LET m_logDir = gl_getLogDir() END IF
+	IF m_logName IS NULL THEN LET m_logName = gl_getLogName() END IF
+	LET l_fil = m_logDir||m_logName||".log"
+	CALL c.openFile(l_fil,"a")
+
+	LET l_fil = gl_getCallingModuleName()
+	IF l_fil MATCHES "cloud_gl_lib.gl_dbgMsg:*" THEN
+		LET l_mess = CURRENT||"|"||NVL(l_mess,"NULL")
+	ELSE
+		LET l_mess = CURRENT||"|"||NVL(l_fil,"NULL")||"|"||l_mess
+	END IF
+	
+	DISPLAY "Log:",l_mess
+	CALL c.writeLine(l_mess)
+
+	CALL c.close()
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+-- double use, 1=set m_logdir for THIS function, 2=set&return logdir to call programming
+-- also check for and create the log folder if it doesn't exist.
+--	normally not required as it's created during package install.
+FUNCTION gl_getLogDir() RETURNS STRING
+	LET m_logDir = fgl_getEnv("LOGDIR")
+	LET m_logDate = TRUE
+	IF fgl_getEnv("LOGFILEDATE") = "false" THEN LET m_logDate = FALSE END IF
+	IF m_logDir.getLength() < 1 THEN
+		LET m_logDir = "../logs/" -- default logdir
+	END IF
+
+	IF NOT os.path.exists( m_logDir ) THEN
+		IF NOT os.path.mkdir( m_logDir ) THEN
+			CALL gl_winMessage("Error","Failed to make logdir '"||m_logDir||"'.\nProgram aborting","exclamation")
+			EXIT PROGRAM 200
+		ELSE
+			IF NOT os.path.chrwx( m_logDir,  ( (7 *64) + (7 * 8) + 5 )  ) THEN
+				CALL gl_winMessage("Error","Failed set permissions on logdir '"||m_logDir||"'.","exclamation")
+				EXIT PROGRAM 201
+			END IF
+		END IF
+	END IF
+	IF NOT os.path.isDirectory( m_logDir ) THEN
+		CALL gl_winMessage("Error","Logdir '"||m_logDir||"' not a directory.\nProgram aborting","exclamation")
+		EXIT PROGRAM 202
+	END IF
+
+# Make sure the logdir ends with a slash.
+	IF m_logDir.getCharAt( m_logDir.getLength() ) != os.path.separator() THEN
+		LET m_logDir = m_logDir.append( os.path.separator() )
+	END IF
+	RETURN m_logDir
+END FUNCTION
+--------------------------------------------------------------------------------
+-- get / set m_logName 
+-- NOTE: doesn't include the extension so you can use it for .log and .err
+FUNCTION gl_getLogName() RETURNS STRING
+	DEFINE l_user STRING
+	IF m_logName IS NULL THEN
+		LET l_user = fgl_getEnv("LOGNAME") -- get OS user
+		IF l_user.getLength() < 2 THEN
+			LET l_user = fgl_getEnv("USERNAME") -- get OS user
+		END IF
+		IF l_user.getLength() < 2 THEN
+			LET l_user = "unknown"
+		END IF
+		--LET m_logName = (TODAY USING "YYYYMMDD")||"-"||base.application.getProgramName()
+		IF m_logDate THEN
+			LET m_logName = base.application.getProgramName()||"-"||(TODAY USING "YYYYMMDD")||"-"||l_user
+		ELSE
+			LET m_logName = base.application.getProgramName()
+		END IF
+	END IF
+	RETURN m_logName
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ Gets sourcefile.module:line from a stacktrace.
+#+
+FUNCTION gl_getCallingModuleName() RETURNS STRING --{{{
+	DEFINE l_fil,l_mod,l_lin STRING
+	DEFINE x,y SMALLINT
+	LET l_fil = base.Application.getStackTrace()
+	IF l_fil IS NULL THEN
+		DISPLAY "Failed to get getStackTrace!!"
+		RETURN "getStackTrace-failed"
+	END IF
+	--DISPLAY "getCallingModuleName ST:",l_fil
+	LET x = l_fil.getIndexOf("#",2) -- skip passed this func
+	LET x = l_fil.getIndexOf("#",x+1) -- skip passed func that called this func
+	LET x = l_fil.getIndexOf(" ",x) + 1
+	LET y = l_fil.getIndexOf("(",x) - 1
+	LET l_mod = l_fil.subString(x,y)
+
+	LET x = l_fil.getIndexOf(" ",y) + 4
+	LET y = l_fil.getIndexOf("#",x+1) - 2
+	IF y < 1 THEN LET y = (l_fil.getLength() - 1) END IF
+	LET l_fil = l_fil.subString(x,y)
+
+	-- strip the .4gl from the fil name
+	LET x = l_fil.getIndexOf(".",1)
+	IF x > 0 THEN
+		LET y = l_fil.getIndexOf(":",x)
+		LET l_lin = l_fil.subString(y,l_fil.getLength())
+		LET l_fil = l_fil.subString(1,x-1)
+	END IF
+	--DISPLAY "Fil:",l_fil," Mod:",l_mod," Line:",l_lin
+	LET l_fil = NVL(l_fil,"FILE?")||"."||NVL(l_mod,"MOD?")||":"||NVL(l_lin,"LINE?")
+	RETURN l_fil
 END FUNCTION --}}}

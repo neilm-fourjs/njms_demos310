@@ -1,0 +1,66 @@
+
+#+ Login Form - used by lib_login
+
+LAYOUT (TEXT=%"Login",WINDOWSTYLE="default center dialog2", IMAGE="fa-user-secret")
+
+GRID
+{
+<G logo_grid                                      >
+[sp1:logo                                    :sp2]
+<                                                 >
+<G grp1                                           >
+[: :titl                                      : :]
+[""]
+["  "][l001                    ]
+["  "][f001                             ]
+["  "][l002                    ]
+["  "][f002                    ]
+[""]
+[accept:forgotten     :newacc      ]
+<                                                 >
+[""]
+<G grp2                                           >
+["  "][l003                    ]
+["  "][f003                    ]
+["  "][l004                    ]
+["  "][f004                    ]
+[l_rules                                         ]
+[                                                ]
+[                                                ]
+[                                                ]
+[                                                ]
+[                                                ]
+[                                                ]
+<                                                 >
+}
+END -- GRID
+
+ATTRIBUTES
+GROUP logo_grid : logo_grid, STYLE="noborder", HIDDEN;
+IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
+IMAGE logo = FORMONLY.m_logo_image, SIZEPOLICY=INITIAL, STYLE="noborder";
+IMAGE sp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
+
+GROUP grp1 : grp1, GRIDCHILDRENINPARENT,STYLE="login_g";
+
+LABEL titl : titl,TEXT=%"Welcome",JUSTIFY=CENTER,STYLE="bold em14";
+
+LABEL l001 : lemail,TEXT=%"Email:",COMMENT=%"Your Email address", STYLE="bold";
+LABEL l002 : lpassw,TEXT=%"Password:", STYLE="bold";
+
+f001 = FORMONLY.l_login, NOT NULL,COMMENT=%"Your Email address",
+	PLACEHOLDER=%"Email Address", REQUIRED;
+
+f002 = FORMONLY.l_pass, INVISIBLE, REQUIRED, NOT NULL;
+
+GROUP grp2 : grp2, GRIDCHILDRENINPARENT,TEXT=%"Password Change:",HIDDEN;
+
+LABEL l003 : lpassw1,TEXT=%"New Password:", STYLE="bold";
+LABEL l004 : lpassw2,TEXT=%"Confirm Password:", STYLE="bold";
+f003 = FORMONLY.l_pass1, INVISIBLE, REQUIRED, NOT NULL;
+f004 = FORMONLY.l_pass2, INVISIBLE, REQUIRED, NOT NULL;
+TEXTEDIT l_rules = FORMONLY.l_rules, SCROLLBARS=NONE,STRETCH=BOTH,STYLE="small";
+
+BUTTON accept : accept, TEXT=%"Login",IMAGE="fa-user";
+BUTTON newacc : acct_new, TEXT=%"New Account", IMAGE="fa-user-plus";
+BUTTON forgotten : forgotten, TEXT=%"Reset Password?", IMAGE="fa-question-circle";

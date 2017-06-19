@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="-16760393" gstVersion="30a03" version="3.2">
+<Project defaultApplication="1554019048" gstVersion="30a03" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -55,17 +55,44 @@
   </Settings>
   <LanguageList version="1.0"/>
   <PlatformList version="1.0"/>
-  <Group label="NJMs Demos 310" language="Genero">
-    <Library binaryName="Databases" id="1986" label="Databases"/>
+  <Group environment="value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="NJMs Demos 310" language="Genero">
+    <Library binaryName="Databases" id="1986" label="Databases">
+      <File filePath="etc/njm_demo.4db"/>
+      <File filePath="src/schema.inc"/>
+    </Library>
+    <Library binaryName="etc" id="-400184264" label="etc">
+      <File filePath="etc/default.4ad"/>
+      <File filePath="etc/default.4st"/>
+    </Library>
     <Library binaryName="genero_lib" dependencies="1986" id="14000" label="genero_lib">
       <File filePath="src/genero_lib.inc"/>
       <File filePath="src/gl_db.4gl"/>
       <File filePath="src/gl_db.inc"/>
-      <File filePath="src/gl_lib310.4gl"/>
+      <File filePath="src/gl_lib.4gl"/>
       <File filePath="src/gl_lib_aui.4gl"/>
     </Library>
+    <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">
+      <File filePath="src/lib_login.4gl"/>
+      <File filePath="src/lib_secure.4gl"/>
+      <File filePath="src/login.per"/>
+    </Library>
+    <Application binaryName="menu" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
+      <File filePath="src/menu.4gl"/>
+      <File filePath="src/menu.per"/>
+      <File filePath="src/new_acct.4gl"/>
+      <File filePath="src/new_acct.per"/>
+    </Application>
+    <Application binaryName="mk_db" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">
+      <File filePath="src/mk_db.4gl"/>
+      <File filePath="src/mk_db_sys_data.4gl"/>
+      <File filePath="src/mk_db_sys_ifx.4gl"/>
+    </Application>
+    <Library binaryName="mk_db_lib" dependencies="-400184264" id="726830537" label="mk_db_lib">
+      <File filePath="src/mk_db_app_data.4gl"/>
+      <File filePath="src/mk_db_app_ifx.4gl"/>
+    </Library>
     <Application binaryName="Test" compilerOptions="-I &quot;$(GGCDIR)/libForGST&quot;" dependencies="18736" id="36249064" label="Test"/>
-    <Application binaryName="test_app" dependencies="14000" id="-16760393" label="test_app">
+    <Application binaryName="test_app" dependencies="14000" id="-110946196" label="test_app">
       <File filePath="test_app/test_app.4gl"/>
       <File filePath="test_app/test_form.per"/>
     </Application>

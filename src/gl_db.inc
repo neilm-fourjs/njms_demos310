@@ -1,7 +1,8 @@
 
 # Default database settings
 
-CONSTANT DEF_DBNAME="njm_demo"
+# See schema.inc
+#CONSTANT DEF_DBNAME="njm_demo"
 
 # Informix
 #CONSTANT DEF_DBDRIVER="dbmifx9x"
