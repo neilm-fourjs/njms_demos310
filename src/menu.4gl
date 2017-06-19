@@ -12,7 +12,16 @@ CONSTANT C_SPLASH="njm_demo_logo_256"
 
 DEFINE m_user STRING
 DEFINE m_user_id INT
-DEFINE m_menu DYNAMIC ARRAY OF RECORD LIKE sys_menus.*
+DEFINE m_menu DYNAMIC ARRAY OF RECORD 
+    menu_key LIKE sys_menus.menu_key,
+		m_id LIKE sys_menus.m_id,
+		m_pid LIKE sys_menus.m_pid,
+		m_type LIKE sys_menus.m_type,
+		m_text LIKE sys_menus.m_text,
+		m_item LIKE sys_menus.m_item,
+		m_passw LIKE sys_menus.m_passw,
+		m_img STRING
+	END RECORD
 DEFINE m_menus DYNAMIC ARRAY OF VARCHAR(6)
 DEFINE m_curMenu SMALLINT
 DEFINE m_args STRING
@@ -184,13 +193,21 @@ FUNCTION populate_menu(l_mname LIKE sys_menus.m_id ) RETURNS BOOLEAN
 			END IF
 			LET l_prev_key = m_menu[ m_menu.getLength() ].menu_key 
 		END IF
+		CASE m_menu[ m_menu.getLength() ].m_type
+			WHEN "C" LET m_menu[ m_menu.getLength() ].m_img = "quit"
+			WHEN "M" LET m_menu[ m_menu.getLength() ].m_img = "fa-angle-double-right"
+			WHEN "P" LET m_menu[ m_menu.getLength() ].m_img = "fa-gear"
+			WHEN "F" LET m_menu[ m_menu.getLength() ].m_img = "fa-gear"
+		END CASE
 	END FOREACH
 	LET m_menu[m_menu.getLength()].m_type = "C"
 	LET m_menu[m_menu.getLength()].m_text = "Back"
 	LET m_menu[m_menu.getLength()].m_item = "back"
+	LET m_menu[m_menu.getLength()].m_img = "fa-angle-double-left"
 	IF m_menu[m_menu.getLength() - 1].m_pid IS NULL THEN
 		LET m_menu[m_menu.getLength()].m_text = "Quit"
 		LET m_menu[m_menu.getLength()].m_item = "quit"
+		LET m_menu[m_menu.getLength()].m_img = "quit"
 	END IF
 	RETURN TRUE
 

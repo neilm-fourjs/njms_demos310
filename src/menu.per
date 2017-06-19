@@ -46,9 +46,10 @@ PHANTOM sys_menus.menu_key;
 PHANTOM sys_menus.m_id;
 PHANTOM sys_menus.m_pid;
 PHANTOM sys_menus.m_type;
-desc = sys_menus.m_text,STYLE="menuopts",IMAGECOLUMN=m_type;
+desc = sys_menus.m_text,STYLE="menuopts",IMAGECOLUMN=m_img;
 PHANTOM sys_menus.m_item;
 PHANTOM sys_menus.m_passw;
+PHANTOM FORMONLY.m_img;
 
 LABEL lb : lb, TEXT=%"User:",STYLE="small";
 LABEL f001 = FORMONLY.m_user, SIZEPOLICY=DYNAMIC,STYLE="small";
@@ -59,4 +60,4 @@ BUTTON close : close, TEXT="Quit", IMAGE="fa-power-off";
 BUTTON about : about, TEXT="About", IMAGE="help";
 
 INSTRUCTIONS
-SCREEN RECORD menu ( menu_key THRU m_passw )
+SCREEN RECORD menu ( menu_key THRU m_img )
