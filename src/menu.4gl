@@ -35,12 +35,6 @@ MAIN
 
 END MAIN
 --------------------------------------------------------------------------------
--- 
-FUNCTION exit_program()
-	DISPLAY "Exit program reached"
-	EXIT PROGRAM
-END FUNCTION
---------------------------------------------------------------------------------
 -- Connect to the database to do the login process.
 FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 
@@ -72,8 +66,7 @@ FUNCTION do_menu()
 	DEFINE l_prog, l_args STRING
 
 	IF NOT populate_menu(m_menus[m_curMenu]) THEN -- should not happen!
-		CALL gl_logit("'main' menu not found!")
-		CALL exit_Program()
+		CALL gl_lib.gl_exitProgram(0,"'main' menu not found!")
 	END IF
 
 	IF m_user IS NOT NULL THEN CALL gl_titleWin(m_user) END IF

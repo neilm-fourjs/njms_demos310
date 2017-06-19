@@ -354,7 +354,7 @@ FUNCTION gl_titleWin( l_titl STRING ) --{{{
 		RETURN
 	END IF
 
-	LET n = gl_getFormN( NULL )
+	LET n = gl_getFormNode( NULL )
 	IF l_titl IS NULL OR l_titl = " " THEN
 		IF n IS NOT NULL THEN
 			LET l_titl = n.getAttribute("text")
@@ -390,29 +390,6 @@ FUNCTION gl_titleWin( l_titl STRING ) --{{{
 
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
-#+ Return the node for a named window.
-#+
-#+ @param l_nam The name of window, if null current window node is returned.
-#+ @return ui.Window.
-FUNCTION gl_getWinNode( l_nam STRING ) RETURNS om.DomNode  --{{{
-	DEFINE l_win ui.Window
-	DEFINE l_ret om.DomNode
-	IF l_nam IS NULL THEN
-		LET l_win = ui.Window.getCurrent()
-		LET l_nam = "SCREEN"
-	ELSE
-		LET l_win = ui.Window.forName(l_nam)
-	END IF
-	IF l_win IS NULL THEN
---		CALL gl_errMsg(__FILE__,__LINE__,"gl_getWinNode: Failed to get Window '"||nam||"'. ")
-		CALL gl_errMsg(__FILE__,__LINE__,SFMT(%"lib.getwinnode.error",l_nam) )
-		RETURN l_ret -- l_ret is null here
-	ELSE
-		LET l_ret = l_win.getNode()
-	END IF
-	RETURN l_ret
-END FUNCTION --}}}
---------------------------------------------------------------------------------
 #+ Return the form object for the named form.
 #+
 #+ @param l_nam name of Form, if null current Form object is returned.
@@ -429,74 +406,6 @@ FUNCTION gl_getForm( l_nam STRING ) RETURNS ui.Form --{{{
 	END IF
 
 	RETURN l_frm
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Return the form NODE for the named form.
-#+
-#+ @param l_nam name of Form, if null current Form node is returned.
-#+ @return Node.
-FUNCTION gl_getFormN( l_nam STRING ) RETURNS om.DomNode --{{{
-	DEFINE l_frm ui.Form
-	DEFINE nl om.nodeList
-	DEFINE n om.domNode
-
-	LET l_frm = gl_getForm( NULL )
-	IF l_nam IS NULL THEN
-		IF l_frm IS NULL THEN
---			CALL gl_errMsg(__FILE__,__LINE__,"gl_getFormN: Couldn't get Form for Current Window!")
-			RETURN NULL
-		END IF
-		LET n = l_frm.getNode()
-	ELSE
-		LET n = ui.Interface.getRootNode()
-		LET nl = n.selectByPath("//Form[@name='"||l_nam.trim()||"']")
-		IF nl.getLength() < 1 THEN
-			CALL gl_errMsg(__FILE__,__LINE__,"gl_getFormN: Form not found '"||l_nam.trim()||"'!")
-			RETURN NULL
-		ELSE
-			LET n = nl.item(1)
-		END IF
-	END IF
-
-	RETURN n
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Splash screen
-#+
-#+ @param l_dur > 0 for sleep then close, 0=just open window, -1=close window
-#+ @return Nothing.
-FUNCTION gl_splash(l_dur SMALLINT) --{{{
-	DEFINE frm,g,n om.DomNode
-
-	IF l_dur = -1 THEN
-		CLOSE WINDOW splash
-		RETURN
-	END IF
-
-	OPEN WINDOW splash AT 1,1 WITH 1 ROWS,1 COLUMNS ATTRIBUTE(STYLE="default noborder dialog2 bg_white")
-	LET frm = gl_genForm("splash")
-	LET g = frm.createChild("Grid")
-	LET n = g.createChild("Image")
-	CALL n.setAttribute("name","logo" )
-	CALL n.setAttribute("style","noborder" )
-	CALL n.setAttribute("width","36" )
-	CALL n.setAttribute("height","8" )
-	CALL n.setAttribute("image",gl_splash )
-	CALL n.setAttribute("posY","0" )
-	CALL n.setAttribute("posX","0" )
-	CALL n.setAttribute("gridWidth","40" )
-	CALL n.setAttribute("gridHeight","8")
-	CALL n.setAttribute("height","200px" )
-	CALL n.setAttribute("width", "570px" )
-	CALL n.setAttribute("stretch","both" )
-	CALL n.setAttribute("autoScale","1" )
-	CALL ui.interface.refresh()
-
-	IF l_dur > 0 THEN
-		SLEEP l_dur
-		CLOSE WINDOW splash
-	END IF
-
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Set gl_userName
@@ -530,189 +439,6 @@ FUNCTION gl_showElement( l_element STRING )
 	CALL l_f.setElementHidden( l_element, FALSE )
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
-#+ Dynamic About Window
-#+
-#+ @param l_ver a version string
-#+ @return Nothing.
-FUNCTION gl_about(l_ver STRING) --{{{
-	DEFINE f,n,g,w om.DomNode
-	DEFINE nl om.nodeList
-	DEFINE gver, servername, info, txt STRING
-	DEFINE y SMALLINT
-
-	IF os.Path.pathSeparator() = ";" THEN -- Windows
-		LET servername = fgl_getEnv("COMPUTERNAME")
-	ELSE -- Unix / Linux / Mac / Android
-		LET servername = fgl_getEnv("HOSTNAME")
-	END IF
-	LET gver = "build ",fgl_getVersion()
-
-	IF gl_cli_os = "?" THEN
-		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
-		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )
-		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
-		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
-	END IF
-
-	OPEN WINDOW about AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE="main2")
-	LET n = gl_getWinNode(NULL)
-	CALL n.setAttribute("text",gl_progdesc)
-	LET f = gl_genForm("about")
-	LET n = f.createChild("VBox")
-	CALL n.setAttribute("posY","0" )
-	CALL n.setAttribute("posX","0" )
-
-	IF gl_splash IS NOT NULL AND gl_splash != " " THEN
-		LET g = n.createChild("HBox")
-		CALL g.setAttribute("posY",y)
-		CALL g.setAttribute("gridWidth",36)
-		LET w = g.createChild("SpacerItem")
-
-		LET w = g.createChild("Image")
-		CALL w.setAttribute("posY","0" )
-		CALL w.setAttribute("posX","0" )
-		CALL w.setAttribute("name","logo" )
-		CALL w.setAttribute("style","noborder")
-		CALL w.setAttribute("stretch","both" )
-		CALL w.setAttribute("autoScale","1" )
-		CALL w.setAttribute("gridWidth","12" )
-		CALL w.setAttribute("image",gl_splash )
-		CALL w.setAttribute("height","100px" )
-		CALL w.setAttribute("width", "290px" )
-
-		LET w = g.createChild("SpacerItem")
-		LET y = 10
-	ELSE
-		LET y = 1
-	END IF
-
-	LET g = n.createChild("Group")
-	CALL g.setAttribute("text","About")
-	CALL g.setAttribute("posY","10" )
-	CALL g.setAttribute("posX","0" )
-	CALL g.setAttribute("style","about")
-
-	IF gl_app_build IS NOT NULL THEN
-		CALL gl_addLabel(g, 0,y,LSTR("lib.about.application"),"right","black")
-		CALL gl_addLabel(g,10,y,gl_app_name||" - "||gl_app_build,NULL,NULL) LET y = y + 1
-	END IF
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.program"),"right","black")
-	CALL gl_addLabel(g,10,y,gl_progname||" - "||l_ver,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.progdesc"),"right","black")
-	CALL gl_addLabel(g,10,y,gl_progdesc,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.progauth"),"right","black")
-	CALL gl_addLabel(g,10,y,gl_progauth,NULL,"black") LET y = y + 1
-
-	LET w = g.createChild("HLine")
-	CALL w.setAttribute("posY",y) LET y = y + 1
-	CALL w.setAttribute("posX",0)
-	CALL w.setAttribute("gridWidth",25)
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.generort"),"right","black")
-	CALL gl_addLabel(g,10,y,gver,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.serveros"),"right","black")
-	CALL gl_addLabel(g,10,y,gl_os,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.servername"),"right","black")
-	CALL gl_addLabel(g,10,y,servername,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.serveruser"),"right","black")
-	CALL gl_addLabel(g,10,y,gl_userName,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.datetime"),"right","black")
-	CALL gl_addLabel(g,10,y,TODAY||" "||TIME,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.dbname"),"right","black")
-	CALL gl_addLabel(g,10,y,fgl_getEnv("DBNAME"),NULL,NULL) LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.dbtype"),"right","black")
-	CALL gl_addLabel(g,10,y,UPSHIFT( fgl_db_driver_type() ),NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.dbdate"),"right","black")
-	CALL gl_addLabel(g,10,y,fgl_getEnv("DBDATE"),NULL,"black") LET y = y + 1
-
-	LET w = g.createChild("HLine")
-	CALL w.setAttribute("posY",y) LET y = y + 1
-	CALL w.setAttribute("posX",0)
-	CALL w.setAttribute("gridWidth",25)
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientos"),"right","black")
-	CALL gl_addLabel(g,10,y,gl_cli_os||" / "||gl_cli_osver,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientuser"),"right","black")
-	CALL gl_addLabel(g,10,y,gl_cli_un,NULL,"black") LET y = y + 1
-
-	IF m_user_agent.getLength() > 1 THEN
-		CALL gl_addLabel(g, 0,y,LSTR("lib.about.useragent"),"right","black")
-		CALL gl_addLabel(g,10,y,m_user_agent,NULL,"black") LET y = y + 1
-	END IF
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.fever"),"right","black")
-	CALL gl_addLabel(g,10,y,gl_fe_typ||" "||gl_fe_ver,NULL,"black") LET y = y + 1
-
-	IF gl_cli_dir.getLength() > 1 THEN
-		CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientdir"),"right","black")
-		CALL gl_addLabel(g,10,y,gl_cli_dir,NULL,"black") LET y = y + 1
-	END IF
-
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientres"),"right","black")
-	CALL gl_addLabel(g,10,y,gl_cli_res,NULL,"black") LET y = y + 1
-
-	LET g = g.createChild("HBox")
-	CALL g.setAttribute("posY",y)
-	CALL g.setAttribute("gridWidth",40)
-	LET w = g.createChild("SpacerItem")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","Copy to Clipboard")
-	CALL w.setAttribute("name","copyabout")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","Show Env")
-	CALL w.setAttribute("name","showenv")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","Show License")
-	CALL w.setAttribute("name","showlicence")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","ReadMe")
-	CALL w.setAttribute("name","showreadme")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","Close")
-	CALL w.setAttribute("name","closeabout")
-	LET w = g.createChild("SpacerItem")
-
-	LET nl = f.selectByTagName("Label")
-	FOR y = 1 TO nl.getLength()
-		LET w = nl.item( y )
-		LET txt = w.getAttribute("text")
-		IF txt IS NULL THEN LET txt = "(null)" END IF
-		LET info = info.append( txt )
-		IF NOT y MOD 2 THEN
-			LET info = info.append( "\n" )
-		END IF
-	END FOR
-
-	MENU "Options"
-		ON ACTION close	EXIT MENU
-		ON ACTION closeabout	EXIT MENU
-		ON ACTION showenv CALL gl_showEnv()
-		ON ACTION showreadme CALL gl_showReadMe()
-		ON ACTION copyabout 
-			CALL ui.interface.frontCall("standard","cbset",info,y )
-		ON ACTION showlicence
-			CALL gl_showlicence()
-	END MENU
-	CLOSE WINDOW about
-
-END FUNCTION --}}}
---------------------------------------------------------------------------------
 #+ Format revision string
 #+
 #+ @param ver = String : a cvs revisions string ie : $Revision: 344 $
@@ -721,265 +447,6 @@ FUNCTION gl_verFmt( l_ver STRING ) RETURNS STRING --{{{
 	DEFINE x SMALLINT
 	LET x = l_ver.getIndexOf(":",1)
 	RETURN l_ver.subString(X+2, l_ver.getLength() - 1 )
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Dynamically generate a form object & return it's node.
-#+
-#+ @param l_nam name of Form, Should not be NULL!
-#+ @return ui.Form.
-FUNCTION gl_genForm( l_nam STRING ) RETURNS om.DomNode --{{{
-	DEFINE l_win ui.Window
-	DEFINE l_frm ui.Form
-	DEFINE l_n om.DomNode
-
-	LET l_win = ui.Window.getCurrent()
-	IF l_win IS NULL THEN
-		CALL gl_errMsg(__FILE__,__LINE__,SFMT(%"genForm: failed to get Window '%1'","CURRENT") )
-		RETURN l_n
-	END IF
-
-	LET l_frm = l_win.createForm( l_nam )
-	IF l_frm IS NULL THEN
-		CALL gl_errMsg(__FILE__,__LINE__,SFMT(%"genForm: createForm('%1') failed !!",l_nam) )
-		RETURN l_n
-	END IF
-	LET l_n = l_frm.getNode()
-
-	RETURN l_n
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Show the Genero & GRE license
-#+
-FUNCTION gl_showLicence( ) --{{{
-	DEFINE licstring STRING
-	DEFINE winnode, frm, g, frmf, txte om.DomNode
-	DEFINE c base.Channel
-
-	OPEN WINDOW lic WITH 1 ROWS, 1 COLUMNS
-	LET winnode = gl_getWinNode(NULL)
-	CALL winnode.setAttribute("style","naked")
-	CALL winnode.setAttribute("width",80)
-	CALL winnode.setAttribute("height",20)
-	CALL winnode.setAttribute("text","Licence Info")
-	LET frm = gl_genForm("help")
-
-	LET g = frm.createChild('Grid')
-	CALL g.setAttribute("width",80)
-	CALL g.setAttribute("height",20)
-
-	LET frmf = g.createChild('FormField')
-	CALL frmf.setAttribute("colName","licstring")
-	LET txte = frmf.createChild('TextEdit')
-	CALL txte.setAttribute("gridWidth",80)
-	CALL txte.setAttribute("gridHeight",20)
-
-	CALL ui.interface.refresh()
-
-	LET c = base.Channel.create()
-	CALL c.openPipe("fglWrt -a info 2>&1","r")
-	DISPLAY "Status:",STATUS
-	LET licString = "fglWrt -a info:\n"
-	WHILE NOT c.isEof()
-		LET licstring = licstring.append( c.readLine()||"\n" )
-	END WHILE
-	CALL c.close()
-
-	CALL c.openPipe("greWrt -a info 2>&1","r")
-	LET licString = licString.append("\n\ngreWrt -a info:\n")
-	WHILE NOT c.isEof()
-		LET licstring = licstring.append( c.readLine()||"\n" )
-	END WHILE
-	CALL c.close()
-
-	DISPLAY "Lic:",licstring.trim()
-	DISPLAY BY NAME licstring
-
-	MENU COMMAND "close" EXIT MENU COMMAND "cancel" EXIT MENU END MENU
-
-	CLOSE WINDOW lic
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Help Window -- NOT WRITTEN YET!!
-#+
-#+ @param msgno No of help message to display.
-#+ @return Nothing.
-FUNCTION gl_help( l_msgno SMALLINT ) --{{{
-	DEFINE helptext CHAR(500)
-	DEFINE helpstring STRING
-	DEFINE winnode, frm, g, frmf, txte om.DomNode
-
--- NOTE: this is Informix Specific!!
-	WHENEVER ERROR CONTINUE
-	SELECT COUNT(*) FROM helptexts
-	IF STATUS != 0 THEN
-		CREATE TABLE helptexts (
-			message_no SERIAL,
-			help_text CHAR(500)
-		)
-	END IF
-	WHENEVER ERROR STOP
-
-	SELECT help_text INTO helptext FROM helptexts WHERE message_no = msgno
-	IF STATUS = NOTFOUND THEN
-		CALL gl_winMessage("Help","Sorry, help message "||l_msgno||" not found.","info")
-		RETURN
-	END IF
-
-	OPEN WINDOW help WITH 1 ROWS, 1 COLUMNS
-	LET winnode = gl_getWinNode(NULL)
-	CALL winnode.setAttribute("style","naked")
-	CALL winnode.setAttribute("width",80)
-	CALL winnode.setAttribute("height",20)
-	CALL winnode.setAttribute("text","Help Message - "||l_msgno)
-	LET frm = gl_genForm("help")
-
-	LET g = frm.createChild('Grid')
-	CALL g.setAttribute("width",80)
-	CALL g.setAttribute("height",20)
-
-	LET frmf = g.createChild('FormField')
-	CALL frmf.setAttribute("colName","helpstring")
-	LET txte = frmf.createChild('TextEdit')
-	CALL txte.setAttribute("gridWidth",80)
-	CALL txte.setAttribute("gridHeight",20)
-
-	CALL ui.interface.refresh()
-
-	LET helpstring = helptext CLIPPED
-	DISPLAY "Help:",helpstring.trim()
-	DISPLAY BY NAME helpstring
-
-	MENU COMMAND "close" EXIT MENU END MENU
-
-	CLOSE WINDOW help
-
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Help Window - Display help message from URL
-#+ Needs the style to exist:
-#+ @code   <Style name="Image.browser">
-#+ @code    <StyleAttribute name="imageContainerType" value="browser" />
-#+ @code  </Style>
-#+
-#+ @param url url to display.
-#+ @return Nothing.
-FUNCTION gl_helpURL( l_url STRING ) --{{{
-	DEFINE winnode, frm, g, frmf, txte om.DomNode
-
-	OPEN WINDOW help WITH 1 ROWS, 1 COLUMNS
-	LET winnode = gl_getWinNode(NULL)
-	CALL winnode.setAttribute("style","naked")
-	CALL winnode.setAttribute("width",80)
-	CALL winnode.setAttribute("height",20)
-	CALL winnode.setAttribute("text","Help Message - "||l_url)
-	LET frm = gl_genForm("help")
-
-	LET g = frm.createChild('Grid')
-	CALL g.setAttribute("width",80)
-	CALL g.setAttribute("height",20)
-
-	LET frmf = g.createChild('FormField')
-	CALL frmf.setAttribute("colName","l_url")
-	LET txte = frmf.createChild('Image')
-	CALL txte.setAttribute("gridWidth",80)
-	CALL txte.setAttribute("gridHeight",20)
-	CALL txte.setAttribute("style","browser")
-	CALL ui.interface.refresh()
-
-	DISPLAY BY NAME l_url
-
-	MENU COMMAND "close" EXIT MENU END MENU
-
-	CLOSE WINDOW help
-
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ A Simple Prompt function
-#+
-#+ @code LET tmp = gl_prompt("A Simple Prompt","Enter a value","C",5,NULL)
-#+
-#+ @param win_tit Window Title
-#+ @param prmpt_txt Label text
-#+ @param prmpt_typ Data type for prompt C=char D=date
-#+ @param prmpt_sz Size of field for entry.
-#+ @param prmpt_def Default value ( can be NULL )
-#+ @return Char(50): Entered value.
-FUNCTION gl_prompt(win_tit, prmpt_txt, prmpt_typ, prmpt_sz, prmpt_def) --{{{
-	DEFINE win_tit, prmpt_txt,prmpt_def STRING
-	DEFINE prmpt_typ CHAR(1)
-	DEFINE prmpt_sz SMALLINT
-	DEFINE frm,g om.DomNode
-	DEFINE fldnam,wgt STRING
-	DEFINE tmp CHAR(50)
-	DEFINE tmp_date DATE
-
--- setup field name
-	CASE prmpt_typ
-		WHEN "D"
-			LET tmp_date = prmpt_def
-			LET fldnam = "tmp_date"
-		OTHERWISE
-			LET tmp = prmpt_def
-			LET fldnam = "tmp"
-	END CASE
-
-	OPEN WINDOW myprompt WITH 1 ROWS,1 COLUMNS ATTRIBUTES(TEXT=win_tit, STYLE="dialog")
-
--- Get window object and create a form
-	LET frm = gl_genForm("myprompt")
-
--- create the grid, label, formfield and edit/dateedit nodes.
-	LET g = frm.createChild('Grid')
-	CALL g.setAttribute("height","4")
-	CALL g.setAttribute("width","50")
-	IF prmpt_typ = "D" THEN
-		LET wgt = "DateEdit"
-	ELSE
-		LET wgt = "Edit"
-	END IF
-	CALL gl_addLabel(g, 1,2,prmpt_txt,NULL,NULL)
-	CALL gl_addField(g,20,2,wgt,fldnam,prmpt_sz,NULL,NULL,NULL)
-
--- do the input.
-	CASE prmpt_typ
-		WHEN "D"
-			INPUT BY NAME tmp_date WITHOUT DEFAULTS
-			LET tmp = tmp_date
-		OTHERWISE
-			INPUT BY NAME tmp WITHOUT DEFAULTS
-	END CASE
-	IF int_flag THEN LET tmp = NULL END IF
-
-	CLOSE WINDOW myprompt
-	RETURN tmp
-
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Generic Window notify message.
-#+
-#+ @param msg   = String: Message text
-#+ @return none
-FUNCTION gl_notify( l_msg STRING) --{{{
-	DEFINE frm,g om.domNode
-	
-	IF l_msg IS NULL THEN
-		CLOSE WINDOW notify
-		RETURN
-	ELSE
-		OPEN WINDOW notify AT 1,1 WITH 1 ROWS, 2 COLUMNS ATTRIBUTES(STYLE="naked")
-	END IF
-
-	LET frm = gl_genForm("myprompt")
-
--- create the grid, label, formfield and edit/dateedit nodes.
-	LET g = frm.createChild('Grid')
-	CALL g.setAttribute("height","4")
-	CALL g.setAttribute("width",l_msg.getLength() + 1)
-	CALL g.setAttribute("gridWidth",l_msg.getLength() + 1)
-	CALL gl_addLabel(g, 1,2,l_msg,NULL,"big")
-	GL_DBGMSG(1, "gl_notify"||l_msg)
-	CALL ui.interface.refresh()
-
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Generic message in statusbar.
@@ -1081,66 +548,6 @@ FUNCTION gl_winQuestion(l_title STRING,
 	RETURN l_result
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
-#+ Progressbar Routine.
-#+ Example call:
-#+ @code 
-#+ CALL gl_progBar(1,10,"Processing, please wait ...")   Open window and set max = 10
-#+ FOR x = 1 TO 10
-#+ 	CALL gl_progBar(2,x,NULL)  Move the bar to x position
-#+ END FOR
-#+ CALL gl_progBar(3,0,NULL)   Close the window
-#+
-#+ @param meth 1=Open Window / 2=Update bar / 3=Close Window
-#+ @param curval 1=Max value for Bar / 2=Current value position for Bar / 3=Ignored.
-#+ @param txt Text display below the bar in the window.
-#+ @return Nothing.
-FUNCTION gl_progBar( l_meth SMALLINT, l_curval INT, l_txt STRING ) --{{{
-	DEFINE winnode, frm, g, frmf, pbar om.DomNode
--- open window and create form
-	IF l_meth = 1 OR l_meth = 0 THEN
-		OPEN WINDOW progbar WITH 1 ROWS, 50 COLUMNS
-		LET winnode = gl_getWinNode(NULL)
-		CALL winnode.setAttribute("style","naked")
-		CALL winnode.setAttribute("width",45)
-		CALL winnode.setAttribute("height",2)
-		CALL winnode.setAttribute("text",l_txt)
-		LET frm = gl_genForm("gl_progbar")
-		CALL frm.setAttribute("text","ProgressBar")
-
-		LET g = frm.createChild('Grid')
-
-		LET frmf = g.createChild('FormField')
-		CALL frmf.setAttribute("colName","progress")
-		CALL frmf.setAttribute("value",0)
-		LET pbar = frmf.createChild('ProgressBar')
-		CALL pbar.setAttribute("width",40)
-		CALL pbar.setAttribute("posY",1)
-		CALL pbar.setAttribute("valueMax",l_curval)
-		CALL pbar.setAttribute("valueMin",1)
-
-		CALL gl_addLabel(g, 0,2,l_txt,NULL,NULL)
-		IF l_meth = 0 THEN
-			LET g = g.createChild('HBox')
-			CALL g.setAttribute("posY",3)
-			LET frmf = g.createChild('SpacerItem')
-			LET frmf = g.createChild('Button')
-			CALL frmf.setAttribute("name","cancel")
-			LET frmf = g.createChild('SpacerItem')
-		END IF
-	END IF
--- update the progressbar
-	IF l_meth = 2 THEN
-		DISPLAY l_curval TO progress
-	END IF
--- close the window
-	IF l_meth = 3 THEN
-		CLOSE WINDOW progbar
-	END IF
-
-	CALL ui.interface.refresh()
-
-END FUNCTION --}}}
---------------------------------------------------------------------------------
 #+ Default error handler
 #+
 #+ @return Nothing.
@@ -1212,161 +619,6 @@ FUNCTION gl_dbgMsg( l_fil STRING, l_lno INT, l_lev STRING, l_msg STRING) --{{{
 		END IF
 	END IF
 
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Show ReadMe local file
-#+
-#+ @return none
-FUNCTION gl_showReadMe() --{{{
-	DEFINE vb,frm,g,ff,t om.DomNode
-	DEFINE txt STRING
-	DEFINE c base.Channel
-
-	LET c = base.channel.create()
-	LET txt = fgl_getEnv("README")
-	IF txt IS NULL THEN LET txt = "readme.txt" END IF
-	TRY
-		CALL c.openFile(txt,"r")
-	CATCH
-		CALL gl_winMessage("ReadMe",SFMT(%"Open '%1' failed\n%2.",txt, err_get(STATUS)),"information")
-		RETURN
-	END TRY
-
-	LET txt = "ReadMe.txt:\n"
-	WHILE NOT c.isEOF()
-		LET txt = txt.append( c.readLine()||"\n" )
-	END WHILE
-	CALL c.close()
-
-	OPEN WINDOW showRM AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTES(STYLE="naked")
-	LET frm = gl_genForm("showRM")
-	CALL gl_titleWin("Read Me")
-	LET vb = frm.createChild("VBox")
-	LET g = vb.createChild("Grid")
-	LET ff = g.createChild("FormField")
-	CALL ff.setATtribute("colName","txt")
-	LET t = ff.createChild("TextEdit")
-	CALL t.setATtribute("scroll","both")
-	CALL t.setATtribute("stretch","both")
-	CALL t.setATtribute("gridWidth","80")
-	CALL t.setATtribute("height","60")
-
-	DISPLAY BY NAME txt
-	MENU
-		ON ACTION close EXIT MENU
-		ON ACTION exit EXIT MENU
-	END MENU	
-	CLOSE WINDOW showRM
-
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Show Environment variables in a dynamic table.
-#+ @return none
-FUNCTION gl_showEnv() --{{{
-	DEFINE vb,frm,w,tabl,tabc om.DomNode
-	DEFINE x,val_w,txt_w SMALLINT
-	DEFINE env DYNAMIC ARRAY OF RECORD
-		nam STRING,
-		val STRING
-	END RECORD
---TODO: maybe read list of environment variables from a file?
-	LET env[env.getLength()+1].nam = "FGLDIR"
-	LET env[env.getLength()+1].nam = "FGLASDIR"
-	LET env[env.getLength()+1].nam = "FGLSERVER"
-	LET env[env.getLength()+1].nam = "FGLLDPATH"
-	LET env[env.getLength()+1].nam = "FGLRESOURCEPATH"
-	LET env[env.getLength()+1].nam = "FGLIMAGEPATH"
-	LET env[env.getLength()+1].nam = "FGLPROFILE"
-	LET env[env.getLength()+1].nam = "FGLRUN"
-	LET env[env.getLength()+1].nam = "GREDIR"
-
-	LET env[env.getLength()+1].nam = "FGLDBPATH"
-	LET env[env.getLength()+1].nam = "FGLSQLDEBUG"
-
-	LET env[env.getLength()+1].nam = "DBPATH"
-	LET env[env.getLength()+1].nam = "DBDATE"
-	LET env[env.getLength()+1].nam = "DBCENTURY"
-
-	LET env[env.getLength()+1].nam = "INFORMIXDIR"
-	LET env[env.getLength()+1].nam = "INFORMIXSERVER"
-	LET env[env.getLength()+1].nam = "INFORMIXSQLHOSTS"
-
-	LET env[env.getLength()+1].nam = "ANTSHOME"
-	LET env[env.getLength()+1].nam = "ANTS_DSN"
-
-	LET env[env.getLength()+1].nam = "PATH"
-	LET env[env.getLength()+1].nam = "LD_LIBRARY_PATH"
-
-	LET env[env.getLength()+1].nam = "TEMP"
-	LET env[env.getLength()+1].nam = "TMP"
-
-	LET env[env.getLength()+1].nam = "LANG"
-	LET env[env.getLength()+1].nam = "LOCALE"
-	LET env[env.getLength()+1].nam = "HOSTNAME"
-	LET env[env.getLength()+1].nam = "RHOSTNAME"
-
-	LET env[env.getLength()+1].nam = "FGL_PRIVATE_DIR"
-	LET env[env.getLength()+1].nam = "FGL_PRIVATE_URL_PREFIX"
-	LET env[env.getLength()+1].nam = "FGL_PUBLIC_DIR"
-	LET env[env.getLength()+1].nam = "FGL_PUBLIC_IMAGEPATH"
-	LET env[env.getLength()+1].nam = "FGL_PUBLIC_URL_PREFIX"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_APPLICATION_ID"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_AUTO_LOGOUT"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_COMMAND_DIR"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_COMMAND_LINE"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_CONNECTOR_URI"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_DVM_AVAILABLE"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_GAS_ADDRESS"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_LOG_DAILYFILE"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_LOG_DAILYFILE_CATEGORIES_FILTER"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_LOG_DAILYFILE_FORMAT"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_LOG_DAILYFILE_PATH"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_LOG_DAILYFILE_RAW_DATA_MAX_LENGTH"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_PROXY"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_REQUEST_RESULT"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_SESSION_ID"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_TEMPORARY_DIRECTORY"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_USER_AGENT"
-	LET env[env.getLength()+1].nam = "FGL_VMPROXY_WEB_COMPONENT_LOCATION"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_HTTPS"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_HTTP_ACCEPT"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_HTTP_ACCEPT_ENCODING"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_HTTP_ACCEPT_LANGUAGE"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_HTTP_CONNECTION"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_HTTP_COOKIE"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_HTTP_HOST"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_HTTP_REFERER"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_HTTP_USER_AGENT"
-	LET env[env.getLength()+1].nam = "FGL_WEBSERVER_REMOTE_ADDR"
-
-	FOR x = 1 TO env.getLength()
-		LET env[x].val = fgl_getEnv( env[x].nam )
-		IF env[x].nam.getLength() > txt_w THEN LET txt_w = env[x].nam.getLength() END IF
-		IF env[x].val.getLength() > val_w THEN LET val_w = env[x].val.getLength() END IF
-	END FOR
-
-	OPEN WINDOW showEnv AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTES(STYLE="naked")
-	LET frm = gl_genForm("showEnv")
-	CALL gl_titleWin("Current Environment")
-	LET vb = frm.createChild("VBox")
-	LET tabl = vb.createChild("Table")
-	CALL tabl.setAttribute("tabName","showenv")
-	CALL tabl.setAttribute("height",env.getLength()+1)
-	CALL tabl.setAttribute("pageSize",env.getLength()+1)
-	CALL tabl.setAttribute("posX",1)
-	CALL tabl.setAttribute("posY",6)
-	LET tabc = tabl.createChild('TableColumn')
-	CALL tabc.setAttribute("colName","nam")
-	CALL tabc.setAttribute("text","Name")
-	LET w = tabc.createChild('Edit')
-	CALL w.setAttribute("width",txt_w)
-	LET tabc = tabl.createChild('TableColumn')
-	CALL tabc.setAttribute("colName","val")
-	CALL tabc.setAttribute("text","Value")
-	LET w = tabc.createChild('Edit')
-	CALL w.setAttribute("width",val_w)
-	DISPLAY ARRAY env TO showenv.* ATTRIBUTE( COUNT=env.getLength() )
-	CLOSE WINDOW showEnv
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Get the product version from the $FGLDIR/etc/fpi-fgl
@@ -1563,4 +815,225 @@ FUNCTION gl_getCallingModuleName() RETURNS STRING --{{{
 	--DISPLAY "Fil:",l_fil," Mod:",l_mod," Line:",l_lin
 	LET l_fil = NVL(l_fil,"FILE?")||"."||NVL(l_mod,"MOD?")||":"||NVL(l_lin,"LINE?")
 	RETURN l_fil
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Splash screen
+#+
+#+ @param l_dur > 0 for sleep then close, 0=just open window, -1=close window
+#+ @return Nothing.
+FUNCTION gl_splash(l_dur SMALLINT) --{{{
+	DEFINE f,g,n om.DomNode
+
+	IF l_dur = -1 THEN
+		CLOSE WINDOW splash
+		RETURN
+	END IF
+
+	OPEN WINDOW splash AT 1,1 WITH 1 ROWS,1 COLUMNS ATTRIBUTE(STYLE="default noborder dialog2 bg_white")
+	LET f = gl_genForm("splash")
+	LET g = f.createChild("Grid")
+	LET n = g.createChild("Image")
+	CALL n.setAttribute("name","logo" )
+	CALL n.setAttribute("style","noborder" )
+	CALL n.setAttribute("width","36" )
+	CALL n.setAttribute("height","8" )
+	CALL n.setAttribute("image",gl_splash )
+	CALL n.setAttribute("posY","0" )
+	CALL n.setAttribute("posX","0" )
+	CALL n.setAttribute("gridWidth","40" )
+	CALL n.setAttribute("gridHeight","8")
+	CALL n.setAttribute("height","200px" )
+	CALL n.setAttribute("width", "570px" )
+	CALL n.setAttribute("stretch","both" )
+	CALL n.setAttribute("autoScale","1" )
+	CALL ui.interface.refresh()
+
+	IF l_dur > 0 THEN
+		SLEEP l_dur
+		CLOSE WINDOW splash
+	END IF
+
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Dynamic About Window
+#+
+#+ @param l_ver a version string
+#+ @return Nothing.
+FUNCTION gl_about(l_ver STRING) --{{{
+	DEFINE f,n,g,w om.DomNode
+	DEFINE nl om.nodeList
+	DEFINE gver, servername, info, txt STRING
+	DEFINE y SMALLINT
+
+	IF os.Path.pathSeparator() = ";" THEN -- Windows
+		LET servername = fgl_getEnv("COMPUTERNAME")
+	ELSE -- Unix / Linux / Mac / Android
+		LET servername = fgl_getEnv("HOSTNAME")
+	END IF
+	LET gver = "build ",fgl_getVersion()
+
+	IF gl_cli_os = "?" THEN
+		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
+		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )
+		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
+		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
+	END IF
+
+	OPEN WINDOW about AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE="main2")
+	LET n = gl_getWinNode(NULL)
+	CALL n.setAttribute("text",gl_progdesc)
+	LET f = gl_genForm("about")
+	LET n = f.createChild("VBox")
+	CALL n.setAttribute("posY","0" )
+	CALL n.setAttribute("posX","0" )
+
+	IF gl_splash IS NOT NULL AND gl_splash != " " THEN
+		LET g = n.createChild("HBox")
+		CALL g.setAttribute("posY",y)
+		CALL g.setAttribute("gridWidth",36)
+		LET w = g.createChild("SpacerItem")
+
+		LET w = g.createChild("Image")
+		CALL w.setAttribute("posY","0" )
+		CALL w.setAttribute("posX","0" )
+		CALL w.setAttribute("name","logo" )
+		CALL w.setAttribute("style","noborder")
+		CALL w.setAttribute("stretch","both" )
+		CALL w.setAttribute("autoScale","1" )
+		CALL w.setAttribute("gridWidth","12" )
+		CALL w.setAttribute("image",gl_splash )
+		CALL w.setAttribute("height","100px" )
+		CALL w.setAttribute("width", "290px" )
+
+		LET w = g.createChild("SpacerItem")
+		LET y = 10
+	ELSE
+		LET y = 1
+	END IF
+
+	LET g = n.createChild("Group")
+	CALL g.setAttribute("text","About")
+	CALL g.setAttribute("posY","10" )
+	CALL g.setAttribute("posX","0" )
+	CALL g.setAttribute("style","about")
+
+	IF gl_app_build IS NOT NULL THEN
+		CALL gl_addLabel(g, 0,y,LSTR("lib.about.application"),"right","black")
+		CALL gl_addLabel(g,10,y,gl_app_name||" - "||gl_app_build,NULL,NULL) LET y = y + 1
+	END IF
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.program"),"right","black")
+	CALL gl_addLabel(g,10,y,gl_progname||" - "||l_ver,NULL,"black") LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.progdesc"),"right","black")
+	CALL gl_addLabel(g,10,y,gl_progdesc,NULL,"black") LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.progauth"),"right","black")
+	CALL gl_addLabel(g,10,y,gl_progauth,NULL,"black") LET y = y + 1
+
+	LET w = g.createChild("HLine")
+	CALL w.setAttribute("posY",y) LET y = y + 1
+	CALL w.setAttribute("posX",0)
+	CALL w.setAttribute("gridWidth",25)
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.generort"),"right","black")
+	CALL gl_addLabel(g,10,y,gver,NULL,"black") LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.serveros"),"right","black")
+	CALL gl_addLabel(g,10,y,gl_os,NULL,"black") LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.servername"),"right","black")
+	CALL gl_addLabel(g,10,y,servername,NULL,"black") LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.serveruser"),"right","black")
+	CALL gl_addLabel(g,10,y,gl_userName,NULL,"black") LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.datetime"),"right","black")
+	CALL gl_addLabel(g,10,y,TODAY||" "||TIME,NULL,"black") LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.dbname"),"right","black")
+	CALL gl_addLabel(g,10,y,fgl_getEnv("DBNAME"),NULL,NULL) LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.dbtype"),"right","black")
+	CALL gl_addLabel(g,10,y,UPSHIFT( fgl_db_driver_type() ),NULL,"black") LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.dbdate"),"right","black")
+	CALL gl_addLabel(g,10,y,fgl_getEnv("DBDATE"),NULL,"black") LET y = y + 1
+
+	LET w = g.createChild("HLine")
+	CALL w.setAttribute("posY",y) LET y = y + 1
+	CALL w.setAttribute("posX",0)
+	CALL w.setAttribute("gridWidth",25)
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientos"),"right","black")
+	CALL gl_addLabel(g,10,y,gl_cli_os||" / "||gl_cli_osver,NULL,"black") LET y = y + 1
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientuser"),"right","black")
+	CALL gl_addLabel(g,10,y,gl_cli_un,NULL,"black") LET y = y + 1
+
+	IF m_user_agent.getLength() > 1 THEN
+		CALL gl_addLabel(g, 0,y,LSTR("lib.about.useragent"),"right","black")
+		CALL gl_addLabel(g,10,y,m_user_agent,NULL,"black") LET y = y + 1
+	END IF
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.fever"),"right","black")
+	CALL gl_addLabel(g,10,y,gl_fe_typ||" "||gl_fe_ver,NULL,"black") LET y = y + 1
+
+	IF gl_cli_dir.getLength() > 1 THEN
+		CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientdir"),"right","black")
+		CALL gl_addLabel(g,10,y,gl_cli_dir,NULL,"black") LET y = y + 1
+	END IF
+
+	CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientres"),"right","black")
+	CALL gl_addLabel(g,10,y,gl_cli_res,NULL,"black") LET y = y + 1
+
+	LET g = g.createChild("HBox")
+	CALL g.setAttribute("posY",y)
+	CALL g.setAttribute("gridWidth",40)
+	LET w = g.createChild("SpacerItem")
+	LET w = g.createChild("Button")
+	CALL w.setAttribute("posY",y)
+	CALL w.setAttribute("text","Copy to Clipboard")
+	CALL w.setAttribute("name","copyabout")
+	LET w = g.createChild("Button")
+	CALL w.setAttribute("posY",y)
+	CALL w.setAttribute("text","Show Env")
+	CALL w.setAttribute("name","showenv")
+	LET w = g.createChild("Button")
+	CALL w.setAttribute("posY",y)
+	CALL w.setAttribute("text","Show License")
+	CALL w.setAttribute("name","showlicence")
+	LET w = g.createChild("Button")
+	CALL w.setAttribute("posY",y)
+	CALL w.setAttribute("text","ReadMe")
+	CALL w.setAttribute("name","showreadme")
+	LET w = g.createChild("Button")
+	CALL w.setAttribute("posY",y)
+	CALL w.setAttribute("text","Close")
+	CALL w.setAttribute("name","closeabout")
+	LET w = g.createChild("SpacerItem")
+
+	LET nl = f.selectByTagName("Label")
+	FOR y = 1 TO nl.getLength()
+		LET w = nl.item( y )
+		LET txt = w.getAttribute("text")
+		IF txt IS NULL THEN LET txt = "(null)" END IF
+		LET info = info.append( txt )
+		IF NOT y MOD 2 THEN
+			LET info = info.append( "\n" )
+		END IF
+	END FOR
+
+	MENU "Options"
+		ON ACTION close	EXIT MENU
+		ON ACTION closeabout	EXIT MENU
+		ON ACTION showenv CALL gl_showEnv()
+		ON ACTION showreadme CALL gl_showReadMe()
+		ON ACTION copyabout 
+			CALL ui.interface.frontCall("standard","cbset",info,y )
+		ON ACTION showlicence
+			CALL gl_showlicence()
+	END MENU
+	CLOSE WINDOW about
+
 END FUNCTION --}}}

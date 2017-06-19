@@ -281,7 +281,7 @@ FUNCTION gl_addPage( fld, pgno, fname, pgnam ) --{{{
 -- Create new page in the folder and add the form to it
 	LET pg = fld.createChild("Page")
 -- Check to see if fname has path info
-	FOR x  = fname.getLength() TO 1 STEP -1
+	FOR x	= fname.getLength() TO 1 STEP -1
 		IF fname.getCharAt(x) = "/" THEN
 			LET fname = fname.subString(x+1, fname.getLength() )
 			EXIT FOR
@@ -399,9 +399,9 @@ END FUNCTION --}}}
 #+ Dynamically change title of a page
 #+
 #+ @param folder Node of the folder, can be NULL
-#+ @param fname  Name of the folder, can be NULL only if folder is passed.
-#+ @param page   Name of the page to affected.
-#+ @param title  New title for the page.
+#+ @param fname	Name of the folder, can be NULL only if folder is passed.
+#+ @param page	 Name of the page to affected.
+#+ @param title	New title for the page.
 #+ @return Nothing.
 FUNCTION gl_titlePage( folder,fname, page, title) --{{{
 	DEFINE folder,n om.DomNode
@@ -417,9 +417,9 @@ END FUNCTION --}}}
 #+ Dynamically hide/unhide a page
 #+
 #+ @param folder Node of the folder, can be NULL
-#+ @param fname  Name of the folder, can be NULL only if folder is passed.
-#+ @param page   Name of the page to hide/unhide
-#+ @param hide   TRUE/FALSE = Hide/Unhide
+#+ @param fname	Name of the folder, can be NULL only if folder is passed.
+#+ @param page	 Name of the page to hide/unhide
+#+ @param hide	 TRUE/FALSE = Hide/Unhide
 #+ @return Nothing.
 FUNCTION gl_hidePage( folder, fname, page, hide) --{{{
 	DEFINE folder,n om.DomNode
@@ -546,12 +546,12 @@ END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Find a Node and set an attribute to a value.
 #+
-#+ @param par       = Parent Node Tag
-#+ @param par_nam   = Parent Node Name
-#+ @param child     = Child Node Tag
+#+ @param par			 = Parent Node Tag
+#+ @param par_nam	 = Parent Node Name
+#+ @param child		 = Child Node Tag
 #+ @param child_nam = Child Node Name
-#+ @param attr      = Attribute to set
-#+ @param val       = Value to set attribute to
+#+ @param attr			= Attribute to set
+#+ @param val			 = Value to set attribute to
 FUNCTION gl_setNodeAtt( par, par_nam, child, child_nam, attr, val ) --{{{
 	DEFINE par, par_nam, child, child_nam, attr, val STRING
 	DEFINE nl om.NodeList
@@ -582,8 +582,8 @@ END FUNCTION --}}}
 #+ Set the min and max values for a progress bar.
 #+
 #+ @param fld = String: tag property on the ProgressBar element.
-#+ @param mn  = Integer: Min value
-#+ @param mx  = Integer: Max value
+#+ @param mn	= Integer: Min value
+#+ @param mx	= Integer: Max value
 #+ @return Nothing.
 FUNCTION gl_setProgMinMax( fld, mn, mx ) --{{{
 	DEFINE fld STRING
@@ -604,7 +604,7 @@ END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Set the stlye attribute on an element of current form.
 #+
-#+ @param ele  = String: Elements name attribute.
+#+ @param ele	= String: Elements name attribute.
 #+ @param styl = String: Style to set.
 #+ @return Nothing.
 FUNCTION gl_setElementStyle( ele, styl ) --{{{
@@ -833,7 +833,7 @@ END FUNCTION --}}}
 #+ @param nam Name for label.
 #+ @param j Justify : NULL, center or right
 #+ @param s Style.
-#+ @return TRUE/FALSE.  Success / Failed
+#+ @return TRUE/FALSE.	Success / Failed
 FUNCTION gl_addLabelN(g,x,y,txt,nam,j,s) --{{{
 	DEFINE g,l om.domNode
 	DEFINE txt,nam,j,s STRING
@@ -958,7 +958,7 @@ END FUNCTION --}}}
 #+ Add defaults colours and fonts to stylelist
 #+
 #+ uses ../etc/colours.txt
-FUNCTION gl_addStyles(  ) --{{{
+FUNCTION gl_addStyles(	) --{{{
 	DEFINE c Base.Channel
 	DEFINE fname STRING
 	DEFINE ret, x SMALLINT
@@ -1247,7 +1247,7 @@ FUNCTION gl_mergeST( l_nam STRING ) --{{{
 					IF nval != oval THEN
 						GL_DBGMSG(3, "Update:"||snam||" : "||anam||" Updated Old:"||oval||" New:"||nval)
 					ELSE
-						GL_DBGMSG(3, "Okay  :"||snam||" : "||anam)
+						GL_DBGMSG(3, "Okay	:"||snam||" : "||anam)
 					END IF
 				ELSE
 					GL_DBGMSG(3, "Update:"||snam||" : "||anam||" Added New:"||nval)
@@ -1322,7 +1322,7 @@ FUNCTION gl_mergeAD( l_nam STRING ) --{{{
 					IF nval != oval THEN
 						GL_DBGMSG(3, "Update:"||snam||" : "||anam||" Updated Old:"||oval||" New:"||nval)
 					ELSE
-						GL_DBGMSG(3, "Okay  :"||snam||" : "||anam)
+						GL_DBGMSG(3, "Okay	:"||snam||" : "||anam)
 					END IF
 				ELSE
 					GL_DBGMSG(3, "Update:"||snam||" : "||anam||" Added New:"||nval)
@@ -1331,5 +1331,161 @@ FUNCTION gl_mergeAD( l_nam STRING ) --{{{
 			END FOR
 		END IF
 	END FOR
+
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Help Window -- NOT WRITTEN YET!!
+#+
+#+ @param msgno No of help message to display.
+#+ @return Nothing.
+FUNCTION gl_help( l_msgno SMALLINT ) --{{{
+	DEFINE helptext CHAR(500)
+	DEFINE helpstring STRING
+	DEFINE winnode, frm, g, frmf, txte om.DomNode
+
+-- NOTE: this is Informix Specific!!
+	WHENEVER ERROR CONTINUE
+	SELECT COUNT(*) FROM helptexts
+	IF STATUS != 0 THEN
+		CREATE TABLE helptexts (
+			message_no SERIAL,
+			help_text CHAR(500)
+		)
+	END IF
+	WHENEVER ERROR STOP
+
+	SELECT help_text INTO helptext FROM helptexts WHERE message_no = msgno
+	IF STATUS = NOTFOUND THEN
+		CALL gl_winMessage("Help","Sorry, help message "||l_msgno||" not found.","info")
+		RETURN
+	END IF
+
+	OPEN WINDOW help WITH 1 ROWS, 1 COLUMNS
+	LET winnode = gl_getWinNode(NULL)
+	CALL winnode.setAttribute("style","naked")
+	CALL winnode.setAttribute("width",80)
+	CALL winnode.setAttribute("height",20)
+	CALL winnode.setAttribute("text","Help Message - "||l_msgno)
+	LET frm = gl_genForm("help")
+
+	LET g = frm.createChild('Grid')
+	CALL g.setAttribute("width",80)
+	CALL g.setAttribute("height",20)
+
+	LET frmf = g.createChild('FormField')
+	CALL frmf.setAttribute("colName","helpstring")
+	LET txte = frmf.createChild('TextEdit')
+	CALL txte.setAttribute("gridWidth",80)
+	CALL txte.setAttribute("gridHeight",20)
+
+	CALL ui.interface.refresh()
+
+	LET helpstring = helptext CLIPPED
+	DISPLAY "Help:",helpstring.trim()
+	DISPLAY BY NAME helpstring
+
+	MENU COMMAND "close" EXIT MENU END MENU
+
+	CLOSE WINDOW help
+
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Help Window - Display help message from URL
+#+ Needs the style to exist:
+#+ @code	 <Style name="Image.browser">
+#+ @code		<StyleAttribute name="imageContainerType" value="browser" />
+#+ @code	</Style>
+#+
+#+ @param url url to display.
+#+ @return Nothing.
+FUNCTION gl_helpURL( l_url STRING ) --{{{
+	DEFINE winnode, frm, g, frmf, txte om.DomNode
+
+	OPEN WINDOW help WITH 1 ROWS, 1 COLUMNS
+	LET winnode = gl_getWinNode(NULL)
+	CALL winnode.setAttribute("style","naked")
+	CALL winnode.setAttribute("width",80)
+	CALL winnode.setAttribute("height",20)
+	CALL winnode.setAttribute("text","Help Message - "||l_url)
+	LET frm = gl_genForm("help")
+
+	LET g = frm.createChild('Grid')
+	CALL g.setAttribute("width",80)
+	CALL g.setAttribute("height",20)
+
+	LET frmf = g.createChild('FormField')
+	CALL frmf.setAttribute("colName","l_url")
+	LET txte = frmf.createChild('Image')
+	CALL txte.setAttribute("gridWidth",80)
+	CALL txte.setAttribute("gridHeight",20)
+	CALL txte.setAttribute("style","browser")
+	CALL ui.interface.refresh()
+
+	DISPLAY BY NAME l_url
+
+	MENU COMMAND "close" EXIT MENU END MENU
+
+	CLOSE WINDOW help
+
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ A Simple Prompt function
+#+
+#+ @code LET tmp = gl_prompt("A Simple Prompt","Enter a value","C",5,NULL)
+#+
+#+ @param win_tit Window Title
+#+ @param prmpt_txt Label text
+#+ @param prmpt_typ Data type for prompt C=char D=date
+#+ @param prmpt_sz Size of field for entry.
+#+ @param prmpt_def Default value ( can be NULL )
+#+ @return Char(50): Entered value.
+FUNCTION gl_prompt(win_tit, prmpt_txt, prmpt_typ, prmpt_sz, prmpt_def) --{{{
+	DEFINE win_tit, prmpt_txt,prmpt_def STRING
+	DEFINE prmpt_typ CHAR(1)
+	DEFINE prmpt_sz SMALLINT
+	DEFINE frm,g om.DomNode
+	DEFINE fldnam,wgt STRING
+	DEFINE tmp CHAR(50)
+	DEFINE tmp_date DATE
+
+-- setup field name
+	CASE prmpt_typ
+		WHEN "D"
+			LET tmp_date = prmpt_def
+			LET fldnam = "tmp_date"
+		OTHERWISE
+			LET tmp = prmpt_def
+			LET fldnam = "tmp"
+	END CASE
+
+	OPEN WINDOW myprompt WITH 1 ROWS,1 COLUMNS ATTRIBUTES(TEXT=win_tit, STYLE="dialog")
+
+-- Get window object and create a form
+	LET frm = gl_genForm("myprompt")
+
+-- create the grid, label, formfield and edit/dateedit nodes.
+	LET g = frm.createChild('Grid')
+	CALL g.setAttribute("height","4")
+	CALL g.setAttribute("width","50")
+	IF prmpt_typ = "D" THEN
+		LET wgt = "DateEdit"
+	ELSE
+		LET wgt = "Edit"
+	END IF
+	CALL gl_addLabel(g, 1,2,prmpt_txt,NULL,NULL)
+	CALL gl_addField(g,20,2,wgt,fldnam,prmpt_sz,NULL,NULL,NULL)
+
+-- do the input.
+	CASE prmpt_typ
+		WHEN "D"
+			INPUT BY NAME tmp_date WITHOUT DEFAULTS
+			LET tmp = tmp_date
+		OTHERWISE
+			INPUT BY NAME tmp WITHOUT DEFAULTS
+	END CASE
+	IF int_flag THEN LET tmp = NULL END IF
+
+	CLOSE WINDOW myprompt
+	RETURN tmp
 
 END FUNCTION --}}}
