@@ -43,7 +43,7 @@ CONSTANT C_SHA_ITERATIONS=64
 #+ Password must contain at least one symbol
 #+
 #+ @return String - password
-FUNCTION glsec_genPassword()
+FUNCTION glsec_genPassword() RETURNS STRING
 	DEFINE l_pass CHAR(C_DEFPASSLEN)
 	DEFINE x,y SMALLINT
 -- because it's base64 encoded it will return 16 chars or larger!!
@@ -66,7 +66,7 @@ END FUNCTION
 #+ Get the hash type
 #+
 #+ @return string
-FUNCTION glsec_getHashType()
+FUNCTION glsec_getHashType() RETURNS STRING
 &ifdef G310
 	RETURN "BCRYPT"
 &else
@@ -78,8 +78,8 @@ END FUNCTION
 #+
 #+ @param  l_hashtype - String -The type of hash to use ( can be NULL for default )
 #+ @returns String - salt value
-FUNCTION glsec_genSalt(l_hashtype)
-	DEFINE l_hashtype, l_salt STRING
+FUNCTION glsec_genSalt(l_hashtype STRING) RETURNS STRING
+	DEFINE l_salt STRING
 	IF l_hashtype IS NULL THEN
 		LET l_hashtype = glsec_getHashType()
 	END IF
@@ -110,8 +110,7 @@ END FUNCTION
 #+ @param l_salt - String - The salt value ( optional for Genero 3.10 )
 #+ @param  l_hashtype - String -The type of hash to use ( can be NULL for default )
 #+ @return String - An Encrypted string using SHA512 or BCrypt( Genero 3.10 )
-FUNCTION glsec_genPasswordHash(l_pass,l_salt,l_hashtype)
-	DEFINE l_pass, l_salt, l_hashtype STRING
+FUNCTION glsec_genPasswordHash(l_pass STRING, l_salt STRING, l_hashtype STRING) RETURNS STRING
 	DEFINE l_hash STRING
 	DEFINE l_dgst security.Digest
 	DEFINE x SMALLINT
@@ -158,8 +157,8 @@ END FUNCTION
 #+ @param l_salt - String - The salt value ( not required for BCRYPT )
 #+ @param  l_hashtype - String -The type of hash to use ( can be NULL for default )
 #+ @return boolean
-FUNCTION glsec_chkPassword(l_pass,l_passhash,l_salt,l_hashtype)
-	DEFINE l_pass, l_passhash, l_salt, l_hash, l_hashtype STRING
+FUNCTION glsec_chkPassword(l_pass STRING,l_passhash STRING,l_salt STRING,l_hashtype STRING) RETURNS BOOLEAN
+	DEFINE l_hash STRING
 
 	LET l_pass = l_pass.trim()
 	LET l_passhash  = l_passhash.trim()
@@ -199,8 +198,7 @@ END FUNCTION
 #+
 #+ @param l_str - String
 #+ @return String or NULL if failed.
-FUNCTION glsec_fromBase64( l_str )
-	DEFINE l_str STRING
+FUNCTION glsec_fromBase64( l_str STRING ) RETURNS STRING
 
 	IF l_str IS NULL THEN RETURN NULL END IF
 	TRY
@@ -217,8 +215,7 @@ END FUNCTION
 #+
 #+ @param l_str - String
 #+ @return String or NULL if failed.
-FUNCTION glsec_toBase64( l_str )
-	DEFINE l_str STRING
+FUNCTION glsec_toBase64( l_str STRING ) RETURNS STRING
 
 	IF l_str IS NULL THEN RETURN NULL END IF
 	TRY
@@ -235,8 +232,8 @@ END FUNCTION
 #+
 #+ @param l_typ - String - The type of the data to return, eg: EMAIL / SMS provider creds
 #+ @returns - Strings : username, password
-FUNCTION glsec_getCreds(l_typ)
-	DEFINE l_typ, l_user, l_pwd STRING
+FUNCTION glsec_getCreds( l_typ STRING)  RETURNS ( STRING, STRING )
+	DEFINE l_user, l_pwd STRING
 	DEFINE l_node xml.DomNode
 	DEFINE l_enc xml.Encryption
 	DEFINE l_symkey xml.CryptoKey
@@ -322,20 +319,19 @@ END FUNCTION
 #+ @param l_user - String - Username
 #+ @param l_pass - String - Password
 #+ @returns boolean
-FUNCTION glsec_updCreds(l_typ, l_user, l_pass)
-	DEFINE l_typ, l_user, l_pass, l_old_usr, l_old_pass STRING
+FUNCTION glsec_updCreds(l_typ STRING, l_user STRING, l_pass STRING) RETURNS BOOLEAN
+	DEFINE l_old_usr, l_old_pass STRING
 	DEFINE l_root xml.DomNode
 	DEFINE enc xml.Encryption
 	DEFINE symkey xml.CryptoKey
 	DEFINE l_myKey CHAR(32)
 	DEFINE l_dte STRING
-	DEFINE l_tim CHAR(5)
 
 	CALL glsec_getCreds(l_typ) RETURNING l_old_usr, l_old_pass
 
 	LET l_myKey = seclogit()
-	LET l_tim = TIME
-	LET l_dte = (TODAY USING "yyyymmdd")||l_tim[1,2]||l_tim[4,5]
+
+	LET l_dte = util.Datetime.format( CURRENT, "%Y%m%d%H%M" )
 	TRY
 		LET l_root = m_doc.getDocumentElement()
 		CALL m_user_node.setNodeValue( l_user )
@@ -369,8 +365,8 @@ END FUNCTION
 
 --------------------------------------------------------------------------------
 -- Obfuscation Code
-PRIVATE FUNCTION secchk(l_s)
-	DEFINE l_s,l_e STRING
+PRIVATE FUNCTION secchk(l_s STRING) RETURNS STRING
+	DEFINE l_e STRING
 	DEFINE x SMALLINT
 	FOR x = 11 TO 4 STEP -1
 		LET l_e = l_e.append(l_s.getCharAt(x))
@@ -379,7 +375,7 @@ PRIVATE FUNCTION secchk(l_s)
 END FUNCTION
 --------------------------------------------------------------------------------
 -- obfuscate our key
-{PRIVATE} FUNCTION seclogit()
+{PRIVATE} FUNCTION seclogit() RETURNS STRING
 	DEFINE s1,s2,s3,s4 STRING
 --TODO: fixme
 	LET s1 = ASCII(62),ASCII(68),ASCII(62),ASCII(64),ASCII(66),ASCII(67),ASCII(69),ASCII(68),ASCII(68),ASCII(67),ASCII(66),ASCII(62),ASCII(62),ASCII(60),ASCII(60),ASCII(62)
@@ -391,8 +387,8 @@ END FUNCTION
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Used to generate obfuscation code
-PRIVATE FUNCTION b(s)
-	DEFINE s,r STRING
+PRIVATE FUNCTION b(s STRING) RETURNS STRING
+	DEFINE r STRING
 	DEFINE x,c SMALLINT
 	FOR x = 1 TO s.getLength()
 		FOR c = 12 TO 127

@@ -73,7 +73,7 @@
     </Library>
     <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">
       <File filePath="src/lib_login.4gl"/>
-      <File filePath="src/lib_secure.4gl"/>
+      <File compilerOptions="-DG310" filePath="src/lib_secure.4gl"/>
       <File filePath="src/login.per"/>
     </Library>
     <Application binaryName="menu" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">

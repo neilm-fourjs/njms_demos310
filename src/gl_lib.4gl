@@ -554,7 +554,7 @@ FUNCTION gl_about(l_ver STRING) --{{{
 		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
 	END IF
 
-	OPEN WINDOW about AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE="about")
+	OPEN WINDOW about AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE="main2")
 	LET n = gl_getWinNode(NULL)
 	CALL n.setAttribute("text",gl_progdesc)
 	LET f = gl_genForm("about")
@@ -572,7 +572,7 @@ FUNCTION gl_about(l_ver STRING) --{{{
 		CALL w.setAttribute("posY","0" )
 		CALL w.setAttribute("posX","0" )
 		CALL w.setAttribute("name","logo" )
-		CALL w.setAttribute("style","about")
+		CALL w.setAttribute("style","noborder")
 		CALL w.setAttribute("stretch","both" )
 		CALL w.setAttribute("autoScale","1" )
 		CALL w.setAttribute("gridWidth","12" )
@@ -721,6 +721,31 @@ FUNCTION gl_verFmt( l_ver STRING ) RETURNS STRING --{{{
 	DEFINE x SMALLINT
 	LET x = l_ver.getIndexOf(":",1)
 	RETURN l_ver.subString(X+2, l_ver.getLength() - 1 )
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Dynamically generate a form object & return it's node.
+#+
+#+ @param l_nam name of Form, Should not be NULL!
+#+ @return ui.Form.
+FUNCTION gl_genForm( l_nam STRING ) RETURNS om.DomNode --{{{
+	DEFINE l_win ui.Window
+	DEFINE l_frm ui.Form
+	DEFINE l_n om.DomNode
+
+	LET l_win = ui.Window.getCurrent()
+	IF l_win IS NULL THEN
+		CALL gl_errMsg(__FILE__,__LINE__,SFMT(%"genForm: failed to get Window '%1'","CURRENT") )
+		RETURN l_n
+	END IF
+
+	LET l_frm = l_win.createForm( l_nam )
+	IF l_frm IS NULL THEN
+		CALL gl_errMsg(__FILE__,__LINE__,SFMT(%"genForm: createForm('%1') failed !!",l_nam) )
+		RETURN l_n
+	END IF
+	LET l_n = l_frm.getNode()
+
+	RETURN l_n
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Show the Genero & GRE license
@@ -1213,7 +1238,7 @@ FUNCTION gl_showReadMe() --{{{
 	END WHILE
 	CALL c.close()
 
-	OPEN WINDOW showRM AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTES(STYLE="about")
+	OPEN WINDOW showRM AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTES(STYLE="naked")
 	LET frm = gl_genForm("showRM")
 	CALL gl_titleWin("Read Me")
 	LET vb = frm.createChild("VBox")
@@ -1320,7 +1345,7 @@ FUNCTION gl_showEnv() --{{{
 		IF env[x].val.getLength() > val_w THEN LET val_w = env[x].val.getLength() END IF
 	END FOR
 
-	OPEN WINDOW showEnv AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTES(STYLE="about")
+	OPEN WINDOW showEnv AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTES(STYLE="naked")
 	LET frm = gl_genForm("showEnv")
 	CALL gl_titleWin("Current Environment")
 	LET vb = frm.createChild("VBox")

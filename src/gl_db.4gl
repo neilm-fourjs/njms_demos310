@@ -87,11 +87,11 @@ GL_MODULE_ERROR_HANDLER
 
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION gldb_getDBName()
+FUNCTION gldb_getDBName() RETURNS STRING
 	RETURN m_dbnam
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION gldb_getDBType()
+FUNCTION gldb_getDBType() RETURNS STRING
 	DEFINE drv STRING
 	IF m_dbtyp IS NULL THEN
 		LET drv = fgl_getenv("DBDRIVER")
@@ -101,7 +101,7 @@ FUNCTION gldb_getDBType()
 	RETURN m_dbtyp
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION gldb_getDBInfo()
+FUNCTION gldb_getDBInfo() RETURNS ( STRING, STRING, STRING, STRING )
 	RETURN m_dbtyp, m_dbsrc, m_dbdrv, m_dbcon
 END FUNCTION
 
