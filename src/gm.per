@@ -1,0 +1,51 @@
+
+ACTION DEFAULTS
+	ACTION mapclicked (DEFAULTVIEW=NO)
+	ACTION accept (DEFAULTVIEW=NO)
+	ACTION go (TEXT="Go",IMAGE="play")
+	ACTION cancel (TEXT="Exit", IMAGE="quit")
+END -- ACTIONS
+
+LAYOUT (TEXT="Google Map Demo", STYLE="main2")
+GRID
+{
+[cancel :         :|lat          |lng           |:      :go     ]
+[wc_gm                                                          ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+in_data:[indata                                                 ]
+}
+END -- GRID
+END -- LAYOUT
+
+ATTRIBUTES
+lat = FORMONLY.lat;
+EDIT lng = FORMONLY.lng;
+EDIT indata = FORMONLY.in_data, NOENTRY;
+WEBCOMPONENT wc_gm = FORMONLY.wc_gm, 
+	STRETCH=BOTH, SCROLLBARS=NONE, HEIGHT=640 PIXELS, WIDTH=640 PIXELS,
+	COMPONENTTYPE="gm", 	PROPERTIES=(lat="0",lng="0"); 
+
+BUTTON go : go;
+BUTTON cancel : cancel;
