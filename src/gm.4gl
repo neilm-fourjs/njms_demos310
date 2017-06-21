@@ -8,9 +8,8 @@ MAIN
 			lng FLOAT
 		END RECORD
 
-	CALL STARTLOG( base.application.getProgramName()||".log" )
 	CALL gl_lib.gl_init("C",NULL,TRUE)
-
+	LET gl_lib.gl_noToolBar = TRUE
 	OPEN FORM f FROM "gm"
 	DISPLAY FORM f
 

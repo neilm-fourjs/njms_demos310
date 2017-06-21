@@ -29,7 +29,6 @@ DEFINE gl_progIcon STRING
 DEFINE gl_progName STRING -- base.application.getProgramName
 DEFINE gl_progDesc STRING
 DEFINE gl_progAuth STRING
-DEFINE gl_noToolBar SMALLINT
 DEFINE gl_toolbar,  gl_topmenu STRING
 DEFINE gl_os STRING
 DEFINE gl_cli_os STRING
@@ -46,6 +45,7 @@ DEFINE gl_app_name STRING -- Applcation Name
 DEFINE m_key STRING
 DEFINE m_user_agent STRING
 
+PUBLIC DEFINE gl_noToolBar BOOLEAN
 PUBLIC DEFINE gl_splash STRING
 PUBLIC DEFINE m_logDir STRING
 PUBLIC DEFINE m_logName STRING
@@ -63,7 +63,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 
 	LET gl_progName = base.Application.getProgramName()
 	CALL gl_userName()
-	CALL startLog(gl_progName||"."||gl_userName||".log")
+	CALL startLog( os.path.join( gl_getLogDir(),gl_progName||"."||gl_userName||".log"))
 
 	GL_MODULE_ERROR_HANDLER
 	OPTIONS ON CLOSE APPLICATION CALL gl_appClose
