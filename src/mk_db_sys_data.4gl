@@ -36,7 +36,7 @@ FUNCTION insert_system_data()
 
 	LET m_mkey = 1
 	CALL addMenu("main","","T","Four J's Demos Menu", "","")
-	--CALL addMenu("main","","M","Demos Programs", "demo","")
+	CALL addMenu("main","","M","Demos Programs", "demo","")
 	CALL addMenu("main","","M","Enquiry Programs", "enq","")
 	CALL addMenu("main","","M","Maintenance Programs", "mnt","")
 	CALL addMenu("main","","M","Order Entry", "oe","")
@@ -46,6 +46,7 @@ FUNCTION insert_system_data()
 	CALL addMenu("demo","main","P","Widgets Demo", "../scripts/rundemo widgets","")
 	CALL addMenu("demo","main","P","ipodTree Demo", "../scripts/rundemo ipodTree","")
 	CALL addMenu("demo","main","P","picFlow Demo", "../scripts/rundemo picFlow","")
+	CALL addMenu("demo","main","F","GoogleMaps WC Demo", "wc_googleMaps.42r","")
 
 	CALL addMenu("sys","main","T","System Maintenance", "","")
 	CALL addMenu("sys","main","F","User/Role Maintenance", "user_mnt.42r","")
@@ -80,7 +81,7 @@ FUNCTION mk_demo_account()
 	SELECT * FROM accounts WHERE email = l_email
 	IF STATUS = 0 THEN RETURN END IF
 
-	LET l_login_pass = "T3st.T3st"
+	LET l_login_pass = "12test"
 	LET l_hash_type = lib_secure.glsec_getHashType()
 	LET l_salt = lib_secure.glsec_genSalt(l_hash_type)
 	LET l_pass_hash = lib_secure.glsec_genPasswordHash( l_login_pass, l_salt, l_hash_type )

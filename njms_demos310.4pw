@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="-2121135278" gstVersion="30a03" version="3.2">
+<Project defaultApplication="1554019048" gstVersion="30a03" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -55,6 +55,12 @@
   </Settings>
   <LanguageList version="1.0"/>
   <PlatformList version="1.0"/>
+  <Group label="Demo Apps" language="Genero">
+    <Application binaryName="wc_googleMaps" dependencies="14000" id="-2121135278" label="wc_googleMaps">
+      <File filePath="src/gm.4gl"/>
+      <File filePath="src/gm.per"/>
+    </Application>
+  </Group>
   <Group environment="value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="NJMs Demos 310" language="Genero">
     <Library binaryName="Databases" id="1986" label="Databases">
       <File filePath="etc/njm_demo.4db"/>
@@ -82,7 +88,7 @@
       <File filePath="src/new_acct.4gl"/>
       <File filePath="src/new_acct.per"/>
     </Application>
-    <Application binaryName="mk_db" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">
+    <Application binaryName="mk_db" commandLineArguments="SYS" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">
       <File filePath="src/mk_db.4gl"/>
       <File filePath="src/mk_db_sys_data.4gl"/>
       <File filePath="src/mk_db_sys_ifx.4gl"/>
@@ -95,10 +101,6 @@
     <Application binaryName="test_app" dependencies="14000" id="-110946196" label="test_app">
       <File filePath="test_app/test_app.4gl"/>
       <File filePath="test_app/test_form.per"/>
-    </Application>
-    <Application binaryName="wc_googleMaps" dependencies="14000" id="-2121135278" label="wc_googleMaps">
-      <File filePath="src/gm.4gl"/>
-      <File filePath="src/gm.per"/>
     </Application>
   </Group>
 </Project>

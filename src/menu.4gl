@@ -35,7 +35,7 @@ MAIN
 	DISPLAY C_SPLASH TO logo
 	LET m_curMenu = 1
   LET m_menus[m_curMenu] = "main"
-
+  IF m_args IS NULL THEN LET m_args = " " END IF
 	IF do_dbconnect_and_login() THEN
 		CALL do_menu()
 	END IF
