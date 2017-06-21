@@ -55,17 +55,33 @@
   </Settings>
   <LanguageList version="1.0"/>
   <PlatformList version="1.0"/>
+  <Group label="Business Apps" language="Genero">
+    <Application binaryName="dynMaint" commandLineArguments="S 1 stock stock_code" dependencies="14000,1986" id="1873655788" label="dynMaint">
+      <File filePath="src/dynMaint.4gl"/>
+    </Application>
+  </Group>
+  <Group label="Database" language="Genero">
+    <Library binaryName="Databases" id="1986" label="Databases">
+      <File filePath="etc/njm_demo.4db"/>
+      <File filePath="src/schema.inc"/>
+    </Library>
+    <Application binaryName="mk_db" commandLineArguments="SYS" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">
+      <File filePath="src/mk_db.4gl"/>
+      <File filePath="src/mk_db_sys_data.4gl"/>
+      <File filePath="src/mk_db_sys_ifx.4gl"/>
+    </Application>
+    <Library binaryName="mk_db_lib" dependencies="-400184264" id="726830537" label="mk_db_lib">
+      <File filePath="src/mk_db_app_data.4gl"/>
+      <File filePath="src/mk_db_app_ifx.4gl"/>
+    </Library>
+  </Group>
   <Group label="Demo Apps" language="Genero">
     <Application binaryName="wc_googleMaps" dependencies="14000" id="-2121135278" label="wc_googleMaps">
       <File filePath="src/gm.4gl"/>
       <File filePath="src/gm.per"/>
     </Application>
   </Group>
-  <Group environment="value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="NJMs Demos 310" language="Genero">
-    <Library binaryName="Databases" id="1986" label="Databases">
-      <File filePath="etc/njm_demo.4db"/>
-      <File filePath="src/schema.inc"/>
-    </Library>
+  <Group environment="value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="Libraries" language="Genero">
     <Library binaryName="etc" id="-400184264" label="etc">
       <File filePath="etc/default.4ad"/>
       <File filePath="etc/default.4st"/>
@@ -82,21 +98,16 @@
       <File compilerOptions="-DG310" filePath="src/lib_secure.4gl"/>
       <File filePath="src/login.per"/>
     </Library>
+  </Group>
+  <Group label="System" language="Genero">
     <Application binaryName="menu" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
       <File filePath="src/menu.4gl"/>
       <File filePath="src/menu.per"/>
       <File filePath="src/new_acct.4gl"/>
       <File filePath="src/new_acct.per"/>
     </Application>
-    <Application binaryName="mk_db" commandLineArguments="SYS" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">
-      <File filePath="src/mk_db.4gl"/>
-      <File filePath="src/mk_db_sys_data.4gl"/>
-      <File filePath="src/mk_db_sys_ifx.4gl"/>
-    </Application>
-    <Library binaryName="mk_db_lib" dependencies="-400184264" id="726830537" label="mk_db_lib">
-      <File filePath="src/mk_db_app_data.4gl"/>
-      <File filePath="src/mk_db_app_ifx.4gl"/>
-    </Library>
+  </Group>
+  <Group label="Tests" language="Genero">
     <Application binaryName="Test" compilerOptions="-I &quot;$(GGCDIR)/libForGST&quot;" dependencies="18736" id="36249064" label="Test"/>
     <Application binaryName="test_app" dependencies="14000" id="-110946196" label="test_app">
       <File filePath="test_app/test_app.4gl"/>

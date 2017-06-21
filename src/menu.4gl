@@ -9,7 +9,6 @@ IMPORT FGL new_acct
 CONSTANT C_VER="1.0"
 CONSTANT C_TITLE="NJM's Demos"
 CONSTANT C_SPLASH="njm_demo_logo_256"
-
 DEFINE m_user STRING
 DEFINE m_user_id INT
 DEFINE m_menu DYNAMIC ARRAY OF RECORD 
@@ -25,9 +24,13 @@ DEFINE m_menu DYNAMIC ARRAY OF RECORD
 DEFINE m_menus DYNAMIC ARRAY OF VARCHAR(6)
 DEFINE m_curMenu SMALLINT
 DEFINE m_args STRING
+DEFINE m_mdi CHAR(1)
 MAIN
 
-	CALL gl_lib.gl_init("C",NULL,FALSE)
+	LET m_mdi = ARG_VAL(1)
+	IF m_mdi IS NULL OR m_mdi = " " THEN LET m_mdi = "S" END IF -- default to not MDI
+	CALL gl_lib.gl_init(m_mdi,NULL,FALSE)
+	IF m_mdi = "M" THEN LET m_mdi = "C" END IF -- if MDI container set so child programs are children
 
 	OPEN FORM menu FROM "menu"
 	DISPLAY FORM menu
@@ -35,7 +38,6 @@ MAIN
 	DISPLAY C_SPLASH TO logo
 	LET m_curMenu = 1
   LET m_menus[m_curMenu] = "main"
-  IF m_args IS NULL THEN LET m_args = " " END IF
 	IF do_dbconnect_and_login() THEN
 		CALL do_menu()
 	END IF
@@ -66,6 +68,8 @@ FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 	IF m_user = "Cancelled" THEN RETURN FALSE END IF
 
 	SELECT acct_id INTO m_user_id FROM accounts WHERE email = m_user
+
+	LET m_args = m_mdi," ", m_user_id
 
 	RETURN TRUE
 END FUNCTION
