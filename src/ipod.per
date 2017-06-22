@@ -1,4 +1,17 @@
 
+ACTION DEFAULTS
+	ACTION open (TEXT="Open", IMAGE="open")
+	ACTION quit (TEXT="Quit", IMAGE="quit")
+	ACTION about (TEXT="About", IMAGE="help")
+	ACTION firstrow (TEXT="First", IMAGE="first" )
+	ACTION prevrow (TEXT="Prev", IMAGE="prev" )
+	ACTION nextrow (TEXT="Next", IMAGE="next" )
+	ACTION lastrow (TEXT="Last", IMAGE="last" )
+	ACTION update (TEXT="Update", IMAGE="pen" )
+	ACTION expandall (TEXT="Expand", IMAGE="fa-expand" )
+	ACTION collapseall (TEXT="Collapse", IMAGE="fa-caret-down" )
+END
+
 TOPMENU
 	GROUP file (TEXT="File")
 		COMMAND open
@@ -21,10 +34,10 @@ END -- TOPMENU
 
 TOOLBAR
 	ITEM quit
-	ITEM open (TEXT="Open")
+	ITEM open
 	ITEM expandall
 	ITEM collapseall
-	ITEM update ( TEXT="Update", IMAGE="pen" )
+	ITEM update
 	SEPARATOR
 	ITEM about
 END -- TOOLBAR

@@ -92,7 +92,7 @@ MAIN
 
 	OPTIONS ON CLOSE APPLICATION CALL tidyup
 
-	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
+	CALL gl_lib.gl_init( ARG_VAL(1) ,"ipodtree",TRUE)
 
 	OPEN FORM win FROM "ipod"
 	DISPLAY FORM win

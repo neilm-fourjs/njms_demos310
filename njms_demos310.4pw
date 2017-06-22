@@ -80,6 +80,7 @@
       <File filePath="src/ipod.4gl"/>
       <File filePath="src/ipod.per"/>
       <File filePath="src/ipod_sax.4gl"/>
+      <File filePath="etc/ipodtree.4st"/>
     </Application>
     <Application binaryName="picFlow" commandLineArguments="S 1 ../pics" dependencies="14000" id="-183914303" label="picFlow">
       <File filePath="src/picflow.4gl"/>
@@ -96,6 +97,7 @@
     </Application>
     <Application binaryName="wc_kite" commandLineArguments="S 1" dependencies="14000" id="-2014604027" label="wc_kite">
       <File filePath="src/wc_kite.4gl"/>
+      <File filePath="etc/wc_kite.4st"/>
       <File filePath="src/wc_kite.per"/>
     </Application>
   </Group>
