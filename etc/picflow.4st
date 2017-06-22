@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="ANSI_X3.4-1968"?>
 <StyleList>
-
 	<Style name=".html">
   	<StyleAttribute name="textFormat" value="html" />
 	</Style>
 	<Style name=".big">
-  	<StyleAttribute name="fontSize" value="22pt" />
+  	<StyleAttribute name="fontSize" value="2em" />
   	<StyleAttribute name="border" value="none" />
 	</Style>
 	<Style name=".center">
@@ -13,13 +12,13 @@
 	</Style>
 	<Style name="Label.black">
   	<StyleAttribute name="backgroundColor" value="black" />
-  	<StyleAttribute name="fontSize" value="18pt" />
+  	<StyleAttribute name="fontSize" value="1.8em" />
   	<StyleAttribute name="fontWeight" value="bold" />
   	<StyleAttribute name="textColor" value="lightMagenta" />
 	</Style>
 	<Style name="Label.d_black">
   	<StyleAttribute name="backgroundColor" value="black" />
-  	<StyleAttribute name="fontSize" value="18pt" />
+  	<StyleAttribute name="fontSize" value="1.8em" />
   	<StyleAttribute name="textColor" value="white" />
 	</Style>
 	<Style name="Edit.d_black">
@@ -42,6 +41,8 @@
   	<StyleAttribute name="backgroundColor" value="black" />
   	<StyleAttribute name="textColor" value="white" />
   	<StyleAttribute name="border" value="none" />
+  	<StyleAttribute name="defaultTTFColor" value="lightMagenta" />
+  	<StyleAttribute name="fontSize" value="1.8em" />
 	</Style>
 	<Style name="Table.PictureFlow">
   	<StyleAttribute name="border" value="none" />
@@ -51,13 +52,13 @@
 	<Style name="Button.black:inactive">
   	<StyleAttribute name="textColor" value="lightMagenta" />
   	<StyleAttribute name="border" value="none" />
-  	<StyleAttribute name="fontSize" value="14pt" />
+  	<StyleAttribute name="fontSize" value="1.4em" />
   	<StyleAttribute name="fontWeight" value="bold" />
 	</Style>
 	<Style name="Button.black:active">
   	<StyleAttribute name="textColor" value="white" />
   	<StyleAttribute name="border" value="none" />
-  	<StyleAttribute name="fontSize" value="14pt" />
+  	<StyleAttribute name="fontSize" value="1.4em" />
   	<StyleAttribute name="fontWeight" value="bold" />
   </Style>
   <Style name="Window.black">

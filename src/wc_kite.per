@@ -5,15 +5,17 @@ ACTION DEFAULTS
 	ACTION newKite (TEXT="New", IMAGE="new")
 	ACTION openKite (TEXT="Open", IMAGE="open")
 	ACTION saveKite (TEXT="Save", IMAGE="disk")
-	ACTION exit (TEXT="Exit", IMAGE="uplevel")
+	ACTION exit (TEXT="Exit", IMAGE="quit")
+	ACTION about (TEXT="About", IMAGE="help")
 	ACTION kiteupdated (DEFAULTVIEW=NO)
 END
 
 TOOLBAR
+	ITEM exit
 	ITEM newKite
 	ITEM openKite
 	ITEM saveKite
-	ITEM exit
+	ITEM about
 END -- TOOLBAR
 
 LAYOUT (TEXT="Interactive Web Component - Kite Demo", STYLE="main2 kite")

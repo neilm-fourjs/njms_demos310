@@ -2,21 +2,22 @@
 IMPORT os
 IMPORT FGL gl_lib
 
-	DEFINE max_images SMALLINT
+CONSTANT C_VER="3.1"
+DEFINE max_images SMALLINT
 
-	DEFINE pics DYNAMIC ARRAY OF RECORD
-		pic STRING
-	END RECORD
-	DEFINE pics_info DYNAMIC ARRAY OF RECORD
-		pth STRING,
-		nam STRING,
-		mod STRING,
-		siz STRING,
-		typ STRING,
-		rwx STRING
-	END RECORD
-	DEFINE d,c INTEGER
-	DEFINE m_base, path, html_start, html_end STRING
+DEFINE pics DYNAMIC ARRAY OF RECORD
+	pic STRING
+END RECORD
+DEFINE pics_info DYNAMIC ARRAY OF RECORD
+	pth STRING,
+	nam STRING,
+	mod STRING,
+	siz STRING,
+	typ STRING,
+	rwx STRING
+END RECORD
+DEFINE d,c INTEGER
+DEFINE m_base, path, html_start, html_end STRING
 
 MAIN
 	DEFINE frm ui.Form
@@ -88,7 +89,7 @@ MAIN
 				CALL DIALOG.setCurrentRow( "pics", ( c - 1 ) )
 				CALL refresh( c - 1 )
 			END IF
-
+		ON ACTION about CALL gl_lib.gl_about( C_VER )
 		ON ACTION close EXIT DIALOG
 	END DIALOG
 

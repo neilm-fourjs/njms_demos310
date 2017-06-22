@@ -6,7 +6,7 @@ IMPORT FGL new_acct
 
 &include "schema.inc"
 
-CONSTANT C_VER="1.0"
+CONSTANT C_VER="3.1"
 CONSTANT C_TITLE="NJM's Demos"
 CONSTANT C_SPLASH="njm_demo_logo_256"
 DEFINE m_user STRING
