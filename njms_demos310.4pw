@@ -88,6 +88,10 @@
       <File filePath="src/gm.4gl"/>
       <File filePath="src/gm.per"/>
     </Application>
+    <Application binaryName="wc_kite" commandLineArguments="S 1" dependencies="14000" id="-2014604027" label="wc_kite">
+      <File filePath="src/wc_kite.4gl"/>
+      <File filePath="src/wc_kite.per"/>
+    </Application>
   </Group>
   <Group environment="value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="Libraries" language="Genero">
     <Library binaryName="etc" id="-400184264" label="etc">
