@@ -1,0 +1,74 @@
+
+ACTION DEFAULTS
+	ACTION newdata (TEXT="New Data", IMAGE="smiley")
+	ACTION quit (TEXT="Quit", IMAGE="quit")
+	ACTION back (DEFAULTVIEW=NO)
+	ACTION act1 (DEFAULTVIEW=NO)
+	ACTION act2 (DEFAULTVIEW=NO)
+	ACTION act3 (DEFAULTVIEW=NO)
+	ACTION act4 (DEFAULTVIEW=NO)
+	ACTION act5 (DEFAULTVIEW=NO)
+	ACTION act6 (DEFAULTVIEW=NO)
+	ACTION act7 (DEFAULTVIEW=NO)
+	ACTION act8 (DEFAULTVIEW=NO)
+	ACTION act9 (DEFAULTVIEW=NO)
+	ACTION act10 (DEFAULTVIEW=NO)
+	ACTION act11 (DEFAULTVIEW=NO)
+	ACTION act12 (DEFAULTVIEW=NO)
+END --
+
+LAYOUT ( TEXT="Am Charts Demo" )
+HBOX ( SPLITTER )
+GRID
+{
+<T tab                                  >
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+[f001                ][f002            ]
+<                                       >
+[logo]
+}
+END -- TABLE
+GRID
+{
+[wc                                                     ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+}
+END -- GRID
+END -- BOX
+
+ATTRIBUTES
+
+f001 = FORMONLY.labels,TITLE="Labels";
+f002 = FORMONLY.values,TITLE="Values";
+
+IMAGE logo : logo, IMAGE="logo";
+
+WEBCOMPONENT wc = FORMONLY.l_data,
+	STRETCH=BOTH, 
+	SCROLLBARS=NONE,
+	PROPERTIES=(title="Sales"),
+	COMPONENTTYPE="amcharts"; 
+
+INSTRUCTIONS
+SCREEN RECORD arr ( FORMONLY.labels THRU FORMONLY.values )
+

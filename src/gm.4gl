@@ -8,7 +8,7 @@ MAIN
 			lng FLOAT
 		END RECORD
 
-	CALL gl_lib.gl_init("C",NULL,TRUE)
+	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
 	LET gl_lib.gl_noToolBar = TRUE
 	OPEN FORM f FROM "gm"
 	DISPLAY FORM f

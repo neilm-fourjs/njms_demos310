@@ -76,6 +76,14 @@
     </Library>
   </Group>
   <Group label="Demo Apps" language="Genero">
+    <Application binaryName="picFlow" commandLineArguments="S 1 ../pics" dependencies="14000" id="-183914303" label="picFlow">
+      <File filePath="src/picflow.4gl"/>
+      <File filePath="src/picflow.per"/>
+    </Application>
+    <Application binaryName="wc_amCharts" dependencies="14000" id="-1954675472" label="wc_amCharts">
+      <File filePath="src/wc_amcharts.4gl"/>
+      <File filePath="src/wc_amcharts.per"/>
+    </Application>
     <Application binaryName="wc_googleMaps" dependencies="14000" id="-2121135278" label="wc_googleMaps">
       <File filePath="src/gm.4gl"/>
       <File filePath="src/gm.per"/>
@@ -98,6 +106,14 @@
       <File compilerOptions="-DG310" filePath="src/lib_secure.4gl"/>
       <File filePath="src/login.per"/>
     </Library>
+  </Group>
+  <Group label="Packages" language="Genero">
+    <Package binaryName="njms_demos310" description="NJMs Demos" label="njms_demos310" platform="Genero Application Server" rootDirectory="$(ProjectDir)/">
+      <DynamicProperty name="packageId" value="njmsdemos"/>
+      <DynamicProperty name="packageLabel" value="NJMs Demos"/>
+      <Directory includedFiles="*.42?" label="bin" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
+      <Directory destinationDirectory="bin/pics/" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
+    </Package>
   </Group>
   <Group label="System" language="Genero">
     <Application binaryName="menu" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">

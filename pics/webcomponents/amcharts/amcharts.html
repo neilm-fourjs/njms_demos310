@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>amCharts examples</title>
+		<link rel="stylesheet" href="style.css" type="text/css">
+
+		<script src="./amcharts/amcharts.js" type="text/javascript"></script>
+		<script src="./amcharts/serial.js" type="text/javascript"></script>
+
+		<script type="text/javascript">
+			var chart;
+			var myProps
+// This function is called by the Genero Client Container
+// so the web component can initialize itself and initialize
+// the gICAPI handlers
+			onICHostReady = function(version) {
+
+				if ( version != 1.0 ) {
+					alert('Invalid API version');
+					return;
+				}
+
+				gICAPI.onFocus = function( polarity ) {
+				}
+
+				gICAPI.onProperty = function(props) {
+					myProps = eval("(" + props + ")");
+				}
+
+				gICAPI.onData = function( data ) {
+					chartData = eval("(" + data + ")");
+					//document.getElementById("data2").innerHTML=data;
+					doChart();
+				}
+			}
+
+			function handleClick(event)
+			{
+					//alert(event.item.category + ": " + event.item.values.value + " p:" + event.item.description );
+					gICAPI.SetData( event.item.category );
+					gICAPI.Action( event.item.description );
+			}
+
+			function doChart() {
+				// SERIAL CHART
+				chart = new AmCharts.AmSerialChart();
+				//alert('In AmCharts');
+
+				// add click listener
+				chart.addListener("clickGraphItem", handleClick);
+
+				chart.startDuration = 1;
+
+				chart.dataProvider = chartData;
+				chart.categoryField = "label";
+				// this single line makes the chart a bar chart,
+				// try to set it to false - your bars will turn to columns
+				// chart.rotate = true;
+				// the following two lines makes chart 3D
+				chart.depth3D = 20;
+				chart.angle = 30;
+				chart.fillAlpha = .5;
+
+				// AXES
+				// Category
+				var categoryAxis = chart.categoryAxis;
+				categoryAxis.gridPosition = "start";
+				categoryAxis.axisColor = "#AAAAAA";
+				categoryAxis.fillAlpha = .5;
+				categoryAxis.gridAlpha = 0;
+				categoryAxis.fillColor = "#FAFAAA";
+
+				// value
+				var valueAxis = new AmCharts.ValueAxis();
+				valueAxis.axisColor = "#DADAA";
+				valueAxis.title = myProps.title;
+				valueAxis.gridAlpha = 0.1;
+				chart.addValueAxis(valueAxis);
+
+				// GRAPH
+				var graph = new AmCharts.AmGraph();
+				graph.title = myProps.title;
+				graph.valueField = "value";
+				graph.type = "column";
+				graph.balloonText = myProps.title + " in [[category]]:[[value]]";
+				graph.lineAlpha = 0;
+				//graph.fillColors = "#bf1c25";
+				graph.fillAlphas = .7;
+				graph.colorField = "colour";
+				chart.addGraph(graph);
+				graph.descriptionField = "action";
+				chart.creditsPosition = "top-right";
+
+				// WRITE
+				chart.write("chartdiv");
+			};
+		</script>
+	</head>
+
+	<body class="grad">
+		<h1>AmChart Demo</h1>
+		<div id="chartdiv" class="graph" style="width: 800px;	height: 600px;"></div>
+		<!--div id="data2"></div-->
+	</body>
+
+</html>
