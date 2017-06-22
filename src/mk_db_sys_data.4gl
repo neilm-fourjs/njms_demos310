@@ -44,7 +44,7 @@ FUNCTION insert_system_data()
 
 	CALL addMenu("demo","main","T","Demo Programs", "","")
 	CALL addMenu("demo","main","P","Widgets Demo", "../scripts/rundemo widgets","")
-	CALL addMenu("demo","main","P","ipodTree Demo", "../scripts/rundemo ipodTree","")
+	CALL addMenu("demo","main","F","ipodTree Demo", "ipodTree.42r","")
 	CALL addMenu("demo","main","F","picFlow Demo", "picFlow.42r ../pics","")
 	CALL addMenu("demo","main","F","GoogleMaps WC Demo", "wc_googleMaps.42r","")
 	CALL addMenu("demo","main","F","AmCharts WC Demo", "wc_amCharts.42r","")
