@@ -100,6 +100,21 @@
       <File filePath="etc/wc_kite.4st"/>
       <File filePath="src/wc_kite.per"/>
     </Application>
+    <Application binaryName="widgets" dependencies="14000" id="1663756762" label="widgets">
+      <VirtualFolder label="etc">
+        <File filePath="etc/widgets.4ad"/>
+        <File filePath="etc/widgets.4sm"/>
+        <File filePath="etc/widgets.4st"/>
+        <File filePath="etc/widgets.4tb"/>
+        <File filePath="etc/widgets1.4st"/>
+        <File filePath="etc/widgets2.4st"/>
+        <File filePath="etc/widgets3.4st"/>
+      </VirtualFolder>
+      <File filePath="src/widgets.per"/>
+      <File filePath="src/widgets300.4gl"/>
+      <File filePath="src/widgets_charts.4gl"/>
+      <File filePath="src/widgets_clock.4gl"/>
+    </Application>
   </Group>
   <Group environment="value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="Libraries" language="Genero">
     <Library binaryName="etc" id="-400184264" label="etc">
@@ -112,6 +127,7 @@
       <File filePath="src/gl_db.inc"/>
       <File filePath="src/gl_lib.4gl"/>
       <File filePath="src/gl_lib_aui.4gl"/>
+      <File filePath="src/gl_lookup3.4gl"/>
     </Library>
     <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">
       <File filePath="src/lib_login.4gl"/>

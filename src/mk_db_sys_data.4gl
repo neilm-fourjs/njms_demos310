@@ -43,7 +43,7 @@ FUNCTION insert_system_data()
 	CALL addMenu("main","","M","System Maintenance", "sys","")
 
 	CALL addMenu("demo","main","T","Demo Programs", "","")
-	CALL addMenu("demo","main","P","Widgets Demo", "../scripts/rundemo widgets","")
+	CALL addMenu("demo","main","F","Widgets Demo", "widgets.42r","")
 	CALL addMenu("demo","main","F","ipodTree Demo", "ipodTree.42r","")
 	CALL addMenu("demo","main","F","picFlow Demo", "picFlow.42r ../pics","")
 	CALL addMenu("demo","main","F","GoogleMaps WC Demo", "wc_googleMaps.42r","")

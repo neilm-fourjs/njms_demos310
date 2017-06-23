@@ -27,9 +27,8 @@ DEFINE m_args STRING
 DEFINE m_mdi CHAR(1)
 MAIN
 
-	LET m_mdi = ARG_VAL(1)
-	IF m_mdi IS NULL OR m_mdi = " " THEN LET m_mdi = "S" END IF -- default to not MDI
-	CALL gl_lib.gl_init(m_mdi,NULL,FALSE)
+	CALL gl_lib.gl_init(ARG_VAL(1),NULL,FALSE)
+	LET m_mdi = gl_lib.m_mdi
 	IF m_mdi = "M" THEN LET m_mdi = "C" END IF -- if MDI container set so child programs are children
 
 	OPEN FORM menu FROM "menu"

@@ -23,33 +23,34 @@ IMPORT util
 
 &include "genero_lib.inc"
 
-DEFINE gl_dbgLev SMALLINT  -- debug level: 0=None, 1=General, 2=All
-DEFINE gl_version STRING
-DEFINE gl_progIcon STRING
-DEFINE gl_progName STRING -- base.application.getProgramName
-DEFINE gl_progDesc STRING
-DEFINE gl_progAuth STRING
-DEFINE gl_toolbar,  gl_topmenu STRING
-DEFINE gl_os STRING
-DEFINE gl_cli_os STRING
-DEFINE gl_cli_osver STRING
-DEFINE gl_cli_un STRING
-DEFINE gl_cli_res STRING
-DEFINE gl_cli_dir STRING
-PUBLIC DEFINE gl_fe_typ, gl_fe_ver STRING
-
-DEFINE gl_userName STRING
-DEFINE gl_app_build STRING -- Applcation Build 
-DEFINE gl_app_name STRING -- Applcation Name
-
-DEFINE m_key STRING
-DEFINE m_user_agent STRING
-
-PUBLIC DEFINE gl_noToolBar BOOLEAN
+PUBLIC DEFINE gl_dbgLev SMALLINT  -- debug level: 0=None, 1=General, 2=All
+PUBLIC DEFINE gl_version STRING
+PUBLIC DEFINE gl_progIcon STRING
+PUBLIC DEFINE gl_progName STRING -- base.application.getProgramName
+PUBLIC DEFINE gl_progDesc STRING
+PUBLIC DEFINE gl_progAuth STRING
 PUBLIC DEFINE gl_splash STRING
+PUBLIC DEFINE gl_toolbar,  gl_topmenu STRING
+PUBLIC DEFINE gl_os STRING
+PUBLIC DEFINE gl_cli_os STRING
+PUBLIC DEFINE gl_cli_osver STRING
+PUBLIC DEFINE gl_cli_un STRING
+PUBLIC DEFINE gl_cli_res STRING
+PUBLIC DEFINE gl_cli_dir STRING
+PUBLIC DEFINE gl_fe_typ STRING
+PUBLIC DEFINE gl_fe_ver STRING
+PUBLIC DEFINE gl_userName STRING
+PUBLIC DEFINE gl_app_build STRING -- Applcation Build 
+PUBLIC DEFINE gl_app_name STRING -- Applcation Name
+PUBLIC DEFINE gl_noToolBar BOOLEAN
+
 PUBLIC DEFINE m_logDir STRING
 PUBLIC DEFINE m_logName STRING
 PUBLIC DEFINE m_logDate BOOLEAN
+PUBLIC DEFINE m_mdi CHAR(1)
+
+DEFINE m_key STRING
+DEFINE m_user_agent STRING
 
 --------------------------------------------------------------------------------
 #+ Initialize Function
@@ -78,7 +79,9 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 		GL_DBGMSG(0, "gl_init:WARNING: No localization file specified in FGLPROFILE!")
 	END IF
 
-	IF l_mdi_sdi IS NULL THEN LET l_mdi_sdi = "S" END IF
+	IF l_mdi_sdi IS NULL OR l_mdi_sdi = " " THEN LET l_mdi_sdi = "S" END IF
+	LET m_mdi = l_mdi_sdi
+
 	IF gl_os IS NULL THEN
 		IF os.Path.separator() = "\\" THEN
 			LET gl_os = "Windows"
@@ -124,7 +127,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	LET gl_cli_res = "?"
 	LET gl_cli_dir = "?"
 	IF gl_fe_typ = "GBC" THEN LET gl_cli_os = "WWW" END IF
-	IF l_mdi_sdi != "M" AND l_mdi_sdi != "C" AND gl_fe_typ != "GBC" THEN
+	IF m_mdi != "M" AND m_mdi != "C" AND gl_fe_typ != "GBC" THEN
 		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
 		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )
 		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
@@ -170,7 +173,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 		END TRY
 	END IF
 
-	IF l_mdi_sdi = "M" OR l_mdi_sdi = "s" THEN -- Startmenu only for MDI Container.
+	IF m_mdi = "M" OR m_mdi = "s" THEN -- Startmenu only for MDI Container.
 		TRY
 			CALL ui.Interface.loadStartMenu( m_key )
 			GL_DBGMSG(1, "gl_init: Start Menu '"||m_key.trim()||"' loaded.")
@@ -193,7 +196,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	IF l_desc IS NULL OR l_desc = " " THEN
 		LET l_desc = "MDI Container:"||l_container
 	END IF
-	CASE l_mdi_sdi
+	CASE m_mdi
 		WHEN "C" -- Child
 			GL_DBGMSG(2, "gl_init: Child")
 			CALL ui.Interface.setType("child")
@@ -834,7 +837,7 @@ FUNCTION gl_splash(l_dur SMALLINT) --{{{
 	LET g = f.createChild("Grid")
 	LET n = g.createChild("Image")
 	CALL n.setAttribute("name","logo" )
-	CALL n.setAttribute("style","noborder" )
+	CALL n.setAttribute("style","dialog2 noborder" )
 	CALL n.setAttribute("width","36" )
 	CALL n.setAttribute("height","8" )
 	CALL n.setAttribute("image",gl_splash )
