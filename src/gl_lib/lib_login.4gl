@@ -77,7 +77,7 @@ END FUNCTION
 #+ @param l_email Email address to check
 #+ @return true if exists else false
 PUBLIC FUNCTION sql_checkEmail(l_email VARCHAR(80)) RETURNS BOOLEAN
-	SELECT * FROM accounts WHERE email = l_email
+	SELECT * FROM sys_users WHERE email = l_email
 	IF STATUS = NOTFOUND THEN RETURN FALSE END IF
 	RETURN TRUE
 END FUNCTION
@@ -89,13 +89,13 @@ END FUNCTION
 
 --------------------------------------------------------------------------------
 PRIVATE FUNCTION validate_login(
-	l_login LIKE accounts.email,
-	l_pass LIKE accounts.login_pass) RETURNS BOOLEAN
+	l_login LIKE sys_users.email,
+	l_pass LIKE sys_users.login_pass) RETURNS BOOLEAN
 
-	DEFINE l_acc RECORD LIKE accounts.*
+	DEFINE l_acc RECORD LIKE sys_users.*
 
 -- does account exist?
-	SELECT * INTO l_acc.* FROM accounts WHERE email = l_login
+	SELECT * INTO l_acc.* FROM sys_users WHERE email = l_login
 	IF STATUS = NOTFOUND THEN
 		CALL gl_logIt("No account for:"||l_login)
 		RETURN FALSE
@@ -130,8 +130,8 @@ END FUNCTION
 #+ Forgotten password routine.
 #+
 #+ @param l_login - String - email address to send email to
-PRIVATE FUNCTION forgotten( l_login LIKE accounts.email)
-	DEFINE l_acc RECORD LIKE accounts.*
+PRIVATE FUNCTION forgotten( l_login LIKE sys_users.email)
+	DEFINE l_acc RECORD LIKE sys_users.*
 	DEFINE l_cmd, l_subj, l_body, l_b64 STRING
 	DEFINE l_ret SMALLINT
 
@@ -176,7 +176,7 @@ PRIVATE FUNCTION forgotten( l_login LIKE accounts.email)
 	RUN l_cmd RETURNING l_ret
 	CALL gl_lib.gl_logIt("Sendmail return:"||NVL(l_ret,"NULL"))
 	IF l_ret = 0 THEN -- email send okay
-		UPDATE accounts 
+		UPDATE sys_users 
 			SET (salt, pass_hash, forcepwchg, pass_expire) = 
 					(l_acc.salt, l_acc.pass_hash, l_acc.forcepwchg, l_acc.pass_expire )
 			WHERE email = l_login
@@ -201,11 +201,11 @@ PRIVATE FUNCTION login_ver_title(l_appname STRING, l_ver STRING)
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
-PRIVATE FUNCTION passchg(l_login LIKE accounts.email) RETURNS BOOLEAN
-	DEFINE l_pass1, l_pass2 LIKE accounts.login_pass
+PRIVATE FUNCTION passchg(l_login LIKE sys_users.email) RETURNS BOOLEAN
+	DEFINE l_pass1, l_pass2 LIKE sys_users.login_pass
 	DEFINE l_f ui.Form
 	DEFINE l_rules STRING
-	DEFINE l_acc RECORD LIKE accounts.*
+	DEFINE l_acc RECORD LIKE sys_users.*
 
 	LET l_pass1 = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 	LET l_rules = %"The password must confirm to the following rules:\n",
@@ -245,7 +245,7 @@ PRIVATE FUNCTION passchg(l_login LIKE accounts.email) RETURNS BOOLEAN
 	LET l_acc.forcepwchg = "N"
 	LET l_acc.pass_expire = NULL
 	--DISPLAY "New Hash:",l_acc.pass_hash
-	UPDATE accounts 
+	UPDATE sys_users 
 		SET (salt, pass_hash, forcepwchg, pass_expire, hash_type) = 
 				(l_acc.salt, l_acc.pass_hash, l_acc.forcepwchg, l_acc.pass_expire, l_acc.hash_type)
 		WHERE email = l_login
@@ -255,7 +255,7 @@ PRIVATE FUNCTION passchg(l_login LIKE accounts.email) RETURNS BOOLEAN
 	RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
-PRIVATE FUNCTION pass_ok( l_pass LIKE accounts.login_pass ) RETURNS BOOLEAN
+PRIVATE FUNCTION pass_ok( l_pass LIKE sys_users.login_pass ) RETURNS BOOLEAN
 	DEFINE l_gotUp, l_gotLow, l_gotNum, l_gotSym BOOLEAN
 	DEFINE x,y SMALLINT
 

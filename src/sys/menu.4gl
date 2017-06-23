@@ -62,7 +62,7 @@ FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 	LET m_user = lib_login.login( C_TITLE, C_VER )
 	IF m_user = "Cancelled" THEN RETURN FALSE END IF
 
-	SELECT acct_id INTO m_user_id FROM accounts WHERE email = m_user
+	SELECT user_key INTO m_user_id FROM sys_users WHERE email = m_user
 
 	LET m_args = m_mdi," ", m_user_id
 

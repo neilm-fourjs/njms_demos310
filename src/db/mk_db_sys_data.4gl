@@ -26,13 +26,13 @@ FUNCTION insert_system_data()
 	CALL addRole("M","System Admin Update")
 	CALL addRole("M","Delete")
 
-	INSERT INTO sys_acct_roles VALUES(1,1,"Y")
-	INSERT INTO sys_acct_roles VALUES(1,2,"Y")
-	INSERT INTO sys_acct_roles VALUES(1,3,"Y")
-	INSERT INTO sys_acct_roles VALUES(1,4,"Y")
-	INSERT INTO sys_acct_roles VALUES(1,5,"Y")
-	INSERT INTO sys_acct_roles VALUES(1,6,"Y")
-	INSERT INTO sys_acct_roles VALUES(1,10,"Y")
+	INSERT INTO sys_user_roles VALUES(1,1,"Y")
+	INSERT INTO sys_user_roles VALUES(1,2,"Y")
+	INSERT INTO sys_user_roles VALUES(1,3,"Y")
+	INSERT INTO sys_user_roles VALUES(1,4,"Y")
+	INSERT INTO sys_user_roles VALUES(1,5,"Y")
+	INSERT INTO sys_user_roles VALUES(1,6,"Y")
+	INSERT INTO sys_user_roles VALUES(1,10,"Y")
 
 	LET m_mkey = 1
 	CALL addMenu("main","","T","Four J's Demos Menu", "","")
@@ -80,7 +80,7 @@ FUNCTION mk_demo_account()
 	DEFINE l_hash_type, l_login_pass, l_salt, l_pass_hash, l_email VARCHAR(128)
 
 	LET l_email = "test@test.com"
-	SELECT * FROM accounts WHERE email = l_email
+	SELECT * FROM sys_users WHERE email = l_email
 	IF STATUS = 0 THEN RETURN END IF
 
 	LET l_login_pass = "12test"
@@ -89,7 +89,7 @@ FUNCTION mk_demo_account()
 	LET l_pass_hash = lib_secure.glsec_genPasswordHash( l_login_pass, l_salt, l_hash_type )
 
 	TRY
-		INSERT INTO accounts VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",
+		INSERT INTO sys_users VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",
 			l_hash_type, l_login_pass, l_salt, l_pass_hash, TODAY+365)
 		DISPLAY "Test Account Inserted: "||l_email||" / "||l_login_pass||" with "||l_hash_type||" hash."
 	CATCH

@@ -5,8 +5,8 @@
 FUNCTION ifx_create_system_tables()
 	DISPLAY "Creating system tables..."
 
-	CREATE TABLE accounts (
-		acct_id     SERIAL NOT NULL,
+	CREATE TABLE sys_users (
+		user_key     SERIAL NOT NULL,
 		salutation  VARCHAR(60),
 		forenames   VARCHAR(60) NOT NULL,
 		surname     VARCHAR(60) NOT NULL,
@@ -23,11 +23,11 @@ FUNCTION ifx_create_system_tables()
 		pass_expire DATE
 	);
 
-	CREATE TABLE sys_acct_roles (
-		acct_id INTEGER,
+	CREATE TABLE sys_user_roles (
+		user_key INTEGER,
 		role_key INTEGER,
 		active CHAR(1),
-			PRIMARY KEY (acct_id, role_key)
+			PRIMARY KEY (user_key, role_key)
 	);
 
 	CREATE TABLE sys_roles (

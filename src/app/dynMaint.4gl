@@ -16,6 +16,7 @@
 
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
+IMPORT FGL fjs_lib
 
 CONSTANT PRGNAME = "dynMaint"
 CONSTANT PRGDESC = "Dynamic Maintenance Demo"
@@ -58,7 +59,7 @@ MAIN
 
 	CALL gl_db.gldb_connect(NULL)
 
-	SELECT * FROM accounts WHERE acct_id = m_user_key
+	SELECT * FROM sys_users WHERE user_key = m_user_key
 	IF STATUS != 0 THEN 
 		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Invalid Account '%1'!",m_user_key),"exclamation")
 		CALL gl_lib.gl_exitProgram(1,"invalid account")
@@ -74,7 +75,6 @@ MAIN
 		CALL gl_lib.gl_exitProgram(1,"invalid key name")
 	END IF
 
-
 	LET m_key_fld = 0
 	LET m_row_cur = 0
 	LET m_row_count = 0
@@ -85,20 +85,20 @@ MAIN
  
 	MENU
 		BEFORE MENU
-			CALL setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION insert		CALL inpt(1)
 		ON ACTION update		CALL inpt(0)
 		ON ACTION delete		CALL sql_del()
 		ON ACTION find			CALL constrct()
-			CALL setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION firstrow	CALL get_row(SQL_FIRST)
-			CALL setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION prevrow		CALL get_row(SQL_PREV)
-			CALL setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION nextrow		CALL get_row(SQL_NEXT)
-			CALL setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION lastrow		CALL get_row(SQL_LAST)
-			CALL setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION quit			EXIT MENU
 		ON ACTION close			EXIT MENU
 	END MENU
@@ -115,7 +115,7 @@ FUNCTION mk_sql(l_where STRING)
 	TRY
 		CALL m_sql_handle.prepare( l_sql )
 	CATCH
-		CALL fgl_winMessage("Error",SFMT("Failed to doing prepare for select from '%1'\n%2!",m_tab,SQLERRMESSAGE),"exclamation")
+		CALL gl_lib.gl_winMessage("Error",SFMT("Failed to doing prepare for select from '%1'\n%2!",m_tab,SQLERRMESSAGE),"exclamation")
 		EXIT PROGRAM
 	END TRY
 	CALL m_sql_handle.openScrollCursor()
@@ -128,7 +128,7 @@ FUNCTION mk_sql(l_where STRING)
 		END IF
 	END FOR
 	IF m_key_fld = 0 THEN
-		CALL fgl_winMessage("Error","The key field '"||m_key_nam.trim()||"' doesn't appear to be in the table!","exclamation")
+		CALL gl_lib.gl_winMessage("Error","The key field '"||m_key_nam.trim()||"' doesn't appear to be in the table!","exclamation")
 		EXIT PROGRAM
 	END IF
 	IF l_where != "1=2" THEN
@@ -412,7 +412,7 @@ FUNCTION sql_update()
 		CALL mk_sql( m_where )
 		CALL get_row(x)
 	ELSE
-		CALL fgl_winMessage("Error",SFMT("Failed to update record!\n%1!",SQLERRMESSAGE),"exclamation")
+		CALL gl_lib.gl_winMessage("Error",SFMT("Failed to update record!\n%1!",SQLERRMESSAGE),"exclamation")
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -444,7 +444,7 @@ FUNCTION sql_insert()
 		CALL mk_sql( m_where )
 		CALL get_row(SQL_LAST)
 	ELSE
-		CALL fgl_winMessage("Error",SFMT("Failed to insert record!\n%1!",SQLERRMESSAGE),"exclamation")
+		CALL gl_lib.gl_winMessage("Error",SFMT("Failed to insert record!\n%1!",SQLERRMESSAGE),"exclamation")
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -470,43 +470,4 @@ FUNCTION sql_del()
 	ELSE
 		MESSAGE "Delete aborted."
 	END IF
-END FUNCTION
---------------------------------------------------------------------------------
-FUNCTION setActions(l_row INT, l_max INT,l_allowedActions CHAR(6))
-	DEFINE d ui.Dialog
-&define ACT_FIND l_allowedActions[1]
-&define ACT_LIST l_allowedActions[2]
-&define ACT_UPD l_allowedActions[3]
-&define ACT_INS l_allowedActions[4]
-&define ACT_DEL l_allowedActions[5]
-&define ACT_SAM l_allowedActions[6]
-	LET d = ui.Dialog.getCurrent()
-	IF ACT_FIND = "N" THEN CALL d.setActionActive("find",FALSE) END IF
-	IF ACT_LIST = "N" THEN CALL d.setActionActive("list",FALSE) END IF
-	IF ACT_UPD = "N" THEN CALL d.setActionActive("update",FALSE) END IF
-	IF ACT_INS = "N" THEN CALL d.setActionActive("insert",FALSE) END IF
-	IF ACT_DEL = "N" THEN CALL d.setActionActive("delete",FALSE) END IF
-	--IF ACT_SAM = "N" THEN CALL d.setActionActive("sample",FALSE) END IF
-	IF l_max > 1 THEN
-		IF ACT_UPD = "Y" THEN CALL d.setActionActive("update",TRUE) END IF
-		IF ACT_DEL = "Y" THEN CALL d.setActionActive("delete",TRUE) END IF
-	ELSE
-		IF ACT_UPD = "Y" THEN CALL d.setActionActive("update",FALSE) END IF
-		IF ACT_DEL = "Y" THEN CALL d.setActionActive("delete",FALSE) END IF
-	END IF
-	IF l_row > 0 AND l_row < l_max THEN
-		CALL d.setActionActive("nextrow",TRUE)
-		CALL d.setActionActive("lastrow",TRUE)
-	ELSE
-		CALL d.setActionActive("lastrow",FALSE)
-		CALL d.setActionActive("nextrow",FALSE)
-	END IF
-	IF l_row > 1 THEN
-		CALL d.setActionActive("prevrow",TRUE)
-		CALL d.setActionActive("firstrow",TRUE)
-	ELSE
-		CALL d.setActionActive("prevrow",FALSE)
-		CALL d.setActionActive("firstrow",FALSE)
-	END IF
-
 END FUNCTION

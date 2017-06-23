@@ -11,7 +11,7 @@ END -- Toolbar
 LAYOUT ( TEXT="Your Details", WINDOWSTYLE="main2", IMAGE="fa-user" )
 GRID
 {
-[acct_id   |r1|f001        ]  [r                                  ]
+[user_key   |r1|f001        ]  [r                                  ]
 [email     |r6|f007                                               ]
 [salutation|r2|f003        ]  
 [forenames |r3|f004                                               ]
@@ -30,7 +30,7 @@ END -- GRID
 END -- LAYOUT
 
 TABLES
-accounts
+sys_users
 
 ATTRIBUTES
 LABEL r  : r , TEXT="( * = Required )",STYLE="required",JUSTIFY=CENTER;
@@ -47,7 +47,7 @@ LABEL rd : rd, TEXT="",STYLE="required";
 LABEL rp : rp, TEXT="*",STYLE="required";
 LABEL pe : pe, TEXT="*",STYLE="required";
 
-LABEL acct_id    : lc, TEXT=%"Account Id:",JUSTIFY=RIGHT;
+LABEL user_key    : lc, TEXT=%"Account Id:",JUSTIFY=RIGHT;
 LABEL email			 : em, TEXT=%"Email:",JUSTIFY=RIGHT;
 LABEL salutation : sl, TEXT=%"Saluation:",JUSTIFY=RIGHT;
 LABEL forenames	 : fn, TEXT=%"First Name:",JUSTIFY=RIGHT;
@@ -60,24 +60,24 @@ LABEL forcepwch  : fp, TEXT=%"Force Pass Change:",JUSTIFY=RIGHT;
 LABEL passwd     : pw, TEXT=%"Password:", JUSTIFY=RIGHT;
 LABEL passexp    : pe, TEXT=%"Password Expires:",JUSTIFY=RIGHT;
 
-f001 = accounts.acct_id, DEFAULT=0;
-f007 = accounts.email, NOT NULL, REQUIRED, TABINDEX=1;
-f003 = accounts.salutation, TABINDEX=2;
-f004 = accounts.forenames, NOT NULL, REQUIRED, TABINDEX=3;
-f005 = accounts.surname, NOT NULL, REQUIRED, TABINDEX=4;
-f006 = accounts.position, TABINDEX=5;
-TEXTEDIT f008 = accounts.comment, TABINDEX=6;
-COMBOBOX f009 = accounts.acct_type,INITIALIZER=pop_combo,DEFAULT=1,NOT NULL, TABINDEX=7;
-CHECKBOX a = accounts.active,VALUECHECKED=1,VALUEUNCHECKED=0,DEFAULT=1,NOT NULL;
-CHECKBOX b = accounts.forcepwchg, VALUECHECKED="Y", VALUEUNCHECKED="N",NOT NULL;
+f001 = sys_users.user_key, DEFAULT=0;
+f007 = sys_users.email, NOT NULL, REQUIRED, TABINDEX=1;
+f003 = sys_users.salutation, TABINDEX=2;
+f004 = sys_users.forenames, NOT NULL, REQUIRED, TABINDEX=3;
+f005 = sys_users.surname, NOT NULL, REQUIRED, TABINDEX=4;
+f006 = sys_users.position, TABINDEX=5;
+TEXTEDIT f008 = sys_users.comment, TABINDEX=6;
+COMBOBOX f009 = sys_users.acct_type,INITIALIZER=pop_combo,DEFAULT=1,NOT NULL, TABINDEX=7;
+CHECKBOX a = sys_users.active,VALUECHECKED=1,VALUEUNCHECKED=0,DEFAULT=1,NOT NULL;
+CHECKBOX b = sys_users.forcepwchg, VALUECHECKED="Y", VALUEUNCHECKED="N",NOT NULL;
 
-BUTTONEDIT p001 = accounts.login_pass, INVISIBLE, VERIFY, NOT NULL, TABINDEX=8, ACTION=generate, IMAGE="fa-cog";
+BUTTONEDIT p001 = sys_users.login_pass, INVISIBLE, VERIFY, NOT NULL, TABINDEX=8, ACTION=generate, IMAGE="fa-cog";
 BUTTON generate:generate, TEXT="Re-generate", IMAGE="fa-cog", HIDDEN;
---EDIT p001 = accounts.login_pass, NOENTRY, FONTPITCH=FIXED, NOT NULL, TABINDEX=8, STYLE="em12";
+--EDIT p001 = sys_users.login_pass, NOENTRY, FONTPITCH=FIXED, NOT NULL, TABINDEX=8, STYLE="em12";
 
-DATEEDIT p002 = accounts.pass_expire, NOT NULL, TABINDEX=9;
+DATEEDIT p002 = sys_users.pass_expire, NOT NULL, TABINDEX=9;
 
-PHANTOM accounts.salt;
-PHANTOM accounts.pass_hash;
-PHANTOM accounts.hash_type;
+PHANTOM sys_users.salt;
+PHANTOM sys_users.pass_hash;
+PHANTOM sys_users.hash_type;
 

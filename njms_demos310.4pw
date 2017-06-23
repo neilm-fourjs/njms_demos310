@@ -55,101 +55,118 @@
   </Settings>
   <LanguageList version="1.0"/>
   <PlatformList version="1.0"/>
-  <Group label="Business Apps" language="Genero">
-    <Application binaryName="dynMaint" commandLineArguments="S 1 stock stock_code" dependencies="14000,1986" id="1873655788" label="dynMaint">
-      <File filePath="src/dynMaint.4gl"/>
-    </Application>
-  </Group>
-  <Group label="Database" language="Genero">
-    <Library binaryName="Databases" id="1986" label="Databases">
-      <File filePath="etc/njm_demo.4db"/>
-      <File filePath="src/schema.inc"/>
-    </Library>
-    <Application binaryName="mk_db" commandLineArguments="SYS" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">
-      <File filePath="src/mk_db.4gl"/>
-      <File filePath="src/mk_db_sys_data.4gl"/>
-      <File filePath="src/mk_db_sys_ifx.4gl"/>
-    </Application>
-    <Library binaryName="mk_db_lib" dependencies="-400184264" id="726830537" label="mk_db_lib">
-      <File filePath="src/mk_db_app_data.4gl"/>
-      <File filePath="src/mk_db_app_ifx.4gl"/>
-    </Library>
-  </Group>
-  <Group label="Demo Apps" language="Genero">
-    <Application binaryName="ipodTree" dependencies="14000" id="-217822240" label="ipodTree">
-      <File filePath="src/ipod.4gl"/>
-      <File filePath="src/ipod.per"/>
-      <File filePath="src/ipod_sax.4gl"/>
-      <File filePath="etc/ipodtree.4st"/>
-    </Application>
-    <Application binaryName="picFlow" commandLineArguments="S 1 ../pics" dependencies="14000" id="-183914303" label="picFlow">
-      <File filePath="src/picflow.4gl"/>
-      <File filePath="etc/picflow.4st"/>
-      <File filePath="src/picflow.per"/>
-    </Application>
-    <Application binaryName="wc_amCharts" dependencies="14000" id="-1954675472" label="wc_amCharts">
-      <File filePath="src/wc_amcharts.4gl"/>
-      <File filePath="src/wc_amcharts.per"/>
-    </Application>
-    <Application binaryName="wc_googleMaps" dependencies="14000" id="-2121135278" label="wc_googleMaps">
-      <File filePath="src/gm.4gl"/>
-      <File filePath="src/gm.per"/>
-    </Application>
-    <Application binaryName="wc_kite" commandLineArguments="S 1" dependencies="14000" id="-2014604027" label="wc_kite">
-      <File filePath="src/wc_kite.4gl"/>
-      <File filePath="etc/wc_kite.4st"/>
-      <File filePath="src/wc_kite.per"/>
-    </Application>
-    <Application binaryName="widgets" dependencies="14000" id="1663756762" label="widgets">
-      <VirtualFolder label="etc">
-        <File filePath="etc/widgets.4ad"/>
-        <File filePath="etc/widgets.4sm"/>
-        <File filePath="etc/widgets.4st"/>
-        <File filePath="etc/widgets.4tb"/>
-        <File filePath="etc/widgets1.4st"/>
-        <File filePath="etc/widgets2.4st"/>
-        <File filePath="etc/widgets3.4st"/>
-      </VirtualFolder>
-      <File filePath="src/widgets.4gl"/>
-      <File filePath="src/widgets.per"/>
-      <File filePath="src/widgets_charts.4gl"/>
-      <File filePath="src/widgets_clock.4gl"/>
-    </Application>
-  </Group>
-  <Group environment="value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="Libraries" language="Genero">
-    <Library binaryName="etc" id="-400184264" label="etc">
-      <File filePath="etc/default.4ad"/>
-      <File filePath="etc/default.4st"/>
-    </Library>
-    <Library binaryName="genero_lib" dependencies="1986" id="14000" label="genero_lib">
-      <File filePath="src/genero_lib.inc"/>
-      <File filePath="src/gl_db.4gl"/>
-      <File filePath="src/gl_db.inc"/>
-      <File filePath="src/gl_lib.4gl"/>
-      <File filePath="src/gl_lib_aui.4gl"/>
-      <File filePath="src/gl_lookup3.4gl"/>
-    </Library>
-    <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">
-      <File filePath="src/lib_login.4gl"/>
-      <File compilerOptions="-DG310" filePath="src/lib_secure.4gl"/>
-      <File filePath="src/login.per"/>
-    </Library>
-  </Group>
-  <Group label="Packages" language="Genero">
-    <Package binaryName="njms_demos310" description="NJMs Demos" label="njms_demos310" platform="Genero Application Server" rootDirectory="$(ProjectDir)/">
-      <DynamicProperty name="packageId" value="njmsdemos"/>
-      <DynamicProperty name="packageLabel" value="NJMs Demos"/>
-      <Directory includedFiles="*.42?" label="bin" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
-      <Directory destinationDirectory="bin/pics/" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
-    </Package>
-  </Group>
-  <Group label="System" language="Genero">
-    <Application binaryName="menu" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
-      <File filePath="src/menu.4gl"/>
-      <File filePath="src/menu.per"/>
-      <File filePath="src/new_acct.4gl"/>
-      <File filePath="src/new_acct.per"/>
-    </Application>
+  <Group environment="value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+    <Group label="Business Apps" language="Genero">
+      <Library binaryName="App_Lib" dependencies="1986" id="-1090563702" label="App_Lib">
+        <File filePath="src/app/fjs_lib.4gl"/>
+      </Library>
+      <Application binaryName="dynMaint" commandLineArguments="S 1 stock stock_code" dependencies="14000,1986,-1090563702" id="1873655788" label="dynMaint">
+        <File filePath="src/app/dynMaint.4gl"/>
+      </Application>
+      <Library binaryName="etc" id="1835393312" label="etc">
+        <File filePath="etc/dynmaint.4tb"/>
+        <File filePath="etc/dynmaint.4tm"/>
+      </Library>
+      <Application binaryName="menu_mnt" commandLineArguments="S 1" dependencies="14000,-1090563702" id="1001967872" label="menu_mnt">
+        <File filePath="src/sys/menu_mnt.4gl"/>
+        <File filePath="src/sys/menu_mnt.per"/>
+      </Application>
+      <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="14000,-1090563702" id="1117674734" label="user_mnt">
+        <File filePath="src/sys/user_mnt.4gl"/>
+        <File filePath="src/sys/user_mnt.per"/>
+      </Application>
+    </Group>
+    <Group label="Database" language="Genero">
+      <Library binaryName="Databases" id="1986" label="Databases">
+        <File filePath="etc/njm_demo310.4db"/>
+        <File filePath="src/schema.inc"/>
+      </Library>
+      <Application binaryName="mk_db" commandLineArguments="ALL" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">
+        <File filePath="src/db/mk_db.4gl"/>
+        <File filePath="src/db/mk_db_sys_data.4gl"/>
+        <File filePath="src/db/mk_db_sys_ifx.4gl"/>
+      </Application>
+      <Library binaryName="mk_db_lib" dependencies="-400184264,1986" id="726830537" label="mk_db_lib">
+        <File filePath="src/db/mk_db_app_data.4gl"/>
+        <File filePath="src/db/mk_db_app_ifx.4gl"/>
+      </Library>
+    </Group>
+    <Group label="Demo Apps" language="Genero">
+      <Application binaryName="ipodTree" dependencies="14000" id="-217822240" label="ipodTree">
+        <File filePath="src/demos/ipod.4gl"/>
+        <File filePath="src/demos/ipod.per"/>
+        <File filePath="src/demos/ipod_sax.4gl"/>
+        <File filePath="etc/ipodtree.4st"/>
+      </Application>
+      <Application binaryName="picFlow" commandLineArguments="S 1 ../pics" dependencies="14000" id="-183914303" label="picFlow">
+        <File filePath="src/demos/picflow.4gl"/>
+        <File filePath="etc/picflow.4st"/>
+        <File filePath="src/demos/picflow.per"/>
+      </Application>
+      <Application binaryName="wc_amCharts" dependencies="14000" id="-1954675472" label="wc_amCharts">
+        <File filePath="src/demos/wc_amcharts.4gl"/>
+        <File filePath="src/demos/wc_amcharts.per"/>
+      </Application>
+      <Application binaryName="wc_googleMaps" dependencies="14000" id="-2121135278" label="wc_googleMaps">
+        <File filePath="src/demos/wc_gm.4gl"/>
+        <File filePath="src/demos/wc_gm.per"/>
+      </Application>
+      <Application binaryName="wc_kite" commandLineArguments="S 1" dependencies="14000" id="-2014604027" label="wc_kite">
+        <File filePath="src/demos/wc_kite.4gl"/>
+        <File filePath="etc/wc_kite.4st"/>
+        <File filePath="src/demos/wc_kite.per"/>
+      </Application>
+      <Application binaryName="widgets" dependencies="14000" id="1663756762" label="widgets">
+        <VirtualFolder label="etc">
+          <File filePath="etc/widgets.4ad"/>
+          <File filePath="etc/widgets.4sm"/>
+          <File filePath="etc/widgets.4st"/>
+          <File filePath="etc/widgets.4tb"/>
+          <File filePath="etc/widgets1.4st"/>
+          <File filePath="etc/widgets2.4st"/>
+          <File filePath="etc/widgets3.4st"/>
+        </VirtualFolder>
+        <File filePath="src/demos/widgets.4gl"/>
+        <File filePath="src/demos/widgets.per"/>
+        <File filePath="src/demos/widgets_charts.4gl"/>
+        <File filePath="src/demos/widgets_clock.4gl"/>
+      </Application>
+    </Group>
+    <Group label="GL_Lib" language="Genero">
+      <Library binaryName="etc" id="-400184264" label="etc">
+        <File filePath="etc/default.4ad"/>
+        <File filePath="etc/default.4st"/>
+      </Library>
+      <Library binaryName="genero_lib" dependencies="1986" id="14000" label="genero_lib">
+        <File filePath="src/gl_lib/genero_lib.inc"/>
+        <File filePath="src/gl_lib/gl_db.4gl"/>
+        <File filePath="src/gl_lib/gl_db.inc"/>
+        <File filePath="src/gl_lib/gl_lib.4gl"/>
+        <File filePath="src/gl_lib/gl_lib_aui.4gl"/>
+        <File filePath="src/gl_lib/gl_lookup3.4gl"/>
+      </Library>
+    </Group>
+    <Group label="Packages" language="Genero">
+      <Package binaryName="njms_demos310" description="NJMs Demos" label="njms_demos310" platform="Genero Application Server" rootDirectory="$(ProjectDir)/">
+        <DynamicProperty name="packageId" value="njmsdemos"/>
+        <DynamicProperty name="packageLabel" value="NJMs Demos"/>
+        <Directory includedFiles="*.42?" label="bin" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
+        <Directory destinationDirectory="bin/pics/" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
+      </Package>
+    </Group>
+    <Group label="System" language="Genero">
+      <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">
+        <File filePath="src/gl_lib/lib_login.4gl"/>
+        <File filePath="src/gl_lib/lib_secure.4gl"/>
+        <File filePath="src/sys/login.per"/>
+      </Library>
+      <Application binaryName="menu" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
+        <File filePath="src/sys/menu.4gl"/>
+        <File filePath="src/sys/menu.per"/>
+        <File filePath="src/sys/new_acct.4gl"/>
+        <File filePath="src/sys/new_acct.per"/>
+      </Application>
+    </Group>
   </Group>
   <Group label="Tests" language="Genero">
     <Application binaryName="Test" compilerOptions="-I &quot;$(GGCDIR)/libForGST&quot;" dependencies="18736" id="36249064" label="Test"/>

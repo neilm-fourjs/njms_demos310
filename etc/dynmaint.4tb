@@ -1,0 +1,19 @@
+<ToolBar>
+  <ToolBarItem name="quit" text="Quit" image="quit"/>
+  <ToolBarSeparator/>
+  <ToolBarItem name="accept"/>
+  <ToolBarItem name="cancel"/>
+  <ToolBarSeparator/>
+  <ToolBarItem name="find"/>
+  <ToolBarSeparator/>
+  <ToolBarItem name="insert" image="new"/>
+  <ToolBarItem name="sample" text="Sample" image="copy"/>
+  <ToolBarItem name="delete" image="delete"/>
+  <ToolBarItem name="update" image="pen"/>
+  <ToolBarItem name="report" text="Report" image="printer"/>
+  <ToolBarSeparator/>
+  <ToolBarItem name="firstrow"/>
+  <ToolBarItem name="prevrow"/>
+  <ToolBarItem name="nextrow"/>
+  <ToolBarItem name="lastrow"/>
+</ToolBar>

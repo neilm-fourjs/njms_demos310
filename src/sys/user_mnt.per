@@ -1,0 +1,95 @@
+
+&include "schema.inc"
+
+TOOLBAR
+	ITEM exit
+	ITEM save
+	ITEM cancel
+	ITEM delete ( TEXT=%"Delete User" )
+	ITEM removeroles
+	ITEM addroles
+END -- TOOLBAR
+
+LAYOUT (STYLE="main2", TEXT=%"User Maintenance", VERSION="$Id: user_mnt.per 597 2011-02-25 15:35:55Z  $")
+HBOX (SPLITTER)
+VBOX
+TABLE users (DOUBLECLICK=dblclick,STYLE="nosel")
+{
+[u001                      ]
+[u001                      ]
+[u001                      ]
+[u001                      ]
+[u001                      ]
+}
+END -- TABLE
+GRID
+{
+[uk        |f001 ]
+[fn        |f002                      ]
+[sn        |f003                      ]
+[em        |f005                      ]
+[ut        |f009        ]
+[ac        |a ]
+}
+END -- GRID
+END -- VBOX
+VBOX (SPLITTER)
+TABLE uroles (DOUBLECLICK=dblclick)
+{
+[ur01                     |b]
+[ur01                     |b]
+[ur01                     |b]
+[ur01                     |b]
+[ur01                     |b]
+}
+END -- TABLE
+TABLE roles (DOUBLECLICK=dblclick)
+{
+[r|r001                     |c]
+[r|r001                     |c]
+[r|r001                     |c]
+[r|r001                     |c]
+[r|r001                     |c]
+}
+END -- TABLES
+END -- VBOX
+END -- HBOX
+END -- LAYOUT
+
+TABLES
+sys_users
+sys_roles
+sys_user_roles
+
+ATTRIBUTES
+
+u001 = FORMONLY.fullname,TITLE=%"Users";
+
+LABEL uk : uk,TEXT=%"User Key:", JUSTIFY=RIGHT;
+LABEL fn : fn,TEXT=%"Forenames:", JUSTIFY=RIGHT;
+LABEL sn : sn,TEXT=%"Surname:", JUSTIFY=RIGHT;
+LABEL em : em,TEXT=%"Email:", JUSTIFY=RIGHT;
+LABEL ut : ut,TEXT=%"User Type:", JUSTIFY=RIGHT;
+LABEL ac : ac,TEXT=%"Active:", JUSTIFY=RIGHT;
+
+f001 = sys_users.user_key;
+f002 = sys_users.forenames;
+f003 = sys_users.surname;
+f005 = sys_users.email;
+COMBOBOX f009 = sys_users.acct_type, ITEMS=((1,"User"),(2,"Admin")),DEFAULT=1,NOT NULL;
+CHECKBOX a = sys_users.active,VALUECHECKED=1,VALUEUNCHECKED=0,NOT NULL;
+
+PHANTOM sys_user_roles.user_key;
+PHANTOM sys_user_roles.role_key;
+ur01 = FORMONLY.role_name,TITLE=%"User Roles";
+CHECKBOX b = sys_user_roles.active,VALUECHECKED="Y",VALUEUNCHECKED="N",NOT NULL;
+
+PHANTOM sys_roles.role_key;
+r = FORMONLY.role_type,TITLE="Typ",COMMENT=%"S=System,M=Menu,A=Action";
+r001 = FORMONLY.role_name2,TITLE="Roles";
+CHECKBOX c =  sys_roles.active,VALUECHECKED="Y",VALUEUNCHECKED="N",NOT NULL;
+
+INSTRUCTIONS
+SCREEN RECORD u_arr (FORMONLY.fullname)
+SCREEN RECORD ur_arr (sys_user_roles.user_key THRU sys_user_roles.active)
+SCREEN RECORD r_arr (sys_roles.role_key THRU sys_roles.active)
