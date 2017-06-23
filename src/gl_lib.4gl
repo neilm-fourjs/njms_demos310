@@ -268,41 +268,39 @@ END FUNCTION --}}}
 #+
 #+ @param fm Form object to be initialized.
 FUNCTION gl_formInit(l_fm ui.Form) --{{{
-	DEFINE fn om.DomNode
-	DEFINE nam,styl,tag STRING
-	DEFINE win ui.Window
-	DEFINE nl om.nodeList
+	DEFINE l_fn om.DomNode
+	DEFINE l_nam, l_styl, l_tag STRING
+	DEFINE l_nl om.nodeList
 
 	GL_DBGMSG(1, "gl_formInit: start")
 
-	LET fn = l_fm.getNode()
+	LET l_fn = l_fm.getNode()
 
-	LET nam = fn.getAttribute("name")
-	LET styl = fn.getAttribute("style")
-	LET tag = fn.getAttribute("tag")
-	IF tag IS NULL THEN LET tag = "(null)" END IF
-	GL_DBGMSG(0, "gl_formInit: tag='"||tag||"'")
-	IF styl IS NULL THEN -- check to see if the window had the style set.
-		LET win = ui.Window.getCurrent()
-		LET fn = win.getNode()
-		LET styl = fn.getAttribute("style")
-		LET fn = l_fm.getNode()
+	LET l_nam = l_fn.getAttribute("name")
+	LET l_styl = l_fn.getAttribute("style")
+	LET l_tag = l_fn.getAttribute("tag")
+	IF l_tag IS NULL THEN LET l_tag = "(null)" END IF
+	GL_DBGMSG(0, "gl_formInit: tag='"||l_tag||"'")
+	IF l_styl IS NULL THEN -- check to see if the window had the style set.
+		LET l_fn = gl_getWinNode(NULL)
+		LET l_styl = l_fn.getAttribute("style")
+		LET l_fn = l_fm.getNode()
 	END IF
-	IF styl IS NULL THEN
-		GL_DBGMSG(1, "gl_formInit: form='"||nam||"' style=NULL")
-		LET styl = "NULL"
+	IF l_styl IS NULL THEN
+		GL_DBGMSG(1, "gl_formInit: form='"||l_nam||"' style=NULL")
+		LET l_styl = "NULL"
 	ELSE
-		GL_DBGMSG(1, "gl_formInit: form='"||nam||"' style='"||styl||"'")
+		GL_DBGMSG(1, "gl_formInit: form='"||l_nam||"' style='"||l_styl||"'")
 	END IF
-	LET nl = fn.selectByTagName("ToolBar")
 	
-	IF styl != "splash" 
-	AND styl != "dialog" 	AND styl != "dialog2" 	AND styl != "dialog3" 
-	AND styl != "menu"
-	AND styl != "lookup" AND styl != "naked" AND styl != "about"  AND styl != "viewer"
-	AND styl != "wizard" THEN
-		GL_DBGMSG(1, "gl_formInit: loading Toolbar '"||gl_toolbar||"'")
-		IF NOT gl_noToolBar AND nl.getlength() < 1 THEN
+	IF l_styl != "splash" 
+	AND l_styl != "dialog" 	AND l_styl != "dialog2" 	AND l_styl != "dialog3" 
+	AND l_styl != "menu"
+	AND l_styl != "lookup" AND l_styl != "naked" AND l_styl != "about"  AND l_styl != "viewer"
+	AND l_styl != "wizard" THEN
+		LET l_nl = l_fn.selectByTagName("ToolBar")
+		IF NOT gl_noToolBar AND l_nl.getlength() < 1 THEN
+			GL_DBGMSG(1, "gl_formInit: loading Toolbar '"||gl_toolbar||"'")
 			TRY
 				CALL l_fm.loadToolbar( gl_toolbar )
 			CATCH
@@ -310,7 +308,7 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 			END TRY
 		END IF
 
-		IF styl != "main" AND gl_topmenu != "default" THEN -- normal won't want default?
+		IF l_styl != "main" AND l_styl != "main2" AND gl_topmenu != "default" THEN -- normal won't want default?
 			GL_DBGMSG(1, "gl_formInit: loading Topmenu '"||gl_topmenu||"'")
 			TRY
 				CALL l_fm.loadTopmenu( gl_topmenu )
@@ -827,6 +825,8 @@ END FUNCTION --}}}
 FUNCTION gl_splash(l_dur SMALLINT) --{{{
 	DEFINE f,g,n om.DomNode
 
+	IF gl_fe_typ = "GBC" THEN RETURN END IF
+
 	IF l_dur = -1 THEN
 		CLOSE WINDOW splash
 		RETURN
@@ -837,7 +837,7 @@ FUNCTION gl_splash(l_dur SMALLINT) --{{{
 	LET g = f.createChild("Grid")
 	LET n = g.createChild("Image")
 	CALL n.setAttribute("name","logo" )
-	CALL n.setAttribute("style","dialog2 noborder" )
+	CALL n.setAttribute("style","noborder" )
 	CALL n.setAttribute("width","36" )
 	CALL n.setAttribute("height","8" )
 	CALL n.setAttribute("image",gl_splash )

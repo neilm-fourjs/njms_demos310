@@ -31,10 +31,8 @@ MAIN
 	LET m_mdi = gl_lib.m_mdi
 	IF m_mdi = "M" THEN LET m_mdi = "C" END IF -- if MDI container set so child programs are children
 
-	OPEN FORM menu FROM "menu"
-	DISPLAY FORM menu
+	CLOSE WINDOW SCREEN
 
-	DISPLAY C_SPLASH TO logo
 	LET m_curMenu = 1
   LET m_menus[m_curMenu] = "main"
 	IF do_dbconnect_and_login() THEN
@@ -49,9 +47,7 @@ END MAIN
 FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 
 	LET gl_lib.gl_splash = C_SPLASH
-	IF gl_lib.gl_fe_typ != "GBC" THEN
-		CALL gl_lib.gl_splash( 0 ) -- open splash
-	END IF
+	CALL gl_lib.gl_splash( 0 ) -- open splash
 
 	CALL gl_db.gldb_connect( NULL )
 
@@ -76,6 +72,9 @@ END FUNCTION
 -- 
 FUNCTION do_menu()
 	DEFINE l_prog, l_args STRING
+
+	OPEN WINDOW menu WITH FORM "menu"
+	DISPLAY C_SPLASH TO logo
 
 	IF NOT populate_menu(m_menus[m_curMenu]) THEN -- should not happen!
 		CALL gl_lib.gl_exitProgram(0,"'main' menu not found!")

@@ -110,8 +110,8 @@
         <File filePath="etc/widgets2.4st"/>
         <File filePath="etc/widgets3.4st"/>
       </VirtualFolder>
+      <File filePath="src/widgets.4gl"/>
       <File filePath="src/widgets.per"/>
-      <File filePath="src/widgets300.4gl"/>
       <File filePath="src/widgets_charts.4gl"/>
       <File filePath="src/widgets_clock.4gl"/>
     </Application>

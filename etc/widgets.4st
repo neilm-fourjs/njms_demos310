@@ -7,7 +7,9 @@
   <Style name='.noborder'>
     <StyleAttribute name="border" value="none"/>
   </Style>
-
+  <Style name=".bg_white">
+     <StyleAttribute name="backgroundColor" value="white" />
+  </Style>
   <Style name='Image'>
     <StyleAttribute name="border" value="none"/>
   </Style>

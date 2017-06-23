@@ -125,11 +125,9 @@ MAIN
 	END IF
 	GL_DBGMSG(2,"done - fix_path.")
 
-	IF gl_lib.gl_fe_typ = "GDC" THEN
-		GL_DBGMSG(4,"doing splash.")
-		CALL gl_splash( 4 )
-		GL_DBGMSG(4,"done splash.")
-	END IF
+	GL_DBGMSG(4,"doing splash.")
+	CALL gl_splash( 4 )
+	GL_DBGMSG(4,"done splash.")
 
 	GL_DBGMSG(4,"before - open window.")
 	OPEN WINDOW widgets WITH FORM "widgets"
@@ -140,6 +138,7 @@ MAIN
 	CALL hide_item("Page","colours",1)
 	CALL ui.interface.refresh()
 	GL_DBGMSG(4,"after - ui.interface.refresh.")
+
 
 	LET lins = FALSE
 	LET scal = 100
