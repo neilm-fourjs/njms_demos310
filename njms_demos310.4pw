@@ -83,6 +83,7 @@
       </Library>
       <Application binaryName="mk_db" commandLineArguments="ALL" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">
         <File filePath="src/db/mk_db.4gl"/>
+        <File filePath="src/db/mk_db.per"/>
         <File filePath="src/db/mk_db_sys_data.4gl"/>
         <File filePath="src/db/mk_db_sys_ifx.4gl"/>
       </Application>

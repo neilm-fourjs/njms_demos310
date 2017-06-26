@@ -6,15 +6,23 @@ IMPORT FGL mk_db_sys_data
 IMPORT FGL mk_db_app_data
 
 &include "schema.inc"
-
+DEFINE m_stat STRING
 MAIN
 	DEFINE l_arg STRING
+	
+	OPEN FORM f FROM "mk_db"
+	DISPLAY FORM f
+
+	LET m_stat = SFMT( "mk_db.42r running, arg:%1",l_arg )
+	DISPLAY BY NAME m_stat
+	CALL ui.Interface.refresh()
 
 	LET l_arg = ARG_VAL(1)
 	IF l_arg IS NULL OR l_arg = " " THEN LET l_arg = "ALL" END IF
 
 	LET gl_db.m_cre_db = TRUE
 	CALL gl_db.gldb_connect(NULL)
+	CALL mkdb_progress( "Connected to db okay" )
 
 	IF l_arg = "SYS" OR l_arg = "ALL" THEN
 		CALL drop_sys()
@@ -27,10 +35,13 @@ MAIN
 		CALL ifx_create_app_tables()
 		CALL insert_app_data()
 	END IF
+
+	CALL gl_lib.gl_winMessage("Info",SFMT("mk_db program finished Arg:%1",l_arg),"information")
+
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION drop_sys()
-	DISPLAY "Dropping system tables..."
+	CALL mkdb_progress( "Dropping system tables...")
 	WHENEVER ERROR CONTINUE
 	DROP TABLE sys_users
 	DROP TABLE sys_user_roles
@@ -38,11 +49,11 @@ FUNCTION drop_sys()
 	DROP TABLE sys_menus
 	DROP TABLE sys_menu_roles
 	WHENEVER ERROR STOP
-	DISPLAY "Done."
+	CALL mkdb_progress( "Done." )
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION drop_app()
-	DISPLAY "Dropping data tables..."
+	CALL mkdb_progress( "Dropping data tables..." )
 	WHENEVER ERROR CONTINUE
 	DROP TABLE customer
 	DROP TABLE addresses
@@ -56,5 +67,11 @@ FUNCTION drop_app()
 	DROP TABLE ord_payment
 	DROP TABLE disc
 	WHENEVER ERROR STOP
-	DISPLAY "Done."
+	CALL mkdb_progress( "Done." )
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION mkdb_progress(l_mess STRING)
+	LET m_stat = m_stat.append( NVL(l_mess,"NULL!")||"\n" )
+	DISPLAY BY NAME m_stat
+	CALL ui.Interface.refresh()
 END FUNCTION

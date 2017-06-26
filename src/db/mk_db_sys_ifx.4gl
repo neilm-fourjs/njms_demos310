@@ -3,7 +3,7 @@
 
 --------------------------------------------------------------------------------
 FUNCTION ifx_create_system_tables()
-	DISPLAY "Creating system tables..."
+	CALL mkdb_progress( "Creating system tables..." )
 
 	CREATE TABLE sys_users (
 		user_key     SERIAL NOT NULL,
@@ -54,5 +54,5 @@ FUNCTION ifx_create_system_tables()
 			PRIMARY KEY (menu_key, role_key)
 	);
 
-	DISPLAY "Done"
+	CALL mkdb_progress( "Done" )
 END FUNCTION

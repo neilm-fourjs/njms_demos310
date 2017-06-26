@@ -8,7 +8,7 @@ DEFINE m_mkey, m_ukey, m_rkey INTEGER
 --------------------------------------------------------------------------------
 FUNCTION insert_system_data()
 
-	DISPLAY "Loading system users / menus ..."
+	CALL mkdb_progress( "Loading system users / menus ..." )
 
 	LET m_ukey = 1
 	CALL mk_demo_account()
@@ -72,13 +72,13 @@ FUNCTION insert_system_data()
 	CALL addMenu("oeprn","oe","F","Print Invoices", "printInvoices.42r 0 ordent.4rp","")
 	CALL addMenu("oeprn","oe","F","Print Picking Notes", "printInvoices.42r picklist.4rp","")
 
-	DISPLAY "Done."
+	CALL mkdb_progress( "Done." )
 
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION mk_demo_account()
 	DEFINE l_hash_type, l_login_pass, l_salt, l_pass_hash, l_email VARCHAR(128)
-
+	CALL mkdb_progress( "Creating test account." )
 	LET l_email = "test@test.com"
 	SELECT * FROM sys_users WHERE email = l_email
 	IF STATUS = 0 THEN RETURN END IF
@@ -91,15 +91,13 @@ FUNCTION mk_demo_account()
 	TRY
 		INSERT INTO sys_users VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",
 			l_hash_type, l_login_pass, l_salt, l_pass_hash, TODAY+365)
-		DISPLAY "Test Account Inserted: "||l_email||" / "||l_login_pass||" with "||l_hash_type||" hash."
+		CALL mkdb_progress( "Test Account Inserted: "||l_email||" / "||l_login_pass||" with "||l_hash_type||" hash." )
 	CATCH
-		DISPLAY "Insert test account failed!\n",STATUS,":",SQLERRMESSAGE
+		CALL mkdb_progress( "Insert test account failed!\n"||STATUS||":"||SQLERRMESSAGE )
 	END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION addRole(l_type,l_name)
-	DEFINE l_type CHAR(1),
-		l_name     VARCHAR(30)
+FUNCTION addRole(l_type CHAR,l_name VARCHAR(30))
 
 	IF m_dbtyp = "pgs" THEN
 		INSERT INTO sys_roles VALUES(nextval('sys_roles_role_key_seq'),l_type,l_name,"Y")
@@ -109,13 +107,13 @@ FUNCTION addRole(l_type,l_name)
 	LET m_rkey = m_rkey + 1
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION addMenu(l_id,l_pid,l_type,l_text,l_item,l_passw)
-	DEFINE l_id      VARCHAR(6),
+FUNCTION addMenu(
+		l_id      VARCHAR(6),
 		l_pid     VARCHAR(6),
 		l_type    CHAR(1),
 		l_text    VARCHAR(40),
 		l_item    VARCHAR(80),
-		l_passw   VARCHAR(8)
+		l_passw   VARCHAR(8) )
 
 	IF m_dbtyp = "pgs" THEN
 		INSERT INTO sys_menus VALUES(nextval('sys_menus_menu_key_seq'),l_id,l_pid,l_type,l_text,l_item,l_passw)

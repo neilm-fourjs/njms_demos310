@@ -3,7 +3,7 @@
 
 --------------------------------------------------------------------------------
 FUNCTION ifx_create_app_tables()
-	DISPLAY "Creating application tables..."
+	CALL mkdb_progress( "Creating application tables..." )
 
 	CREATE TABLE customer (
 		customer_code CHAR(8) PRIMARY KEY,
@@ -157,6 +157,6 @@ FUNCTION ifx_create_app_tables()
 			PRIMARY KEY (stock_disc, customer_disc)
 	);
 
-	DISPLAY "Done."
+	CALL mkdb_progress( "Done." )
 END FUNCTION
 --------------------------------------------------------------------------------

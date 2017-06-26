@@ -20,7 +20,7 @@ FUNCTION insert_app_data()
 	LET m_dbtyp = FGL_DB_DRIVER_TYPE()
 --	IF m_dbtyp = "snc" OR m_dbtyp = "msv" OR m_dbtyp = "sqt" THEN CALL load() RETURN END IF
 
-	DISPLAY "Inserting test data..."
+	CALL mkdb_progress( "Inserting test data..." )
 	INSERT INTO customer VALUES(1,"NJM Software Projects Inc","Neil Martin","njm@njm-projects.com","12njm",1,1, "CC", 10000, 0 ,0)
 	INSERT INTO customer VALUES(2,"O'Meara Operations Ltd","Neil O'Meara","nom@nom-ltd.com","12neilom",2,2, "BB", 8000, 0, 0)
 	INSERT INTO customer VALUES(3,"Gerrit Enterprises Co.","Gerrit Le Roux","glr@glr-ent.com","12gerrit",3,3, "AA", 8000, 0 ,0)
@@ -116,7 +116,7 @@ FUNCTION insert_app_data()
 	CALL insSupp()
 	CALL genOrders()
 
-	DISPLAY "Done."
+	CALL mkdb_progress( "Done." )
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION insStock(l_sc,l_pack,l_bc,l_ds,l_pr,l_dc)
@@ -428,7 +428,7 @@ FUNCTION genOrders()
 	CALL cst.deleteElement( cst.getLength() )
 	CALL stk.deleteElement( stk.getLength() )
 
-	DISPLAY "Generating "||MAX_ORDERS||" Orders"
+	CALL mkdb_progress( "Generating "||MAX_ORDERS||" Orders" )
 	FOR x = 1 TO MAX_ORDERS
 		LET c = util.math.rand( cst.getLength() )
 		IF c = 0 OR c > cst.getLength() THEN LET c = 3 END IF
