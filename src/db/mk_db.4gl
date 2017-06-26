@@ -23,6 +23,14 @@ MAIN
 	LET gl_db.m_cre_db = TRUE
 	CALL gl_db.gldb_connect(NULL)
 	CALL mkdb_progress( "Connected to db okay" )
+	CALL mkdb_progress( SFMT("typ:%1 nam:%2 des:%3 src:%4 drv:%5 dir:%6 con:%7",
+							m_dbtyp,
+							m_dbnam,
+							m_dbdes,
+							m_dbsrc,
+							m_dbdrv,
+							m_dbdir,
+							m_dbcon) )
 
 	IF l_arg = "SYS" OR l_arg = "ALL" THEN
 		CALL drop_sys()
@@ -72,6 +80,7 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION mkdb_progress(l_mess STRING)
 	LET m_stat = m_stat.append( NVL(l_mess,"NULL!")||"\n" )
+	DISPLAY NVL(l_mess,"NULL!")
 	DISPLAY BY NAME m_stat
 	CALL ui.Interface.refresh()
 END FUNCTION

@@ -53,7 +53,7 @@ FUNCTION gldb_connect( l_db STRING )
 	END IF
 	IF l_msg IS NOT NULL AND l_msg != " " THEN
 		LET m_dbdrv = l_msg
-		GL_DBGMSG(0, "Database Driver(from fglprofile) :"||m_dbdrv)
+		GL_DBGMSG(0, SFMT("Database Driver: %1 from fglprofile:%2",m_dbdrv,fgl_getEnv("FGLPROFILE")))
 	ELSE
 		GL_DBGMSG(0, "Database Driver:"||m_dbdrv)
 	END IF
