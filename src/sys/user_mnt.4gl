@@ -28,6 +28,7 @@ DEFINE m_user_key, m_this_user_key LIKE sys_users.user_key
 MAIN
 	DEFINE dnd ui.DragDrop
 
+	LET gl_lib.gl_topMenu = "dynmaint"
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	WHENEVER ANY ERROR CALL gl_error
 	LET m_this_user_key = ARG_VAL(2)

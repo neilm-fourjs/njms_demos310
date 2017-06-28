@@ -1,6 +1,6 @@
 <TopMenu>
   <TopMenuGroup text="File" >
-    <TopMenuCommand name="exit" text="Exit" />
+    <TopMenuCommand name="quit" text="Quit" image="quit" />
   </TopMenuGroup>
   <TopMenuGroup text="Edit" >
     <TopMenuCommand name="editcopy" />

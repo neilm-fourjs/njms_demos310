@@ -308,7 +308,7 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 			END TRY
 		END IF
 
-		IF l_styl != "main" AND l_styl != "main2" AND gl_topmenu != "default" THEN -- normal won't want default?
+		IF l_styl != "main" AND gl_topmenu != "default" THEN -- normal won't want default?
 			GL_DBGMSG(1, "gl_formInit: loading Topmenu '"||gl_topmenu||"'")
 			TRY
 				CALL l_fm.loadTopmenu( gl_topmenu )

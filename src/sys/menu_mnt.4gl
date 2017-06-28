@@ -46,8 +46,8 @@ DEFINE m_save BOOLEAN
 DEFINE m_user_key INTEGER
 MAIN
 	DEFINE dnd ui.DragDrop
-
 	LET gl_lib.gl_toolbar = "dynmaint"
+	LET gl_lib.gl_topMenu = "dynmaint"
 	LET gl_lib.gl_progAuth = PRGAUTH
 	LET gl_lib.gl_progDesc = PRGDESC
 	LET gl_lib.gl_noToolBar = FALSE
@@ -270,7 +270,7 @@ FUNCTION update()
 
 	IF m_rec.* = m_rec_o.* THEN
 --		DISPLAY "Nothing changed!"
-		ERROR "Nothing changed!"
+		ERROR %"Nothing changed!"
 		RETURN TRUE
 	END IF
 	IF NOT checkUserRoles(m_user_key,"System Admin Update",TRUE) THEN

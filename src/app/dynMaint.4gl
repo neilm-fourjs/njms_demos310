@@ -48,7 +48,8 @@ DEFINE m_user_key INTEGER
 DEFINE m_allowedActions CHAR(6) --Y/N for Find / List / Update / Insert / Delete / Sample
                               -- NNYNNN = Only update allowed.
 MAIN
-
+	LET gl_lib.gl_toolbar = "dynmaint"
+	LET gl_lib.gl_topMenu = "dynmaint"
 	CALL gl_lib.gl_setInfo(NULL, "njm_demo_logo_256", "njm_demo", PRGNAME, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
 
@@ -115,7 +116,7 @@ FUNCTION mk_sql(l_where STRING)
 	TRY
 		CALL m_sql_handle.prepare( l_sql )
 	CATCH
-		CALL gl_lib.gl_winMessage("Error",SFMT("Failed to doing prepare for select from '%1'\n%2!",m_tab,SQLERRMESSAGE),"exclamation")
+		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Failed to doing prepare for select from '%1'\n%2!",m_tab,SQLERRMESSAGE),"exclamation")
 		EXIT PROGRAM
 	END TRY
 	CALL m_sql_handle.openScrollCursor()
@@ -128,7 +129,7 @@ FUNCTION mk_sql(l_where STRING)
 		END IF
 	END FOR
 	IF m_key_fld = 0 THEN
-		CALL gl_lib.gl_winMessage("Error","The key field '"||m_key_nam.trim()||"' doesn't appear to be in the table!","exclamation")
+		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"The key field '%1' doesn't appear to be in the table!",m_key_nam.trim()),"exclamation")
 		EXIT PROGRAM
 	END IF
 	IF l_where != "1=2" THEN
@@ -152,8 +153,12 @@ FUNCTION mk_form()
 	DEFINE x, l_maxlablen SMALLINT
 
 	LET l_w = ui.Window.getCurrent()
+	LET l_n_form = l_w.getNode()
+	CALL l_n_form.setAttribute("style","main2")
+
 	LET l_f = l_w.createForm("dyn_"||m_tab)
 	LET l_n_form = l_f.getNode()
+	CALL l_n_form.setAttribute("windowStyle","main2")
 	LET l_n_tb = l_n_form.createChild("ToolBar")
 	CALL add_toolbarItem(l_n_tb, "quit","Quit","quit")
 	CALL add_toolbarItem(l_n_tb, "accept","Accept","accept")
@@ -168,7 +173,7 @@ FUNCTION mk_form()
 	CALL add_toolbarItem(l_n_tb, "lastrow","","")
 
 	LET l_n_grid = l_n_form.createChild("Grid")
-	CALL l_w.setText("Dynamic Maintenance for "||m_tab)
+	CALL l_w.setText(SFMT(%"Dynamic Maintenance for %1",m_tab))
 	FOR x = 1 TO m_fields.getLength()
 		CALL setProperties(x)
 		LET l_n_formfield = l_n_grid.createChild("Label")
@@ -227,7 +232,7 @@ FUNCTION get_row(l_row)
 			CALL m_fld_props[x].formFieldNode.setAttribute("value", m_sql_handle.getResultValue(x))
 		END FOR
 		CALL ui.Interface.refresh()
-		MESSAGE "Rows "||m_row_cur||" of "||m_row_count
+		MESSAGE SFMT(%"Rows %1 of %2",m_row_cur,m_row_count)
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -412,7 +417,7 @@ FUNCTION sql_update()
 		CALL mk_sql( m_where )
 		CALL get_row(x)
 	ELSE
-		CALL gl_lib.gl_winMessage("Error",SFMT("Failed to update record!\n%1!",SQLERRMESSAGE),"exclamation")
+		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Failed to update record!\n%1!",SQLERRMESSAGE),"exclamation")
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -444,7 +449,7 @@ FUNCTION sql_insert()
 		CALL mk_sql( m_where )
 		CALL get_row(SQL_LAST)
 	ELSE
-		CALL gl_lib.gl_winMessage("Error",SFMT("Failed to insert record!\n%1!",SQLERRMESSAGE),"exclamation")
+		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Failed to insert record!\n%1!",SQLERRMESSAGE),"exclamation")
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -453,8 +458,8 @@ FUNCTION sql_del()
 	IF m_row_cur = 0 THEN RETURN END IF
 	LET l_val = m_sql_handle.getResultValue(m_key_fld)
 	LET l_sql = "DELETE FROM "||m_tab||" WHERE "||m_key_nam||" = ?"
-	IF gl_lib.gl_winQuestion("Confirm",
-			SFMT("Are you sure you want to delete this record?\n\n%1\nKey = %2",l_sql,l_val),
+	IF gl_lib.gl_winQuestion(%"Confirm",
+			SFMT(%"Are you sure you want to delete this record?\n\n%1\nKey = %2",l_sql,l_val),
 				"No","Yes|No","question") = "Yes" THEN
 		TRY
 			PREPARE del_stmt FROM l_sql
@@ -465,9 +470,9 @@ FUNCTION sql_del()
 			LET m_row_count = m_row_count - 1
 			CALL get_row(m_row_cur)
 		ELSE
-			CALL gl_lib.gl_winMessage("Error",SFMT("Failed to delete record!\n%1!",SQLERRMESSAGE),"exclamation")
+			CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Failed to delete record!\n%1!",SQLERRMESSAGE),"exclamation")
 		END IF
 	ELSE
-		MESSAGE "Delete aborted."
+		MESSAGE %"Delete aborted."
 	END IF
 END FUNCTION

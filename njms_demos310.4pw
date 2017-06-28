@@ -60,6 +60,10 @@
       <Library binaryName="App_Lib" dependencies="1986" id="-1090563702" label="App_Lib">
         <File filePath="src/app/fjs_lib.4gl"/>
       </Library>
+      <Application binaryName="cust_mnt" commandLineArguments="S 1" dependencies="-400184264,1986,14000,-1090563702" id="-1273407208" label="cust_mnt">
+        <File filePath="src/app/cust_mnt.4fd"/>
+        <File filePath="src/app/cust_mnt.4gl"/>
+      </Application>
       <Application binaryName="dynMaint" commandLineArguments="S 1 stock stock_code" dependencies="14000,1986,-1090563702" id="1873655788" label="dynMaint">
         <File filePath="src/app/dynMaint.4gl"/>
       </Application>
@@ -71,7 +75,7 @@
         <File filePath="src/sys/menu_mnt.4gl"/>
         <File filePath="src/sys/menu_mnt.per"/>
       </Application>
-      <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="14000,-1090563702" id="1117674734" label="user_mnt">
+      <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,14000" id="-1334009856" label="user_mnt">
         <File filePath="src/sys/user_mnt.4gl"/>
         <File filePath="src/sys/user_mnt.per"/>
       </Application>
