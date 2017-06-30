@@ -71,7 +71,7 @@
         <File filePath="etc/dynmaint.4tb"/>
         <File filePath="etc/dynmaint.4tm"/>
       </Library>
-      <Application binaryName="menu_mnt" commandLineArguments="S 1" dependencies="14000,-1090563702" id="1001967872" label="menu_mnt">
+      <Application binaryName="menu_mnt" commandLineArguments="S 1" dependencies="14000,-1090563702,1835393312,1986" id="1001967872" label="menu_mnt">
         <File filePath="src/sys/menu_mnt.4gl"/>
         <File filePath="src/sys/menu_mnt.per"/>
       </Application>

@@ -1,4 +1,5 @@
 -- A Simple demo program with a login and menu system.
+IMPORT os
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL lib_login
@@ -110,8 +111,11 @@ FUNCTION do_menu()
 
 				WHEN "F" 
 					CALL gl_logit("RUN:fglrun "||l_prog||" "||m_args||" "||l_args)
-					DISPLAY "m_args:",m_args, " l_args:",l_args
-					DISPLAY "Run: fglrun "||l_prog||" "||m_args||" "||l_args
+					--DISPLAY "l_prog:",l_prog," m_args:",m_args, " l_args:",l_args
+					--DISPLAY "Run: fglrun "||l_prog||" "||m_args||" "||l_args
+					IF NOT os.path.exists( l_prog ) THEN
+						CALL gl_lib.gl_winMessage(%"Error",SFMT(%"This program '%1' appears to not be installed!",l_prog),"exclamation")
+					END IF
 					RUN "fglrun "||l_prog||" "||m_args||" "||l_args WITHOUT WAITING
 
 				WHEN "P" 
@@ -224,7 +228,7 @@ FUNCTION progArgs( l_prog STRING )
   LET l_args = " "
   IF y > 0 THEN
     LET l_args = l_prog.subString(y,l_prog.getLength())
-    LET l_prog = l_prog.subString(1,y)
+    LET l_prog = l_prog.subString(1,y-1)
   END IF
   IF l_args IS NULL THEN LET l_args = " " END IF
   DISPLAY "l_prog:",l_prog," l_args:",l_args

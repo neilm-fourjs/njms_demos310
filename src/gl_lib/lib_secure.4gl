@@ -397,7 +397,7 @@ PRIVATE FUNCTION b(s STRING) RETURNS STRING
 			END IF
 		END FOR
 	END FOR
-	DISPLAY r
+	RETURN r
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Sets the m_file module variable and validates that the file exists.
