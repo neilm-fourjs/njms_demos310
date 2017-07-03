@@ -3,14 +3,13 @@
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL fjs_lib
-
+&include "genero_lib.inc"
 &include "schema.inc"
 
 CONSTANT PRGNAME = "cust_mnt"
 CONSTANT PRGDESC = "Customer Maintenance Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
-
-&include "genero_lib.inc"	
+CONSTANT C_VER="3.1"
 
 &define RECNAME customer.*
 &define RECNAME2 addresses.*
@@ -125,8 +124,9 @@ MAIN
 		ON ACTION lastrow
 			CALL showRow(m_recs.getLength())
 			CALL fjs_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
+		GL_ABOUT
 	END MENU
-
+	CALL gl_lib.gl_exitProgram(0,"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION query() RETURNS BOOLEAN

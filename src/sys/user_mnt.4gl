@@ -8,9 +8,9 @@ IMPORT FGL gl_db
 CONSTANT PRGNAME = "user_mnt"
 CONSTANT PRGDESC = "User Maintenance Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
-
-&include "schema.inc"
 &include "genero_lib.inc"
+&include "schema.inc"
+CONSTANT C_VER="3.1"
 
 DEFINE m_user DYNAMIC ARRAY OF RECORD LIKE sys_users.*
 DEFINE m_roles DYNAMIC ARRAY OF RECORD LIKE sys_roles.*
@@ -159,7 +159,9 @@ MAIN
 			EXIT DIALOG
 		ON ACTION close
 			EXIT DIALOG
+		GL_ABOUT
 	END DIALOG
+	CALL gl_lib.gl_exitProgram(0,"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION removeRoles_user(d)

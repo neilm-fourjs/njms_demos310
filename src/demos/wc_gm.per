@@ -9,7 +9,7 @@ END -- ACTIONS
 LAYOUT (TEXT="Google Map Demo", STYLE="main2")
 GRID
 {
-[cancel :         :|lat          |lng           |:      :go     ]
+[cancel :       :|lat          |lng           |:      :go       ]
 [wc_gm                                                          ]
 [                                                               ]
 [                                                               ]
@@ -34,7 +34,7 @@ GRID
 [                                                               ]
 [                                                               ]
 [                                                               ]
-in_data:[indata                                                 ]
+in_data:[indata                                            |abt ]
 }
 END -- GRID
 END -- LAYOUT
@@ -49,3 +49,4 @@ WEBCOMPONENT wc_gm = FORMONLY.wc_gm,
 
 BUTTON go : go;
 BUTTON cancel : cancel;
+BUTTON abt : about,IMAGE="help";

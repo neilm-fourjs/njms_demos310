@@ -2,6 +2,8 @@
 IMPORT util
 IMPORT os
 IMPORT FGL gl_lib
+&include "genero_lib.inc"	
+CONSTANT C_VER="3.1"
 
 DEFINE m_data DYNAMIC ARRAY OF RECORD
 		labs STRING,
@@ -39,6 +41,7 @@ MAIN
 			CALL genRndData()
 			LET l_data = getData(0)
 		ON ACTION close EXIT DIALOG
+		GL_ABOUT
 		ON ACTION quit EXIT DIALOG
 		ON ACTION act1
 			DISPLAY "Data:",l_data

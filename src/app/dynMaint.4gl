@@ -17,10 +17,12 @@
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL fjs_lib
+&include "genero_lib.inc"
 
 CONSTANT PRGNAME = "dynMaint"
 CONSTANT PRGDESC = "Dynamic Maintenance Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
+CONSTANT C_VER="3.1"
 
 CONSTANT SQL_FIRST = 0
 CONSTANT SQL_PREV = -1
@@ -102,8 +104,9 @@ MAIN
 			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION quit			EXIT MENU
 		ON ACTION close			EXIT MENU
+		GL_ABOUT
 	END MENU
-
+	CALL gl_lib.gl_exitProgram(0,"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION mk_sql(l_where STRING)

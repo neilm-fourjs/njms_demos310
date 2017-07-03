@@ -1,6 +1,8 @@
 -- Simple Google Maps Demo
 IMPORT util
 IMPORT FGL gl_lib
+&include "genero_lib.inc"
+CONSTANT C_VER="3.1"
 MAIN
 	DEFINE wc_gm, in_data STRING
 	DEFINE l_latlng_rec RECORD
@@ -10,7 +12,7 @@ MAIN
 
 	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
 	LET gl_lib.gl_noToolBar = TRUE
-	OPEN FORM f FROM "gm"
+	OPEN FORM f FROM "wc_gm"
 	DISPLAY FORM f
 
 	LET l_latlng_rec.lat = "50.8462723212"
@@ -29,7 +31,7 @@ MAIN
 		ON ACTION mapclicked
 			LET in_data = wc_gm
 			CALL util.JSONObject.parse( in_data ).toFGL(l_latlng_rec) -- turn json string into fgl rec
-
+		GL_ABOUT
 	END INPUT
 
 END MAIN

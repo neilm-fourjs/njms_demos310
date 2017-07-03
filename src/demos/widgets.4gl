@@ -312,8 +312,7 @@ MAIN
 			ON ACTION splash
 				CALL gl_lib.gl_splash(p_splash)
 
-			ON ACTION about
-				CALL gl_lib.gl_about( C_VER )
+			GL_ABOUT
 
 			ON ACTION gl_lookup
 				IF NOT db_opened THEN

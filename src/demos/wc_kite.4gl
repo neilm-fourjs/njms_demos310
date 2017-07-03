@@ -7,7 +7,7 @@
 IMPORT xml
 IMPORT os
 IMPORT FGL gl_lib
-
+&include "genero_lib.inc"
 CONSTANT C_VER="3.1"
 CONSTANT WC_KITE_PATH = "../pics/webcomponents/kite"
 
@@ -69,7 +69,7 @@ MAIN
 			CALL openKite()
 			CALL setSVG(m_rec.kitename)
 			LET wc_data = serializePanels()
-		ON ACTION about CALL gl_lib.gl_about( C_VER )
+		GL_ABOUT
 		ON ACTION EXIT
 			EXIT DIALOG
 		ON ACTION CLOSE

@@ -1,8 +1,9 @@
 
 IMPORT os
 IMPORT FGL gl_lib
-
+&include "genero_lib.inc"	
 CONSTANT C_VER="3.1"
+
 DEFINE max_images SMALLINT
 
 DEFINE pics DYNAMIC ARRAY OF RECORD
@@ -89,7 +90,7 @@ MAIN
 				CALL DIALOG.setCurrentRow( "pics", ( c - 1 ) )
 				CALL refresh( c - 1 )
 			END IF
-		ON ACTION about CALL gl_lib.gl_about( C_VER )
+		GL_ABOUT
 		ON ACTION close EXIT DIALOG
 	END DIALOG
 

@@ -10,12 +10,10 @@
 
 IMPORT os
 IMPORT FGL gl_lib
-
+&include "genero_lib.inc"
 CONSTANT C_VER="3.1"
-CONSTANT IDLE_TIME = 300
 
-&define ABOUT ON ACTION about \
-	CALL gl_about( gl_verFmt(gl_version) )
+CONSTANT IDLE_TIME = 300
 
 DEFINE xml_d om.domDocument
 DEFINE xml_r om.domNode
@@ -205,7 +203,7 @@ FUNCTION mainDialog()
 
 		ON ACTION open CALL openLibrary(NULL)
 		ON ACTION close EXIT DIALOG
-		ON ACTION about CALL gl_lib.gl_about( C_VER )
+		GL_ABOUT
 		ON ACTION quit EXIT DIALOG
 
 		ON ACTION dump CALL n.writeXml("aui.xml")
