@@ -64,18 +64,18 @@ MAIN
 
 	SELECT * FROM sys_users WHERE user_key = m_user_key
 	IF STATUS != 0 THEN 
-		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Invalid Account '%1'!",m_user_key),"exclamation")
-		CALL gl_lib.gl_exitProgram(1,"invalid account")
+		CALL gl_lib.gl_errPopup(SFMT(%"Invalid Account '%1'!",m_user_key))
+		CALL gl_lib.gl_exitProgram(1,%"invalid account")
 	END IF
 
 	IF m_tab IS NULL THEN 
-		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Invalid Table '%1'!",m_tab),"exclamation")
-		CALL gl_lib.gl_exitProgram(1,"invalid table")
+		CALL gl_lib.gl_errPopup(SFMT(%"Invalid Table '%1'!",m_tab))
+		CALL gl_lib.gl_exitProgram(1,%"invalid table")
 	END IF
 
 	IF m_key_nam IS NULL THEN 
-		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Invalid Key Name '%1'!",m_key_nam),"exclamation")
-		CALL gl_lib.gl_exitProgram(1,"invalid key name")
+		CALL gl_lib.gl_errPopup(SFMT(%"Invalid Key Name '%1'!",m_key_nam))
+		CALL gl_lib.gl_exitProgram(1,%"invalid key name")
 	END IF
 
 	LET m_key_fld = 0
@@ -106,7 +106,7 @@ MAIN
 		ON ACTION close			EXIT MENU
 		GL_ABOUT
 	END MENU
-	CALL gl_lib.gl_exitProgram(0,"Program Finished")
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION mk_sql(l_where STRING)
@@ -119,7 +119,7 @@ FUNCTION mk_sql(l_where STRING)
 	TRY
 		CALL m_sql_handle.prepare( l_sql )
 	CATCH
-		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Failed to doing prepare for select from '%1'\n%2!",m_tab,SQLERRMESSAGE),"exclamation")
+		CALL gl_lib.gl_errPopup(SFMT(%"Failed to doing prepare for select from '%1'\n%2!",m_tab,SQLERRMESSAGE))
 		EXIT PROGRAM
 	END TRY
 	CALL m_sql_handle.openScrollCursor()
@@ -132,7 +132,7 @@ FUNCTION mk_sql(l_where STRING)
 		END IF
 	END FOR
 	IF m_key_fld = 0 THEN
-		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"The key field '%1' doesn't appear to be in the table!",m_key_nam.trim()),"exclamation")
+		CALL gl_lib.gl_errPopup(SFMT(%"The key field '%1' doesn't appear to be in the table!",m_key_nam.trim()))
 		EXIT PROGRAM
 	END IF
 	IF l_where != "1=2" THEN
@@ -420,7 +420,7 @@ FUNCTION sql_update()
 		CALL mk_sql( m_where )
 		CALL get_row(x)
 	ELSE
-		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Failed to update record!\n%1!",SQLERRMESSAGE),"exclamation")
+		CALL gl_lib.gl_errPopup(SFMT(%"Failed to update record!\n%1!",SQLERRMESSAGE))
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -452,7 +452,7 @@ FUNCTION sql_insert()
 		CALL mk_sql( m_where )
 		CALL get_row(SQL_LAST)
 	ELSE
-		CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Failed to insert record!\n%1!",SQLERRMESSAGE),"exclamation")
+		CALL gl_lib.gl_errPopup(SFMT(%"Failed to insert record!\n%1!",SQLERRMESSAGE))
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -463,7 +463,7 @@ FUNCTION sql_del()
 	LET l_sql = "DELETE FROM "||m_tab||" WHERE "||m_key_nam||" = ?"
 	IF gl_lib.gl_winQuestion(%"Confirm",
 			SFMT(%"Are you sure you want to delete this record?\n\n%1\nKey = %2",l_sql,l_val),
-				"No","Yes|No","question") = "Yes" THEN
+				%"No",%"Yes|No","question") = %"Yes" THEN
 		TRY
 			PREPARE del_stmt FROM l_sql
 			EXECUTE del_stmt USING l_val
@@ -473,7 +473,7 @@ FUNCTION sql_del()
 			LET m_row_count = m_row_count - 1
 			CALL get_row(m_row_cur)
 		ELSE
-			CALL gl_lib.gl_winMessage(%"Error",SFMT(%"Failed to delete record!\n%1!",SQLERRMESSAGE),"exclamation")
+			CALL gl_lib.gl_errPopup(SFMT(%"Failed to delete record!\n%1!",SQLERRMESSAGE))
 		END IF
 	ELSE
 		MESSAGE %"Delete aborted."

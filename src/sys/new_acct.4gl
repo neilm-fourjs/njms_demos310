@@ -20,7 +20,7 @@ FUNCTION new_acct() RETURNS STRING
 	INPUT BY NAME l_acc.* ATTRIBUTES(WITHOUT DEFAULTS, FIELD ORDER FORM, UNBUFFERED)
 		AFTER FIELD email
 			IF lib_login.sql_checkEmail(l_acc.email) THEN
-				CALL gl_lib.gl_winMessage(%"Error",%"This Email is already registered.","exclamation")
+				CALL gl_lib.gl_errPopup(%"This Email is already registered.")
 				NEXT FIELD email
 			ELSE
 				--LET l_acc.login_pass = lib_secure.glsec_genPassword()

@@ -126,7 +126,7 @@ MAIN
 			CALL fjs_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
 		GL_ABOUT
 	END MENU
-	CALL gl_lib.gl_exitProgram(0,"Program Finished")
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION query() RETURNS BOOLEAN

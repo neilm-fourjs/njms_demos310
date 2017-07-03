@@ -117,7 +117,7 @@ MAIN
 				CALL openXML(l_file)
 				CALL loadMusic()	
 			ELSE
-				CALL gl_lib.gl_winMessage("Error", "'"||l_file||"' Doesn't Exist, try running again like this\nfglrun ipod.42r LOAD","exclamation")
+				CALL gl_lib.gl_errPopup(%"'"||l_file||"' Doesn't Exist, try running again like this\nfglrun ipod.42r LOAD")
 			END IF
 		END IF
 	END IF
@@ -127,7 +127,7 @@ MAIN
 	LET getAlbumArt = TRUE
 	CALL dispInfo()
 	CALL mainDialog()
-
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION mainDialog()
@@ -250,7 +250,7 @@ FUNCTION openLibrary( file )
 	END IF
 
 	IF NOT os.path.exists( file ) THEN
-		CALL fgl_winMessage("Error", "'"||file||"' Doesn't Exist, can't do load","exclamation")
+		CALL gl_lib.gl_errPopup(%"'"||file||"' Doesn't Exist, can't do load")
 		RETURN
 	END IF
 
@@ -276,12 +276,12 @@ FUNCTION openXML( file )
 	DISPLAY CURRENT,": Opening "||file||" ..."
 	LET xml_d = om.domDocument.createFromXMLFile(file)
 	IF xml_d IS NULL THEN
-		CALL fgl_winMessage("Error", "Failed to open '"||file||"'!\nTry running like this: fglrun ipod.42r LOAD","exclamation")
+		CALL gl_lib.gl_errPopup(%"Failed to open '"||file||"'!\nTry running like this: fglrun ipod.42r LOAD")
 		EXIT PROGRAM
 	END IF
 	LET xml_r = xml_d.getDocumentElement()	
 	IF xml_r IS NULL THEN
-		CALL fgl_winMessage("Error", "Failed to get root node!","exclamation")
+		CALL gl_lib.gl_errPopup(%"Failed to get root node!")
 		EXIT PROGRAM
 	END IF
 
@@ -930,7 +930,7 @@ FUNCTION db_mk_tab()
 			genre VARCHAR(40)
 		)
 	CATCH
-		CALL fgl_winMessage("Error","failed to create 'ipod_genre'\n"||SQLERRMESSAGE,"exclamation")
+		CALL gl_lib.gl_errPopup(%"failed to create 'ipod_genre'\n"||SQLERRMESSAGE)
 		EXIT PROGRAM
 	END TRY
 	DISPLAY "Created Table 'ipod_genre'"	
@@ -942,7 +942,7 @@ FUNCTION db_mk_tab()
 			artist VARCHAR(50)
 		)
 	CATCH
-		CALL fgl_winMessage("Error","failed to create 'ipod_artists'\n"||SQLERRMESSAGE,"exclamation")
+		CALL gl_lib.gl_errPopup(%"failed to create 'ipod_artists'\n"||SQLERRMESSAGE)
 		EXIT PROGRAM
 	END TRY
 	DISPLAY "Create Table 'ipod_artists'"	
@@ -957,7 +957,7 @@ FUNCTION db_mk_tab()
 			year CHAR(4)
 		)
 	CATCH
-		CALL fgl_winMessage("Error","failed to create 'ipod_albums'\n"||SQLERRMESSAGE,"exclamation")
+		CALL gl_lib.gl_errPopup(%"failed to create 'ipod_albums'\n"||SQLERRMESSAGE)
 		EXIT PROGRAM
 	END TRY
 	DISPLAY "Create Table 'ipod_albums'"	
@@ -975,7 +975,7 @@ FUNCTION db_mk_tab()
 			rating SMALLINT
 		)
 	CATCH
-		CALL fgl_winMessage("Error","failed to create 'ipod_tracks'\n"||SQLERRMESSAGE,"exclamation")
+		CALL gl_lib.gl_errPopup(%"failed to create 'ipod_tracks'\n"||SQLERRMESSAGE)
 		EXIT PROGRAM
 	END TRY
 	DISPLAY "Create Table 'ipod_tracks'"

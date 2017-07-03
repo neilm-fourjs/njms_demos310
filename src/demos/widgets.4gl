@@ -363,9 +363,9 @@ MAIN
 			COMMAND KEY (F2)
 				CALL gl_lib.gl_winmessage("Information", "This is Information", "info")
 			ON ACTION error
-				CALL gl_lib.gl_winmessage("Error!", "This is an Error", "exclamation")
+				CALL gl_lib.gl_errPopup(%"This is an Error")
 			ON ACTION error2
-				CALL gl_lib.gl_winmessage("Error!", "This is another Error", "exclamation")
+				CALL gl_lib.gl_errPopup(%"This is another Error")
 			COMMAND KEY (F19)
 						LET m_answer = gl_winquestion("My Question",
 									"Did you really mean to ask this?", "Yes", "Yes|No|Cancel", "question" )
@@ -481,9 +481,8 @@ MAIN
 				CALL dynamic()
 		END CASE
 	END WHILE
-
 	CLOSE WINDOW widgets
-
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 -- Do an input by name on the all the widgets.
@@ -620,7 +619,7 @@ FUNCTION do1()
 		ON KEY (F17)
 			CALL gl_lib.gl_winmessage("Information", "This is Information", "info")
 		ON KEY (F18)
-			CALL gl_lib.gl_winmessage("Error!", "This is an Error", "exclamation")
+			CALL gl_lib.gl_errPopup(%"This is an Error")
 	END INPUT
 
 END FUNCTION

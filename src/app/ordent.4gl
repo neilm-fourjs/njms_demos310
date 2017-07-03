@@ -23,7 +23,6 @@ CONSTANT PRGDESC = "Order Entry Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER="3.1"
 
-
 DEFINE m_arg1, m_arg2 STRING
 DEFINE m_fullname STRING
 MAIN
@@ -63,7 +62,7 @@ GL_MODULE_ERROR_HANDLER
 	OPEN FORM ordent2 FROM "ordent2"
 	DISPLAY FORM ordent2
 
-	DISPLAY "Welcome "||m_fullname TO welcome
+	DISPLAY SFMT(%"Welcome %1",m_fullname) TO welcome
 	--CALL setTitle()
 
 	IF ARG_VAL(3) = "E" THEN
@@ -77,9 +76,11 @@ GL_MODULE_ERROR_HANDLER
 			ON ACTION find
 				CALL enquire()
 			ON ACTION getcust
-				CALL getCust()
+				IF NOT oe_lib.getCust(NULL) THEN
+					MESSAGE %"No customer selected"
+				END IF
 			ON ACTION getstock
-				CALL getStock("") RETURNING stk.*
+				CALL oe_lib.getStock("") RETURNING m_stk.*
 			ON ACTION help
 				CALL showHelp(1)
 			GL_ABOUT
@@ -89,7 +90,7 @@ GL_MODULE_ERROR_HANDLER
 				EXIT MENU
 		END MENU
 	END IF
-	CALL gl_lib.gl_exitProgram(0,"Program Finished")
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 #+ Create a new order.
@@ -100,24 +101,23 @@ FUNCTION new()
 	CALL initVariables()
 	DISPLAY FORM ordent
 	CLEAR FORM
-	MESSAGE "Enter Header details."
+	MESSAGE %"Enter Header details."
 	INPUT BY NAME g_ordHead.customer_code, g_ordHead.order_ref, g_ordhead.req_del_date
 		 ATTRIBUTES(UNBUFFERED, WITHOUT DEFAULTS) HELP 2
 
 		AFTER FIELD customer_code
-			SELECT * INTO g_cust.* FROM customer WHERE customer_code = g_ordHead.customer_code
-			IF STATUS = NOTFOUND THEN
-				CALL gl_lib.gl_winMessage("Error","Customer you seek cannot be located, but countless more exist.\nCode:"||g_ordHead.customer_code,"exclamation")
+			IF NOT oe_lib.getCust(g_ordHead.customer_code) THEN
 				NEXT FIELD customer_code
 			END IF
 			CALL dispHead()
 		ON ACTION getcust
-			CALL getCust()
-			CALL dispHead()
+			IF oe_lib.getCust(NULL) THEN
+				CALL dispHead()
+			END IF
 		GL_ABOUT
 	END INPUT
 	IF int_flag THEN
-		MESSAGE "Order Cancelled."
+		MESSAGE %"Order Cancelled."
 		LET int_flag = FALSE
 		RETURN
 	END IF
@@ -129,17 +129,17 @@ FUNCTION new()
 	LET g_ordHead.order_number = SQLCA.SQLERRD[2] -- Fetch SERIAL order num
 	DISPLAY BY NAME g_ordHead.*
 
-	MESSAGE "Enter Details Lines."
+	MESSAGE %"Enter Details Lines."
 	INPUT ARRAY g_detailArray FROM details.* ATTRIBUTE(UNBUFFERED, WITHOUT DEFAULTS) HELP 3
 		ON ACTION getstock INFIELD stock_code
 			LET g_detailArray[ arr_curr() ].stock_code = fgl_dialog_getBuffer()
-			CALL getStock( g_detailArray[ arr_curr() ].stock_code ) RETURNING stk.*
-			IF stk.stock_code IS NOT NULL THEN
-				LET g_detailArray[ l_row ].stock_code = stk.stock_code
+			CALL getStock( g_detailArray[ arr_curr() ].stock_code ) RETURNING m_stk.*
+			IF m_stk.stock_code IS NOT NULL THEN
+				LET g_detailArray[ l_row ].stock_code = m_stk.stock_code
 				IF NOT oe_getStockRec(DIALOG.getCurrentRow("details"),TRUE) THEN
 					NEXT FIELD stock_code
 				END IF
-				IF stk.stock_code IS NOT NULL THEN
+				IF m_stk.stock_code IS NOT NULL THEN
 					NEXT FIELD quantity
 				END IF
 			END IF
@@ -149,7 +149,7 @@ FUNCTION new()
 
 		BEFORE FIELD stock_code
 			IF g_detailArray[ l_row ].accepted THEN
-				ERROR "Can't change product code on an accept line!"
+				ERROR %"Can't change product code on an accept line!"
 				NEXT FIELD quantity
 			END IF
 
@@ -158,7 +158,7 @@ FUNCTION new()
 				IF NOT oe_getStockRec(l_row,TRUE) THEN
 					NEXT FIELD stock_code
 				END IF
-				IF stk.stock_code IS NOT NULL THEN
+				IF m_stk.stock_code IS NOT NULL THEN
 					NEXT FIELD quantity
 				END IF
 			END IF
@@ -193,14 +193,14 @@ FUNCTION new()
 			IF g_detailArray[ l_row ].stock_code IS NOT NULL THEN
 				IF ( g_detailArray[ l_row ].quantity IS NULL
 					OR g_detailArray[ l_row ].quantity < 1) THEN
-					ERROR "Quantity must be greater than 0!"
+					ERROR %"Quantity must be greater than 0!"
 					NEXT FIELD quantity
 				END IF
-				SELECT free_stock INTO stk.free_stock
+				SELECT free_stock INTO m_stk.free_stock
 					FROM stock -- refresh stock value.
 				 WHERE stock_code = g_detailArray[ l_row ].stock_code
-				IF g_detailArray[ l_row ].quantity > stk.free_stock THEN
-					ERROR "Not enough stock!"
+				IF g_detailArray[ l_row ].quantity > m_stk.free_stock THEN
+					ERROR %"Not enough stock!"
 					NEXT FIELD quantity
 				END IF
 				CALL oe_explodePack(l_row)
@@ -213,24 +213,24 @@ FUNCTION new()
 						g_ordHead.total_nett
 				IF g_detailArray[ l_row ].accepted AND l_prevQty IS NOT NULL
 				AND l_prevQty != 0 THEN -- Undo previous stock adjustment.
-					IF NOT updateStockLevel(l_row,  g_detailArray[ l_row ].stock_code, 0 - l_prevQty ) THEN -- replace stock
+					IF NOT updateStockLevel( g_detailArray[ l_row ].stock_code, 0 - l_prevQty ) THEN -- replace stock
 						NEXT FIELD quantity
 					END IF
 				END IF
-				IF NOT updateStockLevel(l_row,  g_detailArray[ l_row ].stock_code, g_detailArray[ l_row ].quantity ) THEN -- remove stock
+				IF NOT updateStockLevel( g_detailArray[ l_row ].stock_code, g_detailArray[ l_row ].quantity ) THEN -- remove stock
 					NEXT FIELD quantity
 				END IF
 				LET g_detailArray[ l_row ].accepted = TRUE
-				MESSAGE "Accepted"
+				MESSAGE %"Accepted"
 			END IF
 
 		BEFORE DELETE
-			IF fgl_winQuestion("Confirm","Are you sure you want to remove this line?","No","Yes|No","question",0) = "Yes" THEN
-				IF NOT updateStockLevel(l_row, g_detailArray[ l_row ].stock_code, 0 - g_detailArray[ l_row ].quantity ) THEN -- replace stock
-					MESSAGE "Delete cancelled."
+			IF gl_lib.gl_winQuestion(%"Confirm",%"Are you sure you want to remove this line?",%"No",%"Yes|No","question") = "Yes" THEN
+				IF NOT updateStockLevel( g_detailArray[ l_row ].stock_code, 0 - g_detailArray[ l_row ].quantity ) THEN -- replace stock
+					MESSAGE %"Delete cancelled."
 					CANCEL DELETE
 				ELSE
-					MESSAGE "Line deleted."
+					MESSAGE %"Line deleted."
 				END IF
 			ELSE
 				MESSAGE "Delete cancelled."
@@ -249,11 +249,11 @@ FUNCTION new()
 
 		AFTER INPUT
 			IF NOT int_flag THEN
-				IF fgl_winQuestion("Accept","Accept this order?","Yes","Yes|No","question",0) = "No" THEN
+				IF gl_lib.gl_winQuestion(%"Accept",%"Accept this order?",%"Yes",%"Yes|No","question") = "No" THEN
 					CONTINUE INPUT
 				END IF
 			ELSE
-				IF fgl_winQuestion("Cancel","Cancel this order?","No","Yes|No","question",0) = "No" THEN
+				IF gl_lib.gl_winQuestion(%"Cancel",%"Cancel this order?",%"No",%"Yes|No","question") = "No" THEN
 					LET int_flag = FALSE
 					CONTINUE INPUT
 				END IF
@@ -263,7 +263,7 @@ FUNCTION new()
 	IF int_flag THEN
 		ROLLBACK WORK -- Rollback and end transaction.
 		LET int_flag = FALSE
-		ERROR "Order Cancelled."
+		ERROR %"Order Cancelled."
 		RETURN
 	END IF
 
@@ -288,9 +288,9 @@ FUNCTION new()
 	UPDATE ord_head SET ord_head.* = g_ordHead.* WHERE order_number = g_ordHead.order_number
 	COMMIT WORK -- Commit and end transaction.
 
-	MENU "Order Details" 
+	MENU %"Order Details" 
 		ATTRIBUTES(STYLE="dialog",
-						COMMENT="Order "||g_ordHead.order_number||" Created.\nPrint Invoice?", 
+						COMMENT=SFMT(%"Order %1 Created.\nPrint Invoice?",g_ordHead.order_number), 
 						IMAGE="question")
 		ON ACTION continue
 			EXIT MENU
@@ -301,14 +301,10 @@ END FUNCTION
 --------------------------------------------------------------------------------
 #+ Update the stock levels
 #+
-#+ @param l_row Row number without detail line array
 #+ @param l_pcode Stock Product Code
 #+ @param l_qty Quantity to adjust stock by
-FUNCTION updateStockLevel(l_row, l_pcode, l_qty)
-	DEFINE l_row SMALLINT
-	DEFINE l_pcode LIKE stock.stock_code
-	DEFINE l_qty INTEGER
-
+#+ @return okay
+FUNCTION updateStockLevel(l_pcode LIKE stock.stock_code, l_qty INT) RETURNS BOOLEAN
 	DISPLAY "Update Stock:",l_pcode,":",l_qty
 	TRY
 		UPDATE stock SET ( allocated_stock, free_stock ) =
@@ -316,11 +312,10 @@ FUNCTION updateStockLevel(l_row, l_pcode, l_qty)
 			WHERE stock_code = l_pcode
 	CATCH
 		DISPLAY "Status:",STATUS,":",SQLERRMESSAGE
-		CALL fgl_winMessage("Error","Unable to allocate stock!\nMaybe try again in a few minutes\nOr try a smaller quantity.","exclamation")
+		CALL gl_lib.gl_errPopup(%"Unable to allocate stock!\nMaybe try again in a few minutes\nOr try a smaller quantity.")
 		RETURN FALSE
 	END TRY
 	RETURN TRUE
-
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Set and Display the header detail.
@@ -393,13 +388,13 @@ FUNCTION enquire()
 		END IF
 		SELECT * INTO g_ordHead.* FROM ord_head WHERE order_number = g_ordHead.order_number
 		IF STATUS = NOTFOUND THEN
-			CALL fgl_winMessage("Error","Order not found.","exclamation")
+			CALL gl_lib.gl_errPopup(%"Order not found.")
 			CONTINUE WHILE
 		END IF
 
 		SELECT * INTO g_cust.* FROM customer WHERE customer_code = g_ordHead.customer_code
 		IF STATUS = NOTFOUND THEN
-			CALL fgl_winMessage("Error","customer not found\nCode="||g_ordHead.customer_code,"exclamation")
+			CALL gl_lib.gl_errPopup(%"customer not found\nCode="||g_ordHead.customer_code)
 		END IF
 		CALL dispHead()
 

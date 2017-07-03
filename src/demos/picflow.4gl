@@ -93,7 +93,7 @@ MAIN
 		GL_ABOUT
 		ON ACTION close EXIT DIALOG
 	END DIALOG
-
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION refresh(l_c STRING)

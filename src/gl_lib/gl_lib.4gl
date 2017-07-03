@@ -572,8 +572,21 @@ FUNCTION gl_error() --{{{
   IF l_err IS NULL THEN LET l_err = "Unknown!" END IF
   LET l_err = l_stat||":"||l_err||"\n"||l_mod
 --  CALL gl_logIt("Error:"||l_err)
-  CALL gl_winMessage("Error",l_err,"exclamation")
-
+  CALL gl_errPopup(l_err)
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Simple error message
+#+
+#+ @return Nothing.
+FUNCTION gl_warnPopup(l_msg STRING) --{{{
+  CALL gl_winMessage(%"Warning!",l_msg,"exclamation")
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Simple error message
+#+
+#+ @return Nothing.
+FUNCTION gl_errPopup(l_msg STRING) --{{{
+  CALL gl_winMessage(%"Error!",l_msg,"exclamation")
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Display an error message in a window, console & logfile.
@@ -584,7 +597,7 @@ END FUNCTION --}}}
 #+ @return Nothing.
 FUNCTION gl_errMsg( l_fil STRING, l_lno INT, l_err STRING) --{{{
 
-	CALL gl_winMessage(%"Error!", l_err, "exclamation")
+	CALL gl_errPopup(l_err)
 	ERROR "* ",l_err.trim()," *"
 	IF l_fil IS NOT NULL THEN
 		DISPLAY l_fil.trim(),":",l_lno,": ",l_err.trim()
@@ -741,18 +754,18 @@ FUNCTION gl_getLogDir() RETURNS STRING
 
 	IF NOT os.path.exists( m_logDir ) THEN
 		IF NOT os.path.mkdir( m_logDir ) THEN
-			CALL gl_winMessage("Error","Failed to make logdir '"||m_logDir||"'.\nProgram aborting","exclamation")
-			EXIT PROGRAM 200
+			CALL gl_errPopup(SFMT(%"Failed to make logdir '%1.\nProgram aborting",m_logDir))
+			CALL gl_exitProgram(200,"log dir issues")
 		ELSE
 			IF NOT os.path.chrwx( m_logDir,  ( (7 *64) + (7 * 8) + 5 )  ) THEN
-				CALL gl_winMessage("Error","Failed set permissions on logdir '"||m_logDir||"'.","exclamation")
-				EXIT PROGRAM 201
+				CALL gl_errPopup(SFMT(%"Failed set permissions on logdir '%1'",m_logDir))
+				CALL gl_exitProgram(201,"log permissions")
 			END IF
 		END IF
 	END IF
 	IF NOT os.path.isDirectory( m_logDir ) THEN
-		CALL gl_winMessage("Error","Logdir '"||m_logDir||"' not a directory.\nProgram aborting","exclamation")
-		EXIT PROGRAM 202
+		CALL gl_errPopup(SFMT(%"Logdir '%1' not a directory.\nProgram aborting",m_logDir))
+		CALL gl_exitProgram(202,"logdir not a dir")
 	END IF
 
 # Make sure the logdir ends with a slash.

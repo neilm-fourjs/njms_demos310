@@ -81,6 +81,7 @@ MAIN
 			CALL setGraphTitle( "title", month_name(12) )
 			LET l_data = getData(12)
 	END DIALOG
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION setGraphTitle( l_prop, l_val )

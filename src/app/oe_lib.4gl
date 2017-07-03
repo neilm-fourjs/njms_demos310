@@ -23,47 +23,54 @@ END FUNCTION
 --------------------------------------------------------------------------------
 #+ Get a Customer or return null.
 #+
-#+ @return The customer record or null.
-FUNCTION getCust() 
+#+ @param l_custcode a customer code or null for lookup
+#+ @return Boolean Got customer record or not.
+FUNCTION getCust( l_custcode LIKE customer.customer_code ) RETURNS BOOLEAN
 	DEFINE arr DYNAMIC ARRAY OF RECORD 
 			customer_code LIKE customer.customer_code,
 			customer_name LIKE customer.customer_name
 		END RECORD
 	DEFINE wher STRING
 
-	OPEN WINDOW getcust WITH FORM "getcust"
+	IF l_custcode IS NULL THEN
+		OPEN WINDOW getcust WITH FORM "getcust"
 
-	WHILE TRUE
-		LET int_flag = FALSE
-		CONSTRUCT BY NAME wher ON customer_code, customer_name
-		IF int_flag THEN EXIT WHILE END IF
-		IF NOT int_flag THEN 
-			PREPARE cstpre FROM "SELECT customer_code,customer_name FROM customer WHERE "||wher
-			IF wher IS NULL THEN DISPLAY "where is NULL!" END IF
-			DECLARE cstcur CURSOR FOR cstpre
-			CALL arr.clear()
-			FOREACH cstcur INTO arr[ arr.getLength() + 1]. *
-			END FOREACH
-			CALL arr.deleteElement( arr.getLength() )
+		WHILE TRUE
 			LET int_flag = FALSE
-			IF arr.getLength() > 0 THEN
-				DISPLAY ARRAY arr TO arr.*
-			ELSE
-				CALL gl_lib.gl_winMessage("Warning","No rows found","exclamation")
-				CONTINUE WHILE
+			CONSTRUCT BY NAME wher ON customer_code, customer_name
+			IF int_flag THEN EXIT WHILE END IF
+			IF NOT int_flag THEN 
+				PREPARE cstpre FROM "SELECT customer_code,customer_name FROM customer WHERE "||wher
+				IF wher IS NULL THEN DISPLAY "where is NULL!" END IF
+				DECLARE cstcur CURSOR FOR cstpre
+				CALL arr.clear()
+				FOREACH cstcur INTO arr[ arr.getLength() + 1]. *
+				END FOREACH
+				CALL arr.deleteElement( arr.getLength() )
+				LET int_flag = FALSE
+				IF arr.getLength() > 0 THEN
+					DISPLAY ARRAY arr TO arr.*
+				ELSE
+					CALL gl_lib.gl_warnPopup(%"No rows found")
+					CONTINUE WHILE
+				END IF
 			END IF
+			LET l_custcode = arr[ arr_curr() ].customer_code
+			IF NOT int_flag THEN EXIT WHILE END IF
+		END WHILE
+		CLOSE WINDOW getcust
+		IF int_flag THEN
+			LET int_flag = FALSE
+			INITIALIZE g_cust.* TO NULL
+			RETURN FALSE
 		END IF
-		IF NOT int_flag THEN EXIT WHILE END IF
-	END WHILE
-	CLOSE WINDOW getcust
-
-	IF int_flag THEN
-		LET int_flag = FALSE
-		INITIALIZE g_cust.* TO NULL
-		RETURN
 	END IF
-	SELECT * INTO g_cust.* FROM customer WHERE customer_code = arr[ arr_curr() ].customer_code
-
+	SELECT * INTO g_cust.* FROM customer WHERE customer_code = l_custcode
+	IF STATUS = NOTFOUND THEN
+		CALL gl_lib.gl_errPopup(SFMT(%"Customer code '%1' not found",l_custcode))
+		RETURN FALSE
+	END IF
+	RETURN TRUE
 END FUNCTION
 ----------------------------------------------------------------------------------
 #+ Get a Stock item or return null.
@@ -121,61 +128,62 @@ END FUNCTION
 FUNCTION oe_getStockRec(l_row SMALLINT, l_verbose BOOLEAN) RETURNS BOOLEAN
 	DEFINE l_stat SMALLINT
 	DEFINE l_d RECORD LIKE disc.*
+	DEFINE l_stk RECORD LIKE stock.*
 
-	INITIALIZE stk.* TO NULL
+	INITIALIZE l_stk.* TO NULL
 	TRY
 		OPEN fetch_stock_cur USING g_detailArray[ l_row ].stock_code
 	CATCH
 		LET l_stat = STATUS
 		DISPLAY "Failed:",l_stat
 		IF l_stat = -263 THEN -- Row locked
-			CALL gl_lib.gl_winMessage("Error","That Stock item is currently locked by another user.","exclamation")
+			CALL gl_lib.gl_errPopup(%"That Stock item is currently locked by another user.")
 			RETURN FALSE
 		END IF
 		IF l_stat != 0 THEN
-			CALL gl_lib.gl_winMessage("Error","Error reading record.\n"||SQLERRMESSAGE,"exclamation")
+			CALL gl_lib.gl_errPopup(SFMT(%"Error reading record:\n%1.",SQLERRMESSAGE))
 			RETURN FALSE
 		END IF
 	END TRY
 
-	FETCH fetch_stock_cur INTO stk.*
+	FETCH fetch_stock_cur INTO l_stk.*
 	IF STATUS = NOTFOUND THEN
-		CALL gl_lib.gl_winMessage("Error","Item not found.","exclamation")
+		CALL gl_lib.gl_errPopup(%"Item not found.")
 		RETURN FALSE
 	END IF
 	CLOSE fetch_stock_cur
 
-	IF stk.free_stock < 1 THEN
-		CALL gl_lib.gl_winMessage("Error","Item out of stock.","exclamation")
+	IF l_stk.free_stock < 1 THEN
+		CALL gl_lib.gl_errPopup(%"Item out of stock.")
 		RETURN FALSE
 	END IF
 
-	DISPLAY "Stk:",stk.disc_code," CST:",g_cust.disc_code
-	OPEN getDisc USING stk.disc_code, g_cust.disc_code
+	DISPLAY "Stk:",m_stk.disc_code," CST:",g_cust.disc_code
+	OPEN getDisc USING m_stk.disc_code, g_cust.disc_code
 	FETCH getDisc INTO l_d.* 
 	IF STATUS = NOTFOUND THEN
 		LET l_d.disc_percent = 0
 	END IF
-	LET g_detailArray[ l_row ].description = stk.description
-	LET g_detailArray[ l_row ].stock = stk.free_stock
+	LET g_detailArray[ l_row ].description = l_stk.description
+	LET g_detailArray[ l_row ].stock = l_stk.free_stock
 	LET g_detailArray[ l_row ].disc_percent = l_d.disc_percent
-	LET g_detailArray[ l_row ].disc_value = stk.price * ( g_detailArray[ l_row ].disc_percent / 100 )
+	LET g_detailArray[ l_row ].disc_value = l_stk.price * ( g_detailArray[ l_row ].disc_percent / 100 )
 
 	IF g_detailArray[ l_row ].price IS NULL OR g_detailArray[ l_row ].price = 0 THEN
-		LET g_detailArray[ l_row ].price = stk.price
+		LET g_detailArray[ l_row ].price = l_stk.price
 	END IF
 	IF g_detailArray[ l_row ].tax_code IS NULL THEN
-		LET g_detailArray[ l_row ].tax_code = stk.tax_code
+		LET g_detailArray[ l_row ].tax_code = l_stk.tax_code
 	END IF
 	IF g_detailArray[ l_row ].tax_code = "1" THEN
 		LET g_detailArray[ l_row ].tax_rate = VAT_RATE
-		LET g_detailArray[ l_row ].tax_value = stk.price * ( g_detailArray[ l_row ].tax_rate / 100 )
+		LET g_detailArray[ l_row ].tax_value = l_stk.price * ( g_detailArray[ l_row ].tax_rate / 100 )
 	ELSE
 		LET g_detailArray[ l_row ].tax_rate = 0
 		LET g_detailArray[ l_row ].tax_value = 0
 	END IF
-	IF stk.pack_flag = "P" OR stk.pack_flag = "E" THEN
-		LET g_detailArray[ l_row ].pack_flag = oe_showPack( stk.stock_code, l_verbose)
+	IF l_stk.pack_flag = "P" OR l_stk.pack_flag = "E" THEN
+		LET g_detailArray[ l_row ].pack_flag = oe_showPack( l_stk.stock_code, l_verbose)
 	END IF
 	RETURN TRUE
 END FUNCTION

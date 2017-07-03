@@ -97,7 +97,7 @@ FUNCTION gldb_connect( l_db STRING )
 			RUN "echo $LD_LIBRARY_PATH;ldd $FGLDIR/dbdrivers/"||m_dbdrv||".so"
 		END IF
 		IF l_msg IS NOT NULL THEN
-			CALL gl_winMessage("Fatal Error",l_msg,"exclamation")
+			CALL gl_lib.gl_errPopup(SFMT(%"Fatal Error %1",l_msg))
 			EXIT PROGRAM
 		END IF
 	END TRY
@@ -226,9 +226,9 @@ FUNCTION gldb_sqlStatus(l_line, l_mod, l_stmt) RETURNS BOOLEAN --{{{
 	LET l_mod = l_mod||" Line:",(l_line USING "<<<<<<<")
 	IF l_stat = 0 THEN RETURN TRUE END IF
 	IF l_stmt IS NULL THEN
-		CALL gl_winMessage("Error","Status:"||l_stat||"\nSqlState:"||SQLSTATE||"\n"||SQLERRMESSAGE||"\n"||l_mod,"exclamation")
+		CALL gl_lib.gl_errPopup(%"Status:"||l_stat||"\nSqlState:"||SQLSTATE||"\n"||SQLERRMESSAGE||"\n"||l_mod)
 	ELSE
-		CALL gl_winMessage("Error",l_stmt||"\nStatus:"||l_stat||"\nSqlState:"||SQLSTATE||"\n"||SQLERRMESSAGE||"\n"||l_mod,"exclamation")
+		CALL gl_lib.gl_errPopup(l_stmt||"\nStatus:"||l_stat||"\nSqlState:"||SQLSTATE||"\n"||SQLERRMESSAGE||"\n"||l_mod)
 		GL_DBGMSG(0, "gl_sqlStatus: Stmt         ='"||l_stmt||"'")
 	END IF
 	GL_DBGMSG(0, "gl_sqlStatus: WHERE        :"||l_mod)
@@ -402,7 +402,7 @@ FUNCTION gldb_checkRec(l_ex BOOLEAN, l_key STRING, l_sql STRING) RETURNS BOOLEAN
 	DISPLAY "Key='",l_key,"'"
 
 	IF l_key IS NULL OR l_key = " " OR l_key.getLength() < 1 THEN
-		CALL gl_lib.gl_winMessage(%"Warning",%"You entered a NULL Key value!","exclamation")
+		CALL gl_lib.gl_warnPopup(%"You entered a NULL Key value!")
 		RETURN FALSE
 	END IF
 
@@ -415,12 +415,12 @@ FUNCTION gldb_checkRec(l_ex BOOLEAN, l_key STRING, l_sql STRING) RETURNS BOOLEAN
 	CLOSE gldb_checkrec_cur
 	IF NOT l_exists THEN
 		IF l_ex THEN
-			CALL gl_lib.gl_winMessage(%"Warning",%"Record '"||l_key||"' doesn't Exist!","exclamation")
+			CALL gl_lib.gl_warnPopup(%"Record '"||l_key||"' doesn't Exist!")
 			RETURN FALSE
 		END IF
 	ELSE
 		IF NOT l_ex THEN
-			CALL gl_lib.gl_winMessage(%"Warning",%"Record '"||l_key||"' already Exists!","exclamation")
+			CALL gl_lib.gl_warnPopup(%"Record '"||l_key||"' already Exists!")
 			RETURN FALSE
 		END IF
 	END IF

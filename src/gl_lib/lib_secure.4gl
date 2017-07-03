@@ -97,7 +97,7 @@ FUNCTION glsec_genSalt(l_hashtype STRING) RETURNS STRING
 			CALL gl_logIt( "Generating Random Salt" )
 			LET l_salt = security.RandomGenerator.CreateRandomString( 16 )
 		OTHERWISE
-			CALL gl_winMessage("Error","Unsupported Encryption Type Requested!","exclamation")
+			CALL gl_lib.gl_errPopup(%"Unsupported Encryption Type Requested!")
 			EXIT PROGRAM
 	END CASE
   CALL gl_logIt( "Salt Generated:"||l_salt||" ("||l_salt.getLength()||")")
@@ -139,7 +139,7 @@ FUNCTION glsec_genPasswordHash(l_pass STRING, l_salt STRING, l_hashtype STRING) 
 					LET l_hash = l_dgst.DoBase64Digest()
 				END FOR
 			OTHERWISE
-				CALL gl_winMessage("Error","Unsupported Encryption Type Requested!","exclamation")
+				CALL gl_lib.gl_errPopup(%"Unsupported Encryption Type Requested!")
 				EXIT PROGRAM
 		END CASE
 		CALL gl_logIt( "Hash created:"||l_hash||" ("||l_hash.getLength()||")")
@@ -186,7 +186,7 @@ FUNCTION glsec_chkPassword(l_pass STRING,l_passhash STRING,l_salt STRING,l_hasht
 				RETURN TRUE
 			END IF
 		OTHERWISE
-			CALL gl_winMessage("Error","Unsupported Encryption Type Requested!","exclamation")
+			CALL gl_lib.gl_errPopup(%"Unsupported Encryption Type Requested!")
 			EXIT PROGRAM
 	END CASE
 
@@ -204,7 +204,7 @@ FUNCTION glsec_fromBase64( l_str STRING ) RETURNS STRING
 	TRY
 		LET l_str = security.Base64.toString( l_str )
 	CATCH
-		CALL gl_winMessage("Error","Error in security module!\n"||SQLCA.SQLERRM,"exclamation")
+		CALL gl_lib.gl_errPopup(%"Error in security module!\n"||SQLCA.SQLERRM)
 		LET l_str = NULL
 	END TRY
 
@@ -221,7 +221,7 @@ FUNCTION glsec_toBase64( l_str STRING ) RETURNS STRING
 	TRY
 		LET l_str = security.Base64.fromString( l_str )
 	CATCH
-		CALL gl_winMessage("Error","Error in security module!\n"||SQLCA.SQLERRM,"exclamation")
+		CALL gl_lib.gl_errPopup(%"Error in security module!\n"||SQLCA.SQLERRM)
 		LET l_str = NULL
 	END TRY
 

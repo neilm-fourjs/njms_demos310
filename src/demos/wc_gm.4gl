@@ -33,7 +33,7 @@ MAIN
 			CALL util.JSONObject.parse( in_data ).toFGL(l_latlng_rec) -- turn json string into fgl rec
 		GL_ABOUT
 	END INPUT
-
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 -- Set a Property in the AUI

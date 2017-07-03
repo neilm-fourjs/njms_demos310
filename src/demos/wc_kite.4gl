@@ -75,6 +75,7 @@ MAIN
 		ON ACTION CLOSE
 			EXIT DIALOG
 	END DIALOG
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 #+ serialize panels to a web component value
@@ -144,28 +145,28 @@ END FUNCTION
 FUNCTION saveKite()
 	DEFINE dd xml.DomDocument
 	DEFINE dn xml.DomNode
-	DEFINE tmpFile, fileName STRING
+	DEFINE l_tmpFile, l_fileName STRING
 
 	LET dd = xml.DomDocument.Create()
 	LET dn = dd.createElement("kite")
 	CALL xml.Serializer.VariableToDom( m_rec, dn )
 	CALL dd.appendDocumentNode( dn )
 
-	LET fileName = winSaveFile("","Colour List","*.xml","Save Colour List")
-	IF fileName IS NULL THEN RETURN END IF
+	LET l_fileName = winSaveFile("","Colour List","*.xml","Save Colour List")
+	IF l_fileName IS NULL THEN RETURN END IF
 
-	LET tmpFile = fgl_getPid()||".tmp"
+	LET l_tmpFile = fgl_getPid()||".tmp"
 	TRY
-		CALL dd.save(tmpFile)
+		CALL dd.save(l_tmpFile)
 	CATCH
-		CALL gl_lib.gl_winMessage("Error","File Save Failed!\nStatus:"||STATUS||" "||err_get(STATUS)||"Name:"||tmpFile,"exclamation")
+		CALL gl_lib.gl_errPopup(SFMT(%"File Save Failed!\nStatus: %1 %2 Name:%3",STATUS,err_get(STATUS),l_tmpFile))
 	END TRY
 	TRY
-		CALL fgl_putFile(tmpFile, fileName)
+		CALL fgl_putFile(l_tmpFile, l_fileName)
 	CATCH
-		CALL gl_lib.gl_winMessage("Error","File Transfer Failed!\nStatus:"||STATUS||" "||err_get(STATUS),"exclamation")
+		CALL gl_lib.gl_errPopup(SFMT(%"File Transfer Failed!\nStatus:%1 %2",STATUS,err_get(STATUS)))
 	END TRY
-	IF NOT os.Path.delete( tmpFile ) THEN
+	IF NOT os.Path.delete( l_tmpFile ) THEN
 		-- Failed to delete temp file !
 	END IF
 

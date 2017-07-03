@@ -10,6 +10,7 @@
 #+ Dynamic Lookup function.
 #+ $Id: gl_lookup.4gl 334 2014-01-20 09:51:45Z test4j $
 --------------------------------------------------------------------------------
+IMPORT FGL gl_lib
 &include "genero_lib.inc"
 
 CONSTANT MAXCOLWIDTH=30
@@ -52,7 +53,7 @@ FUNCTION gl_lookup3( tabnam, cols, colts, wher, ordby ) --{{{
 		LET sel_stmt = "SELECT COUNT(*) FROM "||tabnam||" WHERE "||wher
 		PREPARE listcntpre FROM sel_stmt
 	CATCH
-		CALL gl_winMessage("Error!","Failed to prepare:\n"||sel_stmt||"\n"||SQLERRMESSAGE,"exclamation")
+		CALL gl_lib.gl_errPopup(SFMT(%"Failed to prepare:\n%1\n%2",sel_stmt,SQLERRMESSAGE))
 		RETURN NULL --, NULL
 	END TRY
 -- do the count
@@ -61,7 +62,7 @@ FUNCTION gl_lookup3( tabnam, cols, colts, wher, ordby ) --{{{
 	FETCH listcntcur INTO tot_recs
 	CLOSE listcntcur
 	IF tot_recs < 1 THEN
-		CALL gl_winmessage("Error", "No Records Found", "exclamation")
+		CALL gl_lib.gl_errPopup(%"No Records Found")
 		RETURN NULL --, NULL
 	END IF
 	GL_DBGMSG(2,"gl_lookup3: Counted:"||tot_recs)

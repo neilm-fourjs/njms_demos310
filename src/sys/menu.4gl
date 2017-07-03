@@ -39,9 +39,7 @@ MAIN
 	IF do_dbconnect_and_login() THEN
 		CALL do_menu()
 	END IF
-
-	DISPLAY "End Main reached."
-
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 -- Connect to the database to do the login process.
@@ -114,7 +112,7 @@ FUNCTION do_menu()
 					--DISPLAY "l_prog:",l_prog," m_args:",m_args, " l_args:",l_args
 					--DISPLAY "Run: fglrun "||l_prog||" "||m_args||" "||l_args
 					IF NOT os.path.exists( l_prog ) THEN
-						CALL gl_lib.gl_winMessage(%"Error",SFMT(%"This program '%1' appears to not be installed!",l_prog),"exclamation")
+						CALL gl_lib.gl_errPopup(SFMT(%"This program '%1' appears to not be installed!",l_prog))
 					END IF
 					RUN "fglrun "||l_prog||" "||m_args||" "||l_args WITHOUT WAITING
 
@@ -142,7 +140,7 @@ FUNCTION do_menu()
 		ON ACTION exit 
 			IF ARG_VAL(1) = "MDI" THEN
 				IF ui.Interface.getChildCount() > 0 THEN
-					CALL gl_lib.gl_winMessage("Warning","Must close child windows first!","exclamation")
+					CALL gl_lib.gl_warnPopup(%"Must close child windows first!")
 					CONTINUE DISPLAY
 				END IF
 			END IF
@@ -151,7 +149,7 @@ FUNCTION do_menu()
 		ON ACTION close 
 			IF ARG_VAL(1) = "MDI" THEN
 				IF ui.Interface.getChildCount() > 0 THEN
-					CALL gl_lib.gl_winMessage("Warning","Must close child windows first!","exclamation")
+					CALL gl_lib.gl_warnPopup(%"Must close child windows first!")
 					CONTINUE DISPLAY
 				END IF
 			END IF

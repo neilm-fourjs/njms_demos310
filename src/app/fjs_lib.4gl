@@ -45,26 +45,26 @@ FUNCTION checkUserRoles(l_user_key,l_role,l_verb)
 
 	SELECT u.active,u.surname INTO l_u_act,l_user FROM sys_users u WHERE u.user_key = l_user_key
 	IF STATUS = NOTFOUND THEN
-		LET l_err = "User not found! key:",l_user_key
-		CALL gl_lib.gl_winMessage("Error",l_err,"exclamation")
+		LET l_err = SFMT(%"User key '%1' not found!",l_user_key)
+		CALL gl_lib.gl_errPopup(l_err)
 		RETURN FALSE
 	END IF
 	IF NOT l_u_act THEN
-		LET l_err = "User '"||l_user||"' not active!"
-		IF l_verb THEN CALL gl_lib.gl_winMessage("Error",l_err,"exclamation") END IF
+		LET l_err = SFMT("User '%1' not active!",l_user)
+		IF l_verb THEN CALL gl_lib.gl_errPopup(l_err) END IF
 		RETURN FALSE
 	END IF
 
 	SELECT r.active,role_key INTO l_r_act,l_role_key 
 		FROM sys_roles r WHERE r.role_name = l_role
 	IF STATUS = NOTFOUND THEN
-		LET l_err = "Role not found! Role:",l_role
-		CALL gl_lib.gl_winMessage("Error",l_err,"exclamation")
+		LET l_err = SFMT("Role '%1' not found!",l_role)
+		CALL gl_lib.gl_errPopup(l_err)
 		RETURN FALSE
 	END IF
 	IF l_r_act != "Y" THEN
-		LET l_err = "Role '"||l_role||"' not longer active!"
-		IF l_verb THEN CALL gl_lib.gl_winMessage("Error",l_err,"exclamation") END IF
+		LET l_err = SFMT("Role '%1' not longer active!",l_role)
+		IF l_verb THEN CALL gl_lib.gl_errPopup(l_err) END IF
 		RETURN FALSE
 	END IF
 	DISPLAY "checkUserRoles U:",l_u_act,":",l_user," R:",l_r_act
@@ -76,16 +76,16 @@ FUNCTION checkUserRoles(l_user_key,l_role,l_verb)
 		AND ur.role_key = l_role_key
 	IF STATUS = NOTFOUND THEN
 		IF l_verb THEN
-			LET l_err = "You don't have permission to do that\nPlease contact your system administrator\n"||"Role:"||l_role
-			CALL gl_lib.gl_winMessage("Error",l_err,"exclamation")
+			LET l_err = SFMT(%"You don't have permission to do that\nPlease contact your system administrator\nRole:",l_role)
+			CALL gl_lib.gl_errPopup(l_err)
 		END IF
 		RETURN FALSE
 	END IF
 	DISPLAY "checkUserRoles UR:",l_ur_act
 
 	IF NOT l_ur_act THEN
-		LET l_err = "Role '"||l_role||"' not active for this user!"
-		IF l_verb THEN CALL gl_lib.gl_winMessage("Error",l_err,"exclamation") END IF
+		LET l_err = SFMT(%"Role '%1' not active for this user!",l_role)
+		IF l_verb THEN CALL gl_lib.gl_errPopup(l_err) END IF
 		RETURN FALSE
 	END IF
 

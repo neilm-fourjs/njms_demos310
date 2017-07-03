@@ -111,7 +111,7 @@ PRIVATE FUNCTION validate_login(
 	IF l_acc.pass_expire IS NOT NULL AND l_acc.pass_expire > DATE("01/01/1990") THEN
 		IF l_acc.pass_expire <= TODAY THEN
 			CALL gl_lib.gl_logIt("Password has expired:"||l_acc.pass_expire)
-			CALL gl_lib.gl_winMessage(%"Error",%"Your password has expired!\nYou will need to create a new one!","exclamation")
+			CALL gl_lib.gl_errPopup(%"Your password has expired!\nYou will need to create a new one!")
 			LET l_acc.forcepwchg = "Y" 
 		END IF
 	END IF
@@ -136,17 +136,17 @@ PRIVATE FUNCTION forgotten( l_login LIKE sys_users.email)
 	DEFINE l_ret SMALLINT
 
 	IF l_login IS NULL OR l_login = " " THEN
-		CALL gl_lib.gl_winMessage(%"Error",%"You must enter your email address!","exclamation")
+		CALL gl_lib.gl_errPopup(%"You must enter your email address!")
 		RETURN
 	END IF
 
 	IF NOT sql_checkEmail(l_login) THEN
-		CALL gl_lib.gl_winMessage(%"Error",%"Email address not registered!","exclamation")
+		CALL gl_lib.gl_errPopup(%"Email address not registered!")
 		RETURN
 	END IF
 
 	IF gl_lib.gl_winQuestion(%"Confirm",%"Are you sure you want to reset your password?\n\nA link will be emailed to you,\nyou will then be able to change and clicking the link.",
-			"No","Yes|No","question") = "No" THEN
+			%"No",%"Yes|No","question") = %"No" THEN
 		RETURN
 	END IF
 
@@ -250,7 +250,7 @@ PRIVATE FUNCTION passchg(l_login LIKE sys_users.email) RETURNS BOOLEAN
 				(l_acc.salt, l_acc.pass_hash, l_acc.forcepwchg, l_acc.pass_expire, l_acc.hash_type)
 		WHERE email = l_login
 
-	CALL gl_lib.gl_winMessage(%"Comfirmation",%"Your password has be updated, please don't forget it.\nWe cannot retrieve this password, only reset it.\n","exclamation")
+	CALL gl_lib.gl_warnPopup(%"Your password has be updated, please don't forget it.\nWe cannot retrieve this password, only reset it.\n")
 
 	RETURN TRUE
 END FUNCTION

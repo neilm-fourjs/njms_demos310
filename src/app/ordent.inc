@@ -53,7 +53,7 @@ TYPE t_packItem
 		description LIKE stock.description
 	END RECORD
 
-DEFINE stk RECORD LIKE stock.*
+DEFINE m_stk RECORD LIKE stock.*
 
 DEFINE detailArray_tree DYNAMIC ARRAY OF t_detailLine_tree
 
