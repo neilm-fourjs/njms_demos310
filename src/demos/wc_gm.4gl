@@ -23,7 +23,7 @@ MAIN
 
 	INPUT BY NAME wc_gm, l_latlng_rec.*, in_data  ATTRIBUTE(UNBUFFERED, WITHOUT DEFAULTS)
 		ON ACTION close EXIT INPUT
-
+		ON ACTION quit EXIT INPUT
 		ON ACTION go
 			CALL wc_setProp("lat",l_latlng_rec.lat)
 			CALL wc_setProp("lng",l_latlng_rec.lng)

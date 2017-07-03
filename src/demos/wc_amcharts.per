@@ -18,25 +18,26 @@ ACTION DEFAULTS
 	ACTION act12 (DEFAULTVIEW=NO)
 END --
 
-LAYOUT ( TEXT="Am Charts Demo" )
+LAYOUT ( TEXT="Am Charts Demo", STYLE="main2" )
 HBOX ( SPLITTER )
 GRID
 {
-<T tab                                  >
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-[f001                ][f002            ]
-<                                       >
-[logo]
+[newdata:      :about:     :quit]
+<T tab                           >
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+<                                >
+[logo                           ]
 }
 END -- TABLE
 GRID
@@ -62,7 +63,12 @@ ATTRIBUTES
 f001 = FORMONLY.labels,TITLE="Labels";
 f002 = FORMONLY.values,TITLE="Values";
 
-IMAGE logo : logo, IMAGE="logo";
+IMAGE logo : logo, IMAGE="njm_demo_logo_256", SIZEPOLICY=INITIAL,STYLE="noborder";
+
+BUTTON quit : quit;
+BUTTON about : about;
+BUTTON newdata : newdata;
+
 
 WEBCOMPONENT wc = FORMONLY.l_data,
 	STRETCH=BOTH, 
