@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="30a04" version="3.2">
+<Project defaultApplication="2103145373" gstVersion="30a04" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Cordova plugins" editorInfo="isDynamic:true;title:Cordova;description:Cordova plugins;icon:checkbox_checked" initialValue="" isDefaultInherited="false" isHidden="false" label="Cordova Plugins" name="cordova" readOnly="false" type="MULTIPLEBOOLEAN"/>
@@ -85,6 +85,7 @@
         <File filePath="src/app/getorder.per"/>
         <File filePath="src/app/getstock.per"/>
         <File filePath="src/app/oe_lib.4gl"/>
+        <File filePath="src/app/oeweb_lib.4gl"/>
         <File filePath="src/app/ordent.inc"/>
         <File filePath="src/app/packshow.per"/>
       </Library>
@@ -109,9 +110,20 @@
         <File filePath="src/sys/user_mnt.per"/>
       </Application>
       <Application binaryName="webOE" dependencies="-272766546,14000,-1090563702,-400184264,1986" id="-559263813" label="webOE">
-        <File filePath="src/app/oeweb_lib.4gl"/>
-        <File filePath="src/app/webOE3.4gl"/>
-        <File filePath="src/app/webOE3.per"/>
+        <VirtualFolder label="etc">
+          <File filePath="etc/weboe.4ad"/>
+          <File filePath="etc/weboe.4st"/>
+        </VirtualFolder>
+        <File filePath="src/app/webOE.4gl"/>
+        <File filePath="src/app/webOE.per"/>
+      </Application>
+      <Application binaryName="webOE2" dependencies="-272766546,14000,-1090563702,1986" id="2103145373" label="webOE2">
+        <VirtualFolder label="etc">
+          <File filePath="etc/weboe2.4ad"/>
+          <File filePath="etc/weboe2.4st"/>
+        </VirtualFolder>
+        <File filePath="src/app/webOE2.4gl"/>
+        <File filePath="src/app/webOE2.per"/>
       </Application>
     </Group>
     <Group label="Database" language="Genero">

@@ -7,7 +7,7 @@ IMPORT FGL gl_db
 IMPORT FGL oe_lib
 IMPORT FGL oeweb_lib
 
-CONSTANT PRGDESC = "Web Ordering Demo"
+CONSTANT PRGDESC = "Web Ordering Demo #2"
 CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER="3.1"
 
@@ -43,7 +43,7 @@ MAIN
 	DEFINE l_cat SMALLINT
 
 	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
-	CALL gl_lib.gl_init(ARG_VAL(1),"weboe",TRUE)
+	CALL gl_lib.gl_init(ARG_VAL(1),"weboe2",TRUE)
 GL_MODULE_ERROR_HANDLER
 
 	CALL gl_db.gldb_connect(NULL)
@@ -62,7 +62,7 @@ GL_MODULE_ERROR_HANDLER
 	IF fgl_getEnv("GBC_CUSTOM") = "csslayout" THEN LET m_csslayout = TRUE END IF
 	DISPLAY "GBC_CUSTOM:",fgl_getEnv("GBC_CUSTOM") 
 
-	OPEN FORM weboe FROM "webOE"
+	OPEN FORM weboe FROM "webOE2"
 	DISPLAY FORM weboe
 
 	LET l_win = ui.Window.getCurrent()
@@ -102,10 +102,24 @@ GL_MODULE_ERROR_HANDLER
 	CALL build_cats()
 
 	LET l_cat = 3
-	WHILE l_cat > 0
+--	WHILE l_cat > 0
 		CALL getItems( m_stock_cats[ l_cat ].id )
-		LET l_cat = dynDiag()
-	END WHILE
+		--LET l_cat = dynDiag()
+--	END WHILE
+
+	INPUT ARRAY m_items FROM items.* ATTRIBUTES(WITHOUT DEFAULTS,
+			DELETE ROW=FALSE,INSERT ROW=FALSE,APPEND ROW=FALSE)
+		ON CHANGE qty1
+			CALL detLine(m_items[DIALOG.getCurrentRow("items")].stock_code1,m_items[DIALOG.getCurrentRow("items")].qty1)
+
+		ON ACTION add1
+				CALL detLine(m_items[DIALOG.getCurrentRow("items")].stock_code1,m_items[DIALOG.getCurrentRow("items")].qty1+1)
+				CALL recalcOrder()
+		ON ACTION detlnk1 CALL detLnk( m_items[DIALOG.getCurrentRow("items")].stock_code1,
+																	 m_items[DIALOG.getCurrentRow("items")].desc1,
+																	 m_items[DIALOG.getCurrentRow("items")].img1,
+																	 m_items[DIALOG.getCurrentRow("items")].qty1 )
+	END INPUT
 
 END MAIN
 --------------------------------------------------------------------------------
@@ -124,8 +138,6 @@ FUNCTION getItems( sc )
 		LET m_items[ m_items.getLength() ].desc1 = mkDesc( l_stk.*)
 		LET m_items[ m_items.getLength() ].qty1 = 0
 	END FOREACH
-
-	CALL build_grids()
 
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -155,125 +167,6 @@ FUNCTION build_cats()
 		CALL n.setAttribute("posX","1")
 		CALL n.setAttribute("style", "big")
 	END FOR
-END FUNCTION
---------------------------------------------------------------------------------
-FUNCTION build_grids()
-	DEFINE l_hbox, n,n1, ff om.DomNode
-	DEFINE x,y, l_gw SMALLINT
-	CONSTANT l_lab1_gwidth = 12
-	CONSTANT l_lab2_gwidth = 4
-	CONSTANT l_qty_gwidth = 6
-	CONSTANT l_detbut_gwidth = 2
-
-	LET l_gw = l_lab1_gwidth + 1
-	DISPLAY "Build_grids:",m_csslayout
-
-	LET n = m_vbox.getParent()
-	CALL n.removeChild( m_vbox )
-	LET m_vbox = n.createChild("VBox")
-	CALL m_vbox.setAttribute("name","main_vbox")
-	CALL m_vbox.setAttribute("splitter","0")
-
-	LET l_hbox = m_vbox.createChild("HBox")
-	IF m_csslayout THEN
-		CALL l_hbox.setAttribute("style","cssLayout")
-	END IF
-
-	LET y = m_items.getLength()
-	IF NOT m_csslayout THEN
-		IF y MOD 4 THEN -- make sure we generate 4 grids across
-			LET y = y + (4 - ( y MOD 4  ))
-		END IF
-		IF y < 8 THEN LET y = 8 END IF -- make sure we have at least 12 total
-	END IF
-	FOR x = 1 TO y
-		LET n = l_hbox.createChild("Group")
-		IF x <= m_items.getLength() THEN
-			CALL n.setAttribute("style", "griditemX")
-		ELSE
-			CALL n.setAttribute("style", "noborder")
-		END IF
-		LET n = n.createChild("Grid")
-		CALL n.setAttribute("gridWidth", l_gw)
-		CALL n.setAttribute("gridHeight", "14")
-		IF x <= m_items.getLength() THEN
-			CALL n.setAttribute("style", "griditem")
-		END IF
-
-		LET n1 = n.createChild("Image")
-		IF x <= m_items.getLength() THEN
-			CALL n1.setAttribute("image", m_items[x].img1)
-			CALL n1.setAttribute("style", "bg_white noborder")
-		ELSE
-			CALL n1.setAttribute("style", "noborder")
-		END IF
-		CALL n1.setAttribute("sizePolicy","fixed")
-		CALL n1.setAttribute("autoScale","1")
-		CALL n1.setAttribute("gridWidth", l_gw-1)
-		CALL n1.setAttribute("width", "150px")
-		CALL n1.setAttribute("height", "150px")
-		CALL n1.setAttribute("posY","1")
-		CALL n1.setAttribute("posX","1")
-
-		LET n1 = n.createChild("Label")
-		IF x <= m_items.getLength() THEN
-			CALL n1.setAttribute("text", m_items[x].desc1)
-		ELSE
-			CALL n1.setAttribute("text", "&nbsp;" )
-		END IF
-		CALL n1.setAttribute("gridWidth", l_lab1_gwidth)
-		CALL n1.setAttribute("width", l_lab1_gwidth)
-		CALL n1.setAttribute("gridHeight", "3")
-		CALL n1.setAttribute("posY","5")
-		CALL n1.setAttribute("posX","1")
-		CALL n1.setAttribute("style", "html")
-		CALL n1.setAttribute("sizePolicy","fixed")
-
-
-		LET n1 = n.createChild("Label")
-		IF x <= m_items.getLength() THEN
-			CALL n1.setAttribute("text","QTY:")
-		END IF
-		CALL n1.setAttribute("style", "bold")
-		CALL n1.setAttribute("gridWidth",l_lab2_gwidth)
-		CALL n1.setAttribute("width","5")
-		CALL n1.setAttribute("sizePolicy","fixed")
-		CALL n1.setAttribute("posY","10")
-		CALL n1.setAttribute("posX","1")
-
-		IF x <= m_items.getLength() THEN
-			LET ff = n.createChild("FormField")
-			CALL ff.setAttribute("name","formonly.qty"||x)
-			CALL ff.setAttribute("colName","qty"||x)
-			LET n1 = ff.createChild("ButtonEdit")
-			--LET n1 = ff.createChild("SpinEdit")
-			CALL n1.setAttribute("gridWidth",l_qty_gwidth)
-			CALL n1.setAttribute("width",l_qty_gwidth)
-			CALL n1.setAttribute("action","add1")
-			CALL n1.setAttribute("posY","10")
-			CALL n1.setAttribute("posX",l_lab2_gwidth)
-			CALL n1.setAttribute("style", "bold")
-
-			LET n1 = n.createChild("Button")
-			CALL n1.setAttribute("name","detlnk"||x)
-			CALL n1.setAttribute("gridWidth",l_detbut_gwidth)
-			CALL n1.setAttribute("width",l_detbut_gwidth)
-			CALL n1.setAttribute("image", "fa-info-circle")
-			CALL n1.setAttribute("text", "")
-			CALL n1.setAttribute("posY","10")
-			CALL n1.setAttribute("posX",l_lab2_gwidth+l_qty_gwidth)
-		END IF
-
-		--DISPLAY "Grid x:",x, " y:",y, " MOD4:",( x MOD 4 ), " len:",m_items.getLength()
-
-		IF NOT m_csslayout THEN
-			IF NOT x MOD 4 THEN
-				LET l_hbox = m_vbox.createChild("HBox")
-			END IF
-		END IF
-
-	END FOR
-
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION dynDiag()

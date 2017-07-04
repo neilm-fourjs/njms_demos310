@@ -1,0 +1,86 @@
+
+&include "schema.inc"
+
+TOOLBAR ( STYLE="gbc_weboe")
+	ITEM signin ( STYLE="gbc_weboe")
+	ITEM viewb ( STYLE="gbc_weboe")
+	ITEM gotoco ( STYLE="gbc_weboe")
+	ITEM about ( STYLE="gbc_weboe")
+	ITEM cancel (TEXT="Leave", IMAGE="fa-sign-out", STYLE="gbc_weboe")
+END -- TB
+
+LAYOUT (TEXT="Main Store Front", STYLE="gbc_footer")
+
+HBOX --(SPLITTER)
+
+GRID (STYLE="scrollable")
+{
+<G cats         >
+
+<               >
+<G tots         >
+[tot_items  : :]
+[t002       : :]
+[t003       : :]
+[t004       : :]
+[t005       : :]
+[t006       : :]
+[tot_nett   : :]
+[t007       : :]
+[: :p1:p2:p3: :]
+[f001          ]
+[status        ]
+}
+END --GRID
+
+ 
+SCROLLGRID ( STYLE="tiles", WANTFIXEDPAGESIZE = NO ) 
+{
+[img1              ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[det1              ]
+[qty1     |detlnk1 ]
+}
+END -- GRID
+
+
+END --HBOX
+
+TABLES
+stock
+stock_cat
+ord_head
+ord_payment
+
+ATTRIBUTES
+
+LABEL f001 = FORMONLY.custname,SIZEPOLICY=DYNAMIC, STYLE="gbc_status",TAG="user";
+LABEL status = FORMONLY.status,SIZEPOLICY=DYNAMIC, STYLE="gbc_status",TAG="status";
+
+IMAGE p1 : pt1, IMAGE="fa-cc-paypal", SIZEPOLICY=FIXED, AUTOSCALE, HEIGHT=48 PIXELS, WIDTH=48 PIXELS,STYLE="noborder";
+IMAGE p2 : pt2, IMAGE="fa-cc-mastercard", SIZEPOLICY=FIXED, AUTOSCALE, HEIGHT=48 PIXELS, WIDTH=48 PIXELS, STYLE="noborder";
+IMAGE p3 : pt3, IMAGE="fa-cc-visa", SIZEPOLICY=FIXED, AUTOSCALE, HEIGHT=48 PIXELS, WIDTH=48 PIXELS, STYLE="noborder";
+
+GROUP cats : cats, TEXT=%"Categories:", STYLE="cats";
+GROUP tots : tots, TEXT=%"This Sale:";
+LABEL tot_items : tot_items,TEXT=%"Total Qty:", STYLE="big";
+t002 = ord_head.total_qty, STYLE="big";
+t003 = ord_head.total_gross, HIDDEN;
+t004 = ord_head.total_tax, HIDDEN;
+t005 = ord_head.total_disc, HIDDEN;
+t006 = ord_payment.del_amount, HIDDEN;
+LABEL tot_nett : tot_nett,TEXT=%"Total Cost:", STYLE="big";
+t007 = ord_head.total_nett, STYLE="big";
+
+BUTTONEDIT detlnk1 = FORMONLY.stock_code1,ACTION=detlnk1;
+IMAGE img1 = FORMONLY.img1,AUTOSCALE,WIDTH=150 PIXELS,HEIGHT=150 PIXELS{,STRETCH=BOTH},SIZEPOLICY=FIXED,STYLE="bg_white noborder";
+TEXTEDIT det1 = FORMONLY.det1,SCROLLBARS=NONE,NOENTRY,STYLE="bg_white noborder html notools";
+BUTTONEDIT qty1 = FORMONLY.qty1,ACTION=add1;
+
+INSTRUCTIONS
+SCREEN RECORD items ( stock_code1, img1, det1, qty1 )
