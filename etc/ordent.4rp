@@ -109,7 +109,7 @@
                                     <rtl:input-variable name="r_detailline.disc_value" type="FGLNumeric" expectedLocation="expectedHere"/>
                                     <DECIMALFORMATBOX name="r_detailline.disc_value Value" width="width(&quot;000,000.00&quot;)" anchorX="1" color="{{r_detailline.disc_value&gt;50?Color.RED:Color.BLACK}}" floatingBehavior="enclosed" textAlignment="right" format="###,###,##&amp;.&amp;&amp;" value="{{r_detailline.disc_value}}"/>
                                     <rtl:input-variable name="r_detailline.nett_value" type="FGLNumeric" expectedLocation="expectedHere"/>
-                                    <DECIMALFORMATBOX name="r_detailline.total Value" width="width(&quot;000,000,000.00&quot;)" floatingBehavior="enclosed" textAlignment="right" format="£###,###,##&amp;.&amp;&amp;" value="{{r_detailline.nett_value}}"/>
+                                    <DECIMALFORMATBOX name="r_detailline.total Value" width="width(&quot;000,000,000.00&quot;)" floatingBehavior="enclosed" textAlignment="right" format="###,###,##&amp;.&amp;&amp;" value="{{r_detailline.nett_value}}"/>
                                 </MINIPAGE>
                                 <rtl:input-variable name="r_detailline.pack_flag" type="FGLString" expectedLocation="expectedHere"/>
                                 <MINIPAGE name="Detail Lines-PackExpand_p" rtl:condition="r_detailline.pack_flag.matches(&quot;[p]&quot;)" width="min" length="max-200" alignment="center" fontSize="12" layoutDirection="leftToRight" swapX="false">

@@ -26,7 +26,7 @@ CONSTANT PRGDESC = "Invoice Print"
 CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER = "3.1"
 
-CONSTANT m_logo = "../pics/fourjs-demo-co.png"
+CONSTANT m_logo = "../pics/njm_demo_logo_256.png"
 
 MAIN
 	DEFINE l_row SMALLINT

@@ -290,7 +290,7 @@ FUNCTION glGRW_rptStart(l_filename STRING) RETURNS om.saxdocumenthandler
 
 	-- load the 4rp file
 	IF opts.r_filename != "ASCII" THEN
-		IF NOT fgl_report_loadCurrentSettings(m_rptDir||opts.r_filename) THEN
+		IF NOT fgl_report_loadCurrentSettings( os.path.join(m_rptDir,opts.r_filename)) THEN
 			CALL gl_winMessage(%"Error",SFMT(%"fgl_report_loadCurrentSettings(%1) Failed!",opts.r_filename),"exclamation")
 			RETURN NULL
 		END IF
