@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="-1350833088" gstVersion="30a04" version="3.2">
+<Project defaultApplication="1554019048" gstVersion="30a04" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Cordova plugins" editorInfo="isDynamic:true;title:Cordova;description:Cordova plugins;icon:checkbox_checked" initialValue="" isDefaultInherited="false" isHidden="false" label="Cordova Plugins" name="cordova" readOnly="false" type="MULTIPLEBOOLEAN"/>
@@ -99,7 +99,6 @@
           <File filePath="etc/ordent-2.4rp"/>
           <File filePath="etc/ordent-3.4rp"/>
           <File filePath="etc/ordent-4.4rp"/>
-          <File filePath="etc/ordent-5.4rp"/>
           <File filePath="etc/ordent.4rp"/>
           <File filePath="etc/picklist.4rp"/>
         </VirtualFolder>

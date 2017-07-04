@@ -10,6 +10,10 @@ IMPORT FGL new_acct
 CONSTANT C_VER="3.1"
 CONSTANT C_TITLE="NJM's Demos"
 CONSTANT C_SPLASH="njm_demo_logo_256"
+CONSTANT C_ICON="njm_demo_icon"
+CONSTANT PRGDESC = "Order Entry Demo"
+CONSTANT PRGAUTH = "Neil J.Martin"
+
 DEFINE m_user STRING
 DEFINE m_user_id INT
 DEFINE m_menu DYNAMIC ARRAY OF RECORD 
@@ -28,6 +32,7 @@ DEFINE m_args STRING
 DEFINE m_mdi CHAR(1)
 MAIN
 
+	CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,FALSE)
 	LET m_mdi = gl_lib.m_mdi
 	IF m_mdi = "M" THEN LET m_mdi = "C" END IF -- if MDI container set so child programs are children
