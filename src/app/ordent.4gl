@@ -12,49 +12,41 @@
 IMPORT util
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
-IMPORT FGL fjs_lib
+IMPORT FGL app_lib
 IMPORT FGL oe_lib
 &include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
-&include "schema.inc"
+&include "app.inc"
 &include "ordent.inc"
 
-CONSTANT PRGNAME = "Ordent"
 CONSTANT PRGDESC = "Order Entry Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER="3.1"
 
-DEFINE m_arg1, m_arg2 STRING
-DEFINE m_fullname STRING
 MAIN
-	DEFINE l_test STRING
+	DEFINE l_email STRING
+	DEFINE l_key INTEGER
 
-	CALL gl_lib.gl_setInfo(NULL, "njm_demo_logo_256", "njm_demo", PRGNAME, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 GL_MODULE_ERROR_HANDLER
 
 	CALL gl_db.gldb_connect(NULL) -- Library function.
 
-	LET m_arg1 = ARG_VAL(1)
-	IF m_arg1 IS NULL OR m_arg1 = " " THEN LET m_arg1 = "SDI" END IF
-	LET m_arg2 = ARG_VAL(2)
-	IF m_arg2 IS NULL OR m_arg2 = " " THEN LET m_arg2 = "1" END IF
-
-
 	IF UPSHIFT(ui.Interface.getFrontEndName()) = "GBC" THEN
-		CALL ui.Interface.FrontCall("session","getvar","login",l_test)
+		CALL ui.Interface.FrontCall("session","getvar","login",l_email)
 		TRY
-			LET m_user.user_key = l_test
+			LET l_key = l_email
 		CATCH
 --ah? char to num error ??
 		END TRY
-		DISPLAY "From cookie:",l_test
+		DISPLAY "From cookie:",l_email
 	ELSE
-		LET m_user.email = fgl_getEnv("REALUSER")
+		LET l_email = fgl_getEnv("REALUSER")
 	END IF
-	IF m_user.user_key > 1 THEN
-		LET m_fullname = getUserName(m_user.user_key)
-		DISPLAY "User:",m_fullname
-	END IF
+-- either key or email may have a valid, if both null the function uses arg2
+	CALL app_lib.getUser( l_key, l_email )
+	LET m_fullname = app_lib.getUserName()
+	DISPLAY "User:",m_fullname
 
 	CALL oe_cursors()
 
@@ -491,7 +483,7 @@ FUNCTION printInv(l_what)
 
 	IF fgl_getEnv("BENCHMARK") = "true" THEN
 		DISPLAY "Printing Invoice:",g_ordHead.order_number
-		RUN "fglrun printInvoices.42r "||m_arg1||" "||m_arg2||" "||g_ordHead.order_number||" "||l_what||".4rp PDF save 0 "||fgl_getPID()||".pdf"
+		RUN "fglrun printInvoices.42r "||ARG_VAL(1)||" "||m_user.user_key||" "||g_ordHead.order_number||" "||l_what||".4rp PDF save 0 "||fgl_getPID()||".pdf"
 		RETURN
 	END IF
 
@@ -502,7 +494,7 @@ FUNCTION printInv(l_what)
 	END IF
 
 	DISPLAY "Printing Invoice:",g_ordHead.order_number
-	RUN "fglrun printInvoices.42r "||m_arg1||" "||m_arg2||" "||g_ordHead.order_number||" "||l_what||".4rp "||l_rptTo||" preview 1"
+	RUN "fglrun printInvoices.42r "||ARG_VAL(1)||" "||m_user.user_key||" "||g_ordHead.order_number||" "||l_what||".4rp "||l_rptTo||" preview 1"
 
 END FUNCTION
 --------------------------------------------------------------------------------

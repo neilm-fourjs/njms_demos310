@@ -3,9 +3,9 @@
 
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
-IMPORT FGL fjs_lib
+IMPORT FGL app_lib
 &include "genero_lib.inc"
-&include "schema.inc"
+&include "app.inc"
 CONSTANT PRGDESC = "Menu Maintenance Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER="3.1"
@@ -47,9 +47,8 @@ MAIN
 	DEFINE dnd ui.DragDrop
 	LET gl_lib.gl_toolbar = "dynmaint"
 	LET gl_lib.gl_topMenu = "dynmaint"
-	LET gl_lib.gl_progAuth = PRGAUTH
-	LET gl_lib.gl_progDesc = PRGDESC
 	LET gl_lib.gl_noToolBar = FALSE
+	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
 	WHENEVER ANY ERROR CALL gl_error
 	LET m_user_key = ARG_VAL(2)
@@ -62,7 +61,7 @@ MAIN
 
 	CALL gl_db.gldb_connect(NULL)
 
-	IF NOT fjs_lib.checkUserRoles(m_user_key,"System Admin",TRUE) THEN
+	IF NOT app_lib.checkUserRoles(m_user_key,"System Admin",TRUE) THEN
 		EXIT PROGRAM
 	END IF
 
@@ -126,7 +125,7 @@ MAIN
 		END DISPLAY
 
 		BEFORE DIALOG
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
 			CALL setSave_menu(FALSE)
 
 		ON ACTION quit EXIT DIALOG
@@ -137,7 +136,7 @@ MAIN
 			IF m_recs.getLength() > 0 THEN
 				CALL showRow(1)
 			END IF
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
 
 		ON ACTION insert LET m_func = "N"
 			IF NOT inp(TRUE) THEN MESSAGE "Cancelled" END IF
@@ -164,16 +163,16 @@ MAIN
 
 		ON ACTION nextrow
 			CALL showRow(m_row + 1)
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
 		ON ACTION prevrow
 			CALL showRow(m_row - 1)
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
 		ON ACTION firstrow
 			CALL showRow(1)
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
 		ON ACTION lastrow
 			CALL showRow(m_recs.getLength())
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(),m_allowedActions)
 		GL_ABOUT
 	END DIALOG
 	CALL gl_lib.gl_exitProgram(0,"Program Finished")

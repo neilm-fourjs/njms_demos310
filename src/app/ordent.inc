@@ -57,7 +57,7 @@ DEFINE m_stk RECORD LIKE stock.*
 
 DEFINE detailArray_tree DYNAMIC ARRAY OF t_detailLine_tree
 
-DEFINE m_user RECORD LIKE sys_users.*
+DEFINE m_fullname STRING
 
 CONSTANT VAT_RATE = 17.5
 CONSTANT POST_0 = 5.50

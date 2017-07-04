@@ -217,7 +217,7 @@ END FUNCTION --}}}
 #+ @param reason For Exit, clean, crash, closed, terminated etc
 #+ @return none
 FUNCTION gl_exitProgram( l_stat SMALLINT, l_reason STRING )
-	GL_DBGMSG(1, SFMT("gl_exitProgram: stat=%1 reason:%2",l_stat,l_reason))
+	GL_DBGMSG(0, SFMT("gl_exitProgram: stat=%1 reason:%2",l_stat,l_reason))
 	EXIT PROGRAM l_stat
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
@@ -246,7 +246,7 @@ FUNCTION gl_setInfo(l_version STRING,
 										l_progname STRING, 
 										l_progdesc STRING, 
 										l_progauth STRING) --{{{
-
+	IF l_progName IS NULL THEN LET l_progname = base.Application.getProgramName() END IF
 	LET gl_version = l_version
 	LET gl_splash = l_splash
 	LET gl_progicon = l_progicon
@@ -895,7 +895,7 @@ FUNCTION gl_about(l_ver STRING) --{{{
 		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
 	END IF
 
-	OPEN WINDOW about AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE="main2")
+	OPEN WINDOW about AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE="naked")
 	LET n = gl_getWinNode(NULL)
 	CALL n.setAttribute("text",gl_progdesc)
 	LET f = gl_genForm("about")

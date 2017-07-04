@@ -16,10 +16,10 @@
 
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
-IMPORT FGL fjs_lib
+IMPORT FGL app_lib
 &include "genero_lib.inc"
+&include "app.inc"
 
-CONSTANT PRGNAME = "dynMaint"
 CONSTANT PRGDESC = "Dynamic Maintenance Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER="3.1"
@@ -52,7 +52,7 @@ DEFINE m_allowedActions CHAR(6) --Y/N for Find / List / Update / Insert / Delete
 MAIN
 	LET gl_lib.gl_toolbar = "dynmaint"
 	LET gl_lib.gl_topMenu = "dynmaint"
-	CALL gl_lib.gl_setInfo(NULL, "njm_demo_logo_256", "njm_demo", PRGNAME, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
 
 	LET m_user_key = ARG_VAL(2)
@@ -88,20 +88,20 @@ MAIN
  
 	MENU
 		BEFORE MENU
-			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL app_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION insert		CALL inpt(1)
 		ON ACTION update		CALL inpt(0)
 		ON ACTION delete		CALL sql_del()
 		ON ACTION find			CALL constrct()
-			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL app_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION firstrow	CALL get_row(SQL_FIRST)
-			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL app_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION prevrow		CALL get_row(SQL_PREV)
-			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL app_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION nextrow		CALL get_row(SQL_NEXT)
-			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL app_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION lastrow		CALL get_row(SQL_LAST)
-			CALL fjs_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
+			CALL app_lib.setActions(m_row_cur,m_row_count, m_allowedActions)
 		ON ACTION quit			EXIT MENU
 		ON ACTION close			EXIT MENU
 		GL_ABOUT

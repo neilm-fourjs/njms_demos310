@@ -2,11 +2,10 @@
 
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
-IMPORT FGL fjs_lib
+IMPORT FGL app_lib
 &include "genero_lib.inc"
-&include "schema.inc"
+&include "app.inc"
 
-CONSTANT PRGNAME = "cust_mnt"
 CONSTANT PRGDESC = "Customer Maintenance Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER="3.1"
@@ -49,7 +48,7 @@ DEFINE m_allowedActions CHAR(6) --Y/N for Find / List / Update / Insert / Delete
 MAIN
 	LET gl_lib.gl_toolbar = "dynmaint"
 	LET gl_lib.gl_topMenu = "dynmaint"
-	CALL gl_lib.gl_setInfo(NULL, "njm_demo_logo_256", "njm_demo", PRGNAME, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
 	WHENEVER ANY ERROR CALL gl_error
 	LET m_user_key = ARG_VAL(2)
@@ -74,7 +73,7 @@ MAIN
 
 	MENU
 		BEFORE MENU
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
 
 		ON ACTION quit EXIT MENU
 		ON ACTION close EXIT MENU
@@ -83,7 +82,7 @@ MAIN
 			IF m_recs.getLength() > 0 THEN
 				CALL showRow(1)
 			END IF
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
 
 		ON ACTION insert LET m_func = "N"
 			IF NOT inp(TRUE) THEN MESSAGE %"Cancelled" END IF
@@ -101,7 +100,7 @@ MAIN
 			IF delete() THEN MESSAGE %"Row deleted" END IF
 
 {	 	ON ACTION list 
-			LET RECKEY = fjs_lib.fldChoose( TABNAMEQ, base.typeInfo.create( m_rec ) )
+			LET RECKEY = app_lib.fldChoose( TABNAMEQ, base.typeInfo.create( m_rec ) )
 			DISPLAY "key:",RECKEY
 			LET m_wher = KEYFLDQ||"='"||RECKEY||"'"
 			IF getRec() THEN CALL showRow(1) END IF}
@@ -114,16 +113,16 @@ MAIN
 
 		ON ACTION nextrow
 			CALL showRow(m_row + 1)
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
 		ON ACTION prevrow
 			CALL showRow(m_row - 1)
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
 		ON ACTION firstrow
 			CALL showRow(1)
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
 		ON ACTION lastrow
 			CALL showRow(m_recs.getLength())
-			CALL fjs_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
+			CALL app_lib.setActions(m_row,m_recs.getLength(), m_allowedActions)
 		GL_ABOUT
 	END MENU
 	CALL gl_lib.gl_exitProgram(0,%"Program Finished")

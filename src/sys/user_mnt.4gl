@@ -1,15 +1,14 @@
 
 #+ User Maintenance Demo - by N.J.Martin neilm@4js.com
 
-IMPORT FGL fjs_lib
+IMPORT FGL app_lib
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
 
-CONSTANT PRGNAME = "user_mnt"
 CONSTANT PRGDESC = "User Maintenance Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
 &include "genero_lib.inc"
-&include "schema.inc"
+&include "app.inc"
 CONSTANT C_VER="3.1"
 
 DEFINE m_user DYNAMIC ARRAY OF RECORD LIKE sys_users.*
@@ -29,6 +28,7 @@ MAIN
 	DEFINE dnd ui.DragDrop
 
 	LET gl_lib.gl_topMenu = "dynmaint"
+	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	WHENEVER ANY ERROR CALL gl_error
 	LET m_this_user_key = ARG_VAL(2)
@@ -39,13 +39,16 @@ MAIN
 
 	CALL gl_db.gldb_connect(NULL)
 
-	IF NOT fjs_lib.checkUserRoles(m_this_user_key,"System Admin",TRUE) THEN
+	IF NOT app_lib.checkUserRoles(m_this_user_key,"System Admin",TRUE) THEN
 		EXIT PROGRAM
 	END IF
 
 	DECLARE u_cur CURSOR FOR SELECT * FROM sys_users
 	FOREACH u_cur INTO m_user[m_user.getLength()+1].*
-		LET m_fullname[ m_user.getLength() ] = fjs_lib.getUserName( m_user[m_user.getLength()].user_key )
+		LET m_fullname[ m_user.getLength() ] = 			app_lib.getFullName(
+					 m_user[m_user.getLength()].salutation,
+					 m_user[m_user.getLength()].forenames, 
+					 m_user[m_user.getLength()].surname )
 	END FOREACH
 	LET m_fullname[ m_user.getLength() ]  = "Click here for new User"
 
@@ -234,7 +237,7 @@ FUNCTION saveUser()
 		UPDATE sys_users SET sys_users.* = m_user_rec.* 
 			WHERE sys_users.user_key = m_user_rec.user_key
 	END IF
-	LET m_fullname[ x ] = fjs_lib.getUserName( m_user_rec.user_key )
+	LET m_fullname[ x ] = app_lib.getFullName( m_user_rec.salutation, m_user_rec.forenames, m_user_rec.surname )
 	LET m_user[ x ].* = m_user_rec.*
 	LET m_save = FALSE
 	LET m_saveUser = FALSE

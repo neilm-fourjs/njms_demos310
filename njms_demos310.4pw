@@ -59,10 +59,11 @@
   </Settings>
   <LanguageList version="1.0"/>
   <PlatformList version="1.0"/>
-  <Group environment="value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
-      <Library binaryName="App_Lib" dependencies="1986" id="-1090563702" label="App_Lib">
-        <File filePath="src/app/fjs_lib.4gl"/>
+      <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
+        <File filePath="src/app/app.inc"/>
+        <File filePath="src/app/app_lib.4gl"/>
       </Library>
       <Application binaryName="cust_mnt" commandLineArguments="S 1" dependencies="-400184264,1986,14000,-1090563702" id="-1273407208" label="cust_mnt">
         <File filePath="src/app/cust_mnt.4fd"/>
@@ -84,13 +85,25 @@
         <File filePath="src/app/getorder.per"/>
         <File filePath="src/app/getstock.per"/>
         <File filePath="src/app/oe_lib.4gl"/>
+        <File filePath="src/app/ordent.inc"/>
         <File filePath="src/app/packshow.per"/>
       </Library>
-      <Application binaryName="orderEntry" dependencies="1835393312,-1090563702,14000,1986,-272766546" id="1773362531" label="orderEntry">
+      <Application binaryName="orderEntry" commandLineArguments="S 1" dependencies="1835393312,-1090563702,14000,1986,-272766546" id="1773362531" label="orderEntry">
         <File filePath="src/app/ordent.4gl"/>
-        <File filePath="src/app/ordent.inc"/>
         <File filePath="src/app/ordent.per"/>
         <File filePath="src/app/ordent2.per"/>
+      </Application>
+      <Application binaryName="printInvoices" commandLineArguments="S 1 1 ordent.4rp" compilerOptions="--build-rdd" dependencies="14000,1986,-272766546,923654133" id="-1350833088" label="printInvoices">
+        <VirtualFolder label="Reports">
+          <File filePath="etc/ordent-1.4rp"/>
+          <File filePath="etc/ordent-2.4rp"/>
+          <File filePath="etc/ordent-3.4rp"/>
+          <File filePath="etc/ordent-4.4rp"/>
+          <File filePath="etc/ordent-5.4rp"/>
+          <File filePath="etc/ordent.4rp"/>
+          <File filePath="etc/picklist.4rp"/>
+        </VirtualFolder>
+        <File filePath="src/app/printInvoices.4gl"/>
       </Application>
       <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,14000" id="-1334009856" label="user_mnt">
         <File filePath="src/sys/user_mnt.4gl"/>
@@ -166,6 +179,10 @@
         <File filePath="src/gl_lib/gl_lib.4gl"/>
         <File filePath="src/gl_lib/gl_lib_aui.4gl"/>
         <File filePath="src/gl_lib/gl_lookup3.4gl"/>
+      </Library>
+      <Library binaryName="gl_rpt" dependencies="14000,-400184264" externalDependencies="libgre.42x" id="923654133" label="gl_rpt">
+        <File filePath="src/gl_rpt/gl_grw.4gl"/>
+        <File filePath="src/gl_rpt/gl_grwCfg.per"/>
       </Library>
     </Group>
     <Group label="Packages" language="Genero">

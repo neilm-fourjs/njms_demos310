@@ -3,25 +3,56 @@ IMPORT FGL gl_lib
 
 &include "schema.inc"
 
---------------------------------------------------------------------------------
-FUNCTION getUserName( l_key LIKE sys_users.user_key ) RETURNS STRING
-	DEFINE l_surname LIKE sys_users.surname
-	DEFINE l_forename LIKE sys_users.forenames
-	DEFINE l_sal LIKE sys_users.salutation
-	DEFINE l_fullname STRING
+PUBLIC DEFINE m_user RECORD LIKE sys_users.*
 
-	SELECT surname, forenames, salutation 
-		INTO l_surname, l_forename, l_sal 
+--------------------------------------------------------------------------------
+#+ set the m_user record from passed email or key - preference is email
+#+
+#+ @param l_key the key for the user or NULL to default to ARG 2
+#+ @param l_email the users email address
+FUNCTION getUser( l_key LIKE sys_users.user_key, l_email LIKE sys_users.email )
+
+	IF l_email IS NOT NULL THEN
+		SELECT * INTO m_user.*
+			FROM sys_users 
+			WHERE email = l_email
+		IF STATUS = NOTFOUND THEN
+			CALL gl_lib.gl_exitProgram(1,"Invalid User Email!")
+		ELSE
+			RETURN
+		END IF
+	END IF
+
+	IF l_key IS NULL OR l_key = 0 THEN
+		LET l_key = ARG_VAL(2)
+	END IF
+	IF l_key IS NULL OR l_key = 0 THEN
+		CALL gl_lib.gl_exitProgram(1,"Invalid User Id passed")
+	END IF
+
+	SELECT * INTO m_user.*
 		FROM sys_users 
 		WHERE user_key = l_key
 	IF STATUS = NOTFOUND THEN
-		LET l_fullname = "Unknown User:",l_key USING "<<<"
+		CALL gl_lib.gl_exitProgram(1,"Invalid User Id passed")
+	END IF
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ The users full name
+FUNCTION getUserName() RETURNS STRING
+	IF m_user.surname IS NULL THEN
+		CALL getUser( NULL, NULL )
+	END IF
+	RETURN getFullName( m_user.salutation, m_user.forenames, m_user.surname )
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ The users full name
+FUNCTION getFullName(l_sal STRING,l_for STRING,l_sur STRING) RETURNS STRING
+	DEFINE l_fullname STRING
+	IF l_sal IS NOT NULL AND l_sal != " " THEN
+		LET l_fullname = l_sal.trim()," ",l_for.trim()," ",l_sur.trim()
 	ELSE
-		IF l_sal IS NOT NULL AND l_sal != " " THEN
-			LET l_fullname = l_sal CLIPPED," ",l_forename CLIPPED," ",l_surname CLIPPED
-		ELSE
-			LET l_fullname = l_forename CLIPPED," ",l_surname CLIPPED
-		END IF
+		LET l_fullname = l_for.trim()," ",l_sur.trim()
 	END IF
 	RETURN l_fullname
 END FUNCTION
