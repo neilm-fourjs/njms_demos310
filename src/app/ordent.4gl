@@ -33,7 +33,7 @@ GL_MODULE_ERROR_HANDLER
 	CALL gl_db.gldb_connect(NULL) -- Library function.
 
 	IF UPSHIFT(ui.Interface.getFrontEndName()) = "GBC" THEN
-		CALL ui.Interface.FrontCall("session","getvar","login",l_email)
+		CALL ui.Interface.FrontCall("session","getvar","njm_demo_login",l_email)
 		TRY
 			LET l_key = l_email
 		CATCH

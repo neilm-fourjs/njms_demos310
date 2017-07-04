@@ -108,6 +108,11 @@
         <File filePath="src/sys/user_mnt.4gl"/>
         <File filePath="src/sys/user_mnt.per"/>
       </Application>
+      <Application binaryName="webOE" dependencies="-272766546,14000,-1090563702,-400184264,1986" id="-559263813" label="webOE">
+        <File filePath="src/app/oeweb_lib.4gl"/>
+        <File filePath="src/app/webOE3.4gl"/>
+        <File filePath="src/app/webOE3.per"/>
+      </Application>
     </Group>
     <Group label="Database" language="Genero">
       <Library binaryName="Databases" id="1986" label="Databases">

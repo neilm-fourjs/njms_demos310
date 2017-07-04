@@ -938,22 +938,7 @@ FUNCTION gl_popRadio(fnam,namval,txtval)
 	END WHILE
 	
 END FUNCTION
---------------------------------------------------------------------------------
-#+ Add items to a RadioGroup
-#+
-#+ @param l_rad RadioGroup node.
-#+ @param l_val value
-#+ @param l_txt Text
-#+ @return Node of radiogroup
-FUNCTION gl_addRadioItem( l_rad , l_val, l_txt ) --{{{
-	DEFINE l_rad, l_itm om.domNode	
-	DEFINE l_val, l_txt STRING
-	
-	LET l_itm = l_rad.createChild("Item")
-	CALL l_itm.setAttribute("name",l_val)
-	CALL l_itm.setAttribute("text",l_txt)
 
-END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Add defaults colours and fonts to stylelist
 #+

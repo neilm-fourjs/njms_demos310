@@ -51,7 +51,7 @@ ATTRIBUTES
   RADIOGROUP ori=FORMONLY.r_orientation, DEFAULT="L", TABINDEX=3, ITEMS=(("L",%"Landscape"),("P",%"Portrait")), ORIENTATION=HORIZONTAL,NOT NULL;
 
 	GROUP gp2 : opdest, TEXT=%"Output Destinations";
-  RADIOGROUP aa3=FORMONLY.r_output, DEFAULT="SVG", TABINDEX=1, ITEMS=(("SVG",%"SVG"),("PDF",%"PDF"),("Image",%"JPG"),("XLS",%"XLS"),("HTML",%"HTML"),("Printer","Printer")), ORIENTATION=HORIZONTAL;
+  RADIOGROUP aa3=FORMONLY.r_output, DEFAULT="SVG", TABINDEX=1, ORIENTATION=HORIZONTAL;
 	LABEL lab : grwsvg, TEXT=%"SVG Viewer:";
 	EDIT val = FORMONLY.r_grwsvgserver, SCROLL;
 	LABEL lab2 : l_filename, TEXT=%"Filename:";

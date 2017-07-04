@@ -454,3 +454,15 @@ FUNCTION gl_addLabel(
 	END IF
 
 END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Add items to a RadioGroup or any node that has Item nodes
+#+
+#+ @param l_rad Parent node.
+#+ @param l_val value
+#+ @param l_txt Text
+FUNCTION gl_addItem( l_rad om.DomNode , l_val STRING, l_txt STRING) --{{{
+	DEFINE l_itm om.DomNode
+	LET l_itm = l_rad.createChild("Item")
+	CALL l_itm.setAttribute("name",l_val)
+	CALL l_itm.setAttribute("text",l_txt)
+END FUNCTION --}}}

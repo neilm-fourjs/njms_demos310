@@ -17,7 +17,8 @@ FUNCTION getUser( l_key LIKE sys_users.user_key, l_email LIKE sys_users.email )
 			FROM sys_users 
 			WHERE email = l_email
 		IF STATUS = NOTFOUND THEN
-			CALL gl_lib.gl_exitProgram(1,"Invalid User Email!")
+			CALL gl_lib.gl_errPopup( SFMT(%"Invalid User Email '%1'!",l_email))
+			CALL gl_lib.gl_exitProgram(1,SFMT("Invalid User Email '%1'!",l_email))
 		ELSE
 			RETURN
 		END IF
@@ -34,7 +35,8 @@ FUNCTION getUser( l_key LIKE sys_users.user_key, l_email LIKE sys_users.email )
 		FROM sys_users 
 		WHERE user_key = l_key
 	IF STATUS = NOTFOUND THEN
-		CALL gl_lib.gl_exitProgram(1,"Invalid User Id passed")
+		CALL gl_lib.gl_errPopup( SFMT(%"Invalid User Key '%1'!",l_key))
+		CALL gl_lib.gl_exitProgram(1,SFMT("Invalid User Key '%1'!",l_key))
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------

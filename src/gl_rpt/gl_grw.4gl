@@ -26,6 +26,7 @@ IMPORT JAVA javax.print.attribute.standard.Copies
 
 IMPORT os
 IMPORT FGL gl_lib
+IMPORT FGL gl_lib_aui
 &include "genero_lib.inc"
 
 PUBLIC DEFINE
@@ -177,6 +178,7 @@ FUNCTION glGRW_rptStart(l_filename STRING) RETURNS om.saxdocumenthandler
 		INPUT BY NAME opts.* ATTRIBUTE(WITHOUT DEFAULTS,UNBUFFERED)
 			BEFORE INPUT
 				LET l_f = DIALOG.getForm()
+				CALL glGRW_prnOutputRadio(l_f)
 				LET p_opts.* = opts.*
 				DISPLAY "Output:",opts.r_output
 				IF l_fileName = "ASCII" THEN
@@ -204,7 +206,6 @@ FUNCTION glGRW_rptStart(l_filename STRING) RETURNS om.saxdocumenthandler
 				CASE opts.r_output
 					WHEN "SVG"
 						CALL DIALOG.setfieldactive("r_grwsvgserver",TRUE)
-
 					WHEN "Printer"
 						IF m_def_printer = 0 THEN
 							CALL gl_lib.gl_errPopup(%"No Printers found.")
@@ -482,6 +483,24 @@ FUNCTION glGRW_prnCombo(l_cb ui.combobox)
 			CALL l_cb.additem( x, m_printers[x].name )
 		END IF
 	END FOR
+END FUNCTION
+--------------------------------------------------------------------------------
+-- 1, ITEMS=(("SVG",%"SVG"),("PDF",%"PDF"),("Image",%"JPG"),("XLS",%"XLS")("HTML",%"HTML"),("Printer","Printer"))
+#+ Populate the printer output radio group
+FUNCTION glGRW_prnOutputRadio(l_f ui.Form)
+	DEFINE l_n om.DomNode
+	LET l_n = l_f.findNode("FormField","formonly.r_output")
+	LET l_n = l_n.getFirstChild()
+	IF l_n IS NULL THEN DISPLAY "Failed to find RadioGroup!" RETURN END IF
+	CALL gl_lib_aui.gl_additem(l_n,"PDF",%"PDF")
+	IF gl_lib.gl_fe_typ = "GBC" THEN
+		CALL gl_lib_aui.gl_additem(l_n,"Browser",%"Browser")
+	ELSE
+		CALL gl_lib_aui.gl_additem(l_n,"SVG",%"SVG")
+		CALL gl_lib_aui.gl_additem(l_n,"XLS",%"XLS")
+		CALL gl_lib_aui.gl_additem(l_n,"HTML",%"HTML")
+		CALL gl_lib_aui.gl_additem(l_n,"Printer",%"Printer")
+	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION glGRW_setFileExt()
