@@ -77,10 +77,10 @@ t006 = ord_payment.del_amount, HIDDEN;
 LABEL tot_nett : tot_nett,TEXT=%"Total Cost:", STYLE="big";
 t007 = ord_head.total_nett, STYLE="big";
 
-BUTTONEDIT detlnk1 = FORMONLY.stock_code1,ACTION=detlnk1;
+BUTTON detlnk1 : detlnk1;
 IMAGE img1 = FORMONLY.img1,AUTOSCALE,WIDTH=150 PIXELS,HEIGHT=150 PIXELS{,STRETCH=BOTH},SIZEPOLICY=FIXED,STYLE="bg_white noborder";
 TEXTEDIT det1 = FORMONLY.det1,SCROLLBARS=NONE,NOENTRY,STYLE="bg_white noborder html notools";
 BUTTONEDIT qty1 = FORMONLY.qty1,ACTION=add1;
 
 INSTRUCTIONS
-SCREEN RECORD items ( stock_code1, img1, det1, qty1 )
+SCREEN RECORD items ( img1, det1, qty1 )

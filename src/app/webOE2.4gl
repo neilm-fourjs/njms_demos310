@@ -102,11 +102,11 @@ GL_MODULE_ERROR_HANDLER
 	CALL build_cats()
 
 	LET l_cat = 3
---	WHILE l_cat > 0
+	WHILE l_cat > 0
 		CALL getItems( m_stock_cats[ l_cat ].id )
-		--LET l_cat = dynDiag()
---	END WHILE
-
+		LET l_cat = dynDiag()
+	END WHILE
+{
 	INPUT ARRAY m_items FROM items.* ATTRIBUTES(WITHOUT DEFAULTS,
 			DELETE ROW=FALSE,INSERT ROW=FALSE,APPEND ROW=FALSE)
 		ON CHANGE qty1
@@ -120,7 +120,7 @@ GL_MODULE_ERROR_HANDLER
 																	 m_items[DIALOG.getCurrentRow("items")].img1,
 																	 m_items[DIALOG.getCurrentRow("items")].qty1 )
 	END INPUT
-
+}
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION getItems( sc )
@@ -171,17 +171,20 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION dynDiag()
 	DEFINE x SMALLINT
-	DEFINE l_field, l_evt STRING
+	DEFINE l_evt STRING
 
 	CALL recalcOrder()
+
 	CALL m_fields.clear()
-	FOR x = 1 TO m_items.getLength()
-		LET m_fields[m_fields.getLength()+1].name = "qty"||x
-		LET m_fields[m_fields.getLength()].type = "INTEGER"
-	END FOR
+	LET m_fields[m_fields.getLength()+1].name = "img1"
+	LET m_fields[m_fields.getLength()].type = "STRING"
+	LET m_fields[m_fields.getLength()+1].name = "det1"
+	LET m_fields[m_fields.getLength()].type = "STRING"
+	LET m_fields[m_fields.getLength()+1].name = "qty1"
+	LET m_fields[m_fields.getLength()].type = "INTEGER"
 
 	CALL ui.Dialog.setDefaultUnbuffered(TRUE)
-	LET m_dialog = ui.Dialog.createInputByName(m_fields)
+	LET m_dialog = ui.Dialog.createInputArrayFrom( m_fields, "items")
 
 	CALL m_dialog.addTrigger("ON ACTION close")
 	CALL m_dialog.addTrigger("ON ACTION add1")
@@ -190,10 +193,17 @@ FUNCTION dynDiag()
 	CALL m_dialog.addTrigger("ON ACTION gotoco")
 	CALL m_dialog.addTrigger("ON ACTION about")
 	CALL m_dialog.addTrigger("ON ACTION cancel")	
+	CALL m_dialog.addTrigger("ON ACTION detlnk1")
+
 	FOR x = 1 TO m_items.getLength()
-		CALL m_dialog.addTrigger("ON ACTION detlnk"||x)
-		CALL m_dialog.setFieldValue("qty"||x, m_items[x].qty1)
+		CALL m_dialog.setCurrentRow("items",x)
+		--CALL m_dialog.addTrigger("ON ACTION detlnk"||x)
+		CALL m_dialog.setFieldValue("items.qty1", m_items[x].qty1)
+		CALL m_dialog.setFieldValue("items.img1", m_items[x].img1)
+		CALL m_dialog.setFieldValue("items.det1", m_items[x].desc1)
+		CALL m_dialog.setFieldValue("items.det1", m_items[x].stock_code1)
 	END FOR
+	CALL m_dialog.setCurrentRow("items",1)
 	FOR x = 1 TO m_stock_cats.getLength()
 		CALL m_dialog.addTrigger("ON ACTION cat"||x)
 	END FOR
@@ -208,13 +218,15 @@ FUNCTION dynDiag()
 	LET int_flag = FALSE
 	WHILE TRUE
 		LET l_evt = m_dialog.nextEvent()
+		LET x = m_dialog.getCurrentRow("items")
+		DISPLAY "Event:",l_evt, " Row:",x
 
 		IF l_evt MATCHES "ON ACTION cat*" THEN
+			CALL m_dialog.accept()
 			RETURN l_evt.subString(14, l_evt.getLength())
 		END IF
 
-		IF l_evt MATCHES "ON ACTION detlnk*" THEN
-			LET x = l_evt.subString(17, l_evt.getLength())
+		IF l_evt MATCHES "ON ACTION detlnk1" THEN
 			CALL detLnk( m_items[x].stock_code1,
 					m_items[x].desc1,
 					m_items[x].img1,
@@ -222,20 +234,14 @@ FUNCTION dynDiag()
 		END IF
 
 		IF l_evt MATCHES "ON CHANGE qty*" OR l_evt MATCHES "AFTER FIELD qty*" THEN
-			LET l_field = m_dialog.getCurrentItem()
-			LET x = l_field.subString(4, l_field.getLength())
-			DISPLAY "Event:",l_evt, "  fld:",l_field," X:",x 
-			CALL detLine(m_items[x].stock_code1,  m_dialog.getFieldValue("qty"||x))
-			CALL m_dialog.setFieldValue("qty"||x, m_items[x].qty1)
+			CALL detLine(m_items[x].stock_code1,  m_dialog.getFieldValue("qty1"))
 		END IF
 
 		CASE l_evt
 			WHEN "ON ACTION add1"
-				LET l_field = m_dialog.getCurrentItem()
-				LET x = l_field.subString(4, l_field.getLength())
 				LET m_items[x].qty1 = m_items[x].qty1 + 1
 				CALL detLine(m_items[x].stock_code1,m_items[x].qty1)
-				CALL m_dialog.setFieldValue("qty"||x, m_items[x].qty1)
+				CALL m_dialog.setFieldValue("qty1", m_items[x].qty1)
 
 			WHEN "ON ACTION close"
 				LET int_flag = TRUE
