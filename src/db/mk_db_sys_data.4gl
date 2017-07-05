@@ -57,6 +57,7 @@ FUNCTION insert_system_data()
 	CALL addMenu("enq","main","T","Enquiry Programs", "","")
 	CALL addMenu("enq","main","F","Customer Enquiry", "cust_mnt.42r YYNNNN","")
 	CALL addMenu("enq","main","F","Stock Enquiry", "dynMaint.42r stock stock_code YYNNNN","")
+	CALL addMenu("mnt","main","F","Supplier Enquiry", "dynMaint.42r supplier supp_code YYNNNN","")
 
 	CALL addMenu("mnt","main","T","Maintenance Programs", "","")
 	CALL addMenu("mnt","main","F","Customer Maintenance", "cust_mnt.42r","")

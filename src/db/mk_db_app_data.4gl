@@ -1,6 +1,8 @@
 #+ Insert the demo application data.
 
 IMPORT util
+IMPORT os
+IMPORT FGL gl_db
 
 &include "schema.inc"
 
@@ -12,20 +14,17 @@ CONSTANT MAX_ORDERS = 50
 CONSTANT MAX_LINES = 30
 CONSTANT MAX_QTY = 25
 
-DEFINE m_bc_cnt, m_addr INTEGER
-DEFINE m_dbtyp STRING
+DEFINE m_bc_cnt, m_prod_key INTEGER
+
 ---------------------------------------------------
 FUNCTION insert_app_data()
 	
-	LET m_dbtyp = FGL_DB_DRIVER_TYPE()
---	IF m_dbtyp = "snc" OR m_dbtyp = "msv" OR m_dbtyp = "sqt" THEN CALL load() RETURN END IF
-
 	CALL mkdb_progress( "Inserting test data..." )
 	INSERT INTO customer VALUES(1,"NJM Software Projects Inc","Neil Martin","njm@njm-projects.com","12njm",1,1, "CC", 10000, 0 ,0)
 	INSERT INTO customer VALUES(2,"O'Meara Operations Ltd","Neil O'Meara","nom@nom-ltd.com","12neilom",2,2, "BB", 8000, 0, 0)
 	INSERT INTO customer VALUES(3,"Gerrit Enterprises Co.","Gerrit Le Roux","glr@glr-ent.com","12gerrit",3,3, "AA", 8000, 0 ,0)
 
-	IF m_dbtyp = "pgs" THEN
+	IF gl_db.m_dbtyp = "pgs" THEN
 		INSERT INTO addresses VALUES(nextval('addresses_rec_key_seq'),"The Road","The Small Town","Sussex","U.K.","","BN12 XYZ","GBR")
 		INSERT INTO addresses VALUES(nextval('addresses_rec_key_seq'),"Some Road","The Large Town","London","U.K.","","SW12","GBR")
 		INSERT INTO addresses VALUES(nextval('addresses_rec_key_seq'),"The Street","The Village","Surry","U.K.","","RH1 XYZ","GBR")
@@ -34,52 +33,56 @@ FUNCTION insert_app_data()
 		INSERT INTO addresses VALUES(2,"Some Road","The Large Town","London","U.K.","","SW12","GBR")
 		INSERT INTO addresses VALUES(3,"The Street","The Village","Surry","U.K.","","RH1 XYZ","GBR")
 	END IF
-	LET m_addr = 4
 
 	LET m_bc_cnt = 124212
+	LET m_prod_key = 1
+	CALL insStock("FR01",NULL,"An Apple",NULL, 0.20, "AA", NULL)
+	CALL insStock("FR01-10",NULL, "An Apple x 10",NULL, 1.90, "AA", NULL)
+	CALL insStock("FR02",NULL,"A Bannana",NULL, 0.30, "AA", NULL)
+	CALL insStock("FR02-5",NULL,"A Bunch of Bannanas(5)",NULL, 1.0, "AA", NULL)
+	CALL insStock("FR03",NULL,"A Peach",NULL, 0.30, "AA", NULL)
+	CALL insStock("FR03-10",NULL,"A Peach x 10",NULL, 1.95, "AA", NULL)
 
-	CALL insStock("FR01",NULL, "06660010001x","An Apple", 0.20, "AA")
-	CALL insStock("FR01-10",NULL, "06660010002x","An Apple x 10", 1.90, "AA")
-	CALL insStock("FR02",NULL, "06660010003x","A Bannana", 0.30, "AA")
-
-	CALL insStock("GM01",NULL, "06660011001x","Poker Chips", 19.99, "AA")
-	CALL insStock("GM02",NULL, "06660011002x","Playing Cards - Cheap", .99, "AA")
-	CALL insStock("GM03-R",NULL, "06660011003x","Playing Cards - Bicycle Red", 1.99, "AA")
-	CALL insStock("GM03-B",NULL, "06660011004x","Playing Cards - Bicycle Blue", 1.99, "AA")
-	CALL insStock("GM05",NULL, "06660011005x","Poker Dice", 2.49, "AA")
-	CALL insStock("GM06",NULL, "06660011006x","Card Mat - Green", 1.49, "AA")
+	CALL insStock("GM01",NULL,"Poker Chips",NULL, 19.99, "AA", NULL)
+	CALL insStock("GM02",NULL, "Playing Cards - Cheap",NULL, .99, "AA", NULL)
+	CALL insStock("GM03-R",NULL,"Playing Cards - Bicycle Red",NULL, 1.99, "AA", NULL)
+	CALL insStock("GM03-B",NULL,"Playing Cards - Bicycle Blue",NULL, 1.99, "AA", NULL)
+	CALL insStock("GM05",NULL,"Poker Dice",NULL, 2.49, "AA", NULL)
+	CALL insStock("GM06",NULL,"Card Mat - Green",NULL, 1.49, "AA", NULL)
 
 	CALL insPackItem("GM04","GM01",1)
 	CALL insPackItem("GM04","GM03-R",1)
 	CALL insPackItem("GM04","GM03-B",1)
 	CALL insPackItem("GM04","GM05",1)
 	CALL insPackItem("GM04","GM06",1)
-	CALL insStock("GM04","E", "06660011000x","Poker Set", 25.99, "AA")
+	CALL insStock("GM04","E","Poker Set",NULL, 25.99, "AA", NULL)
 
-	CALL insStock("GM15",NULL, "06660011015x","Artist Sketch Pad", 2.49, "AA")
-	CALL insStock("GM16",NULL, "06660011016x","5 Pencils HB-B4", 3.49, "AA")
-	CALL insStock("GM17",NULL, "06660011017x","5 Pencils H4-HB", 3.49, "AA")
-	CALL insStock("GM18",NULL, "06660011018x","Artists Eraser", 1.49, "AA")
+	CALL insStock("GM15",NULL,"Artist Sketch Pad",NULL, 2.49, "AA", NULL)
+	CALL insStock("GM16",NULL,"5 Pencils HB-B4",NULL, 3.49, "AA", NULL)
+	CALL insStock("GM17",NULL,"5 Pencils H4-HB",NULL, 3.49, "AA", NULL)
+	CALL insStock("GM18",NULL,"Artists Eraser",NULL, 1.49, "AA", NULL)
 
 	CALL insPackItem("GM19","GM15",2)
 	CALL insPackItem("GM19","GM16",1)
 	CALL insPackItem("GM19","GM17",1)
 	CALL insPackItem("GM19","GM18",2)
-	CALL insStock("GM19","P", "06660011019x","Artists Starter Pack", 12.99, "AA")
+	CALL insStock("GM19","P", "Artists Starter Pack",NULL, 12.99, "AA", NULL)
 
-	CALL insStock("ST13",NULL, "06660012021x","Calculator", 9.99, "CC")
-	CALL insStock("ST02-10",NULL, "06660012002x","Envelope x 10", 2.25, "CC")
-	CALL insStock("ST01",NULL, "06660012001x","A4 Paper x 500", 9.99, "CC")
-	CALL insStock("ST03-BK",NULL, "06660012031x","Bic Ball Point - Black", .49, "CC")
-	CALL insStock("ST03-BL",NULL, "06660012032x","Bic Ball Point - Blue", .49, "CC")
-	CALL insStock("ST03-RD",NULL, "06660012033x","Bic Ball Point - Red", .49, "CC")
+	CALL insStock("ST13",NULL,"Calculator",NULL, 9.99, "CC", NULL)
+	CALL insStock("ST02-10",NULL,"Envelope x 10",NULL, 2.25, "CC", NULL)
+	CALL insStock("ST01",NULL,"A4 Paper x 500",NULL, 9.99, "CC", NULL)
+	CALL insStock("ST03-BK",NULL,"Bic Ball Point - Black",NULL, .49, "CC", NULL)
+	CALL insStock("ST03-BL",NULL,"Bic Ball Point - Blue",NULL, .49, "CC", NULL)
+	CALL insStock("ST03-RD",NULL,"Bic Ball Point - Red",NULL, .49, "CC", NULL)
 
-	CALL insStock("WW47",NULL, "06660090021x","AK47", 789.99, "DD")
-	CALL insStock("WW10",NULL, "06660092213x","Flame Thrower", 1229.99, "DD")
-	CALL insStock("WW01-DES",NULL, "06660091041x","Combat Jacket - Desert", 59.99, "DD")
-	CALL insStock("WW01-JUN",NULL, "06660091042x","Combat Jacket - Jungle", 59.99, "DD")
+	CALL insStock("WW47",NULL,"AK47",NULL, 789.99, "DD", NULL)
+	CALL insStock("WW10",NULL,"Flame Thrower",NULL, 1229.99, "DD", NULL)
+	CALL insStock("WW01-DES",NULL,"Combat Jacket - Desert",NULL, 59.99, "DD", NULL)
+	CALL insStock("WW01-JUN",NULL, "Combat Jacket - Jungle",NULL, 59.99, "DD", NULL)
 
-	CALL insStock("HH01",NULL, "03600029145X","Tissues", 1.49, "BB")
+	CALL insStock("HH01",NULL, "Tissues",NULL, 1.49, "BB", NULL)
+
+	CALL genStock( "../pics/products", "??", FALSE)
 
 	INSERT INTO stock_cat VALUES ('ART', 'Office Decor')
 	INSERT INTO stock_cat VALUES ('ENTERTAIN', 'Entertainment')
@@ -109,39 +112,44 @@ FUNCTION insert_app_data()
 	INSERT INTO disc VALUES("DD","CC",1.45)
 	INSERT INTO disc VALUES("DD","DD",1.55)
 
-	CALL officeStore()
-	IF m_dbtyp = "ifx" THEN
-		CALL stores_demo()
-	END IF
 	CALL insSupp()
 	CALL genOrders()
 
 	CALL mkdb_progress( "Done." )
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION insStock(l_sc,l_pack,l_bc,l_ds,l_pr,l_dc)
-	DEFINE
+FUNCTION insStock(
 		l_sc CHAR(8),
 		l_pack CHAR(1),
-		l_bc CHAR(13),
 		l_ds CHAR(30),
-		l_pr,l_cst DECIMAL(12,2),
-		l_dc CHAR(2),
 		l_cat CHAR(10),
+		l_pr DECIMAL(12,2),
+		l_dc CHAR(2),
+		l_img VARCHAR(100))
+
+	DEFINE
+		l_bc CHAR(13),
+		l_cst DECIMAL(12,2),
 		l_sup CHAR(10),
-		l_tc CHAR(1),
-		l_img VARCHAR(100)
+		l_tc CHAR(1)
+
 	DEFINE l_ps, l_al, l_fr INTEGER --physical/allocated/free
 
 	LET l_tc = "1"
-	IF l_sc[1,2]= "FR" THEN LET l_cat = "FRUIT" LET l_sup = getSupp(l_cat) LET l_tc = "0" LET l_dc = "AA" END IF
-	IF l_sc[1,2]= "ST" THEN LET l_cat = "SUPPLIES" LET l_sup = getSupp(l_cat) END IF
-	IF l_sc[1,2]= "WW" THEN LET l_cat = "ARMY" LET l_sup = getSupp(l_cat) LEt l_tc = "3" LET l_dc = "CC" END IF
-	IF l_sc[1,2]= "HH" THEN LET l_cat = "HOUSEHOLD" LET l_sup = getSupp(l_cat) END IF
-	IF l_sc[1,2]= "GM" THEN LET l_cat = "GAMES" LET l_sup = getSupp(l_cat)  LET l_dc = "BB" END IF
+	IF l_cat IS NULL THEN
+		IF l_sc[1,2]= "FR" THEN LET l_cat = "FRUIT" LET l_sup = getSupp(l_cat) LET l_tc = "0" LET l_dc = "AA" END IF
+		IF l_sc[1,2]= "ST" THEN LET l_cat = "SUPPLIES" LET l_sup = getSupp(l_cat) END IF
+		IF l_sc[1,2]= "WW" THEN LET l_cat = "ARMY" LET l_sup = getSupp(l_cat) LEt l_tc = "3" LET l_dc = "CC" END IF
+		IF l_sc[1,2]= "HH" THEN LET l_cat = "HOUSEHOLD" LET l_sup = getSupp(l_cat) END IF
+		IF l_sc[1,2]= "GM" THEN LET l_cat = "GAMES" LET l_sup = getSupp(l_cat)  LET l_dc = "BB" END IF
+	END IF
 
-	LET l_bc = genBarCode(l_sc,l_cat)
-	LET l_bc = calcCheck(l_bc)
+	IF l_sc IS NULL THEN
+		LET l_sc = l_cat[1,2]||(m_prod_key USING "&&&&&&")
+		LET m_prod_key = m_prod_key + 1
+	END IF
+
+	LET l_bc = genBarCode(l_cat)
 
 	IF l_pack = "P" THEN
 		SELECT MIN( physical_stock ) INTO l_ps FROM pack_items p,stock s
@@ -154,11 +162,14 @@ FUNCTION insStock(l_sc,l_pack,l_bc,l_ds,l_pr,l_dc)
 		LET l_ps = util.math.rand( 200 )
 		LET l_al = util.math.rand( 50 )
 	END IF
+	IF l_pr = 0 THEN LET l_pr = util.math.rand( 10 ) + ( 100 / util.math.rand(10) ) END IF
 	LET l_ps = l_ps  + 50
 	LET l_fr = l_ps - l_al
 	LET l_cst = ( l_pr * 0.75 )
 	DISPLAY l_sc,"-",l_bc, "-", l_ds, " ps:",l_ps, " al:",l_al, " fr:",l_fr
-	LET l_img = DOWNSHIFT(l_sc CLIPPED)
+	IF l_img IS NULL THEN
+		LET l_img = DOWNSHIFT(l_sc CLIPPED)
+	END IF
 	INSERT INTO stock VALUES(l_sc,l_cat,l_pack,l_sup,l_bc,l_ds,l_pr,l_cst,l_tc,l_dc,l_ps,l_al,l_fr,"",l_img)
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -204,76 +215,6 @@ FUNCTION getSupp(l_cat)
 
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION calcCheck(bc)
-	DEFINE bc CHAR(12)
-	DEFINE x,y SMALLINT
-
-	LET x = bc[1] + bc[3] + bc[5] + bc[7] + bc[9] + bc[11]
-	LET x = x * 3
-	LET x = x + bc[2] + bc[4] + bc[6] + bc[8] + bc[10]
-	LET y = ( x MOD 10 )
-	IF y != 0 THEN LET y = 10 - y END IF
-	LET bc[12] = y
-
-	RETURN bc
-END FUNCTION
---------------------------------------------------------------------------------
-FUNCTION stores_demo()
-	DEFINE
-		l_sc CHAR(8),
-		l_bc CHAR(13),
-		l_ds,l_att CHAR(30),
-		l_pr,l_cst DECIMAL(12,2),
-		l_cat,l_sup,l_pwd CHAR(10),
-		l_ld, l_pic,l_em VARCHAR(100),
-		l_dc CHAR(2)
-	DEFINE l_ps, l_al, l_fr INTEGER
-	DEFINE l_sn SMALLINT
-	DEFINE l_ad1,l_ad2,l_ad3,l_ad4,l_ad5,l_pc VARCHAR(40)
-
-	TRY
-		DECLARE sdcur CURSOR FOR 
-			SELECT *
-			FROM stores7:stock
-	CATCH
-		DISPLAY "stores7 not available:",SQLERRMESSAGE
-		RETURN
-	END TRY
-	DISPLAY "stores7 Stock"
-	FOREACH sdcur INTO l_sn,l_sup,l_ds,l_pr,l_bc,l_att
---		DISPLAY "got stock record:",l_sn
-		LET l_ds = l_ds CLIPPED,"/",l_att
-		LET l_sc = l_sup CLIPPED,"-",l_sn USING "&&&&"
-		LET l_ps = util.math.rand( 250 )
-		LET l_al = util.math.rand( 50 )
-		LET l_ps = l_ps + 50
-		LET l_fr = l_ps - l_al
-		LET l_cst = ( l_pr * 0.75 )
-		LET l_cat = "SPORTS"
-		LET l_bc = genBarCode(l_sc,l_cat)
-		LET l_bc = calcCheck(l_bc)
-		DISPLAY "STK:",l_sc, " ",l_bc
-		LET l_dc = discCode()
-		LET l_pic = DOWNSHIFT("sd_"||(l_sup CLIPPED)||"_"||l_sn)
-		INSERT INTO stock VALUES(l_sc,l_cat,NULL,l_sup,l_bc,l_ds,l_pr,l_cst,"1",l_dc,l_ps,l_al,l_fr,l_ld, l_pic)
---		DISPLAY "inserted."
-	END FOREACH
-
-	DISPLAY "stores_demo Customers"
-	DECLARE sdcur2 CURSOR FOR
-		SELECT customer_num, TRIM(fname)||" "||lname,company, address1,address2,city,state, "USA",zipcode
-		FROM stores7:customer ORDER BY 1
-	LET l_pwd = "password"
-	FOREACH sdcur2 INTO l_sc, l_ds, l_ld, l_ad1,l_ad2,l_ad3,l_ad4,l_ad5,l_pc
-		LET l_dc = discCode()
-		DISPLAY "CST:",m_addr, " ",l_sc, " ",l_ld
-		INSERT INTO customer VALUES(l_sc,l_ld,l_ds,l_em,l_pwd,m_addr,m_addr, l_dc, 8000, 0 ,0)
-		INSERT INTO addresses VALUES(m_addr,l_ad1,l_ad2,l_ad3,l_ad4,"",l_pc,l_ad5)
-		LET m_addr = m_addr + 1
-	END FOREACH
-
-END FUNCTION
---------------------------------------------------------------------------------
 FUNCTION discCode()
 	DEFINE l_dc CHAR(2)
 	CASE util.math.rand(5)
@@ -286,109 +227,9 @@ FUNCTION discCode()
 	RETURN l_dc
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION officeStore()
-	DEFINE
-		l_sc CHAR(8),
-		l_bc CHAR(13),
-		l_ds,l_att CHAR(30),
-		l_pr,l_cst DECIMAL(12,2),
-		l_cat,l_sup,l_pwd CHAR(10),
-		l_ld, l_pic,l_em VARCHAR(100),
-		l_dc CHAR(2)
-	DEFINE l_ps, l_al, l_fr INTEGER
-	DEFINE l_ad1,l_ad2,l_ad3,l_ad4,l_ad5 VARCHAR(40)
-	DEFINE l_pc CHAR(8)
-	DEFINE l_stmt,l_stmt2 STRING
-	DEFINE retry BOOLEAN
-	DEFINE l_sep CHAR(1)
-	LET l_sep = "."
-	IF m_dbtyp = "ifx" THEN LET l_sep = ":" END IF
-	LET l_stmt = "SELECT itemid, catid,supplier, prodname, proddesc, prodpic, listprice, unitcost, i.attr1
-		FROM officestore",l_sep,"product p , OUTER officestore",l_sep,"item i WHERE p.productid = i.productid"
-	LET l_stmt2 = "SELECT userid, TRIM(firstname)||\" \"||lastname,email, addr1,addr2,city,state, country,zip
-		FROM officestore",l_sep,"account ORDER BY 1"
-	LET retry = TRUE
-	WHILE TRUE
-		TRY
-			DECLARE oscur CURSOR FROM l_stmt
-			EXIT WHILE
-		CATCH	
-			IF NOT retry THEN
-				DISPLAY "Officestore tables not found"
-				RETURN
-			END IF
-			DISPLAY "Officestore not found, looking for tables."
-			DISPLAY "Err:",SQLERRMESSAGE
-			LET l_stmt = "SELECT itemid, catid,supplier, prodname, proddesc, prodpic, listprice, unitcost, i.attr1
-			FROM product p , OUTER item i	WHERE p.productid = i.productid"
-			LET l_stmt2 = "SELECT userid, TRIM(firstname)||\" \"||lastname,email, addr1,addr2,city,state, country,zip
-			FROM account ORDER BY 1"
-			LET retry = FALSE
-		END TRY
-		CONTINUE WHILE
-	END WHILE
-	DISPLAY "SQL:",l_stmt
-	DISPLAY "Adding officestore stock data..."
-	TRY
-		FOREACH oscur INTO l_sc, l_cat, l_sup, l_ds, l_ld, l_pic, l_pr, l_cst,l_att
-
-			IF l_cat = "ENTERTAIN" THEN
-				LET l_cat = "SPORTS"
-				CASE l_ds
-					WHEN "Guitar" LET l_cat = "ENTERTAIN"
-												LET l_sc = "EN-069-G"
-												LET l_pr = "120.99"
-					WHEN "Maracas" LET l_cat = "ENTERTAIN"
-					WHEN "Chess game" LET l_cat = "GAMES"
-					WHEN "Dice" LET l_cat = "GAMES"
-				END CASE
-			END IF
-
-			IF l_sc IS NULL THEN CONTINUE FOREACH END IF
-
-			IF l_att IS NULL THEN LET l_att =  "Unit" END IF
-			IF l_att != "Unit" THEN
-				LET l_ds = l_ds CLIPPED,"/",l_att
-			END IF
-			IF l_pr IS NULL THEN LET l_pr = 9.99 END IF
-			IF l_cst IS NULL THEN LET l_cst = l_pr * .20 END IF
-			LET l_sup = getSupp(l_cat)
-			LET l_bc = genBarCode(l_sc,l_cat)
-			LET l_bc = calcCheck(l_bc)
-	--		DISPLAY l_sc, " ",l_bc
-			LET l_ps = util.math.rand( 250 )
-			LET l_ps = l_ps + 50
-	--		DISPLAY l_sc, " ",l_bc," Stock:",l_ps
-			LET l_al = util.math.rand( l_ps-20 )
-			LET l_fr = l_ps - l_al
-			DISPLAY l_cat," ",l_ds," ",l_sc, " ",l_bc," free:",l_fr
-			LET l_dc = discCode()
-			INSERT INTO stock VALUES(l_sc,l_cat,NULL,l_sup,l_bc,l_ds,l_pr,l_cst,"1",l_dc,l_ps,l_al,l_fr,l_ld, l_pic)
-		END FOREACH
-	CATCH
-		DISPLAY "Status:",STATUS,":",ERR_GET(STATUS)
-		DISPLAY "Officestore tables not found"
-		RETURN
-	END TRY
-	DISPLAY "Adding officestore customer data..."
-	LET l_pwd = "password"
-	DECLARE oscur2 CURSOR FROM l_stmt2
-	FOREACH oscur2 INTO l_sc, l_ds,l_em, l_ad1,l_ad2,l_ad3,l_ad4,l_ad5,l_pc
-		LET l_ld = l_ds CLIPPED," Ltd"
-		DISPLAY m_addr, " ",l_sc, " ",l_ld
-		LET l_dc = discCode()
-		INSERT INTO customer VALUES(l_sc,l_ld,l_ds,l_em,l_pwd,m_addr,m_addr, l_dc, 8000, 0 ,0)
-		INSERT INTO addresses VALUES(m_addr,l_ad1,l_ad2,l_ad3,l_ad4,"",l_pc,l_ad5)
-		LET m_addr = m_addr + 1
-	END FOREACH
-	DISPLAY "Done."
-END FUNCTION
---------------------------------------------------------------------------------
-FUNCTION genBarCode(l_sc,l_cat)
-	DEFINE
-		l_sc CHAR(8),
-		l_cat CHAR(10),
-		l_bc CHAR(13)
+FUNCTION genBarCode(l_cat CHAR(10)) RETURNS CHAR(13)
+	DEFINE l_bc CHAR(13)
+	DEFINE x SMALLINT
 
 	CASE l_cat
 		WHEN "SPORT" LET l_bc = "060"
@@ -405,7 +246,14 @@ FUNCTION genBarCode(l_sc,l_cat)
 	END CASE
 	LET l_bc[4,11] = m_bc_cnt USING "&&&&&&&&"
 	LET m_bc_cnt = m_bc_cnt + 1
---	DISPLAY "bar code:",l_bc
+
+	LET x = l_bc[1] + l_bc[3] + l_bc[5] + l_bc[7] + l_bc[9] + l_bc[11]
+	LET x = x * 3
+	LET x = x + l_bc[2] + l_bc[4] + l_bc[6] + l_bc[8] + l_bc[10]
+	LET x = ( x MOD 10 )
+	IF x != 0 THEN LET x = 10 - x END IF
+	LET l_bc[12] = x
+
 	RETURN l_bc
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -566,4 +414,61 @@ FUNCTION oe_calcLineTot()
 	LET m_ordDet.tax_value = m_ordDet.nett_value * ( m_ordDet.tax_rate / 100 )
 	LET m_ordDet.nett_value =  m_ordDet.nett_value + m_ordDet.tax_value 
 
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION genStock(l_base STRING, l_cat STRING, l_process BOOLEAN) 
+	DEFINE l_ext, l_path, l_dir, l_desc STRING
+	DEFINE l_d INT
+	DEFINE l_nam STRING
+
+	DISPLAY "---------------Generating Stock from ",l_base, " Cat:",l_cat
+
+	CALL os.Path.dirSort( "name", 1 )
+	LET l_d = os.Path.dirOpen( l_base )
+	IF l_d > 0 THEN
+		WHILE TRUE
+			LET l_path = os.Path.dirNext( l_d )
+			IF l_path IS NULL THEN EXIT WHILE END IF
+			LET l_dir = os.path.baseName(l_base)
+			--DISPLAY "Path:",l_path," Dir:", os.path.isDirectory(os.path.join(l_base,l_path)) 
+			IF os.path.isDirectory(os.path.join(l_base,l_path)) THEN
+				IF l_path != "." AND l_path != ".." THEN
+					CASE l_path
+						WHEN "supplies" LET l_cat = "SUPPLIES"
+						WHEN "art" LET l_cat = "ART"
+						WHEN "entertainment" LET l_cat = "ENTERTAIN"
+						WHEN "furniture" LET l_cat = "FURNITURE" 
+						WHEN "travelling" LET l_cat = "TRAVELLING"
+						OTHERWISE LET l_cat = "??"
+					END CASE
+					DISPLAY "DIR --    Path:",l_path," Cat:",l_cat 
+					CALL genStock( os.path.join(l_base,l_path), l_cat, TRUE )
+				END IF
+				CONTINUE WHILE 
+			ELSE
+				IF l_process THEN
+					LET l_ext = os.path.extension( l_path )
+					IF l_ext IS NULL OR (l_ext != "jpg" AND l_ext != "png") THEN CONTINUE WHILE END IF
+					LET l_nam = os.path.rootName(l_path) 
+					LET l_desc = tidy_name(l_nam)
+					DISPLAY "Path:",l_path, " Cat:",l_cat," Name:",l_nam," Ext:",l_ext
+					CALL insStock(NULL,NULL,l_desc,l_cat,0, "CC", os.path.join( l_dir, l_nam ))
+				END IF
+			END IF
+		END WHILE
+	END IF
+	DISPLAY "---------------END"
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION tidy_name( l_nam STRING ) RETURNS STRING
+	DEFINE l_st base.StringTokenizer
+	DEFINE l_word CHAR(100)
+	LET l_st = base.StringTokenizer.create( l_nam, "-" )
+	LET l_nam = ""
+	WHILE l_st.hasMoreTokens()
+		LET l_word = l_st.nextToken()
+		LET l_word[1] = UPSHIFT(l_word[1])
+		LET l_nam = l_nam.append( l_word CLIPPED||" ")
+	END WHILE
+	RETURN l_nam.trim()
 END FUNCTION
