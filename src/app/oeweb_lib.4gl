@@ -5,6 +5,19 @@ IMPORT FGL oe_lib
 &include "ordent.inc"
 
 DEFINE m_pay RECORD LIKE ord_payment.*
+
+PUBLIC DEFINE m_stock_cats DYNAMIC ARRAY OF RECORD
+		id LIKE stock_cat.catid,
+		desc LIKE stock_cat.cat_name
+	END RECORD
+
+PUBLIC DEFINE m_items DYNAMIC ARRAY OF RECORD
+		stock_code1 STRING,
+		img1 STRING,
+		desc1 STRING,
+		qty1 INTEGER
+	END RECORD
+
 PUBLIC DEFINE m_cookie STRING
 --------------------------------------------------------------------------------
 FUNCTION initAll()
@@ -55,6 +68,62 @@ FUNCTION getCookie() RETURNS STRING
 		DISPLAY "From Cookie:",l_cookie
 	END IF
 	RETURN l_cookie
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION get_categories()
+	DECLARE stkcur CURSOR FROM "SELECT * FROM stock WHERE stock_cat = ?"
+	DECLARE sc_cur CURSOR FOR SELECT UNIQUE stock_cat.* FROM stock_cat, stock 
+		WHERE stock.stock_cat = stock_cat.catid {AND stock_cat.catid != "ARMS"}
+   ORDER BY stock_cat.cat_name
+	FOREACH sc_cur INTO m_stock_cats[ m_stock_cats.getLength() + 1 ].*
+	END FOREACH
+	CALL m_stock_cats.deleteElement( m_stock_cats.getLength() )
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ This build my categories list of buttons
+#+ @param none
+#+ @returns none
+FUNCTION build_cats(l_form ui.Form)
+	DEFINE n om.DomNode
+	DEFINE x,len SMALLINT
+	DEFINE l_grid_cats om.DomNode
+	LET l_grid_cats = l_form.findNode("Group","cats")
+	DISPLAY "Build cats"
+	LET len = 5
+	FOR x = 1 TO m_stock_cats.getLength()
+		IF LENGTH( m_stock_cats[x].desc ) > len THEN LET len = LENGTH( m_stock_cats[x].desc ) END IF
+	END FOR
+	FOR x = 1 TO m_stock_cats.getLength()
+		LET n = l_grid_cats.createChild("Button")
+		CALL n.setAttribute("name", "cat"||x)
+		CALL n.setAttribute("text", "  "||m_stock_cats[x].desc CLIPPED||"  " )
+		CALL n.setAttribute("image", "products/cat_"||DOWNSHIFT( m_stock_cats[x].id ) CLIPPED )
+		CALL n.setAttribute("sizePolicy","fixed")
+		CALL n.setAttribute("gridWidth", len)
+		CALL n.setAttribute("width", len)
+		CALL n.setAttribute("gridHeight", "1")
+		CALL n.setAttribute("posY",x+1)
+		CALL n.setAttribute("posX","1")
+		CALL n.setAttribute("style", "big")
+	END FOR
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION getItems( sc )
+	DEFINE sc LiKE stock_cat.catid
+	DEFINE l_stk RECORD LIKE stock.*
+	DEFINE rec SMALLINT
+	DEFINE img STRING
+
+	CALL m_items.clear()
+	LET rec = 1
+	FOREACH stkcur USING sc INTO l_stk.*
+		LET img = "products/"||(l_stk.img_url CLIPPED)
+		LET m_items[ m_items.getLength() + 1 ].stock_code1 = l_stk.stock_code
+		LET m_items[ m_items.getLength() ].img1 = img.trim()
+		LET m_items[ m_items.getLength() ].desc1 = mkDesc( l_stk.*)
+		LET m_items[ m_items.getLength() ].qty1 = 0
+	END FOREACH
+
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION detLnk(l_sc, l_det, l_img, l_qty )
@@ -310,6 +379,19 @@ FUNCTION oe_uiUpdate()
 		END TRY
 	END IF
 
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION recalcOrder()
+	DEFINE x,y SMALLINT
+	FOR x = 1 TO m_items.getLength()
+		LET m_items[x].qty1 = 0
+		FOR y = 1 TO g_detailArray.getLength()
+			IF m_items[x].stock_code1 = g_detailArray[y].stock_code THEN
+				LET m_items[x].qty1 = g_detailArray[y].quantity
+			END IF
+		END FOR
+	END FOR
+	CALL oe_uiUpdate()
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION gotoco()
