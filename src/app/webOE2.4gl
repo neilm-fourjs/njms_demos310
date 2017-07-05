@@ -53,10 +53,6 @@ GL_MODULE_ERROR_HANDLER
 
 	LET m_dbtyp = gldb_getDBType()
 	CALL ui.Interface.setText( gl_progdesc )
-	IF ui.Interface.getFrontEndName() != "GDC" THEN
-		CALL ui.Interface.FrontCall("session","getvar",base.application.getProgramName()||"_login",l_cookie)
-		DISPLAY "From Cookie:",l_cookie
-	END IF
 
 	LET m_csslayout = FALSE
 	IF fgl_getEnv("GBC_CUSTOM") = "csslayout" THEN LET m_csslayout = TRUE END IF
@@ -70,22 +66,6 @@ GL_MODULE_ERROR_HANDLER
 	LET m_vbox = m_form.findNode("VBox","main_vbox")
 
 	CALL oeweb_lib.initAll()
-
-	IF l_cookie.getLength() > 0 THEN
-		LET l_cc = l_cookie.trim()
-		DISPLAY "Selecting customer_code:",l_cc
-		SELECT * INTO g_cust.* FROM customer WHERE customer_code = l_cc
-		IF STATUS = NOTFOUND THEN
-			LET g_custcode = "Guest"
-			LET g_custname = "Guest"
-			LET g_cust.email = "Guest"
-		ELSE
-			LET g_custcode = g_cust.customer_code
-			LET g_custname = g_cust.customer_name
-			CALL oe_setHead( g_cust.customer_code,g_cust.del_addr,g_cust.inv_addr )
-		END IF
-	END IF
-
 	CALL oeweb_lib.logaccess( FALSE ,g_cust.email )
 	DISPLAY "Customer:",g_custname
 	DISPLAY g_custname TO custname
@@ -214,7 +194,7 @@ FUNCTION dynDiag()
 		CALL m_dialog.setActionActive("viewb",FALSE)
 		CALL m_dialog.setActionActive("gotoco",FALSE)
 	END IF
-	CALL setSignInAction()
+	CALL oeweb_lib.setSignInAction()
 	LET int_flag = FALSE
 	WHILE TRUE
 		LET l_evt = m_dialog.nextEvent()

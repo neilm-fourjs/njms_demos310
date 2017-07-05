@@ -1,11 +1,60 @@
 
+IMPORT FGL gl_lib
+IMPORT FGL oe_lib
 &include "app.inc"
 &include "ordent.inc"
 
 DEFINE m_pay RECORD LIKE ord_payment.*
+PUBLIC DEFINE m_cookie STRING
+--------------------------------------------------------------------------------
+FUNCTION initAll()
+	DEFINE l_cc LIKE customer.customer_code
 
+	INITIALIZE g_cust.* TO NULL
+	INITIALIZE g_ordHead.* TO NULL
+	INITIALIZE m_pay.* TO NULL
+	LET g_ordHead.items = 0
+	LET g_ordHead.order_datetime = CURRENT
+	CALL g_detailArray.clear()
+	LET m_pay.del_type = "0"
+	LET m_pay.del_amount = POST_0
+	LET m_pay.payment_type = "C"
+	LET m_pay.card_type = "V"
+	LET g_custcode = "Guest"
+	LET g_custname = "Guest"
+
+	CALL recalcOrder()
+
+	LET m_cookie = getCookie()
+	IF m_cookie.getLength() > 0 THEN
+		LET l_cc = m_cookie.trim()
+		DISPLAY "Selecting customer_code:",l_cc
+		SELECT * INTO g_cust.* FROM customer WHERE customer_code = l_cc
+		IF STATUS = NOTFOUND THEN
+			LET g_custcode = "Guest"
+			LET g_custname = "Guest"
+			LET g_cust.email = "Guest"
+		ELSE
+			LET g_custcode = g_cust.customer_code
+			LET g_custname = g_cust.customer_name
+			CALL oe_setHead( g_cust.customer_code,g_cust.del_addr,g_cust.inv_addr )
+		END IF
+	END IF
+
+END FUNCTION
+--------------------------------------------------------------------------------
 FUNCTION build_sqls()
 	DECLARE stkcur2 CURSOR FROM "SELECT * FROM stock WHERE stock_code = ?"
+END FUNCTION
+--------------------------------------------------------------------------------
+-- Get the login cookie
+FUNCTION getCookie() RETURNS STRING
+	DEFINE l_cookie STRING
+	IF ui.Interface.getFrontEndName() = "GBC" THEN
+		CALL ui.Interface.FrontCall("session","getvar",base.application.getProgramName()||"_login",l_cookie)
+		DISPLAY "From Cookie:",l_cookie
+	END IF
+	RETURN l_cookie
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION detLnk(l_sc, l_det, l_img, l_qty )
@@ -47,7 +96,7 @@ FUNCTION signin()
 	DEFINE l_cookie STRING
 
 	IF g_custcode != "Guest" THEN
-		IF fgl_winQuestion("Confirm","Confirm signout","No","Yes|No","question",0) = "No" THEN
+		IF gl_lib.gl_winQuestion(%"Confirm",%"Confirm signout",%"No",%"Yes|No","question") = %"No" THEN
 			RETURN
 		END IF
 		IF UPSHIFT(ui.Interface.getFrontEndName()) != "GDC" THEN
@@ -188,8 +237,7 @@ FUNCTION detLine(l_sc,l_qty)
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION mkDesc( l_stk )
-	DEFINE l_stk RECORD LIKE stock.*
+FUNCTION mkDesc( l_stk RECORD LIKE stock.*) RETURNS STRING
 	DEFINE l_desc STRING
 
 &define TITLON(sz) "<B STYLE=\"font-size: "||sz||"pt;\">"
@@ -270,6 +318,7 @@ FUNCTION gotoco()
 	DEFINE l_add RECORD LIKE addresses.*
 	DEFINE del_amt LIKE ord_payment.del_amount
 	DEFINE l_orddet RECORD LIKE ord_detail.*
+
 	IF g_custcode = "Guest" THEN
 		CALL signin()
 		IF g_custcode = "Guest" THEN RETURN END IF
@@ -378,6 +427,7 @@ FUNCTION gotoco()
 	END DIALOG
 	CLOSE WINDOW basket
 	IF int_flag THEN RETURN END IF
+
 	LET g_ordHead.order_datetime = CURRENT
 
 	SELECT * INTO l_add.* FROM addresses 
@@ -462,29 +512,8 @@ FUNCTION gotoco()
 
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION initAll()
-
-	INITIALIZE g_cust.* TO NULL
-	INITIALIZE g_ordHead.* TO NULL
-	INITIALIZE m_pay.* TO NULL
-	LET g_ordHead.items = 0
-	LET g_ordHead.order_datetime = CURRENT
-	LET g_custcode = "Guest"
-	LET g_custname = "Guest"
-	CALL g_detailArray.clear()
-	LET m_pay.del_type = "0"
-	LET m_pay.del_amount = POST_0
-	LET m_pay.payment_type = "C"
-	LET m_pay.card_type = "V"
-	CALL recalcOrder()
-	DISPLAY g_custname TO custname
-
-END FUNCTION
---------------------------------------------------------------------------------
-FUNCTION logaccess( l_new, l_email )
+FUNCTION logaccess( l_new BOOLEAN, l_email VARCHAR(60) )
 	CONSTANT C_VER = 2
-	DEFINE l_new BOOLEAN
-	DEFINE l_email CHAR(60)
 	DEFINE l_ver SMALLINT
 	DEFINE l_wu RECORD
 			wu_tabver SMALLINT,
