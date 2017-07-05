@@ -2,12 +2,19 @@
 &include "schema.inc"
 
 LAYOUT ( TEXT="Menu Screen", STYLE="main2" )
-HBOX -- (SPLITTER)
-GRID
+VBOX 
+GRID padding1
 {
-["      "]
+[vsp1]
 }
 END -- GRID
+HBOX -- (SPLITTER)
+GRID padding2
+{
+[hsp1]
+}
+END -- GRID
+GROUP
 GRID (STYLE="menu")
 {
  [sp1:logo                     :sp2]
@@ -26,27 +33,39 @@ GRID (STYLE="menu")
  [: :accept :back  :close :about: :]
 }
 END -- GRID
-GRID
+END -- GROUP
+GRID padding3
 {
-["      "]
+[hsp2]
 }
 END -- GRID
 END -- HBOX
+GRID padding4
+{
+[vsp2]
+}
+END -- GRID
+END -- VBOX
 TABLES
 sys_menus
 
 ATTRIBUTES
+IMAGE hsp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
+IMAGE hsp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
+IMAGE vsp1 : spacer, IMAGE="fa-fw", STRETCH=Y, STYLE="noborder";
+IMAGE vsp2 : spacer, IMAGE="fa-fw", STRETCH=Y, STYLE="noborder";
+
 IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
 IMAGE logo = FORMONLY.logo, SIZEPOLICY=INITIAL, STYLE="noborder";
 IMAGE sp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
-LABEL titl = FORMONLY.l_titl,STYLE="bold em14",JUSTIFY=CENTER;
+LABEL titl = FORMONLY.l_titl,STYLE="bold em16",JUSTIFY=CENTER;
 
 TABLE menu : menu, STYLE="menu oneclick";
 PHANTOM sys_menus.menu_key;
 PHANTOM sys_menus.m_id;
 PHANTOM sys_menus.m_pid;
 PHANTOM sys_menus.m_type;
-desc = sys_menus.m_text,STYLE="menuopts",IMAGECOLUMN=m_img;
+desc = sys_menus.m_text,STYLE="menuopts em14",IMAGECOLUMN=m_img;
 PHANTOM sys_menus.m_item;
 PHANTOM sys_menus.m_passw;
 PHANTOM FORMONLY.m_img;
