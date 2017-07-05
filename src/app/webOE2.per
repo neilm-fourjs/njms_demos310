@@ -36,6 +36,7 @@ END --GRID
  
 SCROLLGRID ( STYLE="tiles", WANTFIXEDPAGESIZE = NO ) 
 {
+<G tile             >
 [img1              ]
 [                  ]
 [                  ]
@@ -45,6 +46,7 @@ SCROLLGRID ( STYLE="tiles", WANTFIXEDPAGESIZE = NO )
 [                  ]
 [det1              ]
 [qty1     |detlnk1 ]
+<                   >
 }
 END -- GRID
 
@@ -76,6 +78,8 @@ t005 = ord_head.total_disc, HIDDEN;
 t006 = ord_payment.del_amount, HIDDEN;
 LABEL tot_nett : tot_nett,TEXT=%"Total Cost:", STYLE="big";
 t007 = ord_head.total_nett, STYLE="big";
+
+GROUP tile : tile,TEXT="",STYLE="tile";
 
 BUTTON detlnk1 : detlnk1;
 IMAGE img1 = FORMONLY.img1,AUTOSCALE,WIDTH=150 PIXELS,HEIGHT=150 PIXELS{,STRETCH=BOTH},SIZEPOLICY=FIXED,STYLE="bg_white noborder";
