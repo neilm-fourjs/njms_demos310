@@ -165,6 +165,7 @@
         </VirtualFolder>
         <File filePath="src/demos/wc_aircraft.4gl"/>
         <File filePath="src/demos/wc_aircraft.per"/>
+        <File filePath="src/demos/wc_aircraft_ud.per"/>
       </Application>
       <Application binaryName="wc_amCharts" dependencies="14000" id="-1954675472" label="wc_amCharts">
         <File filePath="src/demos/wc_amcharts.4gl"/>

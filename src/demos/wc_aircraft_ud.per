@@ -1,0 +1,40 @@
+
+ACTION DEFAULTS
+	ACTION accept (TEXT="Accept", IMAGE="accept", DEFAULTVIEW=YES)
+	ACTION cancel (TEXT="Cancel", IMAGE="cancel", DEFAULTVIEW=YES)
+	ACTION remove (TEXT="Remove", IMAGE="delete", DEFAULTVIEW=YES, CONTEXTMENU=YES)
+	ACTION select (TEXT="Load Selected", IMAGE="fa-mouse-pointer", DEFAULTVIEW=YES, CONTEXTMENU=YES)
+END -- ACTIONS
+
+LAYOUT (TEXT="Update Draw/Tray", STYLE="dialog" )
+GRID
+{
+ [: :titl                                    : :]
+<T tab1                 ><T tab2                 >
+ [a001                 ]  [a002                 ]
+ [a001                 ]  [a002                 ]
+ [a001                 ]  [a002                 ]
+ [a001                 ]  [a002                 ]
+ [a001                 ]  [a002                 ]
+ [a001                 ]  [a002                 ]
+ [a001                 ]  [a002                 ]
+ [a001                 ]  [a002                 ]
+ [a001                 ]  [a002                 ]
+ [a001                 ]  [a002                 ]
+}
+END -- GRID
+
+ATTRIBUTES
+
+LABEL titl = FORMONLY.titl, STYLE="em14";
+
+TABLE tab1 : tab1, DOUBLECLICK=select;
+TABLE tab2 : tab2, DOUBLECLICK=remove;
+
+
+a001 = FORMONLY.arr1, TITLE="Loadable Items";
+a002 = FORMONLY.arr2, TITLE="Tray/Draw Content";
+
+INSTRUCTIONS
+SCREEN RECORD arr1 ( FORMONLY.arr1 )
+SCREEN RECORD arr2 ( FORMONLY.arr2 )
