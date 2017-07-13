@@ -1,0 +1,92 @@
+
+ACTION DEFAULTS
+	ACTION quit (TEXT="Quit", IMAGE="fa-power-off")
+	ACTION plane (TEXT="Plane", IMAGE="fa-plane")
+	ACTION back (TEXT="Back", IMAGE="fa-mail-reply")
+	ACTION selobj (TEXT="Select Object", IMAGE="fa-mouse-pointer")
+END -- ACTIONS
+
+TOOLBAR
+	ITEM quit
+	ITEM plane
+	ITEM back
+END -- TB
+
+LAYOUT (TEXT="Aircraft POC Demo", STYLE="main2")
+HBOX ( SPLITTER )
+
+GRID
+{
+[wc                                                             ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[                                                               ]
+[data                                                           ]
+}
+END -- GRID
+GRID  
+{
+[b1]
+}
+END -- GRID
+GRID panela ( HIDDEN )
+{
+[:        :titl:         :]
+[info                     ]
+
+<T t1                     >
+[a001                     ]
+[a001                     ]
+[a001                     ]
+[a001                     ]
+[a001                     ]
+<                         >
+[sp1]
+[logo                     ]
+[                         ]
+}
+END
+END -- LAYOUT
+
+ATTRIBUTES
+LABEL titl : titl,TEXT="Aircraft POC Demo",STYLE="em16";
+LABEL info = FORMONLY.l_info, STYLE="em14";
+
+TABLE t1 : t1;
+a001 = FORMONLY.item_txt, TITLE="Items", IMAGECOLUMN=item_img, STYLE="em12";
+PHANTOM FORMONLY.item_cde;
+PHANTOM FORMONLY.item_img;
+
+IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=Y, STYLE="noborder";
+IMAGE logo : logo, IMAGE="logo2", SIZEPOLICY=INITIAL,STYLE="noborder";
+
+BUTTON b1 : b_panela, IMAGE="fa-chevron-left";
+
+WEBCOMPONENT wc = FORMONLY.l_wc, 
+	STRETCH=BOTH, SCROLLBARS=NONE, HEIGHT=640 PIXELS, WIDTH=640 PIXELS,
+	COMPONENTTYPE="aircraft",
+	PROPERTIES=(design="");
+EDIT data = FORMONLY.l_data;
+
+INSTRUCTIONS
+SCREEN RECORD arr ( FORMONLY.item_txt THRU FORMONLY.item_img )

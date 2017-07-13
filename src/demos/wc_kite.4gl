@@ -117,26 +117,23 @@ FUNCTION updatePanels(wcValue)
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Set a Property in the AUI
-FUNCTION wc_setProp(prop_name, value)
-	DEFINE prop_name, VALUE STRING
+FUNCTION wc_setProp(l_prop_name STRING, l_value STRING)
 	DEFINE w ui.Window
 	DEFINE n om.domNode
 	LET w = ui.Window.getCurrent()
-	LET n = w.findNode("Property",prop_name)
+	LET n = w.findNode("Property",l_prop_name)
 	IF n IS NULL THEN
-		DISPLAY "can't find property:",prop_name
+		DISPLAY "can't find property:",l_prop_name
 		RETURN
 	END IF
---  DISPLAY prop_name,"=",value
-	CALL n.setAttribute("value",value)
+	CALL n.setAttribute("value",l_value)
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Set the svg image into the component.
-FUNCTION setSVG( nam )
-	DEFINE nam STRING
-	CALL wc_setProp("model", "xx"||nam) -- force a refresh
-	CALL wc_setProp("model", nam)
-	IF nam MATCHES "*Trident*" OR nam MATCHES "*Talon*" THEN
+FUNCTION setSVG( l_nam STRING )
+	CALL wc_setProp("model", "xx"||l_nam) -- force a refresh
+	CALL wc_setProp("model", l_nam)
+	IF l_nam MATCHES "*Trident*" OR l_nam MATCHES "*Talon*" THEN
 		LET info = '<b><a href="http://www.jestofevekites.com/">Jest of Eve Kites</a></b>'
 	END IF
 END FUNCTION

@@ -97,7 +97,7 @@
         <File filePath="src/app/ordent.per"/>
         <File filePath="src/app/ordent2.per"/>
       </Application>
-      <Application binaryName="printInvoices" commandLineArguments="S 1 1 ordent.4rp" compilerOptions="--build-rdd" dependencies="14000,1986,-272766546,923654133" id="-1350833088" label="printInvoices">
+      <Application binaryName="printInvoices" commandLineArguments="S 1 2 ordent.4rp" compilerOptions="--build-rdd" dependencies="14000,1986,-272766546,923654133" id="-1350833088" label="printInvoices">
         <VirtualFolder label="Reports">
           <File filePath="etc/ordent-1.4rp"/>
           <File filePath="etc/ordent-2.4rp"/>
@@ -157,6 +157,15 @@
         <File filePath="etc/picflow.4st"/>
         <File filePath="src/demos/picflow.per"/>
       </Application>
+      <Application binaryName="wc_aircraft" dependencies="-400184264,14000" id="252530810" label="wc_aircraft">
+        <VirtualFolder label="wc">
+          <File filePath="pics/webcomponents/aircraft/aircraft.css"/>
+          <File filePath="pics/webcomponents/aircraft/aircraft.html"/>
+          <File filePath="pics/webcomponents/aircraft/aircraft.js"/>
+        </VirtualFolder>
+        <File filePath="src/demos/wc_aircraft.4gl"/>
+        <File filePath="src/demos/wc_aircraft.per"/>
+      </Application>
       <Application binaryName="wc_amCharts" dependencies="14000" id="-1954675472" label="wc_amCharts">
         <File filePath="src/demos/wc_amcharts.4gl"/>
         <File filePath="src/demos/wc_amcharts.per"/>
@@ -205,7 +214,7 @@
       </Library>
     </Group>
     <Group label="Packages" language="Genero">
-      <Package binaryName="njms_demos310" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027" description="NJMs Demos" label="njms_demos310" platform="Genero Application Server">
+      <Package binaryName="njms_demos310" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810" description="NJMs Demos" label="njms_demos310" platform="Genero Application Server">
         <DynamicProperty name="packageId" value="njmsdemos"/>
         <DynamicProperty name="packageLabel" value="NJMs Demos"/>
         <Directory destinationDirectory="$(ProjectDir)/bin/bin" includedFiles="*.42?" label="bin" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
