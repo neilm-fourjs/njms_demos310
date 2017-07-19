@@ -4,6 +4,7 @@
 IMPORT FGL app_lib
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
+IMPORT FGL lib_secure
 
 CONSTANT PRGDESC = "User Maintenance Demo"
 CONSTANT PRGAUTH = "Neil J.Martin"
@@ -82,7 +83,7 @@ MAIN
 				END FOREACH
 				CALL  m_uroles.deleteElement(m_uroles.getLength())
 				IF m_user_rec.user_key IS NULL THEN
-					NEXT FIELD username
+					NEXT FIELD salutation
 				END IF
 			ON DRAG_START(dnd)
 				LET m_drag_source = "users"
@@ -131,7 +132,11 @@ MAIN
 			BEFORE INPUT
 				CALL DIALOG.setactionActive("save",FALSE)
 				IF m_user_rec.user_key IS NULL THEN
-					LET m_user_rec.active = "Y"
+					LET m_user_rec.active = TRUE
+					LET m_user_rec.forcepwchg = "N"
+					LET m_user_rec.hash_type = lib_secure.glsec_getHashType()
+					LET m_user_rec.salt = lib_secure.glsec_genSalt(m_user_rec.hash_type) -- NOTE: for Genero 3.10 we don't need to store this
+					LET m_user_rec.pass_expire = (TODAY + 6 UNITS MONTH)
 				END IF
 				LEt m_saveUser = FALSE
 				MESSAGE "IN User:",DIALOG.getCurrentRow("u_arr")," of ",m_fullname.getLength()," ",m_user[ DIALOG.getCurrentRow("u_arr") ].surname
@@ -140,6 +145,8 @@ MAIN
 				IF DIALOG.validate("sys_users.*") < 0 THEN
 					CONTINUE DIALOG
 				ELSE
+					LET m_user_rec.pass_hash = lib_secure.glsec_genPasswordHash(m_user_rec.login_pass ,m_user_rec.salt,m_user_rec.hash_type)
+					LET m_user_rec.login_pass = "PasswordEncrypted!" -- we don't store their clear text password!
 					CALL checkSave()
 					CALL setSave_user(FALSE)
 				END IF

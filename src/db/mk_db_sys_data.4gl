@@ -93,7 +93,8 @@ FUNCTION mk_demo_account()
 
 	TRY
 		INSERT INTO sys_users VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",
-			l_hash_type, l_login_pass, l_salt, l_pass_hash, TODAY+365)
+			l_hash_type, "not stored", l_salt, l_pass_hash, TODAY+365)
+-- NOTE: we don't store the clear text password
 		CALL mkdb_progress( "Test Account Inserted: "||l_email||" / "||l_login_pass||" with "||l_hash_type||" hash." )
 	CATCH
 		CALL mkdb_progress( "Insert test account failed!\n"||STATUS||":"||SQLERRMESSAGE )

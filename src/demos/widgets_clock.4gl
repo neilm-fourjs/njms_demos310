@@ -1,38 +1,5 @@
 
-&ifdef genero13x
--- nothing
-&else
 IMPORT util
-&endif
-
-{ CVS Header
-$Author: $
-$Date: 2008-10-14 12:42:28 +0100 (Tue, 14 Oct 2008) $
-$Revision: 2 $
-$Source: /usr/home/test4j/cvs/all/demos/widgets/src/clock2.4gl,v $
-$Log: clock2.4gl,v $
-Revision 1.9  2008/04/04 10:05:14  test4j
-
-Added form dump to xml
-
-Revision 1.8  2007/07/12 16:43:03  test4j
-*** empty log message ***
-
-Revision 1.7  2006/09/01 10:55:11  test4j
-
-Change clock2 so it uses util.math for sin/cos instead of using Informix DB.
-
-Revision 1.6  2006/07/21 11:23:08  test4j
-*** empty log message ***
-
-Revision 1.1  2005/11/17 18:14:12  test4j
-*** empty log message ***
-
-Revision 1.3  2005/05/10 14:48:12  test4j
-
-Added cvs header.
-
-}
 
 GLOBALS
 	DEFINE aniyn SMALLINT
@@ -140,8 +107,8 @@ FUNCTION time(seconds)
 	FOR a = 30 TO 360 STEP 30
 		LET h = h + 1
 		LET d = ( pi / 180 ) * a
-		LET y = r * ( sin(d) )
-		LET x = r * ( cos(d) )
+		LET y = r * ( util.math.sin(d) )
+		LET x = r * ( util.math.cos(d) )
 		LET dsp = h
 		CALL drawfillcolor("black")
 		CALL drawtext(520+x,500+y, dsp ) RETURNING w
@@ -194,8 +161,8 @@ FUNCTION clock_face()
 	LET a = (360 / 12 ) * h
 	LET a = a + (( 30 / 60 ) * m )
 	LET d = ( pi / 180 ) * a
-	LET y = r * ( sin(d) )
-	LET x = r * ( cos(d) )
+	LET y = r * ( util.math.sin(d) )
+	LET x = r * ( util.math.cos(d) )
 	CALL drawlinewidth(4)
 	CALL drawfillcolor("red")
 	CALL drawline(501,501,x,y) RETURNING w
@@ -204,8 +171,8 @@ FUNCTION clock_face()
 	LET r = 350
 	LET a = (360 / 60 ) * m
 	LET d = ( pi / 180 ) * a
-	LET y = r * ( sin(d) )
-	LET x = r * ( cos(d) )
+	LET y = r * ( util.math.sin(d) )
+	LET x = r * ( util.math.cos(d) )
 	CALL drawfillcolor("blue")
 	CALL drawlinewidth(2)
 	CALL drawline(501,501,x,y) RETURNING w
@@ -214,40 +181,10 @@ FUNCTION clock_face()
 	LET r = 350
 	LET a = (360 / 60 ) * s
 	LET d = ( pi / 180 ) * a
-	LET y = r * ( sin(d) )
-	LET x = r * ( cos(d) )
+	LET y = r * ( util.math.sin(d) )
+	LET x = r * ( util.math.cos(d) )
 	CALL drawlinewidth(1)
 	CALL drawfillcolor("black")
 	CALL drawline(501,501,x,y) RETURNING w
-
-END FUNCTION
---------------------------------------------------------------------------------
--- Asking database engine to provide the SIN
-FUNCTION sin( a )
-	DEFINE a DECIMAL(12,9)
-	DEFINE s DECIMAL(12,6)
-
-&ifdef genero13x
-	SELECT SIN( a ) INTO s FROM systables WHERE tabid = 1
-&else
-	LET s = util.math.sin( a )
-&endif
-
-	RETURN s
-
-END FUNCTION
---------------------------------------------------------------------------------
--- Asking database engine to provide the COS
-FUNCTION cos( a )
-	DEFINE a DECIMAL(12,9)
-	DEFINE c DECIMAL(12,6)
-
-&ifdef genero13x
-	SELECT COS( a ) INTO c FROM systables WHERE tabid = 1
-&else
-	LET c = util.math.cos( a )
-&endif
-
-	RETURN c
 
 END FUNCTION

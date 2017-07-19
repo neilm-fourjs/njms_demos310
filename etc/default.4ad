@@ -47,5 +47,6 @@ Property of Four Js*
   <ActionDefault name="getstock" acceleratorName="Control-F" image="find" comment="Select Stock Item"/>
   <ActionDefault name="getcust" acceleratorName="Control-F" image="find" comment="Select Customer Item"/>
   <ActionDefault name="getorder" acceleratorName="Control-F" image="find" comment="Find Order"/>
+	<ActionDefault name="save" text="Save" image="disk" contextMenu="yes"/>
 
 </ActionDefaultList>

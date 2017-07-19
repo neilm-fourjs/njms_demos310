@@ -24,9 +24,7 @@ IMPORT util
 IMPORT FGL gl_lib
 
 -- For Genero 3.10 we are going to default to BCRYPT
-&ifdef G310
-&define BCRYPT
-&endif
+&define G310
 
 -- Private variables:
 DEFINE m_doc xml.domDocument
