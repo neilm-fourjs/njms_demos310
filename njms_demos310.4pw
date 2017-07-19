@@ -152,6 +152,10 @@
         <File filePath="src/demos/ipod_sax.4gl"/>
         <File filePath="etc/ipodtree.4st"/>
       </Application>
+      <Application binaryName="materialDesignTest" dependencies="14000,-400184264" id="1848127715" label="materialDesignTest">
+        <File filePath="src/demos/matDEsTest.4gl"/>
+        <File filePath="src/demos/matDesTest.per"/>
+      </Application>
       <Application binaryName="picFlow" commandLineArguments="S 1 ../pics" dependencies="14000" id="-183914303" label="picFlow">
         <File filePath="src/demos/picflow.4gl"/>
         <File filePath="etc/picflow.4st"/>
@@ -237,6 +241,9 @@
         <File filePath="gas/test_app.xcf"/>
       </Library>
     </Group>
+    <Library binaryName="README" id="-1076375655" label="README">
+      <File filePath="README.md"/>
+    </Library>
     <Group label="System" language="Genero">
       <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">
         <File filePath="src/gl_lib/lib_login.4gl"/>

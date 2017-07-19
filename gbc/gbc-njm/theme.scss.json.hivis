@@ -11,14 +11,19 @@
   "gbc-primary-light-color"              : "$mt-white",
   "gbc-secondary-background-color"       : "$mt-blue-500",
   "gbc-secondary-color"                  : "$mt-orange-500",
+  "gbc-secondary-text-color"             : "$mt-cyan-400",
   "gbc-header-color"                     : "$mt-lime-800",
   "gbc-field-background-color"           : "$mt-purple-500",
-  "gbc-field-disabled-background"        : "rgba(0,0,0,0.04)",
   "gbc-disabled-color"                   : "$mt-blue-300",
   "gbc-separator-color"                  : "$mt-yellow-300",
   "gbc-message-color"                    : "$mt-blue-800",
   "gbc-error-color"                      : "$mt-red-800",
-  "gbc-sidebar-always-visible-min-width" : "999999px",
-  "gbc-sidebar-default-width"            : "30px",
-  "gbc-animation-duration"               : "0.7s"
+
+  "gbc-field-disabled-background"        : "rgba(0,0,0,0.04)",
+
+  "gbc-sidebar-always-visible-min-width"  : "999999px",
+  "gbc-sidebar-default-width"             : "30px",
+  "gbc-animation-duration"                : "0.7s",
+  "gbc-desactivate-ending-popup"          : false
+
 }

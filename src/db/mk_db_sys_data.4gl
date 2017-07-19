@@ -50,6 +50,7 @@ FUNCTION insert_system_data()
 	CALL addMenu("demo","main","F","AmCharts WC Demo", "wc_amCharts.42r","")
 	CALL addMenu("demo","main","F","Kite WC Demo", "wc_kite.42r","")
 	CALL addMenu("demo","main","F","Aircraft WC Demo", "wc_aircraft.42r","")
+	CALL addMenu("demo","main","F","Material Design Test", "materialDesignTest.42r","")
 
 	CALL addMenu("sys","main","T","System Maintenance", "","")
 	CALL addMenu("sys","main","F","User/Role Maintenance", "user_mnt.42r","")

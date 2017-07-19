@@ -35,6 +35,10 @@ Property of Four Js*
 		<StyleAttribute name="border" value="none" />
 	</Style>
 
+	<Style name="Table.menu">
+		<StyleAttribute name="headerHidden" value="yes" />
+	</Style>
+
 	<Style name="Window">
 		<StyleAttribute name="windowType" value="normal" />
 	</Style>

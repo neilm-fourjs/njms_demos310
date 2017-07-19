@@ -1,0 +1,38 @@
+
+IMPORT FGL gl_lib
+&include "genero_lib.inc"
+CONSTANT C_VER="3.1"
+
+MAIN
+	DEFINE l_rec RECORD
+		str STRING,
+		dt DATE
+	END RECORD
+	DEFINE l_arr DYNAMIC ARRAY OF RECORD
+		fld1 STRING,
+		fld2 SMALLINT
+	END RECORD
+	DEFINE x SMALLINT
+
+	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
+
+	FOR X = 1 TO 5
+		LET l_arr[x].fld1 = "Row "||x
+		LET l_arr[x].fld2 = x
+	END FOR
+
+	OPEN FORM f FROM "matDesTest"
+	DISPLAY FORM f
+
+	DIALOG ATTRIBUTE(UNBUFFERED)
+		INPUT BY NAME l_rec.*
+		END INPUT
+		DISPLAY ARRAY l_arr TO arr.*
+		END DISPLAY
+		ON ACTION msg MESSAGE "Hello Message"
+		ON ACTION err ERROR "Error Message"
+		GL_ABOUT
+		ON ACTION close EXIT DIALOG
+		ON ACTION quit EXIT DIALOG
+	END DIALOG
+END MAIN

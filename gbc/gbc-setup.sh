@@ -22,6 +22,8 @@ if [ ! -d $BLDDIR ]; then
 	fi
 	cd build
 	unzip $SRC
+	rm -f current
+	ln -s gbc-$VER current
 	cd gbc-$VER
 else
 	cd $BLDDIR
