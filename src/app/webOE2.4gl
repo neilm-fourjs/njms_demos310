@@ -87,7 +87,7 @@ FUNCTION dynDiag()
 		CALL m_dialog.setFieldValue("items.qty1", m_items[x].qty1)
 		CALL m_dialog.setFieldValue("items.img1", m_items[x].img1)
 		CALL m_dialog.setFieldValue("items.det1", m_items[x].desc1)
-		CALL m_dialog.setFieldValue("items.det1", m_items[x].stock_code1)
+		DISPLAY "Desc1",x,":",m_items[x].desc1
 	END FOR
 	CALL m_dialog.setCurrentRow("items",1)
 	FOR x = 1 TO m_stock_cats.getLength()

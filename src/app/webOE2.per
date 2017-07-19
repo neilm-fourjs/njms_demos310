@@ -45,6 +45,8 @@ SCROLLGRID ( STYLE="tiles", WANTFIXEDPAGESIZE = NO )
 [                  ]
 [                  ]
 [det1              ]
+[                  ]
+[                  ]
 [qty1     |detlnk1 ]
 <                   >
 }
@@ -83,7 +85,8 @@ GROUP tile : tile,TEXT="",STYLE="tile";
 
 BUTTON detlnk1 : detlnk1;
 IMAGE img1 = FORMONLY.img1,AUTOSCALE,WIDTH=150 PIXELS,HEIGHT=150 PIXELS{,STRETCH=BOTH},SIZEPOLICY=FIXED,STYLE="bg_white noborder";
-TEXTEDIT det1 = FORMONLY.det1,SCROLLBARS=NONE,NOENTRY,STYLE="bg_white noborder html notools";
+LABEL det1 = FORMONLY.det1,STYLE="bg_white noborder html";
+--TEXTEDIT  det1 = FORMONLY.det1,SCROLLBARS=NONE, NOENTRY, STYLE="bg_white noborder notools html";
 BUTTONEDIT qty1 = FORMONLY.qty1,ACTION=add1;
 
 INSTRUCTIONS

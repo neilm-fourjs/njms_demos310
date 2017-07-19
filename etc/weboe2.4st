@@ -142,6 +142,9 @@
 	<Style name="Label">
 		<StyleAttribute name="fontWeight" value="bold" />
 	</Style>
+	<Style name=".html">
+		<StyleAttribute name="textFormat" value="html" />
+	</Style>
 	<Style name=".bold">
 		<StyleAttribute name="fontWeight" value="bold" />
 	</Style>

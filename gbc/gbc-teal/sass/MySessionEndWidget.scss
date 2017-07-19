@@ -1,0 +1,38 @@
+.gbc_MySessionEndWidget {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  bottom: 5px;
+  right: 5px;
+  display: flex;
+  flex-direction: column;
+}
+[__MySessionEndWidget].mt-card {
+  margin: 16px;
+}
+[__MySessionEndWidget].mt-card-richhead {
+  display: flex;
+  align-items: center;
+}
+[__MySessionEndWidget].mt-card-header-text {
+  padding-left: 32px;
+}
+[__MySessionEndWidget].session {
+  padding: 32px 16px 16px 16px;
+  margin: 0;
+}
+[__MySessionEndWidget].message {
+  border-bottom: 1px solid $text-dark-12;
+}
+[__MySessionEndWidget].message, [__MySessionEndWidget].mt-actions {
+  padding: 16px 32px;
+}
+[__MySessionEndWidget].mt-action {
+  margin-bottom: 4px;
+}
+[__MySessionEndWidget].mt-card-actions {
+  margin-bottom: 16px;
+}
+[__MySessionEndWidget].redirectionLink {
+  font-size:60%;
+}

@@ -1,0 +1,21 @@
+.gbc_MyLabelWidget_stat {
+  display: none;
+  height: 0px;
+  padding: $gbc-margin-ratio*0px;
+  .g_measured &.g_measureable{
+    width: 0%;
+  }
+}
+
+[__MyLabelWidget_stat].gbc-label-text-container{
+    flex: 1 1 auto;
+  white-space: pre;
+}
+
+
+.mt-weboeUser {
+  color: white;
+}
+.mt-weboeStat {
+  color: white;
+}

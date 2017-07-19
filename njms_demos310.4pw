@@ -223,6 +223,19 @@
         <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="njm*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas"/>
         <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       </Package>
+      <Library binaryName="xcf_files" id="1211289508" label="xcf_files">
+        <File filePath="gas/demo310.xcf"/>
+        <File filePath="gas/njmdemo.xcf"/>
+        <File filePath="gas/njmdemo_c.xcf"/>
+        <File filePath="gas/njmdemo_t.xcf"/>
+        <File filePath="gas/njmdemodb.xcf"/>
+        <File filePath="gas/njmweb.xcf"/>
+        <File filePath="gas/njmweb2.xcf"/>
+        <File filePath="gas/njmweb2_c.xcf"/>
+        <File filePath="gas/njmweb_c.xcf"/>
+        <File filePath="gas/njmweb_t.xcf"/>
+        <File filePath="gas/test_app.xcf"/>
+      </Library>
     </Group>
     <Group label="System" language="Genero">
       <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">

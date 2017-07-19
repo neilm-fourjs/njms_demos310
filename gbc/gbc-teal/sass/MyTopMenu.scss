@@ -1,0 +1,10 @@
+
+.gbc_TopMenuWidget .gbc_TopMenuGroupWidget {
+	color: $gbc-primary-light-color;
+
+	&:not(.disabled):hover {
+		background-color: $gbc-primary-medium-color;
+	}
+}
+
+

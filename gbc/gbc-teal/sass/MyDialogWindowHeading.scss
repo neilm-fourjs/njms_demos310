@@ -1,0 +1,18 @@
+
+.gbc_ModalWindowDialog  .mt-dialog-header {
+  color: black;
+  background-color: $gbc-header-color;
+
+  text-shadow: 1px 1px 2px white;
+  font-size: 1.2em;
+  text-align: center;
+  background: linear-gradient( $gbc-primary-color, $gbc-secondary-background-color );
+
+  .gbc_ImageWidget {
+    display: none;
+  }
+}
+
+.gbc_ModalWindowDialog  .mt-dialog-pane {
+  background-color: $gbc-secondary-background-color;
+}
