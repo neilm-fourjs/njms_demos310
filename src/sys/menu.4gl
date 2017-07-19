@@ -11,7 +11,7 @@ CONSTANT C_VER="3.1"
 CONSTANT C_TITLE="NJM's Demos"
 CONSTANT C_SPLASH="njm_demo_logo_256"
 CONSTANT C_ICON="njm_demo_icon"
-CONSTANT PRGDESC = "Order Entry Demo"
+CONSTANT PRGDESC = "NJM's Demos Menu System"
 CONSTANT PRGAUTH = "Neil J.Martin"
 
 DEFINE m_user STRING
@@ -36,7 +36,7 @@ MAIN
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,FALSE)
 	LET m_mdi = gl_lib.m_mdi
 	IF m_mdi = "M" THEN LET m_mdi = "C" END IF -- if MDI container set so child programs are children
-
+	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 	CLOSE WINDOW SCREEN
 
 	LET m_curMenu = 1
@@ -79,6 +79,7 @@ FUNCTION do_menu()
 
 	OPEN WINDOW menu WITH FORM "menu"
 	DISPLAY C_SPLASH TO logo
+	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
 	IF NOT populate_menu(m_menus[m_curMenu]) THEN -- should not happen!
 		CALL gl_lib.gl_exitProgram(0,"'main' menu not found!")

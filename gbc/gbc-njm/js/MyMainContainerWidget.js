@@ -29,9 +29,9 @@ modulum('MyMainContainerWidget', ['WidgetGroupBase', 'WidgetFactory'],
         constructor: function() {
           $super.constructor.call(this);
 
-          /*var headerBar = new cls.MyHeaderBarWidget();
+          var headerBar = new cls.MyHeaderBarWidget();
           headerBar.setParentWidget(this);
-          this.getElement().querySelector("header").appendChild(headerBar.getElement());*/
+          this.getElement().querySelector("header").appendChild(headerBar.getElement());
         }
       };
     });

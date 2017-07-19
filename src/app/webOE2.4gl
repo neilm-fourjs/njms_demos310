@@ -31,7 +31,7 @@ GL_MODULE_ERROR_HANDLER
 
 	CALL gl_db.gldb_connect(NULL)
 
-	CALL ui.Interface.setText( gl_progdesc )
+	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
 	OPEN FORM weboe FROM "webOE2"
 	DISPLAY FORM weboe

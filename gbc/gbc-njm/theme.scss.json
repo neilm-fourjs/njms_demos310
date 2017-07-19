@@ -7,7 +7,7 @@
 
 	"gbc-primary-medium-color"							:	"$mt-indigo-900",
 
-	"gbc-header-color"											:	"$mt-indigo-300",
+	"gbc-header-color"											:	"$mt-indigo-200",
 	"gbc-primary-background-color"					:	"$mt-indigo-100",
 	"gbc-secondary-background-color"				:	"$mt-indigo-50",
 	"gbc-field-background-color"						:	"$mt-white",
@@ -15,7 +15,7 @@
 	"gbc-separator-color"										:	"$mt-white",
 
 	"gbc-secondary-text-color"							:	"$mt-white",
-	"gbc-primary-light-color"								:	"$mt-indigo-700",    
+	"gbc-primary-light-color"								:	"$mt-indigo-900",    
 
 	"gbc-secondary-color"										:	"$mt-green-400",
 

@@ -2,7 +2,8 @@
 IMPORT FGL gl_lib
 &include "genero_lib.inc"
 CONSTANT C_VER="3.1"
-
+CONSTANT PRGDESC = "Material Design Test"
+CONSTANT PRGAUTH = "Neil J.Martin"
 MAIN
 	DEFINE l_rec RECORD
 		str STRING,
@@ -13,8 +14,9 @@ MAIN
 		fld2 SMALLINT
 	END RECORD
 	DEFINE x SMALLINT
-
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
+	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
 	FOR X = 1 TO 5
 		LET l_arr[x].fld1 = "Row "||x
