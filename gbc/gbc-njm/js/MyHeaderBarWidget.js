@@ -41,9 +41,6 @@ modulum('MyHeaderBarWidget', ['WidgetBase', 'WidgetFactory'],
           this._model.addCloseApplicationListener(this.onCloseApplication.bind(this));
           this._model.addCurrentWindowChangeListener(this.onCurrentWindowChanged.bind(this));
 
-          this.img = this.getElement().querySelector(".gc-logo-top");
-          this.img.src = context.bootstrapInfo.gbcPath+"/img/logo.png";
-          // get the banner object
           elb = this.getElement().querySelector(".MyHeaderBarWidget-banner");
         },
 
