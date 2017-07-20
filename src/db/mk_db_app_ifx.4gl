@@ -1,4 +1,6 @@
 
+IMPORT FGL gl_db
+
 #+ Create the application database tables: Informix
 
 --------------------------------------------------------------------------------
@@ -26,7 +28,7 @@ FUNCTION ifx_create_app_tables()
 	);
 
 	CREATE TABLE addresses (
-		rec_key SERIAL PRIMARY KEY,
+		rec_key SERIAL,
 		line1 VARCHAR(40),
 		line2 VARCHAR(40),
 		line3 VARCHAR(40),
@@ -57,7 +59,9 @@ FUNCTION ifx_create_app_tables()
 		img_url VARCHAR(100),
 		UNIQUE( barcode )
 	);
-	EXECUTE IMMEDIATE "ALTER TABLE stock ADD CONSTRAINT CHECK (free_stock >= 0)"
+	IF gl_db.m_dbtyp != "sqt" THEN
+		EXECUTE IMMEDIATE "ALTER TABLE stock ADD CONSTRAINT CHECK (free_stock >= 0)"
+	END IF
 	CREATE INDEX stk_idx ON stock ( description );
 
 	CREATE TABLE pack_items (
@@ -90,7 +94,7 @@ FUNCTION ifx_create_app_tables()
 	);
 
 	CREATE TABLE ord_head (
-		order_number SERIAL PRIMARY KEY,
+		order_number SERIAL,
 		order_datetime DATETIME YEAR TO SECOND,
 		order_date DATE,
 		order_ref VARCHAR(40),

@@ -31,14 +31,14 @@ FUNCTION ifx_create_system_tables()
 	);
 
 	CREATE TABLE sys_roles (
-		role_key SERIAL PRIMARY KEY,
+		role_key SERIAL,
 		role_type CHAR(1),
 		role_name VARCHAR(30),
 		active CHAR(1)
 	);
 
 	CREATE TABLE sys_menus (
-		menu_key	SERIAL PRIMARY KEY,
+		menu_key	SERIAL,
 		m_id      VARCHAR(6),
 		m_pid     VARCHAR(6),
 		m_type    CHAR(1),

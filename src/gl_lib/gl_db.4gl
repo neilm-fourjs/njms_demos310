@@ -74,7 +74,7 @@ FUNCTION gldb_connect( l_db STRING )
 				LET m_dbcon = l_db
 			WHEN "sqt"	
 				LET m_dbsrc = fgl_getEnv("SQLITEDB")
-				IF m_dbsrc IS NULL OR m_dbsrc = " " THEN LET m_dbsrc = m_dbdir||os.path.separator()||m_dbnam||".db" END IF
+				IF m_dbsrc IS NULL OR m_dbsrc = " " THEN LET m_dbsrc = os.path.join(m_dbdir,m_dbnam||".db") END IF
 				LET l_lockMode = FALSE
 				LET m_dbdes = "SQLite "||m_dbdrv.subString(7,9)
 				LET m_dbcon = "db+driver='"||m_dbdrv||"',source='"||m_dbsrc||"'"
@@ -91,6 +91,10 @@ FUNCTION gldb_connect( l_db STRING )
 		DISPLAY l_msg
 		IF m_cre_db AND m_dbtyp = "ifx" AND SQLCA.SQLCODE = -329 THEN
 			CALL gldb_ifx_createdb()
+			LET l_msg = NULL
+		END IF
+		IF m_cre_db AND m_dbtyp = "sqt" AND SQLCA.SQLCODE = -6372 THEN
+			CALL gldb_sqt_createdb(m_dbdir, m_dbsrc)
 			LET l_msg = NULL
 		END IF
 		IF SQLCA.SQLCODE = -6366 THEN
@@ -120,6 +124,22 @@ FUNCTION gldb_getDBType() RETURNS STRING
 	RETURN m_dbtyp
 END FUNCTION
 --------------------------------------------------------------------------------
+-- create file and folder for the empty sqlite db and then call the db_connect again
+FUNCTION gldb_sqt_createdb(l_dir STRING, l_file STRING)
+	DEFINE c base.Channel
+	LET c = base.Channel.create()
+	IF NOT os.path.exists( l_dir ) THEN
+		IF NOT os.path.mkdir( l_dir ) THEN
+			CALL gl_lib.gl_exitProgram(STATUS,SFMT("DB Folder Creation Failed for: %1",l_dir))
+		END IF
+	END IF
+	CALL c.openFile(l_file,"w")
+	CALL c.close()
+	LET m_cre_db = FALSE -- avoid infintate loop!
+	CALL gldb_connect( m_dbnam )
+END FUNCTION
+--------------------------------------------------------------------------------
+-- create a new informix database and then call the db_connect again
 FUNCTION gldb_ifx_createdb()
 	DEFINE l_sql_stmt STRING
 	LET l_sql_stmt = "CREATE DATABASE "||m_dbnam||" IN "||m_dbspa
@@ -130,6 +150,7 @@ FUNCTION gldb_ifx_createdb()
 			CALL gl_lib.gl_exitProgram(STATUS,"DB Creation Failed!")
 		END IF
 	END TRY
+	LET m_cre_db = FALSE -- avoid infintate loop!
 	CALL gldb_connect( m_dbnam )
 END FUNCTION
 

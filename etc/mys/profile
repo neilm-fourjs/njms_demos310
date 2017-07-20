@@ -1,0 +1,3 @@
+
+# MySQL
+dbi.default.driver = "dbmmys"

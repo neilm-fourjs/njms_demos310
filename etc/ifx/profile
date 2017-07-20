@@ -1,0 +1,3 @@
+
+# Informix
+dbi.default.driver = "dbmifx"
