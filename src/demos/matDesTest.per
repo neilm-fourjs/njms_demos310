@@ -2,6 +2,7 @@
 ACTION DEFAULTS
 	ACTION msg ( TEXT="Message", IMAGE="fa-info-circle" )
 	ACTION err ( TEXT="Error", IMAGE="fa-exclamation-circle" )
+	ACTION win ( TEXT="Model Window", IMAGE="fa-square-o" )
 END -- AD
 
 TOPMENU
@@ -16,6 +17,7 @@ TOPMENU
 	GROUP opt (TEXT="Option")
 		COMMAND msg
 		COMMAND err
+		COMMAND win
 	END -- opt
 	GROUP help (TEXT="Help")
 		COMMAND about
@@ -29,6 +31,7 @@ TOOLBAR
 	ITEM editpaste
 	ITEM msg
 	ITEM err
+	ITEM win
 END -- TB
 
 LAYOUT ( STYLE="main2" )

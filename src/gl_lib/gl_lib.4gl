@@ -447,7 +447,11 @@ END FUNCTION --}}}
 FUNCTION gl_verFmt( l_ver STRING ) RETURNS STRING --{{{
 	DEFINE x SMALLINT
 	LET x = l_ver.getIndexOf(":",1)
-	RETURN l_ver.subString(X+2, l_ver.getLength() - 1 )
+	IF x = 0 THEN
+		RETURN l_ver
+	ELSE
+		RETURN l_ver.subString(X+2, l_ver.getLength() - 1 )
+	END IF
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Generic message in statusbar.

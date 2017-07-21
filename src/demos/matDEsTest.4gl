@@ -33,8 +33,20 @@ MAIN
 		END DISPLAY
 		ON ACTION msg MESSAGE "Hello Message"
 		ON ACTION err ERROR "Error Message"
+		ON ACTION win CALL win()
 		GL_ABOUT
 		ON ACTION close EXIT DIALOG
 		ON ACTION quit EXIT DIALOG
 	END DIALOG
 END MAIN
+--------------------------------------------------------------------------------
+FUNCTION win()
+
+	OPEN WINDOW win WITH FORM "matDesTest_modal"
+	MENU
+		ON ACTION close EXIT MENU
+		ON ACTION cancel EXIT MENU
+	END MENU
+	CLOSE WINDOW win
+
+END FUNCTION

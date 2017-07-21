@@ -8,3 +8,27 @@ body {
 	font-weight: 400;
 }
 
+
+.gbc_ModalWidget .mt-dialog-header .mt-dialog-title {
+	padding-top: 1px;
+	fill: $mt-white;
+}
+
+.gbc_ModalWidget .mt-dialog-header .mt-dialog-actions {
+	color: $mt-white;
+	fill: $mt-white;
+}
+
+.gbc_ModalWidget .mt-dialog-header {
+//	background-color: $gbc-header-color;
+	background-color: $gbc-primary-medium-color;
+	color: $mt-white;
+	fill: $mt-white;
+	padding: 5px 2px 2px 5px;
+	margin-bottom: 5px;
+}
+
+.gbc_style_center {
+	text-align: center;
+	display: block;
+}
