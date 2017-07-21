@@ -9,7 +9,7 @@ IMPORT FGL new_acct
 
 CONSTANT C_VER="3.1"
 CONSTANT C_TITLE="NJM's Demos"
-CONSTANT C_SPLASH="njm_demo_logo_256"
+CONSTANT C_SPLASH="logo_dark"
 CONSTANT C_ICON="njm_demo_icon"
 CONSTANT PRGDESC = "NJM's Demos Menu System"
 CONSTANT PRGAUTH = "Neil J.Martin"

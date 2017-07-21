@@ -42,7 +42,7 @@ modulum('MyHeaderBarWidget', ['WidgetBase', 'WidgetFactory'],
           this._model.addCurrentWindowChangeListener(this.onCurrentWindowChanged.bind(this));
 
           this.img = this.getElement().querySelector(".njm-logo-top");
-          this.img.src = context.bootstrapInfo.gbcPath+"/img/njm_demo_logo_256.png";
+          this.img.src = context.bootstrapInfo.gbcPath+"/img/logo_light.png";
           // get the banner object
           elb = this.getElement().querySelector(".MyHeaderBarWidget-banner");
         },

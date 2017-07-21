@@ -141,6 +141,7 @@
         <File filePath="gas_deploy/njmweb.xcf"/>
         <File filePath="gas_deploy/njmweb2.xcf"/>
         <File filePath="gas_deploy/njmweb2_d.xcf"/>
+        <File filePath="gas_deploy/njmweb2_t.xcf"/>
         <File filePath="gas_deploy/njmweb_d.xcf"/>
         <File filePath="gas_deploy/njmweb_t.xcf"/>
       </Library>
