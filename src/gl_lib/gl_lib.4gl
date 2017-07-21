@@ -266,10 +266,13 @@ FUNCTION gl_setAppInfo( l_app_name STRING, l_app_build STRING ) --{{{
 		TRY
 			CALL c.openFile("../etc/app_info.txt","r")
 		CATCH
-			RETURN -- abort
+			CALL c.openFile("../etc/app_name.txt","r")
 		END TRY
 		LET l_app_name = c.readLine()
 		LET l_app_build = c.readLine()
+		IF l_app_build IS NULL THEN
+			LET l_app_build = os.path.mtime(".") -- use bin date as a build time
+		END IF
 		CALL c.close()
 	END IF
 	LET gl_app_name = l_app_name
