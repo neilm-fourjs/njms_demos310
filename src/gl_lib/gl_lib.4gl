@@ -260,8 +260,21 @@ END FUNCTION --}}}
 #+ @param l_app_name Appliciation Name
 #+ @param l_app_build Build No / SVN/CVS Revision
 FUNCTION gl_setAppInfo( l_app_name STRING, l_app_build STRING ) --{{{
+	DEFINE c base.Channel
+	IF l_app_name IS NULL THEN
+		LET c = base.Channel.create()
+		TRY
+			CALL c.openFile("../etc/app_info.txt","r")
+		CATCH
+			RETURN -- abort
+		END TRY
+		LET l_app_name = c.readLine()
+		LET l_app_build = c.readLine()
+		CALL c.close()
+	END IF
 	LET gl_app_name = l_app_name
-	LET gl_app_build = gl_verFmt( l_app_build )
+	LET gl_app_build = l_app_build
+	GL_DBGMSG(0, "App: "||NVL(l_app_name,"NULL")||" Buiild: "||NVL(l_app_build,"NULL"))
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Form Initializer. Call automatically set setDefaultinitializer is used.
@@ -898,6 +911,8 @@ FUNCTION gl_about(l_ver STRING) --{{{
 		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
 		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
 	END IF
+
+	IF gl_app_name IS NULL THEN CALL gl_setAppInfo( NULL, NULL ) END IF
 
 	OPEN WINDOW about AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE="naked")
 	LET n = gl_getWinNode(NULL)

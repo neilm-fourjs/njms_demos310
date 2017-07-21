@@ -5,10 +5,12 @@
 IMPORT os
 IMPORT FGL lib_secure
 IMPORT FGL gl_lib
+
+&include "genero_lib.inc"
 &include "schema.inc"
 
 TYPE f_new_account FUNCTION() RETURNS STRING
-
+CONSTANT C_VER="3.1"
 CONSTANT EMAILPROG = "sendemail.sh" --"fglrun sendemail.42r"
 CONSTANT c_sym = "!$%^&*,.;@#?<>" -- valid symbols for use in a password
 PUBLIC DEFINE m_logo_image STRING
@@ -64,6 +66,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 			LET l_login = m_new_acc_func() -- create a new account
 			IF l_login IS NOT NULL THEN EXIT INPUT END IF
 		ON ACTION forgotten CALL forgotten(l_login)
+		GL_ABOUT
 	END INPUT
 	CLOSE WINDOW login
 

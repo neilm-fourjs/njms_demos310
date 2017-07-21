@@ -35,16 +35,19 @@ TOOLBAR
 END -- TB
 
 LAYOUT ( STYLE="main2" )
-HBOX
+HBOX ( SPLITTER )
 GRID
 {
-A simple grid
+A simple grid with some fields
 Edit Field: [f001        ]
 DateEdit:   [f002           ]
 Readonly:   [f003  ]
 <G "A Group"                   >
- This a group
+ This a group with a field
+ Edit Field:[f004        ]
 <                              >
+ [logo                        ]
+ [                            ]
 <T tab                         >
  [a001               |a002    ]
  [a001               |a002    ]
@@ -53,24 +56,27 @@ Readonly:   [f003  ]
  [a001               |a002    ]
  [a001               |a002    ]
 <                              >
-[but1][msg      ][err       ]
+[: :but1  :msg      :err    : :]
 }
 END -- GRID
 FOLDER
 PAGE p1 (TEXT="Page1")
 GRID
 {
-page 1
-<G "A Group"      >
+Some text on a page.
+-------------------------
+[""]
+<G "A Group"            >
  text in a group
-<                 >
+ Edit Field: [f005     ]
+<                       >
 }
 END -- GRID
 END -- PAGE
 PAGE p2 (TEXT="Page2")
 GRID
 {
-page 2
+page 2 is almost empty
 }
 END -- GRID
 END -- PAGE
@@ -82,6 +88,9 @@ ATTRIBUTES
 f001 = FORMONLY.str;
 DATEEDIT f002 = FORMONLY.dt;
 f003 = FORMONLY.fld3;
+f004 = FORMONLY.fld4;
+f005 = FORMONLY.fld5;
+IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder";
 
 a001 = FORMONLY.fld1, TITLE="Title1";
 a002 = FORMONLY.fld2, TITLE="Fld2";
