@@ -33,23 +33,14 @@ modulum('MySessionEndWidget', ['WidgetBase', 'WidgetFactory'],
         setSessionLinks: function(base, session) {
           $super.setSessionLinks.call(this, base, session);
 
-					// NOT USING A REDIRECT
-          // update redirection link url of the template
-          // var redirectionLink = this._element.getElementsByClassName("redirectionLink")[0];
-          // redirectionLink.title = i18next.t("mycusto.session.redirectionText");
-          // var url = "http://www.google.com";
-          // redirectionLink.href = url;
+					var appInfo = gbc.SessionService.getCurrent().info();
+					var demoLinks = this._element.getElementsByClassName("demolink");
+					var x;
+					for (x = 0; x < demoLinks.length; x++) {
+						var url = appInfo.customUA || appInfo.connector + "/" + appInfo.mode + "/r/" + demoLinks[x].title;
+						demoLinks[x].href = url;
+					}
 
-          // var modelHelper = new cls.ModelHelper(this);
-
-          // launch the redirection after a delay of 10 seconds
-          // to remove the delay, remove the setTimeout
-          //setTimeout(function () {
-            // check if an application is running in the current session before reloading
-          //  if(!modelHelper.getCurrentApplication()) {
-          //    window.location = url;
-          //  }
-          //}.bind(this), 10000); // 10000ms
         }
       };
     });
