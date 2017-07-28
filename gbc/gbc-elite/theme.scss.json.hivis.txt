@@ -14,7 +14,7 @@
 
   "gbc-secondary-background-color"       : Table bg - Folder bg
   "gbc-secondary-text-color"             : GBC CtrlBar fg - TopMenu fg - Group Title fg - Table Head fg
-  "gbc-secondary-color"                  : NOT USED
+  "gbc-secondary-color"                  : bottom border for all fields not in focus
 
   "gbc-field-disabled-background-color"  : "$mt-grey-100",
   "gbc-field-disabled-background"        : "rgba(0,0,0,0.44)",
