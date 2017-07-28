@@ -61,3 +61,6 @@ body {
 	color: $gbc-primary-color;
 }
 
+.gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next {
+	width: 0px;
+}
