@@ -40,10 +40,11 @@ GRID
 {
  [lab1       ][f001      ]
  [lab2       ][f002           ]
- [lab3       ][f003  ]
+ [lab3       ][f003           ]
+ [lab4       ][f004      :a   ]
 <G g1                          >
- [lab4       ][f004         ]
- [lab5       ][f005           ]
+ [lab5       ][f005         ]
+ [lab6       ][f006           ]
 <                              >
  more text outside of group.
 <T tab                         >
@@ -68,8 +69,8 @@ Some text on a page.
 [""]
 <G g2                   >
  text in a group
- Live Field: [f006     ]
- Dead Field: [f007     ]
+ Live Field: [p101     ]
+ Dead Field: [p102     ]
 <                       >
 }
 END -- GRID
@@ -97,17 +98,20 @@ GROUP g2 : g2, TEXT="A Group #2";
 
 LABEL lab1 : lab1, TEXT="A Field:",JUSTIFY=RIGHT;
 LABEL lab2 : lab2, TEXT="DateEdit:",JUSTIFY=RIGHT;
-LABEL lab3 : lab3, TEXT="Readonly:",JUSTIFY=RIGHT;
-LABEL lab4 : lab4, TEXT="Live Field:",JUSTIFY=RIGHT;
-LABEL lab5 : lab5, TEXT="Dead Field:",JUSTIFY=RIGHT;
+LABEL lab3 : lab3, TEXT="Combo:",JUSTIFY=RIGHT;
+LABEL lab4 : lab4, TEXT="Readonly:",JUSTIFY=RIGHT;
+LABEL lab5 : lab5, TEXT="Live Field:",JUSTIFY=RIGHT;
+LABEL lab6 : lab6, TEXT="Dead Field:",JUSTIFY=RIGHT;
 
 BUTTONEDIT f001 = FORMONLY.fld1, ACTION=win;
 DATEEDIT f002 = FORMONLY.fld2;
-f003 = FORMONLY.fld3;
-f004 = FORMONLY.fld4;
+COMBOBOX f003 = FORMONLY.fld3, ITEMS=("Red","Blue","Green");
+f004 = FORMONLY.fld4, NOENTRY;
 f005 = FORMONLY.fld5;
-f006 = FORMONLY.fld6;
-f007 = FORMONLY.fld7;
+f006 = FORMONLY.fld6, NOENTRY;
+p101 = FORMONLY.fld7;
+p102 = FORMONLY.fld8, NOENTRY;
+CHECKBOX a = FORMONLY.okay, VALUECHECKED=1, VALUEUNCHECKED=0, TEXT="Ok?";
 IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder center";
 
 a001 = FORMONLY.col1, TITLE="Title1", IMAGECOLUMN=img;

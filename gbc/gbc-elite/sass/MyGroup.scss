@@ -1,0 +1,30 @@
+
+.gbc_GroupWidget {
+	background-color: inherit;
+}
+
+.gbc_GroupWidgetContainer {
+	/*border-radius: 25px 25px 0px 0px;*/
+	border-radius: 25px 25px 25px 25px;
+	border: 1px solid $gbc-primary-medium-color;
+	padding: 5px;
+
+	.containerElement {
+		padding: 5px;
+	}
+
+	.gbc_GroupWidgetContent {
+
+		.gbc_GroupTitleWidget:not(.empty) {
+			border-radius: 25px 25px 0px 0px;
+			font-size: 1.2em;
+			font-weight: bold;
+			padding: 1px;
+			margin: 0px;
+			text-align: center;
+			text-shadow: 1px 1px 2px $mt-black;
+			color: $gbc-secondary-text-color;
+			background-color: $gbc-primary-medium-color;
+		}
+	}
+}

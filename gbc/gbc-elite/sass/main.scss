@@ -1,0 +1,63 @@
+
+body {
+	-webkit-font-smoothing: antialiased;
+	color: $gbc-primary-color;
+	font-family: "Roboto",Arial,Verdana,Helvetica,sans-serif;
+	margin: 0px 0px 0px 0px;
+	background: black;
+}
+
+.gbc_ModalWidget .mt-dialog-header .mt-dialog-title {
+	padding-top: 1px;
+	fill: $gbc-secondary-text-color;
+}
+
+.gbc_ModalWidget .mt-dialog-header .mt-dialog-actions {
+	color: $gbc-secondary-text-color;
+	fill: $gbc-secondary-text-color;
+}
+
+.gbc_ModalWidget .mt-dialog-header {
+	background-color: $gbc-primary-medium-color;
+	color: $gbc-secondary-text-color;
+	fill: $gbc-secondary-text-color;
+	padding: 5px 2px 2px 5px;
+	margin-bottom: 5px;
+}
+
+.gbc_style_center {
+	text-align: center;
+	display: block;
+}
+
+.gbc_UserInterfaceWidget > .gbc_barsContainer {
+	color: $gbc-secondary-text-color;
+	fill: $gbc-secondary-text-color;
+}
+
+.mt-field {
+	color: $gbc-secondary-text-color;
+	border: $gbc-secondary-color;
+}
+
+.gbc_DropDownContainerWidget:not(.hidden) {
+	color: $gbc-secondary-text-color;
+	fill: $gbc-secondary-text-color;
+}
+
+.gbc_style_heading {
+	border-radius: 25px 25px 25px 25px;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 1px 20px 1px 20px;
+	margin: 0px;
+	text-align: center;
+	text-shadow: 1px 1px 2px $mt-black;
+	color: $gbc-secondary-text-color;
+	background-color: $gbc-primary-medium-color;
+}
+
+[__ComboBoxWidget].zmdi-menu-down {
+	color: $gbc-primary-color;
+}
+

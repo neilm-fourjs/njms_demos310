@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="30a04" version="3.2">
+<Project defaultApplication="1848127715" gstVersion="30a04" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Cordova plugins" editorInfo="isDynamic:true;title:Cordova;description:Cordova plugins;icon:checkbox_checked" initialValue="" isDefaultInherited="false" isHidden="false" label="Cordova Plugins" name="cordova" readOnly="false" type="MULTIPLEBOOLEAN"/>

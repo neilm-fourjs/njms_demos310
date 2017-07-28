@@ -8,8 +8,13 @@ MAIN
 	DEFINE l_rec RECORD
 		fld1 CHAR(10),
 		fld2 DATE,
+		fld3 STRING,
 		fld4 STRING,
-		fld6 STRING
+		fld5 STRING,
+		fld6 STRING,
+		fld7 STRING,
+		fld8 STRING,
+		okay BOOLEAN
 	END RECORD
 	DEFINE l_arr DYNAMIC ARRAY OF RECORD
 		col1 STRING,
@@ -32,12 +37,12 @@ MAIN
 
 	LET l_rec.fld1 = "Active"
 	LET l_rec.fld2 = TODAY
-	LET l_rec.fld4 = "Active"
-	LET l_rec.fld6 = "Active"
-
-	DISPLAY "Not active" TO fld3
-	DISPLAY "Not active" TO fld5
-	DISPLAY "Not active" TO fld7
+	LET l_rec.fld3 = "Red"
+	LET l_rec.fld4 = "Inactive"
+	LET l_rec.fld5 = "Active"
+	LET l_rec.fld6 = "Inactive"
+	LET l_rec.fld7 = "Active"
+	LET l_rec.fld8 = "Inactive"
 
 	DIALOG ATTRIBUTE(UNBUFFERED)
 		INPUT BY NAME l_rec.* ATTRIBUTES( WITHOUT DEFAULTS )
