@@ -38,16 +38,14 @@ LAYOUT ( STYLE="main2" )
 HBOX ( SPLITTER )
 GRID
 {
-A simple grid with some fields
-Edit Field: [f001        ]
-DateEdit:   [f002           ]
-Readonly:   [f003  ]
-<G "A Group"                   >
- This a group with a field
- Edit Field:[f004        ]
+ [lab1       ][f001      ]
+ [lab2       ][f002           ]
+ [lab3       ][f003  ]
+<G g1                          >
+ [lab4       ][f004         ]
+ [lab5       ][f005           ]
 <                              >
- [logo                        ]
- [                            ]
+ more text outside of group.
 <T tab                         >
  [a001               |a002    ]
  [a001               |a002    ]
@@ -59,21 +57,24 @@ Readonly:   [f003  ]
 [: :but1  :msg      :err    : :]
 }
 END -- GRID
+VBOX
+
 FOLDER
-PAGE p1 (TEXT="Page1")
+PAGE p1 (TEXT="Page1", IMAGE="fa-smile-o")
 GRID
 {
 Some text on a page.
--------------------------
+------------------------
 [""]
-<G "A Group"            >
+<G g2                   >
  text in a group
- Edit Field: [f005     ]
+ Live Field: [f006     ]
+ Dead Field: [f007     ]
 <                       >
 }
 END -- GRID
 END -- PAGE
-PAGE p2 (TEXT="Page2")
+PAGE p2 (TEXT="Page2", IMAGE="fa-frown-o")
 GRID
 {
 page 2 is almost empty
@@ -81,23 +82,41 @@ page 2 is almost empty
 END -- GRID
 END -- PAGE
 END -- FOLDER
+GRID
+{
+[logo                         ]
+}
+END -- GRID
+END -- VBOX
 END -- HBOX
 
 ATTRIBUTES
 
-f001 = FORMONLY.str;
-DATEEDIT f002 = FORMONLY.dt;
+GROUP g1 : g1, TEXT="A Group #1", GRIDCHILDRENINPARENT;
+GROUP g2 : g2, TEXT="A Group #2";
+
+LABEL lab1 : lab1, TEXT="A Field:",JUSTIFY=RIGHT;
+LABEL lab2 : lab2, TEXT="DateEdit:",JUSTIFY=RIGHT;
+LABEL lab3 : lab3, TEXT="Readonly:",JUSTIFY=RIGHT;
+LABEL lab4 : lab4, TEXT="Live Field:",JUSTIFY=RIGHT;
+LABEL lab5 : lab5, TEXT="Dead Field:",JUSTIFY=RIGHT;
+
+BUTTONEDIT f001 = FORMONLY.fld1, ACTION=win;
+DATEEDIT f002 = FORMONLY.fld2;
 f003 = FORMONLY.fld3;
 f004 = FORMONLY.fld4;
 f005 = FORMONLY.fld5;
-IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder";
+f006 = FORMONLY.fld6;
+f007 = FORMONLY.fld7;
+IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder center";
 
-a001 = FORMONLY.fld1, TITLE="Title1";
-a002 = FORMONLY.fld2, TITLE="Fld2";
+a001 = FORMONLY.col1, TITLE="Title1", IMAGECOLUMN=img;
+a002 = FORMONLY.col2, TITLE="Fld2";
+PHANTOM FORMONLY.img;
 
 BUTTON but1 : quit;
 BUTTON msg : msg;
 BUTTON err: err;
 
 INSTRUCTIONS
-SCREEN RECORD arr ( FORMONLY.fld1 THRU FORMONLY.fld2 )
+SCREEN RECORD arr ( FORMONLY.col1 THRU FORMONLY.img )

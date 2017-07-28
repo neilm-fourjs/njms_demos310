@@ -32,3 +32,11 @@ body {
 	text-align: center;
 	display: block;
 }
+
+.mt-field {
+	border-bottom: none;
+}
+
+.mt-field.gbc_Focus {
+	border-bottom: 1px solid $gbc-primary-medium-color;
+}

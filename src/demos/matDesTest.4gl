@@ -6,12 +6,15 @@ CONSTANT PRGDESC = "Material Design Test"
 CONSTANT PRGAUTH = "Neil J.Martin"
 MAIN
 	DEFINE l_rec RECORD
-		str STRING,
-		dt DATE
+		fld1 CHAR(10),
+		fld2 DATE,
+		fld4 STRING,
+		fld6 STRING
 	END RECORD
 	DEFINE l_arr DYNAMIC ARRAY OF RECORD
-		fld1 STRING,
-		fld2 SMALLINT
+		col1 STRING,
+		col2 SMALLINT,
+		img STRING
 	END RECORD
 	DEFINE x SMALLINT
 	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, PRGDESC, PRGAUTH)
@@ -19,15 +22,25 @@ MAIN
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
 	FOR X = 1 TO 5
-		LET l_arr[x].fld1 = "Row "||x
-		LET l_arr[x].fld2 = x
+		LET l_arr[x].col1 = "Row "||x
+		LET l_arr[x].col2 = x
+		LET l_arr[x].img = "fa-smile-o"
 	END FOR
 
 	OPEN FORM f FROM "matDesTest"
 	DISPLAY FORM f
 
+	LET l_rec.fld1 = "Active"
+	LET l_rec.fld2 = TODAY
+	LET l_rec.fld4 = "Active"
+	LET l_rec.fld6 = "Active"
+
+	DISPLAY "Not active" TO fld3
+	DISPLAY "Not active" TO fld5
+	DISPLAY "Not active" TO fld7
+
 	DIALOG ATTRIBUTE(UNBUFFERED)
-		INPUT BY NAME l_rec.*
+		INPUT BY NAME l_rec.* ATTRIBUTES( WITHOUT DEFAULTS )
 		END INPUT
 		DISPLAY ARRAY l_arr TO arr.*
 		END DISPLAY

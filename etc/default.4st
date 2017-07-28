@@ -10,6 +10,11 @@ Property of Four Js*
 -->
 
 <StyleList>
+	<Style name=".heading">
+		<StyleAttribute name="fontSize" value="1.6em" />
+		<StyleAttribute name="fontWeight" value="bold" />
+		<StyleAttribute name="position" value="center" />
+	</Style>
 	<Style name=".em16">
 		<StyleAttribute name="fontSize" value="1.6em" />
 	</Style>

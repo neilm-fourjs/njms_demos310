@@ -17,20 +17,21 @@ END -- GRID
 GROUP
 GRID (STYLE="menu")
 {
- [sp1:logo                     :sp2]
- [titl                             ]
-<T menu                             >
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
-<                                   >
- [: :lb:f001                    : :]
- [: :accept :back  :close :about: :]
+  [sp1:logo                     :sp2]
+
+  [titl                             ]
+ <T menu                             >
+  [desc                             ]
+  [desc                             ]
+  [desc                             ]
+  [desc                             ]
+  [desc                             ]
+  [desc                             ]
+  [desc                             ]
+  [desc                             ]
+ <                                   >
+  [: :lb:f001                    : :]
+  [: :accept :back  :close :about: :]
 }
 END -- GRID
 END -- GROUP
@@ -58,7 +59,7 @@ IMAGE vsp2 : spacer, IMAGE="fa-fw", STRETCH=Y, STYLE="noborder";
 IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
 IMAGE logo = FORMONLY.logo, SIZEPOLICY=INITIAL, STYLE="noborder";
 IMAGE sp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
-LABEL titl = FORMONLY.l_titl,STYLE="bold em16",JUSTIFY=CENTER;
+LABEL titl = FORMONLY.l_titl,STYLE="heading",JUSTIFY=CENTER;
 
 TABLE menu : menu, STYLE="menu oneclick";
 PHANTOM sys_menus.menu_key;
