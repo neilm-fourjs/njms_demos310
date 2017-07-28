@@ -19,6 +19,7 @@
   "gbc-field-disabled-background-color"  : "$mt-grey-100",
   "gbc-field-disabled-background"        : "rgba(0,0,0,0.44)",
   "gbc-field-background-color"           : "$mt-white",
+  "gbc-field-text-color"                 : "$mt-black",
   "gbc-disabled-color"                   : "$mt-grey-300",
 
   "gbc-separator-color"                  : "$mt-white",

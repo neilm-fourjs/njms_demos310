@@ -13,12 +13,13 @@
   "gbc-primary-light-color"              : Toolbar hover bg
 
   "gbc-secondary-background-color"       : Table bg - Folder bg
-  "gbc-secondary-text-color"             : GBC CtrlBar fg - TopMenu fg - Toolbar fg - Group Title fg - Table Head fg - F Page fg - field fg
+  "gbc-secondary-text-color"             : GBC CtrlBar fg - TopMenu fg - Group Title fg - Table Head fg
   "gbc-secondary-color"                  : NOT USED
 
   "gbc-field-disabled-background-color"  : "$mt-grey-100",
   "gbc-field-disabled-background"        : "rgba(0,0,0,0.44)",
   "gbc-field-background-color"           : "$mt-white",
+  "gbc-field-text-color"                 : Field-text - F Page fg - Toolbar fg - TopMenu drop down fg
   "gbc-disabled-color"                   : "$mt-grey-300",
 
   "gbc-separator-color"                  : "$mt-white",

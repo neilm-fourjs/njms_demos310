@@ -36,13 +36,13 @@ body {
 }
 
 .mt-field {
-	color: $gbc-secondary-text-color;
+	color: $gbc-field-text-color;
 	border: $gbc-secondary-color;
 }
 
 .gbc_DropDownContainerWidget:not(.hidden) {
-	color: $gbc-secondary-text-color;
-	fill: $gbc-secondary-text-color;
+  color: $gbc-field-text-color;
+  fill: $gbc-field-text-color;
 }
 
 .gbc_style_heading {
