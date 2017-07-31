@@ -61,7 +61,7 @@ LABEL passwd     : pw, TEXT=%"Password:", JUSTIFY=RIGHT;
 LABEL passexp    : pe, TEXT=%"Password Expires:",JUSTIFY=RIGHT;
 
 f001 = sys_users.user_key, DEFAULT=0;
-f007 = sys_users.email, NOT NULL, REQUIRED, TABINDEX=1;
+f007 = sys_users.email, NOT NULL, REQUIRED, TABINDEX=1, DOWNSHIFT;
 f003 = sys_users.salutation, TABINDEX=2;
 f004 = sys_users.forenames, NOT NULL, REQUIRED, TABINDEX=3;
 f005 = sys_users.surname, NOT NULL, REQUIRED, TABINDEX=4;

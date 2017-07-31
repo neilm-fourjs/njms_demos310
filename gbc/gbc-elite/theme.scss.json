@@ -8,7 +8,7 @@
   "gbc-header-color"                     : "#260f00",
   "gbc-primary-medium-color"             : "#ff6b0b",
 
-  "gbc-primary-background-color"         : "invalid-color",
+  "gbc-primary-background-color"         : "$mt-black",
   "gbc-primary-color"                    : "#ff6b0b",
   "gbc-primary-light-color"              : "#ff6b0b",
 

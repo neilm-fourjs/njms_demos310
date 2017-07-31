@@ -6,4 +6,8 @@ cd gbc
 make
 cd ..
 
+if [ -z "$FGLDIR" ]; then
+	. env310
+fi
+
 gsmake njms_demos310.4pw

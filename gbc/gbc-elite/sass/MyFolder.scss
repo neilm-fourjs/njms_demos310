@@ -1,5 +1,12 @@
 
+.mt-tab-items[__FolderWidget] {
+  background: linear-gradient($gbc-secondary-background-color, $gbc-primary-background-color);
+}
+
 .gbc_FolderWidget {
+	background-color: inherit;
+}
+.gbc_PageWidget {
 	background-color: inherit;
 }
 

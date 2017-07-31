@@ -63,3 +63,23 @@
 [__MySessionEndWidget].redirectionLink {
   display: none;
 }
+
+table#demos {
+	background: linear-gradient($gbc-primary-background-color, $gbc-secondary-background-color);
+	border: 1px solid $gbc-primary-color;
+	th {
+		background: $gbc-primary-color;
+		text-align: center;
+		color: $gbc-secondary-text-color;
+		padding: 2px 5px;
+	}
+	td {
+		text-align: left;
+		color: $gbc-primary-color;
+		padding: 2px 5px;
+	}
+	a {
+		color: $gbc-primary-color;
+	}
+}
+

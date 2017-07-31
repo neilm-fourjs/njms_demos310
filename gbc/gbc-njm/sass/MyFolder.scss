@@ -1,10 +1,21 @@
 
+.mt-tab-items[__FolderWidget] {
+  background: linear-gradient($gbc-secondary-background-color, $gbc-primary-background-color);
+}
+
 .gbc_FolderWidget {
+	background-color: inherit;
+}
+.gbc_PageWidget {
 	background-color: inherit;
 }
 
 .mt-tab-previous, .mt-tab-next {
 	width: 0px;
+}
+
+.mt-tabs[__FolderWidget] {
+	box-shadow: none;
 }
 
 .mt-tab-titles {

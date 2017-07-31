@@ -1,45 +1,54 @@
 .gbc_MySessionEndWidget {
   position: absolute;
   top: 5px;
-  left: 5px;
+  left: 50px;
   bottom: 5px;
-  right: 5px;
+  right: 50px;
   display: normal;
 }
 .myHeaderText {
 	display: none;
 }
+
 [__MySessionEndWidget].mt-card {
-  padding: 16px 16px 16px 16px;
-  margin: 10px 0px 10px 0px;
+  text-align: center;
+  padding: 6px 60px 6px 60px;
+  margin: 20px 0px 0px 0px;
 	background-color: $gbc-primary-background-color;
 	font-size: 12pt;
-  text-align: center;
 }
+
 [__MySessionEndWidget].mt-card-body {
-  padding: 16px;
+  padding: 6px;
 }
+
 [__MySessionEndWidget].mt-card-session {
   text-align: center;
-  padding: 6px;
-  margin: 0px;
+  padding: 6px 60px 6px 60px;
+  margin: 20px 0px 0px 0px;
 	background-color: $gbc-secondary-background-color;
 	font-size: 8pt;
 }
+
 [__MySessionEndWidget].mt-card-header-text {
 	margin-left: auto;
 	margin-right: auto;
 	font-size: 14pt;
-	line-height: 20px;
 	padding: 4px;
 	border-bottom: 1px solid;
 }
+
+.mt-card > .mt-card-richhead .mt-card-header-text {
+  line-height: 20px;
+}
+
 .mt-card > .mt-card-richhead {
 	height: initial;
 	position: relative;
 	border-bottom: none;
   text-align: center;
 }
+
 [__MySessionEndWidget].session {
 	padding: 10px 6px 6px 6px;
 	border: none;
@@ -64,7 +73,22 @@
   display: none;
 }
 
-.demoitem > a {
-	color: white;
+table#demos {
+	background: linear-gradient($gbc-primary-background-color, $gbc-secondary-background-color);
+	border: 1px solid $gbc-primary-color;
+	th {
+		background: $gbc-primary-color;
+		text-align: center;
+		color: $gbc-secondary-text-color;
+		padding: 2px 5px;
+	}
+	td {
+		text-align: left;
+		color: $gbc-primary-color;
+		padding: 2px 5px;
+	}
+	a {
+		color: $gbc-primary-color;
+	}
 }
 

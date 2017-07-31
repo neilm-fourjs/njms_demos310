@@ -5,7 +5,9 @@ $gbc-TableWidget-headers-color: $gbc-primary-medium-color !important;
 
 .gbc_TableWidget {
 
-	background-color: $gbc-secondary-background-color;
+//	background-color: $gbc-secondary-background-color;
+	background: linear-gradient($gbc-secondary-background-color, $gbc-primary-background-color);
+
 
 	color: $gbc-primary-color;
 	fill: $gbc-primary-color;

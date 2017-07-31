@@ -113,6 +113,6 @@ Property of Four Js*
 		<StyleAttribute name="statusBarType" value="none" />
 	</Style>
 	<Style name="UserInterface">
-		<StyleAttribute name="browserMultiPage" value="yes" />
+		<StyleAttribute name="browserMultiPage" value="no" />
 	</Style>
 </StyleList>
