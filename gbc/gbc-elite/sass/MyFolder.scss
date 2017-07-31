@@ -7,11 +7,15 @@
 	background-color: inherit;
 }
 .gbc_PageWidget {
-	background-color: inherit;
+  background: linear-gradient($gbc-secondary-background-color, $gbc-primary-background-color);
 }
 
 .mt-tab-previous, .mt-tab-next {
 	width: 0px;
+}
+
+.mt-tabs[__FolderWidget] {
+	box-shadow: none;
 }
 
 .mt-tab-titles {

@@ -85,7 +85,7 @@ MAIN
 	CALL mk_sql( "1=2" ) -- not fetching any data.
 	CALL mk_form()
 	CALL gl_lib.gl_titleWin(NULL)
- 
+ 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 	MENU
 		BEFORE MENU
 			CALL app_lib.setActions(m_row_cur,m_row_count, m_allowedActions)

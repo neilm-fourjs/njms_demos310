@@ -79,6 +79,8 @@ PAGE p2 (TEXT="Page2", IMAGE="fa-frown-o")
 GRID
 {
 page 2 is almost empty
+<G "Logo in a group box"        >
+ [logo2                        ]
 }
 END -- GRID
 END -- PAGE
@@ -113,6 +115,7 @@ p101 = FORMONLY.fld7;
 p102 = FORMONLY.fld8, NOENTRY;
 CHECKBOX a = FORMONLY.okay, VALUECHECKED=1, VALUEUNCHECKED=0, TEXT="Ok?";
 IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder center";
+IMAGE logo2 : logo2, IMAGE="logo_light", SIZEPOLICY=INITIAL,STYLE="noborder center";
 
 a001 = FORMONLY.col1, TITLE="Title1", IMAGECOLUMN=img;
 a002 = FORMONLY.col2, TITLE="Fld2";

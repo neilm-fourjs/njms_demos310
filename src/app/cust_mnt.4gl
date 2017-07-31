@@ -59,6 +59,7 @@ MAIN
 
 	OPEN FORM frm FROM "cust_mnt"
 	DISPLAY FORM frm
+	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
 	TRY
 		DECLARE fetch_row CURSOR FOR SELECT * FROM TABNAME 
