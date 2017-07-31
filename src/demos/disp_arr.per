@@ -1,0 +1,90 @@
+
+ACTION DEFAULTS
+	ACTION clrarr (TEXT="Clear", IMAGE="fa-eraser")
+	ACTION poparr (TEXT="Populate", IMAGE="fa-magic")
+	ACTION insert (TEXT="Insert", IMAGE="fa-square-o")
+	ACTION append (TEXT="Append", IMAGE="fa-plus-square-o")
+	ACTION delete (TEXT="Remove", IMAGE="fa-minus-square-o")
+	ACTION update (TEXT="Update", IMAGE="fa-pencil-square-o")
+	ACTION quit (TEXT="Quit", IMAGE="fa-power-off")
+END -- AD
+
+TOPMENU
+	GROUP file ( TEXT="File" )
+		COMMAND accept
+		COMMAND cancel
+		COMMAND quit
+	END -- G
+	GROUP fnd ( TEXT="Find" )
+		COMMAND find
+		COMMAND findnext
+	END -- G
+	GROUP ar ( TEXT="Array" )
+		COMMAND clrarr
+		COMMAND poparr
+		SEPARATOR
+		COMMAND insert
+		COMMAND append
+		COMMAND update
+		COMMAND delete
+	END -- G
+END -- TM
+
+TOOLBAR
+	ITEM quit
+	ITEM accept
+	ITEM cancel
+	SEPARATOR
+	ITEM clrarr
+	ITEM poparr
+	SEPARATOR
+	ITEM insert
+	ITEM append
+	ITEM update
+	ITEM delete
+END -- TB
+
+LAYOUT ( TEXT="2.40 Display Array Features.", STYLE="main2" )
+VBOX
+TABLE ( DOUBLECLICK=select, STYLE="disparr" )
+{
+[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a ]
+                                   [t1 ][t2          ]
+}
+END -- TABLE
+GRID ( COMMENT="Manual Totals" )
+{
+Total of selected rows:[stot        ][t ][btot]
+}
+END -- GRID
+END -- VBOX
+
+ATTRIBUTES
+
+a001 = FORMONLY.key,TITLE="Key:", NOENTRY;
+a002 = FORMONLY.desc,TITLE="Description",REQUIRED;
+a003 = FORMONLY.pri,TITLE="Price", NOT NULL,REQUIRED;
+a04  = FORMONLY.qty,TITLE="Qty", NOT NULL,REQUIRED;
+a005 = FORMONLY.tot,TITLE="Total", NOENTRY;
+-- a = FORMONLY.chkd;
+IMAGE a = FORMONLY.chkd;
+
+AGGREGATE t1 = FORMONLY.t1,AGGREGATETEXT="Totals:";
+AGGREGATE t2 = FORMONLY.t2;
+--AGGREGATE t = FORMONLY.t,AGGREGATETYPE=PROGRAM;
+t = FORMONLY.t;
+--AGGREGATE t2 = FORMONLY.t2,AGGREGATETYPE=PROGRAM;
+
+stot = FORMONLY.stot;
+BUTTON btot : tot,TEXT="Total Selected";
+INSTRUCTIONS
+SCREEN RECORD arr ( key THRU chkd );

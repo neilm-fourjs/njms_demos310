@@ -59,7 +59,7 @@
   </Settings>
   <LanguageList version="1.0"/>
   <PlatformList version="1.0"/>
-  <Group environment="value:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FGLPROFILE=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -173,6 +173,11 @@
       </Library>
     </Group>
     <Group label="Demo Apps" language="Genero">
+      <Application binaryName="dispArr" dependencies="14000" id="62326091" label="dispArr">
+        <File filePath="src/demos/disp_arr.4gl"/>
+        <File filePath="src/demos/disp_arr.per"/>
+        <File filePath="src/demos/fglfind.4gl"/>
+      </Application>
       <Application binaryName="ipodTree" dependencies="14000" id="-217822240" label="ipodTree">
         <File filePath="src/demos/ipod.4gl"/>
         <File filePath="src/demos/ipod.per"/>

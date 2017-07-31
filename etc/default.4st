@@ -47,6 +47,13 @@ Property of Four Js*
 		<StyleAttribute name="headerHidden" value="yes" />
 	</Style>
 
+	<Style name="Table.disparr">
+		<StyleAttribute name="summaryLineAlwaysAtBottom" value="no" />
+	</Style>
+  <Style name='Table.disparr:odd'>
+    <StyleAttribute name='backgroundColor'           value='#D5FFD5'/>
+  </Style>
+
 	<Style name="Window">
 		<StyleAttribute name="windowType" value="normal" />
 	</Style>

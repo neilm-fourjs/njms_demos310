@@ -12,6 +12,8 @@ IMPORT os
 IMPORT FGL gl_lib
 &include "genero_lib.inc"
 CONSTANT C_VER="3.1"
+CONSTANT PRGDESC = "TreeView Demo"
+CONSTANT PRGAUTH = "Neil J.Martin"
 
 CONSTANT IDLE_TIME = 300
 
@@ -90,7 +92,9 @@ MAIN
 
 	OPTIONS ON CLOSE APPLICATION CALL tidyup
 
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,"ipodtree",TRUE)
+	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
 	OPEN FORM win FROM "ipod"
 	DISPLAY FORM win
