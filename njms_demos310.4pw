@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1848127715" gstVersion="30a04" version="3.2">
+<Project defaultApplication="1554019048" gstVersion="30a04" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Cordova plugins" editorInfo="isDynamic:true;title:Cordova;description:Cordova plugins;icon:checkbox_checked" initialValue="" isDefaultInherited="false" isHidden="false" label="Cordova Plugins" name="cordova" readOnly="false" type="MULTIPLEBOOLEAN"/>
@@ -179,11 +179,6 @@
         <File filePath="src/demos/ipod_sax.4gl"/>
         <File filePath="etc/ipodtree.4st"/>
       </Application>
-      <Application binaryName="materialDesignTest" dependencies="14000,-400184264" id="1848127715" label="materialDesignTest">
-        <File filePath="src/demos/matDesTest.4gl"/>
-        <File filePath="src/demos/matDesTest.per"/>
-        <File filePath="src/demos/matDesTest_modal.per"/>
-      </Application>
       <Application binaryName="picFlow" commandLineArguments="S 1 ../pics" dependencies="14000" id="-183914303" label="picFlow">
         <File filePath="src/demos/picflow.4gl"/>
         <File filePath="etc/picflow.4st"/>
@@ -264,6 +259,17 @@
       <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,14000" id="-1334009856" label="user_mnt">
         <File filePath="src/sys/user_mnt.4gl"/>
         <File filePath="src/sys/user_mnt.per"/>
+      </Application>
+    </Group>
+    <Group label="Utils">
+      <Application binaryName="fontAwesome" dependencies="-400184264,14000" id="-531765990" label="fontAwesome">
+        <File filePath="src/utils/fontAwesome.4gl"/>
+        <File filePath="src/utils/fontAwesome.per"/>
+      </Application>
+      <Application binaryName="materialDesignTest" dependencies="14000,-400184264" id="1848127715" label="materialDesignTest">
+        <File filePath="src/utils/matDesTest.4gl"/>
+        <File filePath="src/utils/matDesTest.per"/>
+        <File filePath="src/utils/matDesTest_modal.per"/>
       </Application>
     </Group>
   </Group>

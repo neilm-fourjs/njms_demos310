@@ -121,6 +121,9 @@ FUNCTION ifx_create_app_tables()
 		total_gross DECIMAL(12,2),
 		total_disc DECIMAL(12,3)
 	);
+	IF gl_db.m_dbtyp != "sqt" THEN
+		EXECUTE IMMEDIATE "ALTER TABLE ord_head MODIFY( order_number SERIAL PRIMARY KEY )"
+	END IF
 --	CREATE UNIQUE INDEX oh_idx ON ord_head ( order_number )
 
 	CREATE TABLE ord_payment (

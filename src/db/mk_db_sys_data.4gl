@@ -41,6 +41,7 @@ FUNCTION insert_system_data()
 	CALL addMenu("main","","M","Maintenance Programs", "mnt","")
 	CALL addMenu("main","","M","Order Entry", "oe","")
 	CALL addMenu("main","","M","System Maintenance", "sys","")
+	CALL addMenu("main","","M","Utilities", "util","")
 
 	CALL addMenu("demo","main","T","Demo Programs", "","")
 	CALL addMenu("demo","main","F","Widgets Demo", "widgets.42r","")
@@ -50,7 +51,6 @@ FUNCTION insert_system_data()
 	CALL addMenu("demo","main","F","AmCharts WC Demo", "wc_amCharts.42r","")
 	CALL addMenu("demo","main","F","Kite WC Demo", "wc_kite.42r","")
 	CALL addMenu("demo","main","F","Aircraft WC Demo", "wc_aircraft.42r","")
-	CALL addMenu("demo","main","F","Material Design Test", "materialDesignTest.42r","")
 
 	CALL addMenu("sys","main","T","System Maintenance", "","")
 	CALL addMenu("sys","main","F","User/Role Maintenance", "user_mnt.42r","")
@@ -76,6 +76,9 @@ FUNCTION insert_system_data()
 	CALL addMenu("oeprn","oe","F","Print Invoices", "printInvoices.42r 0 ordent.4rp","")
 	CALL addMenu("oeprn","oe","F","Print Picking Notes", "printInvoices.42r picklist.4rp","")
 
+	CALL addMenu("util","main","T","Utilities", "","")
+	CALL addMenu("util","main","F","Material Design Test", "materialDesignTest.42r","")
+	CALL addMenu("util","main","F","fontAwesome", "fontAwesome.42r","")
 	CALL mkdb_progress( "Done." )
 
 END FUNCTION

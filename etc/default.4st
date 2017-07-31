@@ -15,6 +15,9 @@ Property of Four Js*
 		<StyleAttribute name="fontWeight" value="bold" />
 		<StyleAttribute name="position" value="center" />
 	</Style>
+	<Style name=".hugh">
+		<StyleAttribute name="fontSize" value="24pt" />
+	</Style>
 	<Style name=".em16">
 		<StyleAttribute name="fontSize" value="1.6em" />
 	</Style>
