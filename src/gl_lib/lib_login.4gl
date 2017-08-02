@@ -66,6 +66,12 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 			LET l_login = m_new_acc_func() -- create a new account
 			IF l_login IS NOT NULL THEN EXIT INPUT END IF
 		ON ACTION forgotten CALL forgotten(l_login)
+		ON ACTION testlogin
+			LET l_login = "test@test.com"
+			LET l_pass = "12test"
+			IF validate_login( l_login, l_pass ) THEN
+				EXIT INPUT
+			END IF
 		GL_ABOUT
 	END INPUT
 	CLOSE WINDOW login

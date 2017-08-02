@@ -49,4 +49,6 @@ Property of Four Js*
   <ActionDefault name="getorder" acceleratorName="Control-F" image="find" comment="Find Order"/>
 	<ActionDefault name="save" text="Save" image="disk" contextMenu="yes"/>
 
+	<ActionDefault name="testlogin" text="Test Login" image="fa-key" contextMenu="yes" acceleratorName="f9" />
+
 </ActionDefaultList>

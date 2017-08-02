@@ -22,9 +22,7 @@ DEFINE m_rec2 DYNAMIC ARRAY OF RECORD
 	i07 STRING,
 	i08 STRING,
 	i09 STRING,
-	i10 STRING,
-	i11 STRING,
-	i12 STRING
+	i10 STRING
 END RECORD
 DEFINE m_rec3 DYNAMIC ARRAY OF RECORD
 	v01 STRING,
@@ -36,9 +34,7 @@ DEFINE m_rec3 DYNAMIC ARRAY OF RECORD
 	v07 STRING,
 	v08 STRING,
 	v09 STRING,
-	v10 STRING,
-	v11 STRING,
-	v12 STRING
+	v10 STRING
 	END RECORD
 
 	DEFINE m_img STRING
@@ -80,10 +76,6 @@ MAIN
 				CALL dsp_img( m_rec2[ arr_curr() ].i09 )
 			BEFORE FIELD a10
 				CALL dsp_img( m_rec2[ arr_curr() ].i10 )
-			BEFORE FIELD a11
-				CALL dsp_img( m_rec2[ arr_curr() ].i11 )
-			BEFORE FIELD a12
-				CALL dsp_img( m_rec2[ arr_curr() ].i12 )
 
 			BEFORE ROW
 				DISPLAY DIALOG.getCurrentItem() TO img_name
@@ -97,8 +89,7 @@ MAIN
 				DISPLAY BY NAME m_rec2[ arr_curr() ].i08
 				DISPLAY BY NAME m_rec2[ arr_curr() ].i09
 				DISPLAY BY NAME m_rec2[ arr_curr() ].i10
-				DISPLAY BY NAME m_rec2[ arr_curr() ].i11
-				DISPLAY BY NAME m_rec2[ arr_curr() ].i12
+
 				DISPLAY BY NAME m_rec3[ arr_curr() ].v01
 				DISPLAY BY NAME m_rec3[ arr_curr() ].v02
 				DISPLAY BY NAME m_rec3[ arr_curr() ].v03
@@ -109,8 +100,7 @@ MAIN
 				DISPLAY BY NAME m_rec3[ arr_curr() ].v08
 				DISPLAY BY NAME m_rec3[ arr_curr() ].v09
 				DISPLAY BY NAME m_rec3[ arr_curr() ].v10
-				DISPLAY BY NAME m_rec3[ arr_curr() ].v11
-				DISPLAY BY NAME m_rec3[ arr_curr() ].v12
+
 		END DISPLAY
 		COMMAND "Exit" EXIT DIALOG
 		ON ACTION close EXIT DIALOG
@@ -121,6 +111,7 @@ FUNCTION dsp_img( l_nam STRING )
 	LET m_img = l_nam
 	DISPLAY l_nam TO img_name
 	DISPLAY l_nam TO img
+	DISPLAY l_nam TO img2
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION load_arr()
@@ -174,8 +165,6 @@ FUNCTION load_arr2(l_file)
 		LET m_rec2[ m_rec2.getLength() ].i08 = m_rec[x+7].img
 		LET m_rec2[ m_rec2.getLength() ].i09 = m_rec[x+8].img
 		LET m_rec2[ m_rec2.getLength() ].i10 = m_rec[x+9].img
-		LET m_rec2[ m_rec2.getLength() ].i11 = m_rec[x+10].img
-		LET m_rec2[ m_rec2.getLength() ].i12 = m_rec[x+11].img
 		LET m_rec3[ m_rec3.getLength() ].v01 = m_rec[x].val
 		LET m_rec3[ m_rec3.getLength() ].v02 = m_rec[x+1].val
 		LET m_rec3[ m_rec3.getLength() ].v03 = m_rec[x+2].val
@@ -186,8 +175,6 @@ FUNCTION load_arr2(l_file)
 		LET m_rec3[ m_rec3.getLength() ].v08 = m_rec[x+7].val
 		LET m_rec3[ m_rec3.getLength() ].v09 = m_rec[x+8].val
 		LET m_rec3[ m_rec3.getLength() ].v10 = m_rec[x+9].val
-		LET m_rec3[ m_rec3.getLength() ].v11 = m_rec[x+10].val
-		LET m_rec3[ m_rec3.getLength() ].v12 = m_rec[x+11].val
 	END FOR
 	CALL c.close()
 END FUNCTION

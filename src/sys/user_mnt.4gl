@@ -6,11 +6,11 @@ IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL lib_secure
 
-CONSTANT PRGDESC = "User Maintenance Demo"
-CONSTANT PRGAUTH = "Neil J.Martin"
 &include "genero_lib.inc"
 &include "app.inc"
 CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "User Maintenance Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 DEFINE m_user DYNAMIC ARRAY OF RECORD LIKE sys_users.*
 DEFINE m_roles DYNAMIC ARRAY OF RECORD LIKE sys_roles.*
@@ -29,7 +29,7 @@ MAIN
 	DEFINE dnd ui.DragDrop
 
 	LET gl_lib.gl_topMenu = "dynmaint"
-	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	WHENEVER ANY ERROR CALL gl_error
 	LET m_this_user_key = ARG_VAL(2)

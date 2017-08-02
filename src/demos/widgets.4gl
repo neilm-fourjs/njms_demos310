@@ -18,13 +18,11 @@ IMPORT FGL widgets_charts
 IMPORT FGL widgets_clock
 
 &include "genero_lib.inc"
-
 CONSTANT C_VER = "3.10"
-CONSTANT p_splash = "widgetsdemo"
-CONSTANT p_progicon = "widgetsdemo_icon"
-CONSTANT p_progname = "Widgets"
-CONSTANT p_progdesc = "Genero Widgets Demo"
-CONSTANT p_progauth = "Neil J Martin"
+CONSTANT C_PRGDESC = "Genero Widgets Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGSPLASH = "widgetsdemo"
+CONSTANT C_PRGICON = "widgetsdemo_icon"
 
 CONSTANT arrmax = 55
 
@@ -100,11 +98,7 @@ MAIN
 	DEFINE stat SMALLINT
 	DEFINE f ui.Form
 
-	LET gl_lib.gl_splash = p_splash
-	LET gl_lib.gl_progIcon = p_progicon
-	LET gl_lib.gl_app_name = p_progname
-	LET gl_lib.gl_progDesc = p_progdesc
-	LET gl_lib.gl_progAuth = p_progauth
+	CALL gl_lib.gl_setInfo(C_VER, C_PRGSPLASH, C_PRGICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_init(ARG_VAL(1),"widgets",TRUE)
 
 	GL_DBGMSG(2,"init_genero, done.")
@@ -116,8 +110,6 @@ MAIN
 
 	LET db_opened = FALSE
 
-	LET gl_lib.gl_splash = p_splash
-
 	IF tmp = "sh.exe" OR gdcip = "localhost" THEN
 		CALL fix_path()
 	ELSE
@@ -125,20 +117,21 @@ MAIN
 	END IF
 	GL_DBGMSG(2,"done - fix_path.")
 
-	GL_DBGMSG(4,"doing splash.")
-	CALL gl_splash( 4 )
-	GL_DBGMSG(4,"done splash.")
+	IF gl_lib.gl_fe_typ != "GBC" THEN
+		GL_DBGMSG(4,"doing splash.")
+		CALL gl_splash( 4 )
+		GL_DBGMSG(4,"done splash.")
+	END IF
 
 	GL_DBGMSG(4,"before - open window.")
 	OPEN WINDOW widgets WITH FORM "widgets"
 	GL_DBGMSG(4,"after - open window.")
-	CALL ui.interface.setImage( p_progicon )
+	CALL ui.interface.setImage( gl_lib.gl_progIcon )
 	CALL hide_item("Page","arrays",1)
 	CALL hide_item("Page","canvas",1)
 	CALL hide_item("Page","colours",1)
-	CALL ui.interface.refresh()
-	GL_DBGMSG(4,"after - ui.interface.refresh.")
-
+--	CALL ui.interface.refresh()
+--	GL_DBGMSG(4,"after - ui.interface.refresh.")
 
 	LET lins = FALSE
 	LET scal = 100
@@ -149,7 +142,6 @@ MAIN
 	LET sort3 = TRUE
 	LET dec = 12.34
 	CALL arr_set()
-	DISPLAY "Setting array newarr2"
 	FOR cnt = 1 TO arr.getLength()
 		LET oldarr[cnt].arr1 = "Item ",cnt USING "##"
 		LET oldarr[cnt].arr2 = "Item ",ASCII(65+(10-cnt))
@@ -310,7 +302,7 @@ MAIN
 				CALL ui.interface.frontCall("standard","shellexec","http://www.4js.com/",[tmp])
 
 			ON ACTION splash
-				CALL gl_lib.gl_splash(p_splash)
+				CALL gl_lib.gl_splash( gl_lib.gl_progIcon )
 
 			GL_ABOUT
 

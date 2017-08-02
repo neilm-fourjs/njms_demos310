@@ -10,6 +10,12 @@ Property of Four Js*
 -->
 
 <StyleList>
+	<Style name=".hidden">
+		<StyleAttribute name="textColor" value="window" />
+		<StyleAttribute name="backgroundColor" value="window" />
+		<StyleAttribute name="border" value="none" />
+		<StyleAttribute name="fontSize" value="2pt" />
+	</Style>
 	<Style name=".heading">
 		<StyleAttribute name="fontSize" value="1.6em" />
 		<StyleAttribute name="fontWeight" value="bold" />
@@ -45,13 +51,16 @@ Property of Four Js*
 
 	<Style name="Table.menu">
 		<StyleAttribute name="headerHidden" value="yes" />
+		<StyleAttribute name="highlightCurrentRow" value="no" />
 	</Style>
-
+  <Style name="Table.listview">
+    <StyleAttribute name="tableType" value="listView" />
+  </Style>
 	<Style name="Table.disparr">
 		<StyleAttribute name="summaryLineAlwaysAtBottom" value="no" />
 	</Style>
-  <Style name='Table.disparr:odd'>
-    <StyleAttribute name='backgroundColor'           value='#D5FFD5'/>
+  <Style name="Table.disparr:odd">
+    <StyleAttribute name="backgroundColor" value="#D5FFD5"/>
   </Style>
 
 	<Style name="Window">

@@ -73,9 +73,18 @@ FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 	RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
--- 
+FUNCTION quit()
+	IF ARG_VAL(1) = "MDI" THEN
+		IF ui.Interface.getChildCount() > 0 THEN
+			CALL gl_lib.gl_warnPopup(%"Must close child windows first!")
+			RETURN FALSE
+		END IF
+	END IF
+	RETURN TRUE
+END FUNCTION
+--------------------------------------------------------------------------------
 FUNCTION do_menu()
-	DEFINE l_prog, l_args STRING
+	DEFINE l_dummy CHAR(1)
 
 	OPEN WINDOW menu WITH FORM "menu"
 	DISPLAY C_SPLASH TO logo
@@ -88,80 +97,86 @@ FUNCTION do_menu()
 	IF m_user IS NOT NULL THEN CALL gl_titleWin(m_user) END IF
 	DISPLAY BY NAME m_user
 
-	DISPLAY ARRAY m_menu TO menu.* ATTRIBUTE(UNBUFFERED)	
+	WHILE NOT int_flag
+		DIALOG ATTRIBUTE(UNBUFFERED)
+			INPUT BY NAME l_dummy
+				ON ACTION about
+					CALL gl_lib.gl_about( C_VER )
 
-		ON ACTION back
-			IF m_curMenu > 1 THEN
-				IF populate_menu(m_menus[m_curMenu - 1]) THEN
-					LET m_curMenu = m_curMenu - 1
-				END IF
-			END IF
-		ON ACTION accept
-			CALL progArgs( m_menu[ arr_curr() ].m_item ) RETURNING l_prog, l_args
-			DISPLAY "Menu line accepted:",m_menu[ arr_curr() ].m_type||"-"||m_menu[ arr_curr() ].m_text
-			CASE m_menu[ arr_curr() ].m_type 
-				WHEN "C"
-					CASE m_menu[ arr_curr() ].m_item 
-						WHEN "quit"
-							EXIT DISPLAY
-						WHEN "back" 
-							--DISPLAY "back:",m_curMenu
-							IF m_curMenu > 1 AND populate_menu(m_menus[m_curMenu - 1]) THEN
-								LET m_curMenu = m_curMenu - 1
-							END IF
-							--DISPLAY "back:",m_curMenu
-							CALL DIALOG.setCurrentRow("menu",1)
-					END CASE
+				ON ACTION exit 
+					IF quit() THEN LET int_flag = TRUE EXIT DIALOG END IF
 
-				WHEN "F" 
-					CALL gl_logit("RUN:fglrun "||l_prog||" "||m_args||" "||l_args)
-					--DISPLAY "l_prog:",l_prog," m_args:",m_args, " l_args:",l_args
-					--DISPLAY "Run: fglrun "||l_prog||" "||m_args||" "||l_args
-					IF NOT os.path.exists( l_prog ) THEN
-						CALL gl_lib.gl_errPopup(SFMT(%"This program '%1' appears to not be installed!",l_prog))
+				ON ACTION close 
+					IF quit() THEN LET int_flag = TRUE EXIT DIALOG END IF
+
+				ON ACTION back
+					IF m_curMenu > 1 THEN
+						IF populate_menu(m_menus[m_curMenu - 1]) THEN
+							LET m_curMenu = m_curMenu - 1
+						END IF
+						LET int_flag = TRUE
 					END IF
-					RUN "fglrun "||l_prog||" "||m_args||" "||l_args WITHOUT WAITING
+					EXIT DIALOG
+			END INPUT
 
-				WHEN "P" 
-					CALL gl_logit("RUN:"||l_prog||" "||l_args)
-					DISPLAY "Run: "||l_prog||" "||l_args
-					RUN l_prog||" "||l_args WITHOUT WAITING
+			DISPLAY ARRAY m_menu TO menu.* 
+				BEFORE ROW
+					EXIT DIALOG
 
-				WHEN "O" 
-					CALL gl_logit("OSRUN:"||m_menu[ arr_curr() ].m_item)
-					DISPLAY "exec: "||m_menu[ arr_curr() ].m_item
-					RUN m_menu[ arr_curr() ].m_item WITHOUT WAITING
+				ON ACTION accept
+					EXIT DIALOG
+			END DISPLAY
+		END DIALOG
+		IF NOT int_flag THEN CALL process_menu_item( arr_curr() ) END IF
+	END WHILE
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION process_menu_item( x SMALLINT )
+	DEFINE l_prog, l_args STRING
 
-				WHEN "M"
-					LET m_menus[m_curMenu + 1] = m_menu[ arr_curr() ].m_item
-					IF populate_menu(m_menus[m_curMenu + 1]) THEN
-						LET m_curMenu = m_curMenu + 1
+	DISPLAY "process_menu_item:"||x||":",m_menu[x].m_type||"-"||m_menu[x].m_text
+
+	CASE m_menu[ x ].m_type 
+		WHEN "C"
+			CASE m_menu[ x ].m_item 
+				WHEN "quit"
+					IF quit() THEN LET int_flag = TRUE RETURN END IF
+
+				WHEN "back" 
+					--DISPLAY "back:",m_curMenu
+					IF m_curMenu > 1 AND populate_menu(m_menus[m_curMenu - 1]) THEN
+						LET m_curMenu = m_curMenu - 1
 					END IF
-					CALL DIALOG.setCurrentRow("menu",1)
+					--DISPLAY "back:",m_curMenu
 			END CASE
 
-		ON ACTION about
-			CALL gl_lib.gl_about( C_VER )
-
-		ON ACTION exit 
-			IF ARG_VAL(1) = "MDI" THEN
-				IF ui.Interface.getChildCount() > 0 THEN
-					CALL gl_lib.gl_warnPopup(%"Must close child windows first!")
-					CONTINUE DISPLAY
-				END IF
+		WHEN "F" 
+			CALL progArgs( m_menu[ x ].m_item ) RETURNING l_prog, l_args
+			CALL gl_logit("RUN:fglrun "||l_prog||" "||m_args||" "||l_args)
+			--DISPLAY "l_prog:",l_prog," m_args:",m_args, " l_args:",l_args
+			--DISPLAY "Run: fglrun "||l_prog||" "||m_args||" "||l_args
+			IF NOT os.path.exists( l_prog ) THEN
+				CALL gl_lib.gl_errPopup(SFMT(%"This program '%1' appears to not be installed!",l_prog))
 			END IF
-			EXIT DISPLAY
+			RUN "fglrun "||l_prog||" "||m_args||" "||l_args WITHOUT WAITING
 
-		ON ACTION close 
-			IF ARG_VAL(1) = "MDI" THEN
-				IF ui.Interface.getChildCount() > 0 THEN
-					CALL gl_lib.gl_warnPopup(%"Must close child windows first!")
-					CONTINUE DISPLAY
-				END IF
+		WHEN "P"
+			CALL progArgs( m_menu[ x ].m_item ) RETURNING l_prog, l_args
+			CALL gl_logit("RUN:"||l_prog||" "||l_args)
+			DISPLAY "Run: "||l_prog||" "||l_args
+			RUN l_prog||" "||l_args WITHOUT WAITING
+
+		WHEN "O" 
+			CALL gl_logit("OSRUN:"||m_menu[ x ].m_item)
+			DISPLAY "exec: "||m_menu[ x ].m_item
+			RUN m_menu[ arr_curr() ].m_item WITHOUT WAITING
+
+		WHEN "M"
+			LET m_menus[m_curMenu + 1] = m_menu[ x ].m_item
+			IF populate_menu(m_menus[m_curMenu + 1]) THEN
+				LET m_curMenu = m_curMenu + 1
 			END IF
-			EXIT DISPLAY
-	END DISPLAY
-
+	END CASE
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION populate_menu(l_mname LIKE sys_menus.m_id ) RETURNS BOOLEAN

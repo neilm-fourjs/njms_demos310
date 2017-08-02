@@ -17,12 +17,12 @@
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL app_lib
+
 &include "genero_lib.inc"
 &include "app.inc"
-
-CONSTANT PRGDESC = "Dynamic Maintenance Demo"
-CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "Dynamic Maintenance Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 CONSTANT SQL_FIRST = 0
 CONSTANT SQL_PREV = -1
@@ -52,7 +52,7 @@ DEFINE m_allowedActions CHAR(6) --Y/N for Find / List / Update / Insert / Delete
 MAIN
 	LET gl_lib.gl_toolbar = "dynmaint"
 	LET gl_lib.gl_topMenu = "dynmaint"
-	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
 
 	LET m_user_key = ARG_VAL(2)

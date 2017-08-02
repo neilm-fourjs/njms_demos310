@@ -17,14 +17,13 @@ IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL gl_grw
 IMPORT FGL app_lib
-&include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
 
+&include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
 &include "app.inc"
 &include "ordent.inc"
-
-CONSTANT PRGDESC = "Invoice Print"
-CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER = "3.1"
+CONSTANT C_PRGDESC = "Invoice Print"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 CONSTANT m_logo = "../pics/logo_dark.png"
 
@@ -40,7 +39,7 @@ MAIN
 	DEFINE l_pack_qty INTEGER
 
 	LET gl_noToolBar = TRUE
-	CALL gl_lib.gl_setInfo(C_VER,APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER,C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 GL_MODULE_ERROR_HANDLER
 

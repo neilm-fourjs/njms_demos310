@@ -8,26 +8,27 @@ VBOX
 HBOX ( SPLITTER )
 TABLE
 {
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
-[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  |i11  |i12 ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
+[i01  |i02  |i03  |i04  |i05  |i06  |i07  |i08  |i09  |i10  ]
 }
 END -- TABLE
 GRID
 {
 Current:
 [c:img_name                ]
+[ii]
   [img                     ]
   [                        ]
   [                        ]
@@ -50,8 +51,6 @@ Row:
  8[x08               |v08 ]
  9[x09               |v09 ]
 10[x10               |v10 ]
-11[x11               |v11 ]
-12[x12               |v12 ]
 }
 END -- GRID
 END -- HBOX
@@ -75,12 +74,12 @@ IMAGE i07 = FORMONLY.a07,TITLE="7", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE
 IMAGE i08 = FORMONLY.a08,TITLE="8", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;
 IMAGE i09 = FORMONLY.a09,TITLE="9", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;
 IMAGE i10 = FORMONLY.a10,TITLE="10", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;
-IMAGE i11 = FORMONLY.a11,TITLE="11", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;
-IMAGE i12 = FORMONLY.a12,TITLE="12", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;
 
 LABEL img_name = FORMONLY.img_name, SIZEPOLICY=FIXED, STYLE="em16";
 BUTTON c : copy, IMAGE="fa-copy";
-IMAGE img = FORMONLY.img, STRETCH=BOTH, AUTOSCALE, HEIGHT=150 PIXELS, WIDTH=150 PIXELS, STYLE="noborder";
+
+IMAGE ii = FORMONLY.img2;
+IMAGE img = FORMONLY.img, STRETCH=BOTH, AUTOSCALE, {HEIGHT=150 PIXELS, WIDTH=150 PIXELS,} STYLE="noborder";
 
 LABEL x01 = FORMONLY.i01, SIZEPOLICY=FIXED;
 LABEL x02 = FORMONLY.i02, SIZEPOLICY=FIXED;
@@ -92,8 +91,7 @@ LABEL x07 = FORMONLY.i07, SIZEPOLICY=FIXED;
 LABEL x08 = FORMONLY.i08, SIZEPOLICY=FIXED;
 LABEL x09 = FORMONLY.i09, SIZEPOLICY=FIXED;
 LABEL x10 = FORMONLY.i10, SIZEPOLICY=FIXED;
-LABEL x11 = FORMONLY.i11, SIZEPOLICY=FIXED;
-LABEL x12 = FORMONLY.i12, SIZEPOLICY=FIXED;
+
 LABEL v01 = FORMONLY.v01, SIZEPOLICY=FIXED;
 LABEL v02 = FORMONLY.v02, SIZEPOLICY=FIXED;
 LABEL v03 = FORMONLY.v03, SIZEPOLICY=FIXED;
@@ -104,8 +102,6 @@ LABEL v07 = FORMONLY.v07, SIZEPOLICY=FIXED;
 LABEL v08 = FORMONLY.v08, SIZEPOLICY=FIXED;
 LABEL v09 = FORMONLY.v09, SIZEPOLICY=FIXED;
 LABEL v10 = FORMONLY.v10, SIZEPOLICY=FIXED;
-LABEL v11 = FORMONLY.v11, SIZEPOLICY=FIXED;
-LABEL v12 = FORMONLY.v12, SIZEPOLICY=FIXED;
 
 INSTRUCTIONS
-SCREEN RECORD arr ( FORMONLY.a01 THRU FORMONLY.a12 )
+SCREEN RECORD arr ( FORMONLY.a01 THRU FORMONLY.a10 )

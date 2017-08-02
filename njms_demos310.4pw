@@ -172,7 +172,7 @@
         <File filePath="src/db/mk_db_app_ifx.4gl"/>
       </Library>
     </Group>
-    <Group label="Demo Apps" language="Genero">
+    <Group label="Demos UI" language="Genero">
       <Application binaryName="dispArr" dependencies="14000" id="62326091" label="dispArr">
         <File filePath="src/demos/disp_arr.4gl"/>
         <File filePath="src/demos/disp_arr.per"/>
@@ -189,6 +189,23 @@
         <File filePath="etc/picflow.4st"/>
         <File filePath="src/demos/picflow.per"/>
       </Application>
+      <Application binaryName="widgets" dependencies="14000" id="1663756762" label="widgets">
+        <VirtualFolder label="etc">
+          <File filePath="etc/widgets.4ad"/>
+          <File filePath="etc/widgets.4sm"/>
+          <File filePath="etc/widgets.4st"/>
+          <File filePath="etc/widgets.4tb"/>
+          <File filePath="etc/widgets1.4st"/>
+          <File filePath="etc/widgets2.4st"/>
+          <File filePath="etc/widgets3.4st"/>
+        </VirtualFolder>
+        <File filePath="src/demos/widgets.4gl"/>
+        <File filePath="src/demos/widgets.per"/>
+        <File filePath="src/demos/widgets_charts.4gl"/>
+        <File filePath="src/demos/widgets_clock.4gl"/>
+      </Application>
+    </Group>
+    <Group label="Demos WC">
       <Application binaryName="wc_aircraft" dependencies="-400184264,14000" id="252530810" label="wc_aircraft">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/aircraft/aircraft.css"/>
@@ -211,21 +228,6 @@
         <File filePath="src/demos/wc_kite.4gl"/>
         <File filePath="etc/wc_kite.4st"/>
         <File filePath="src/demos/wc_kite.per"/>
-      </Application>
-      <Application binaryName="widgets" dependencies="14000" id="1663756762" label="widgets">
-        <VirtualFolder label="etc">
-          <File filePath="etc/widgets.4ad"/>
-          <File filePath="etc/widgets.4sm"/>
-          <File filePath="etc/widgets.4st"/>
-          <File filePath="etc/widgets.4tb"/>
-          <File filePath="etc/widgets1.4st"/>
-          <File filePath="etc/widgets2.4st"/>
-          <File filePath="etc/widgets3.4st"/>
-        </VirtualFolder>
-        <File filePath="src/demos/widgets.4gl"/>
-        <File filePath="src/demos/widgets.per"/>
-        <File filePath="src/demos/widgets_charts.4gl"/>
-        <File filePath="src/demos/widgets_clock.4gl"/>
       </Application>
     </Group>
     <Group label="GL_Lib" language="Genero">

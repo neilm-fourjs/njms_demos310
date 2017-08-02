@@ -324,7 +324,8 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 			END TRY
 		END IF
 
-		IF l_styl != "main" AND gl_topmenu != "default" THEN -- normal won't want default?
+		LET l_nl = l_fn.selectByTagName("TopMenu")
+		IF l_styl != "main" AND gl_topmenu != "default" AND l_nl.getlength() < 1 THEN -- normal won't want default?
 			GL_DBGMSG(1, "gl_formInit: loading Topmenu '"||gl_topmenu||"'")
 			TRY
 				CALL l_fm.loadTopmenu( gl_topmenu )
@@ -956,17 +957,17 @@ FUNCTION gl_about(l_ver STRING) --{{{
 	CALL g.setAttribute("style","about")
 
 	IF gl_app_build IS NOT NULL THEN
-		CALL gl_addLabel(g, 0,y,LSTR("lib.about.application"),"right","black")
+		CALL gl_addLabel(g, 0,y,LSTR("Application"),"right","black")
 		CALL gl_addLabel(g,10,y,gl_app_name||" - "||gl_app_build,NULL,NULL) LET y = y + 1
 	END IF
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.program"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Program")||":","right","black")
 	CALL gl_addLabel(g,10,y,gl_progname||" - "||l_ver,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.progdesc"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Description")||":","right","black")
 	CALL gl_addLabel(g,10,y,gl_progdesc,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.progauth"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Author")||":","right","black")
 	CALL gl_addLabel(g,10,y,gl_progauth,NULL,"black") LET y = y + 1
 
 	LET w = g.createChild("HLine")
@@ -974,28 +975,28 @@ FUNCTION gl_about(l_ver STRING) --{{{
 	CALL w.setAttribute("posX",0)
 	CALL w.setAttribute("gridWidth",25)
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.generort"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Genero Runtime")||":","right","black")
 	CALL gl_addLabel(g,10,y,gver,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.serveros"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Server OS")||":","right","black")
 	CALL gl_addLabel(g,10,y,gl_os,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.servername"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Server Name")||":","right","black")
 	CALL gl_addLabel(g,10,y,servername,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.serveruser"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("OS User")||":","right","black")
 	CALL gl_addLabel(g,10,y,gl_userName,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.datetime"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Server Time:")||":","right","black")
 	CALL gl_addLabel(g,10,y,TODAY||" "||TIME,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.dbname"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Database Name")||":","right","black")
 	CALL gl_addLabel(g,10,y,fgl_getEnv("DBNAME"),NULL,NULL) LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.dbtype"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Database Type")||":","right","black")
 	CALL gl_addLabel(g,10,y,UPSHIFT( fgl_db_driver_type() ),NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.dbdate"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("DBDATE")||":","right","black")
 	CALL gl_addLabel(g,10,y,fgl_getEnv("DBDATE"),NULL,"black") LET y = y + 1
 
 	LET w = g.createChild("HLine")
@@ -1003,26 +1004,26 @@ FUNCTION gl_about(l_ver STRING) --{{{
 	CALL w.setAttribute("posX",0)
 	CALL w.setAttribute("gridWidth",25)
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientos"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Client OS")||":","right","black")
 	CALL gl_addLabel(g,10,y,gl_cli_os||" / "||gl_cli_osver,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientuser"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Clint OS User")||":","right","black")
 	CALL gl_addLabel(g,10,y,gl_cli_un,NULL,"black") LET y = y + 1
 
 	IF m_user_agent.getLength() > 1 THEN
-		CALL gl_addLabel(g, 0,y,LSTR("lib.about.useragent"),"right","black")
+		CALL gl_addLabel(g, 0,y,LSTR("User Agent")||":","right","black")
 		CALL gl_addLabel(g,10,y,m_user_agent,NULL,"black") LET y = y + 1
 	END IF
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.fever"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("FrontEnd Version")||":","right","black")
 	CALL gl_addLabel(g,10,y,gl_fe_typ||" "||gl_fe_ver,NULL,"black") LET y = y + 1
 
 	IF gl_cli_dir.getLength() > 1 THEN
-		CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientdir"),"right","black")
+		CALL gl_addLabel(g, 0,y,LSTR("Client Directory")||":","right","black")
 		CALL gl_addLabel(g,10,y,gl_cli_dir,NULL,"black") LET y = y + 1
 	END IF
 
-	CALL gl_addLabel(g, 0,y,LSTR("lib.about.clientres"),"right","black")
+	CALL gl_addLabel(g, 0,y,LSTR("Client Resolution")||":","right","black")
 	CALL gl_addLabel(g,10,y,gl_cli_res,NULL,"black") LET y = y + 1
 
 	LET g = g.createChild("HBox")

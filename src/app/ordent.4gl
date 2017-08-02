@@ -14,19 +14,19 @@ IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL app_lib
 IMPORT FGL oe_lib
+
 &include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
 &include "app.inc"
 &include "ordent.inc"
-
-CONSTANT PRGDESC = "Order Entry Demo"
-CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "Order Entry Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 MAIN
 	DEFINE l_email STRING
 	DEFINE l_key INTEGER
 
-	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 GL_MODULE_ERROR_HANDLER
 

@@ -30,8 +30,8 @@ GRID (STYLE="menu")
   [desc                             ]
   [desc                             ]
  <                                   >
-  [: :lb:f001                    : :]
-  [: :accept :back  :close :about: :]
+  [: :lb:f001                  :d: :]
+  [:     :back  :close :about:     :]
 }
 END -- GRID
 END -- GROUP
@@ -74,7 +74,9 @@ PHANTOM FORMONLY.m_img;
 LABEL lb : lb, TEXT=%"User:",STYLE="small";
 LABEL f001 = FORMONLY.m_user, SIZEPOLICY=DYNAMIC,STYLE="small";
 
-BUTTON accept : accept, TEXT=%"Select", IMAGE="fa-arrow-circle-right";
+d = FORMONLY.l_dummy, STYLE="hidden",INVISIBLE,SAMPLE=".";
+
+--BUTTON accept : accept, TEXT=%"Select", IMAGE="fa-arrow-circle-right";
 BUTTON back : back, TEXT=%"Back", IMAGE="fa-arrow-circle-left";
 BUTTON close : close, TEXT="Quit", IMAGE="fa-power-off";
 BUTTON about : about, TEXT="About", IMAGE="help";

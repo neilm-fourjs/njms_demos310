@@ -7,13 +7,12 @@ IMPORT FGL gl_db
 IMPORT FGL oe_lib
 IMPORT FGL oeweb_lib
 
-CONSTANT PRGDESC = "Web Ordering Demo #2"
-CONSTANT PRGAUTH = "Neil J.Martin"
-CONSTANT C_VER="3.1"
-
 &include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
 &include "app.inc"
 &include "ordent.inc"
+CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "Web Ordering Demo #2"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 DEFINE m_dialog ui.Dialog
 DEFINE m_fields DYNAMIC ARRAY OF RECORD
@@ -25,7 +24,7 @@ MAIN
 	DEFINE l_form ui.Form
 	DEFINE l_cat SMALLINT
 
-	CALL gl_lib.gl_setInfo(C_VER, APP_SPLASH, APP_ICON, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"weboe2",TRUE)
 GL_MODULE_ERROR_HANDLER
 

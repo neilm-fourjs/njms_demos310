@@ -9,10 +9,11 @@
 
 IMPORT util -- used for rand function for testdata
 IMPORT FGL gl_lib
+
 &include "genero_lib.inc"
-CONSTANT PRGDESC = "Display Array Demo"
-CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "Display Array Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 DEFINE m_arr DYNAMIC ARRAY OF RECORD
 		key INTEGER,
@@ -25,7 +26,7 @@ DEFINE m_arr DYNAMIC ARRAY OF RECORD
 
 MAIN
 
-	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 

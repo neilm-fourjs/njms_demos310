@@ -37,7 +37,7 @@ MAIN
 
 	LET l_rec.fld1 = "Active"
 	LET l_rec.fld2 = TODAY
-	LET l_rec.fld3 = "Red"
+	--LET l_rec.fld3 = "Red"
 	LET l_rec.fld4 = "Inactive"
 	LET l_rec.fld5 = "Active"
 	LET l_rec.fld6 = "Inactive"
