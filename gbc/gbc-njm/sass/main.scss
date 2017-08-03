@@ -64,3 +64,9 @@ body {
 .gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next {
 	width: 0px;
 }
+
+.gbc_style_hidden {
+	background-color: inherit !important;
+	display: none !important;
+}
+
