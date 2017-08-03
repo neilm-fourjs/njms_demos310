@@ -1,0 +1,71 @@
+
+
+body {
+	background: black;
+	-webkit-font-smoothing: antialiased;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+}
+
+h1 {
+	font-size: 28px;   
+	font-weight: 800;
+}
+
+h3 {
+	font-size: 1.17em;
+}
+
+footer {
+	font-size: 12px;   
+	font-weight: normal;
+	text-transform: uppercase
+}
+
+.gbc_ApplicationHostMenuWidget.mt-toolbar {
+	display: none;
+}
+
+.gbc_WindowMainContainer > .gbc_WindowMenuContainerMiddle > .gbc_WindowContent {
+	padding: 0px;
+}
+
+.gbc_FormWidget {
+	background: linear-gradient( #F2F2F9, #B7B7CC );
+}
+
+.mt-card {
+	color: $gbc-primary-light-color;
+	background-color: $gbc-primary-background-color;
+}
+
+.gbc_style_style2 {
+	background-color: $gbc-primary-medium-color;
+}
+
+.gbc_style_grad {
+	background: linear-gradient( #F2F2F9, #B7B7CC );
+}
+
+/* we don't want a border on the graphs */
+.gbc_ImageWidget .gbc_ImageWidget_border {
+	box-shadow: none;
+	border: none;
+}
+
+
+.gbc_FolderWidget {
+	background: linear-gradient( #F2F2F9, #B7B7CC );
+}
+
+.gbc_PageWidget {
+	background-color: inherit;
+}
+.mt-tab-previous, .mt-tab-next {
+	display: none;
+}
+.mt-tab-titles-container[__FolderWidget=top] .mt-tab-title.mt-tab-current {
+	background-color: $gbc-primary-background-color;
+}
+

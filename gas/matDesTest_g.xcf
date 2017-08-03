@@ -4,7 +4,9 @@
 	xsi:noNamespaceSchemaLocation="http://www.4js.com/ns/gas/3.00/cfextwa.xsd">
 	<RESOURCE Id="res.genver" Source="INTERNAL">310</RESOURCE>
 	<RESOURCE Id="res.gre" Source="INTERNAL">/opt/fourjs/gre$(res.genver)</RESOURCE>
-	<RESOURCE Id="res.path.njm_demo" Source="INTERNAL">$(res.deployment.path)</RESOURCE>
+	<RESOURCE Id="res.path.isv" Source="INTERNAL">/home/neilm/all</RESOURCE>
+	<RESOURCE Id="res.path.njm_demo" Source="INTERNAL">$(res.path.isv)/demos/njms_demos310</RESOURCE>
+	<!--RESOURCE Id="res.path.njm_demo" Source="INTERNAL">$(res.deployment.path)</RESOURCE-->
 	<EXECUTION>
 		<ENVIRONMENT_VARIABLE Id="FGLRESOURCEPATH">$(res.path.njm_demo)/etc</ENVIRONMENT_VARIABLE>
 		<ENVIRONMENT_VARIABLE Id="FGLIMAGEPATH">$(res.path.njm_demo)/pics:$(res.path.njm_demo)/etc/image2font.txt</ENVIRONMENT_VARIABLE>
@@ -24,6 +26,6 @@
 	<UA_OUTPUT>
 		<PROXY>$(res.uaproxy.cmd)</PROXY>
 		<PUBLIC_IMAGEPATH>$(res.public.resources)</PUBLIC_IMAGEPATH>
-		<GWC-JS>gbc-teal-current</GWC-JS>
+		<GWC-JS>gbc-gc</GWC-JS>
 	</UA_OUTPUT>
 </APPLICATION>
