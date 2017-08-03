@@ -50,10 +50,11 @@ DEFINE m_user_key INTEGER
 DEFINE m_allowedActions CHAR(6) --Y/N for Find / List / Update / Insert / Delete / Sample
                               -- NNYNNN = Only update allowed.
 MAIN
-	LET gl_lib.gl_toolbar = "dynmaint"
-	LET gl_lib.gl_topMenu = "dynmaint"
+
 	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
+	LET gl_lib.gl_toolBar = "dynmaint"
+	LET gl_lib.gl_topMenu = "dynmaint"
 
 	LET m_user_key = ARG_VAL(2)
 	LET m_tab = ARG_VAL(3)
@@ -162,6 +163,8 @@ FUNCTION mk_form()
 	LET l_f = l_w.createForm("dyn_"||m_tab)
 	LET l_n_form = l_f.getNode()
 	CALL l_n_form.setAttribute("windowStyle","main2")
+
+{ Now using dynmaint.4tb instead
 	LET l_n_tb = l_n_form.createChild("ToolBar")
 	CALL add_toolbarItem(l_n_tb, "quit","Quit","quit")
 	CALL add_toolbarItem(l_n_tb, "accept","Accept","accept")
@@ -174,6 +177,7 @@ FUNCTION mk_form()
 	CALL add_toolbarItem(l_n_tb, "prevrow","","")
 	CALL add_toolbarItem(l_n_tb, "nextrow","","")
 	CALL add_toolbarItem(l_n_tb, "lastrow","","")
+}
 
 	LET l_n_grid = l_n_form.createChild("Grid")
 	CALL l_w.setText(SFMT(%"Dynamic Maintenance for %1",m_tab))

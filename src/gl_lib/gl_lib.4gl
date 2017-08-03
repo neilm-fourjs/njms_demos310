@@ -319,6 +319,7 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 			GL_DBGMSG(1, "gl_formInit: loading Toolbar '"||gl_toolbar||"'")
 			TRY
 				CALL l_fm.loadToolbar( gl_toolbar )
+				GL_DBGMSG(0, "gl_formInit: loaded Toolbar '"||gl_toolbar||"'")
 			CATCH
 				GL_DBGMSG(0, "gl_formInit: Failed to load Toolbar '"||gl_toolbar||"'")
 			END TRY
@@ -326,11 +327,12 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 
 		LET l_nl = l_fn.selectByTagName("TopMenu")
 		IF l_styl != "main" AND gl_topmenu != "default" AND l_nl.getlength() < 1 THEN -- normal won't want default?
-			GL_DBGMSG(1, "gl_formInit: loading Topmenu '"||gl_topmenu||"'")
+			GL_DBGMSG(1, "gl_formInit: loading TopMenu '"||gl_topmenu||"'")
 			TRY
 				CALL l_fm.loadTopmenu( gl_topmenu )
+				GL_DBGMSG(0, "gl_formInit: loaded TopMenu '"||gl_topmenu||"'")
 			CATCH
-				GL_DBGMSG(0, "gl_formInit: Failed to load Topmenu '"||gl_topmenu||"'")
+				GL_DBGMSG(0, "gl_formInit: Failed to load TopMenu '"||gl_topmenu||"'")
 			END TRY
 		END IF
 	END IF
