@@ -74,13 +74,13 @@ FUNCTION insert_app_data()
 	CALL insStock("ST03-BK",NULL,"Bic Ball Point - Black",NULL, .49, "CC", NULL)
 	CALL insStock("ST03-BL",NULL,"Bic Ball Point - Blue",NULL, .49, "CC", NULL)
 	CALL insStock("ST03-RD",NULL,"Bic Ball Point - Red",NULL, .49, "CC", NULL)
+	CALL insStock("ST14",NULL, "Tissues",NULL, 1.49, "BB", NULL)
 
 	CALL insStock("WW47",NULL,"AK47",NULL, 789.99, "DD", NULL)
 	CALL insStock("WW10",NULL,"Flame Thrower",NULL, 1229.99, "DD", NULL)
 	CALL insStock("WW01-DES",NULL,"Combat Jacket - Desert",NULL, 59.99, "DD", NULL)
 	CALL insStock("WW01-JUN",NULL, "Combat Jacket - Jungle",NULL, 59.99, "DD", NULL)
 
-	CALL insStock("HH01",NULL, "Tissues",NULL, 1.49, "BB", NULL)
 
 	CALL genStock( "../pics/products", "??", FALSE)
 
@@ -88,7 +88,7 @@ FUNCTION insert_app_data()
 	INSERT INTO stock_cat VALUES ('ENTERTAIN', 'Entertainment')
 	INSERT INTO stock_cat VALUES ('FURNITURE', 'Furniture')
 	INSERT INTO stock_cat VALUES ('TRAVELLING', 'Travelling')
-	INSERT INTO stock_cat VALUES ('HOUSEHOLD', 'House Hold')
+--	INSERT INTO stock_cat VALUES ('HOUSEHOLD', 'House Hold')
 	INSERT INTO stock_cat VALUES ('SUPPLIES',  'Supplies')
 	INSERT INTO stock_cat VALUES ('FRUIT', 'Fruit')
 	INSERT INTO stock_cat VALUES ('ARMY', 'WWIII Supplies')
