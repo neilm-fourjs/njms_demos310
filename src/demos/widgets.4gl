@@ -274,7 +274,7 @@ MAIN
 				CALL dyntab()
 
 			COMMAND "Time" "See canvas demo"
-				CALL clock2()
+				CALL clock2(FALSE)
 	
 			COMMAND "progbar" "Draw a progress bar."
 				CALL gl_lib_aui.gl_progBar(1,100,"Processing random data ...")

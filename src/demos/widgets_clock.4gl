@@ -1,10 +1,6 @@
 
 IMPORT util
 
-GLOBALS
-	DEFINE aniyn SMALLINT
-END GLOBALS
-
 	DEFINE tim CHAR(8)
 	DEFINE dsp CHAR(2)
 	DEFINE scrw,w SMALLINT
@@ -17,18 +13,12 @@ END GLOBALS
 
 --------------------------------------------------------------------------------
 -- Draw a clock using Canvas
-FUNCTION clock2()
-
--- THIS CAN BE ANY DATABASE. ITS ONLY NEEDED BECAUSE OF THE COS & SIN FUNCTIONS
--- Not Needed for version 2
-&ifdef genero13x
-	DATABASE call_log
-&endif
+FUNCTION clock2(l_aniyn BOOLEAN)
 
 	CALL drawselect("canv")
 	CALL drawlinewidth(2)
 
-	IF aniyn THEN 
+	IF l_aniyn THEN 
 		CALL clock_face()
 		RETURN
 	END IF
@@ -59,8 +49,6 @@ FUNCTION cls()
 	DEFINE c, s om.DomNode
 	DEFINE win ui.Window
 
-	LET aniyn = FALSE
-
 	DISPLAY "N" TO chk1
 	DISPLAY "N" TO chk2
 	DISPLAY "N" TO chk3
@@ -83,11 +71,8 @@ FUNCTION cls()
 
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION time(seconds)
-
-	DEFINE seconds INTEGER
-	DEFINE loop SMALLINT
-	DEFINE t CHAR(1)
+FUNCTION time(l_seconds INTEGER)
+	DEFINE l_loop SMALLINT
 
 	LET pi = 3.14159265358
 	LET scrw = 33
@@ -121,14 +106,13 @@ FUNCTION time(seconds)
 	CALL drawcircle(851,151,700) RETURNING w
 
 	-- LOOP FOR seconds DRAWING THE CENTRAL WRITE FACE AND HANDS
-	LET seconds = 1 -- Stopped the loop
-	FOR loop = 1 TO seconds
+	LET l_seconds = 1 -- Stopped the loop
+	FOR l_loop = 1 TO l_seconds
 		CALL clock_face()
 		DISPLAY "Y" TO chk6
 		CALL ui.interface.refresh()
 --		SLEEP 1
 	END FOR
-	LET aniyn = TRUE
 
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -140,8 +124,6 @@ FUNCTION clock_face()
 	DEFINE x SMALLINT
 
 	LET tim = TIME
-
-	LET aniyn = TRUE
 
 -- Remove Hands
   LET win = ui.Window.getCurrent()
