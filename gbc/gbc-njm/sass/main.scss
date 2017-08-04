@@ -25,11 +25,6 @@ body {
 	margin-bottom: 5px;
 }
 
-.gbc_style_center {
-	text-align: center;
-	display: block;
-}
-
 .gbc_UserInterfaceWidget > .gbc_barsContainer {
 	color: $gbc-secondary-text-color;
 	fill: $gbc-secondary-text-color;
@@ -45,6 +40,24 @@ body {
   fill: $gbc-field-text-color;
 }
 
+[__ComboBoxWidget].zmdi-menu-down {
+	color: $gbc-primary-color;
+}
+
+.gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next {
+	width: 0px;
+}
+
+.gbc_UserInterfaceWidget { 
+	background: inherit;
+	background-color: inherit;
+}
+
+.gbc_WindowWidget {
+	background: inherit;
+	background-color: inherit;
+}
+
 .gbc_style_heading {
 	border-radius: 25px 25px 25px 25px;
 	font-size: 1.2em;
@@ -57,26 +70,16 @@ body {
 	background-color: $gbc-primary-medium-color;
 }
 
-[__ComboBoxWidget].zmdi-menu-down {
-	color: $gbc-primary-color;
-}
-
-.gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next {
-	width: 0px;
-}
-
 .gbc_style_hidden {
 	background-color: inherit !important;
 	display: none !important;
 }
 
-.gbc_UserInterfaceWidget { 
-	background: inherit;
-	background-color: inherit;
-}
-
-.gbc_WindowWidget {
-	background: inherit;
-	background-color: inherit;
+.gbc_style_center {
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	display: block;
 }
 
