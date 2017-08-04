@@ -1,11 +1,31 @@
 
+@font-face {
+	font-family: Michroma;
+	src: url("../resources/img/Michroma.ttf") format("truetype");
+}
+@font-face {
+	font-family: AUdimat ;
+	font-style: normal;
+	src: url("../resources/img/AUdimat-Regular.otf") format("opentype");
+}
+@font-face {
+	font-family: AUdimat ;
+	font-weight: bold;
+	src: url("../resources/img/AUdimat-Bold.otf") format("opentype");
+}
+@font-face {
+	font-family: AUdimat ;
+	font-style: italic;
+	src: url("../resources/img/AUdimat-Italic.otf") format("opentype");
+}
 
 body {
 	background: black;
 	-webkit-font-smoothing: antialiased;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 16px;
+	font-family: Audimat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
 	font-weight: 400;
+	/*font-stretch: extra-expanded;*/
 }
 
 h1 {
@@ -28,7 +48,7 @@ footer {
 }
 
 .gbc_WindowMainContainer > .gbc_WindowMenuContainerMiddle > .gbc_WindowContent {
-	padding: 0px;
+	padding: 0px 3px 0px 3px;
 }
 
 .gbc_FormWidget {
@@ -55,6 +75,7 @@ footer {
 }
 
 
+/* Folders */
 .gbc_FolderWidget {
 	background: linear-gradient( #F2F2F9, #B7B7CC );
 }
@@ -69,3 +90,32 @@ footer {
 	background-color: $gbc-primary-background-color;
 }
 
+.mt-tab-titles-bar[__FolderWidget=top], .mt-tab-titles-bar[__FolderWidget=bottom] {
+	border-bottom: $gbc-primary-color solid 1px;
+}
+
+/* GroupBox */
+.gbc_GroupWidgetContent > .gbc_GroupTitleWidget:not(.empty) {
+	padding: 2px 0 2px 0;
+}
+.gbc_GroupTitleWidget {
+	background: linear-gradient( #B7B7CC, #F2F2F9 );
+	border-bottom: $gbc-primary-color groove 1px;
+	font-family: Michroma, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Modal Window */
+.gbc_ModalWidget.movable .mt-dialog-header {
+	background: linear-gradient( #B7B7CC, #F2F2F9 );
+	border-bottom: $gbc-primary-color groove 1px;
+	font-family: Michroma, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.gbc_ModalWidget .mt-dialog-header {
+	padding: 2px 0px 0px 0px;
+}
+
+/* Table */
+.gbc_TableWidget .gbc_TableColumnsHeaders, .gbc_TableWidget .gbc_TableLeftColumnsHeaders, .gbc_TableWidget .gbc_TableRightColumnsHeaders {
+	background: linear-gradient( #B7B7CC, #F2F2F9 );
+	border-bottom: $gbc-primary-color groove 1px;
+}

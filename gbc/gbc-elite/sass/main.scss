@@ -65,6 +65,11 @@ body {
 	width: 0px;
 }
 
+.gbc_style_hidden {
+	background-color: inherit !important;
+	display: none !important;
+}
+
 .gbc_UserInterfaceWidget { 
 	background: inherit;
 	background-color: inherit;

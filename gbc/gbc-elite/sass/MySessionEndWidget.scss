@@ -1,9 +1,9 @@
 .gbc_MySessionEndWidget {
   position: absolute;
   top: 5px;
-  left: 60px;
+  left: 50px;
   bottom: 5px;
-  right: 60px;
+  right: 50px;
   display: normal;
 }
 .myHeaderText {
@@ -14,9 +14,8 @@
   text-align: center;
   padding: 6px 60px 6px 60px;
   margin: 20px 0px 0px 0px;
+	background-color: $gbc-primary-background-color;
 	font-size: 12pt;
-	width: fit-content;
-	align-self: center;
 }
 
 [__MySessionEndWidget].mt-card-body {
@@ -26,11 +25,9 @@
 [__MySessionEndWidget].mt-card-session {
   text-align: center;
   padding: 6px 60px 6px 60px;
-  margin: 50px 0px 0px 0px;
+  margin: 20px 0px 0px 0px;
 	background-color: $gbc-secondary-background-color;
 	font-size: 8pt;
-	width: fit-content;
-	align-self: center;
 }
 
 [__MySessionEndWidget].mt-card-header-text {
@@ -40,15 +37,16 @@
 	padding: 4px;
 	border-bottom: 1px solid;
 }
+
+.mt-card > .mt-card-richhead .mt-card-header-text {
+  line-height: 20px;
+}
+
 .mt-card > .mt-card-richhead {
 	height: initial;
 	position: relative;
 	border-bottom: none;
   text-align: center;
-}
-
-.mt-card > .mt-card-richhead .mt-card-header-text {
-	line-height: 18px;
 }
 
 [__MySessionEndWidget].session {
@@ -76,7 +74,7 @@
 }
 
 table#demos {
-	background: linear-gradient($mt-black, $gbc-secondary-background-color);
+	background: linear-gradient($gbc-primary-background-color, $gbc-secondary-background-color);
 	border: 1px solid $gbc-primary-color;
 	th {
 		background: $gbc-primary-color;

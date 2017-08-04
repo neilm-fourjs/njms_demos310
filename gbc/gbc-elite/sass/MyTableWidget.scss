@@ -33,6 +33,7 @@ $gbc-TableWidget-headers-color: $gbc-primary-medium-color !important;
 	}
 
 
+
 	.gbc_TableColumnsHeaders {
 		background-color: $gbc-TableWidget-headers-color;
 		color: $gbc-secondary-text-color;
@@ -41,6 +42,26 @@ $gbc-TableWidget-headers-color: $gbc-primary-medium-color !important;
 		.headerText {
 			font-weight: bold;
 		}
+	}
+}
+
+
+.gbc_style_menu {
+	background: inherit;
+	border: none;
+	box-shadow: none;
+
+	.gbc_TableColumnItemWidget {
+		height: 30px !important;
+	}
+
+	.gbc_TableWidget .gbc_TableScrollArea, .gbc_TableWidget .gbc_TableRightScrollArea, .gbc_TableWidget .gbc_TableLeftScrollArea {
+		background: linear-gradient($gbc-secondary-background-color, $gbc-primary-background-color);
+		overflow-x: auto;
+		overflow-y: auto;
+		width: fit-content;
+		margin-left: auto;
+		margin-right: auto;
 	}
 }
 
