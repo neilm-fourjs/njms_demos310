@@ -2,7 +2,7 @@
 # This script attempts to setup a GBC dev environment
 #
 # Example:
-# ./setup.sh 1.00.37 201706291754
+# ./gbc-setup.sh 1.00.38 201707261501
 
 BASE=$(pwd)
 
@@ -18,7 +18,7 @@ fi
 
 if [ $# -ne 2 ]; then
 	echo "ERROR: Must pass GBC version and Build, eg:"
-	echo "./setup.sh 1.00.37 201706291754"
+	echo "./gbc-setup.sh 1.00.38 201707261501"
 	exit 1
 fi
 
