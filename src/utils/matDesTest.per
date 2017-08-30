@@ -3,6 +3,8 @@ ACTION DEFAULTS
 	ACTION msg ( TEXT="Message", IMAGE="fa-info-circle" )
 	ACTION err ( TEXT="Error", IMAGE="fa-exclamation-circle" )
 	ACTION win ( TEXT="Model Window", IMAGE="fa-square-o" )
+	ACTION wintitle ( TEXT="Window Title", IMAGE="fa-square" )
+	ACTION uitext ( TEXT="UI Text", IMAGE="fa-square" )
 END -- AD
 
 TOPMENU
@@ -18,6 +20,8 @@ TOPMENU
 		COMMAND msg
 		COMMAND err
 		COMMAND win
+		COMMAND wintitle
+		COMMAND uitext
 	END -- opt
 	GROUP help (TEXT="Help")
 		COMMAND about
