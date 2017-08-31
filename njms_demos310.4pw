@@ -61,8 +61,9 @@
   <LanguageList version="1.0"/>
   <PlatformList version="1.0"/>
   <Group label="GBC" language="Genero">
-    <Library binaryName="gbc_njm" id="-1375686528" label="gbc_njm" language="GBC" srcDirectory="$(ProjectDir)/gbc/gbc-njm" targetDirectory="$(ProjectDir)/distbin">
+    <Library binaryName="gbc-njm" id="-1375686528" label="gbc-njm" language="GBC" srcDirectory="$(ProjectDir)/gbc/gbc-njm" targetDirectory="$(ProjectDir)/distbin">
       <VirtualFolder label="js">
+        <File filePath="gbc/gbc-njm/js/MyFrontCall.js"/>
         <File filePath="gbc/gbc-njm/js/MyHeaderBarWidget.js"/>
         <File filePath="gbc/gbc-njm/js/MyHeaderBarWidget.tpl.html"/>
         <File filePath="gbc/gbc-njm/js/MyMainContainerWidget.js"/>

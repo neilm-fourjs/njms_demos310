@@ -53,7 +53,9 @@ MAIN
 		ON ACTION err ERROR "Error Message"
 		ON ACTION win CALL win()
 		ON ACTION wintitle CALL fgl_setTitle("My Window Title")
-		ON ACTION wintitle2 CALL gbc_setText(".MyHeaderBarWidget-title","My Window Title")
+		ON ACTION dyntext CALL gbc_replaceHTML("dyntext","Dynamic Text")
+		ON ACTION darklogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo_dark.png'/>")
+		ON ACTION lightlogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo.png'/>")
 		ON ACTION uitext CALL ui.Interface.setText("My UI Text")
 		GL_ABOUT
 		ON ACTION close EXIT DIALOG
@@ -72,8 +74,8 @@ FUNCTION win()
 
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION gbc_setText(l_obj STRING, l_txt STRING)
+FUNCTION gbc_replaceHTML(l_obj STRING, l_txt STRING)
 	DEFINE l_ret STRING
-	CALL ui.Interface.frontCall("","",[ l_obj, l_txt ], l_ret)
+	CALL ui.Interface.frontCall("mymodule","replace_html",[ l_obj, l_txt ], l_ret)
 	DISPLAY "l_ret:",l_ret
 END FUNCTION
