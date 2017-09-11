@@ -25,6 +25,8 @@ IMPORT JAVA javax.print.attribute.standard.Copies
 &endif
 
 IMPORT os
+IMPORT security
+
 IMPORT FGL gl_lib
 IMPORT FGL gl_lib_aui
 &include "genero_lib.inc"
@@ -307,11 +309,13 @@ FUNCTION glGRW_rptStart(l_filename STRING) RETURNS om.saxdocumenthandler
 		END IF
 	END IF
 
-	CALL fgl_report_selectDevice(opts.r_output)
 	CALL fgl_report_selectPreview(r_preview)
 	IF opts.r_outputFileName IS NOT NULL THEN
 		CALL fgl_report_setOutputFileName( opts.r_outputFileName )
 	END IF
+
+	CALL glGRW_configureOutoutDevice( opts.r_output )
+
 	IF opts.r_output = "Printer" AND opts.r_printer != m_def_printer THEN
 		CALL fgl_report_setPrinterName( m_printers[ opts.r_printer ].name )
 	END IF
@@ -368,8 +372,9 @@ FUNCTION glGRW_rptStartASCII(
 		CALL fgl_report_configurePageSize("a4width","a4length")
 	END IF
 
+	CALL glGRW_configureOutoutDevice( opts.r_output )
+
 	IF l_device != "XML" THEN
-		CALL fgl_report_selectDevice(l_device)
 		CALL fgl_report_selectPreview(l_preview)
 	END IF
 
@@ -391,6 +396,24 @@ FUNCTION glGRW_rptStartASCII(
 	END IF
 	RETURN l_handler
 END FUNCTION 
+--------------------------------------------------------------------------------
+FUNCTION  glGRW_configureOutoutDevice( l_output STRING )
+	DEFINE l_uuid STRING
+	IF l_output = "XML" THEN RETURN END IF
+
+	CALL fgl_report_selectDevice(l_output)
+
+	IF l_output = "Browser" THEN
+		IF fgl_getenv("GRE_PRIVATE_DIR") IS NOT NULL THEN
+			LET l_uuid=security.RandomGenerator.CreateUUIDString()
+			CALL fgl_report_setBrowserDocumentDirectory(fgl_getenv("GRE_PRIVATE_DIR")||"/"||l_uuid)
+			CALL fgl_report_setBrowserFontDirectory(fgl_getenv("GRE_PUBLIC_DIR")||"/fonts")
+			CALL fgl_report_setBrowserDocumentDirectoryURL(fgl_getenv("GRE_PRIVATE_URL_PREFIX")||"/"||l_uuid)
+			CALL fgl_report_setBrowserFontDirectoryURL(fgl_getenv("GRE_PUBLIC_URL_PREFIX")||"/fonts")
+			CALL ui.Interface.frontCall( "standard", "launchurl", [fgl_getenv("GRE_REPORT_VIEWER_URL_PREFIX")||"/viewer.html?reportId="||l_uuid||"&privateUrlPrefix="||fgl_getenv("GRE_PRIVATE_URL_PREFIX")], [] )		END IF
+	END IF
+
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Printing Window with message...
 #+

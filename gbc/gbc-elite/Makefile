@@ -13,7 +13,7 @@ $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME):
 
 # Build our custom gbc
 $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME): $(GBCBASE)/build/gbc-$(PACKVER) $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME)
-	cd $^ && grunt --customization=customization/$(CUSTOMNAME)
+	cd $^ && grunt --customization=customization/$(CUSTOMNAME) | tee $(PWD)/$(CUSTOMNAME).build
 
 # Package our custom gbc
 ../../../../../$(DISTBIN)/$(CUSTOMNAME)-$(PACKVER).zip: $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME)

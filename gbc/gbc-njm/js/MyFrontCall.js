@@ -18,6 +18,7 @@ modulum('FrontCallService.modules.mymodule', ['FrontCallService'],
 	function(context, cls) {
 		context.FrontCallService.modules.mymodule = {
 
+//NJM Replace the html within a tag with an id= the passed id.
 			replace_html: function (id, value) {
 				var elt = document.getElementById(id);
 				if ( elt ) {
