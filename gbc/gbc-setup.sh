@@ -4,6 +4,13 @@
 # Example:
 # ./gbc-setup.sh 1.00.38 201707261501
 
+set_default_build()
+{
+LAST=$(ls -1 $GBCPROJECTDIR/fjs-${GBC}*-project.zip | tail -1 )
+VER=$(echo $LAST | cut -d'-' -f3)
+BLD=$(echo $LAST | cut -d'-' -f4)
+}
+
 BASE=$(pwd)
 
 GBC=gbc
@@ -17,12 +24,23 @@ if [ -z $GBCPROJECTDIR ]; then
 fi
 
 if [ $# -ne 2 ]; then
-	echo "ERROR: Must pass GBC version and Build, eg:"
-	echo "./gbc-setup.sh 1.00.38 201707261501"
+	set_default_build
+fi
+
+if [ -z $VER ]; then
+	echo "VER is not set! aborting!"
+	echo "./gbc-setup.sh 1.00.38 build201707261501"
+	exit 1
+fi
+if [ -z $BLD ]; then
+	echo "BLD is not set! aborting!"
+	echo "./gbc-setup.sh 1.00.38 build201707261501"
 	exit 1
 fi
 
-SRC="$GBCPROJECTDIR/fjs-$GBC-$VER-build$BLD-project.zip"
+echo "VER=$VER BLD=$BLD"
+
+SRC="$GBCPROJECTDIR/fjs-$GBC-$VER-$BLD-project.zip"
 
 BLDDIR=build/gbc-$VER
 

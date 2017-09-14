@@ -6,11 +6,11 @@ include makefile.inc
 BASE=$(shell pwd)
 dirs=gbc-njm gbc-elite gbc-teal gbc-gc gbc-hivis
 
-all: build/gbc-$(GBCVER) subdirs
+all: build/gbc-current subdirs
 
 # Setup the GBC build env
-build/gbc-$(GBCVER): 
-	./gbc-setup.sh $(GBCVER) $(GBCBLD)
+build/gbc-current: 
+	./gbc-setup.sh
 
 subdirs: $(dirs)
 	@for dir in $^ ; do  \
