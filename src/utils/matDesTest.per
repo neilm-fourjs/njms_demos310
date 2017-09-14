@@ -8,6 +8,7 @@ ACTION DEFAULTS
 	ACTION darklogo ( TEXT="Dark Logo", IMAGE="fa-square" )
 	ACTION lightlogo ( TEXT="Light Logo", IMAGE="fa-square" )
 	ACTION uitext ( TEXT="UI Text", IMAGE="fa-square" )
+	ACTION pg ( TEXT="ProgressBar", IMAGE="fa-toggle-right" )
 END -- AD
 
 TOPMENU
@@ -28,6 +29,7 @@ TOPMENU
 		COMMAND darklogo
 		COMMAND lightlogo
 		COMMAND uitext
+		COMMAND pg
 	END -- opt
 	GROUP help (TEXT="Help")
 		COMMAND about
@@ -42,6 +44,7 @@ TOOLBAR
 	ITEM msg
 	ITEM err
 	ITEM win
+	ITEM pg
 END -- TB
 
 LAYOUT ( STYLE="main2" )
@@ -98,6 +101,7 @@ END -- FOLDER
 GRID
 {
 [logo                         ]
+[pg                           ]
 }
 END -- GRID
 END -- VBOX
@@ -130,6 +134,8 @@ IMAGE logo2 : logo2, IMAGE="logo_light", SIZEPOLICY=INITIAL,STYLE="noborder cent
 a001 = FORMONLY.col1, TITLE="Title1", IMAGECOLUMN=img;
 a002 = FORMONLY.col2, TITLE="Fld2";
 PHANTOM FORMONLY.img;
+
+PROGRESSBAR pg = FORMONLY.pg, VALUEMAX=5000;
 
 BUTTON but1 : quit;
 BUTTON msg : msg;

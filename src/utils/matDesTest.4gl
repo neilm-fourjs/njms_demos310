@@ -57,6 +57,7 @@ MAIN
 		ON ACTION darklogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo_dark.png'/>")
 		ON ACTION lightlogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo.png'/>")
 		ON ACTION uitext CALL ui.Interface.setText("My UI Text")
+		ON ACTION pg CALL pg()
 		GL_ABOUT
 		ON ACTION close EXIT DIALOG
 		ON ACTION quit EXIT DIALOG
@@ -72,6 +73,14 @@ FUNCTION win()
 	END MENU
 	CLOSE WINDOW win
 
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION pg()
+	DEFINE x SMALLINT
+	FOR x = 1 TO 5000
+		DISPLAY x TO pg
+		CALL ui.Interface.refresh()
+	END FOR
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION gbc_replaceHTML(l_obj STRING, l_txt STRING)
