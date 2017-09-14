@@ -1,6 +1,6 @@
 
 TOOLBAR
-	ITEM exit (IMAGE="exit")
+	ITEM quit (IMAGE="quit")
 END -- TB
 
 LAYOUT  (STYLE="main2" )
@@ -27,8 +27,7 @@ END -- TABLE
 GRID
 {
 Current:
-[c:img_name                ]
-[ii]
+[c:ii:img_name                ]
   [img                     ]
   [                        ]
   [                        ]
@@ -78,7 +77,7 @@ IMAGE i10 = FORMONLY.a10,TITLE="10", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCAL
 LABEL img_name = FORMONLY.img_name, SIZEPOLICY=FIXED, STYLE="em16";
 BUTTON c : copy, IMAGE="fa-copy";
 
-IMAGE ii = FORMONLY.img2;
+IMAGE ii = FORMONLY.img2, STYLE="noborder";
 IMAGE img = FORMONLY.img, STRETCH=BOTH, AUTOSCALE, {HEIGHT=150 PIXELS, WIDTH=150 PIXELS,} STYLE="noborder";
 
 LABEL x01 = FORMONLY.i01, SIZEPOLICY=FIXED;

@@ -57,25 +57,25 @@ MAIN
 			ON ACTION copy CALL ui.Interface.frontCall("standard","cbSet",m_img, l_ret)
 
 			BEFORE FIELD a01
-				CALL dsp_img( m_rec2[ arr_curr() ].i01 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i01, m_rec3[ arr_curr() ].v01 )
 			BEFORE FIELD a02
-				CALL dsp_img( m_rec2[ arr_curr() ].i02 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i02, m_rec3[ arr_curr() ].v02 )
 			BEFORE FIELD a03
-				CALL dsp_img( m_rec2[ arr_curr() ].i03 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i03, m_rec3[ arr_curr() ].v03 )
 			BEFORE FIELD a04
-				CALL dsp_img( m_rec2[ arr_curr() ].i04 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i04, m_rec3[ arr_curr() ].v04 )
 			BEFORE FIELD a05
-				CALL dsp_img( m_rec2[ arr_curr() ].i05 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i05, m_rec3[ arr_curr() ].v05 )
 			BEFORE FIELD a06
-				CALL dsp_img( m_rec2[ arr_curr() ].i06 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i06, m_rec3[ arr_curr() ].v06 )
 			BEFORE FIELD a07
-				CALL dsp_img( m_rec2[ arr_curr() ].i07 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i07, m_rec3[ arr_curr() ].v07 )
 			BEFORE FIELD a08
-				CALL dsp_img( m_rec2[ arr_curr() ].i08 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i08, m_rec3[ arr_curr() ].v08 )
 			BEFORE FIELD a09
-				CALL dsp_img( m_rec2[ arr_curr() ].i09 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i09, m_rec3[ arr_curr() ].v09 )
 			BEFORE FIELD a10
-				CALL dsp_img( m_rec2[ arr_curr() ].i10 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i10, m_rec3[ arr_curr() ].v10 )
 
 			BEFORE ROW
 				DISPLAY DIALOG.getCurrentItem() TO img_name
@@ -102,14 +102,14 @@ MAIN
 				DISPLAY BY NAME m_rec3[ arr_curr() ].v10
 
 		END DISPLAY
-		COMMAND "Exit" EXIT DIALOG
+		ON ACTION quit EXIT DIALOG
 		ON ACTION close EXIT DIALOG
 	END DIALOG
 END MAIN
 --------------------------------------------------------------------------------
-FUNCTION dsp_img( l_nam STRING )
+FUNCTION dsp_img( l_nam STRING, l_id STRING)
 	LET m_img = l_nam
-	DISPLAY l_nam TO img_name
+	DISPLAY l_nam||" ("||l_id||")" TO img_name
 	DISPLAY l_nam TO img
 	DISPLAY l_nam TO img2
 END FUNCTION

@@ -1,9 +1,14 @@
 
+IMPORT os
 IMPORT FGL gl_lib
 &include "genero_lib.inc"
 CONSTANT C_VER="3.1"
 CONSTANT PRGDESC = "Material Design Test"
 CONSTANT PRGAUTH = "Neil J.Martin"
+CONSTANT PG_MAX=10000
+
+DEFINE m_forms DYNAMIC ARRAY OF STRING
+
 MAIN
 	DEFINE l_rec RECORD
 		fld1 CHAR(10),
@@ -57,7 +62,8 @@ MAIN
 		ON ACTION darklogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo_dark.png'/>")
 		ON ACTION lightlogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo.png'/>")
 		ON ACTION uitext CALL ui.Interface.setText("My UI Text")
-		ON ACTION pg CALL pg()
+		ON ACTION pg CALL pg(DIALOG.getForm())
+		ON ACTION showform CALL showForm()
 		GL_ABOUT
 		ON ACTION close EXIT DIALOG
 		ON ACTION quit EXIT DIALOG
@@ -75,9 +81,13 @@ FUNCTION win()
 
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION pg()
+FUNCTION pg(l_f ui.Form)
 	DEFINE x SMALLINT
-	FOR x = 1 TO 5000
+	DEFINE l_dn om.DomNode
+	LET l_dn = l_f.findNode("FormField","formonly.pg")
+	LET l_dn = l_dn.getFirstChild()
+	CALL l_dn.setAttribute("valueMax",PG_MAX)
+	FOR x = 1 TO PG_MAX
 		DISPLAY x TO pg
 		CALL ui.Interface.refresh()
 	END FOR
@@ -87,4 +97,37 @@ FUNCTION gbc_replaceHTML(l_obj STRING, l_txt STRING)
 	DEFINE l_ret STRING
 	CALL ui.Interface.frontCall("mymodule","replace_html",[ l_obj, l_txt ], l_ret)
 	DISPLAY "l_ret:",l_ret
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION showForm()
+	DEFINE l_path, l_file STRING
+	DEFINE l_handle INTEGER
+	IF m_forms.getLength() = 0 THEN
+		LET l_path = os.Path.pwd()
+		CALL os.Path.dirSort("name", 1)
+		LET l_handle = os.Path.dirOpen(l_path)
+		WHILE l_handle > 0
+			LET l_file = os.Path.dirNext(l_handle)
+			IF l_file IS NULL THEN EXIT WHILE END IF
+			IF os.path.extension(l_file) = "42f" THEN
+				LET m_forms[ m_forms.getLength() + 1 ] = l_file
+			END IF
+		END WHILE
+		CALL os.Path.dirClose(l_handle)
+	END IF
+	OPEN WINDOW matDesTest_forms WITH FORM "matDesTest_forms"
+	DISPLAY ARRAY m_forms TO arr.*
+		ON ACTION accept CALL showForm2( m_forms[ arr_curr() ] )
+	END DISPLAY
+	CLOSE WINDOW matDesTest_forms
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION showForm2(l_formName STRING)
+	OPEN WINDOW aform WITH FORM l_formName
+	MENU
+		ON ACTION close EXIT MENU
+		ON ACTION cancel EXIT MENU
+		ON ACTION quit EXIT MENU
+	END MENU
+	CLOSE WINDOW aform
 END FUNCTION

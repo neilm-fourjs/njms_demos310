@@ -1,5 +1,6 @@
 
 ACTION DEFAULTS
+	ACTION showform ( TEXT="Show Form", IMAGE="fa-desktop" )
 	ACTION msg ( TEXT="Message", IMAGE="fa-info-circle" )
 	ACTION err ( TEXT="Error", IMAGE="fa-exclamation-circle" )
 	ACTION win ( TEXT="Model Window", IMAGE="fa-square-o" )
@@ -13,6 +14,7 @@ END -- AD
 
 TOPMENU
 	GROUP file (TEXT="File")
+		COMMAND showform
 		COMMAND quit
 	END -- FIle
 	GROUP edit (TEXT="Edit")
@@ -41,6 +43,7 @@ TOOLBAR
 	ITEM editcut
 	ITEM editcopy
 	ITEM editpaste
+	ITEM showform
 	ITEM msg
 	ITEM err
 	ITEM win
@@ -51,13 +54,13 @@ LAYOUT ( STYLE="main2" )
 HBOX ( SPLITTER )
 GRID
 {
- [lab1       ][f001      ]
- [lab2       ][f002           ]
- [lab3       ][f003           ]
- [lab4       ][f004      :a   ]
+[lab1|f001      ]
+[lab2|f002           ]
+[lab3|f003           ]
+[lab4|f004      :a   ]
 <G g1                          >
- [lab5       ][f005         ]
- [lab6       ][f006           ]
+[lab5|f005         ]
+[lab6|f006           ]
 <                              >
  more text outside of group.
 <T tab                         >
@@ -135,7 +138,7 @@ a001 = FORMONLY.col1, TITLE="Title1", IMAGECOLUMN=img;
 a002 = FORMONLY.col2, TITLE="Fld2";
 PHANTOM FORMONLY.img;
 
-PROGRESSBAR pg = FORMONLY.pg, VALUEMAX=5000;
+PROGRESSBAR pg = FORMONLY.pg, VALUEMAX=10000;
 
 BUTTON but1 : quit;
 BUTTON msg : msg;
