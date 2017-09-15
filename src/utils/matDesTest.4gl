@@ -5,6 +5,8 @@ IMPORT FGL gl_lib
 CONSTANT C_VER="3.1"
 CONSTANT PRGDESC = "Material Design Test"
 CONSTANT PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
+
 CONSTANT PG_MAX=10000
 
 DEFINE m_forms DYNAMIC ARRAY OF STRING
@@ -27,7 +29,8 @@ MAIN
 		img STRING
 	END RECORD
 	DEFINE x SMALLINT
-	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, PRGDESC, PRGAUTH)
+
+	CALL gl_lib.gl_setInfo(C_VER, NULL, C_PRGICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
