@@ -7,24 +7,6 @@ body {
 	background: black;
 }
 
-.gbc_ModalWidget .mt-dialog-header .mt-dialog-title {
-	padding-top: 1px;
-	fill: $gbc-secondary-text-color;
-}
-
-.gbc_ModalWidget .mt-dialog-header .mt-dialog-actions {
-	color: $gbc-secondary-text-color;
-	fill: $gbc-secondary-text-color;
-}
-
-.gbc_ModalWidget .mt-dialog-header {
-	background-color: $gbc-primary-medium-color;
-	color: $gbc-secondary-text-color;
-	fill: $gbc-secondary-text-color;
-	padding: 5px 2px 2px 5px;
-	margin-bottom: 5px;
-}
-
 .gbc_UserInterfaceWidget > .gbc_barsContainer {
 	color: $gbc-secondary-text-color;
 	fill: $gbc-secondary-text-color;
@@ -44,8 +26,8 @@ body {
 	color: $gbc-primary-color;
 }
 
-.gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next {
-	width: 0px;
+.vanished {
+	display: none;
 }
 
 .gbc_UserInterfaceWidget { 
