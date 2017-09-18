@@ -66,14 +66,14 @@ MAIN
 		ON ACTION lightlogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo.png'/>")
 		ON ACTION uitext CALL ui.Interface.setText("My UI Text")
 		ON ACTION pg CALL pg(DIALOG.getForm(), 0)
+		ON ACTION pg50 CALL pg(DIALOG.getForm(), (PG_MAX / 2) )
 		ON ACTION showform CALL showForm()
 		ON ACTION inactive CALL dummy()
-
 		GL_ABOUT
 		ON ACTION close EXIT DIALOG
 		ON ACTION quit EXIT DIALOG
 		BEFORE DIALOG
-		CALL pg(DIALOG.getForm(), (PG_MAX / 2) )
+			CALL pg(DIALOG.getForm(), (PG_MAX / 2) )
 	END DIALOG
 END MAIN
 --------------------------------------------------------------------------------
@@ -106,6 +106,7 @@ FUNCTION pg(l_f ui.Form, l_just_set INTEGER)
 	CALL l_dn.setAttribute("valueMax",PG_MAX)
 	IF l_just_set > 0 THEN
 		DISPLAY l_just_set TO pg
+		CALL ui.Interface.refresh()
 	ELSE
 		FOR x = 1 TO PG_MAX
 			DISPLAY x TO pg

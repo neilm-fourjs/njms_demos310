@@ -4,7 +4,7 @@ gbc-header-color                    : Table Heading / TopMenu / ToolBar - backgr
 gbc-primary-medium-color            : MainControlBar / Table Current Row - background color & Current Field Underline color & text color on end page
 
 gbc-primary-background-color        : Window primary background color
-gbc-primary-color                   : Button background color & Text on header / footer & Current FolderPage underline color
+gbc-primary-color                   : Button background color & Text on header / footer & Current FolderPage underline color & ProgBar Color
 gbc-primary-light-color             : Header / Footer backgound color & Field(not current) underline
 
 gbc-secondary-background-color      : Folder Page(including current tab) / Group / drop-down menu / SessionEnd main group - background color

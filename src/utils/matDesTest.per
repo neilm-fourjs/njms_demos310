@@ -10,6 +10,7 @@ ACTION DEFAULTS
 	ACTION lightlogo ( TEXT="Light Logo", IMAGE="fa-square" )
 	ACTION uitext ( TEXT="UI Text", IMAGE="fa-square" )
 	ACTION pg ( TEXT="ProgressBar", IMAGE="fa-toggle-right" )
+	ACTION pg50 ( TEXT="Prog Bar 50", IMAGE="fa-battery-half" )
 	ACTION inactive ( TEXT="Inactive", IMAGE="fa-eye-slash" )
 END -- AD
 
@@ -34,6 +35,7 @@ TOPMENU
 		COMMAND lightlogo
 		COMMAND uitext
 		COMMAND pg
+		COMMAND pg50
 	END -- opt
 	GROUP help (TEXT="Help")
 		COMMAND about
@@ -51,6 +53,7 @@ TOOLBAR
 	ITEM err
 	ITEM win
 	ITEM pg
+	ITEM pg50
 END -- TB
 
 LAYOUT ( STYLE="main2 gbc_footer" )
