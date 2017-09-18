@@ -63,6 +63,8 @@
   <Group label="GBC" language="Genero">
     <Library binaryName="gbc-njm" id="-1375686528" label="gbc-njm" language="GBC" srcDirectory="$(ProjectDir)/gbc/gbc-njm" targetDirectory="$(ProjectDir)/distbin">
       <VirtualFolder label="js">
+        <File filePath="gbc/gbc-njm/js/MyFormWidget.js"/>
+        <File filePath="gbc/gbc-njm/js/MyFormWidget.tpl.html"/>
         <File filePath="gbc/gbc-njm/js/MyFrontCall.js"/>
         <File filePath="gbc/gbc-njm/js/MyHeaderBarWidget.js"/>
         <File filePath="gbc/gbc-njm/js/MyHeaderBarWidget.tpl.html"/>
@@ -74,14 +76,19 @@
       <VirtualFolder label="sass">
         <File filePath="gbc/gbc-njm/sass/customization.scss"/>
         <File filePath="gbc/gbc-njm/sass/main.scss"/>
+        <File filePath="gbc/gbc-njm/sass/MyDialogWindowHeading.scss"/>
         <File filePath="gbc/gbc-njm/sass/MyFolder.scss"/>
+        <File filePath="gbc/gbc-njm/sass/MyFooter.scss"/>
         <File filePath="gbc/gbc-njm/sass/MyGroup.scss"/>
         <File filePath="gbc/gbc-njm/sass/MyHeaderBarWidget.scss"/>
         <File filePath="gbc/gbc-njm/sass/MyMainContainerWidget.scss"/>
         <File filePath="gbc/gbc-njm/sass/MySessionEndWidget.scss"/>
         <File filePath="gbc/gbc-njm/sass/MyTableWidget.scss"/>
+        <File filePath="gbc/gbc-njm/sass/MyToolBar.scss"/>
+        <File filePath="gbc/gbc-njm/sass/MyTopMenu.scss"/>
       </VirtualFolder>
       <File filePath="gbc/gbc-njm/theme.scss.json"/>
+      <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
   <Group environment="value:FGLPROFILE=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">

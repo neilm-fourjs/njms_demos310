@@ -12,7 +12,7 @@ gbc-secondary-color                 : Checkbox border colour
 
 gbc-field-background-color          : Widget background color active fields and Table background
 gbc-field-disabled-background       : Widget disabled background input array only ?
-gbc-disabled-color                  : Disabled text color for Table Columns
+gbc-disabled-color                  : Disabled text color for Table Column heading and inactive checkbox border
 
 gbc-separator-color                 : Toolbar separator color
 gbc-message-color                   : Message background color

@@ -65,18 +65,19 @@ MAIN
 		ON ACTION darklogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo_dark.png'/>")
 		ON ACTION lightlogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo.png'/>")
 		ON ACTION uitext CALL ui.Interface.setText("My UI Text")
-		ON ACTION pg CALL pg(DIALOG.getForm())
+		ON ACTION pg CALL pg(DIALOG.getForm(), 0)
 		ON ACTION showform CALL showForm()
 		ON ACTION inactive CALL dummy()
 
 		GL_ABOUT
 		ON ACTION close EXIT DIALOG
 		ON ACTION quit EXIT DIALOG
+		BEFORE DIALOG
+		CALL pg(DIALOG.getForm(), (PG_MAX / 2) )
 	END DIALOG
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION win()
-
 	OPEN WINDOW win WITH FORM "matDesTest_modal"
 	MENU
 		ON ACTION close EXIT MENU
@@ -97,16 +98,20 @@ FUNCTION dummy()
 	END MENU
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION pg(l_f ui.Form)
+FUNCTION pg(l_f ui.Form, l_just_set INTEGER)
 	DEFINE x SMALLINT
 	DEFINE l_dn om.DomNode
 	LET l_dn = l_f.findNode("FormField","formonly.pg")
 	LET l_dn = l_dn.getFirstChild()
 	CALL l_dn.setAttribute("valueMax",PG_MAX)
-	FOR x = 1 TO PG_MAX
-		DISPLAY x TO pg
-		CALL ui.Interface.refresh()
-	END FOR
+	IF l_just_set > 0 THEN
+		DISPLAY l_just_set TO pg
+	ELSE
+		FOR x = 1 TO PG_MAX
+			DISPLAY x TO pg
+			CALL ui.Interface.refresh()
+		END FOR
+	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION gbc_replaceHTML(l_obj STRING, l_txt STRING)
