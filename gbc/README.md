@@ -131,10 +131,11 @@ To make this work the footer has to be part of the 'form'. I created a MyFormWid
 ```html
 <div>
   <div class="scroller">
-    <div class="containerElement"></div>
-        <footer>
-      This is my customized GBC Demo - by neilm@4js.com
-        </footer>
+    <div class="containerElement">
+      <footer>
+This is my customized GBC Demo - by neilm@4js.com
+      </footer>
+    </div>
   </div>
 </div>
 ```
@@ -154,7 +155,7 @@ modulum('MyFormWidget', ['FormWidget', 'WidgetFactory'],
 ```
 You can see the MyFormWidget.js doesn't actually 'do' anything - so it's inheriting all the methods
 from the default 'FormWidget' and overriding nothing. The class is registered with a style though
-so only a Form with a style of 'gbc_footer' will get the footer - otherwise all windows would get
+so only a Form with a style of 'gbc_footer' will get the footer - otherwise all form would get
 the footer.
 
 ### Change the 'End Session' page ( MySessionEndWidget.js )
