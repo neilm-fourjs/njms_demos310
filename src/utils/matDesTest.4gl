@@ -67,6 +67,8 @@ MAIN
 		ON ACTION uitext CALL ui.Interface.setText("My UI Text")
 		ON ACTION pg CALL pg(DIALOG.getForm())
 		ON ACTION showform CALL showForm()
+		ON ACTION inactive CALL dummy()
+
 		GL_ABOUT
 		ON ACTION close EXIT DIALOG
 		ON ACTION quit EXIT DIALOG
@@ -81,7 +83,18 @@ FUNCTION win()
 		ON ACTION cancel EXIT MENU
 	END MENU
 	CLOSE WINDOW win
-
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION dummy()
+	MENU "dummy"
+		BEFORE MENU
+			CALL DIALOG.getForm().setElementText("inactive","Active")
+			CALL DIALOG.getForm().setElementImage("inactive","fa-eye")
+		ON ACTION inactive
+			CALL DIALOG.getForm().setElementText("inactive","Inactive")
+			CALL DIALOG.getForm().setElementImage("inactive","fa-eye-slash")
+			EXIT MENU
+	END MENU
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION pg(l_f ui.Form)

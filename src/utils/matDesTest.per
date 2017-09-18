@@ -10,11 +10,13 @@ ACTION DEFAULTS
 	ACTION lightlogo ( TEXT="Light Logo", IMAGE="fa-square" )
 	ACTION uitext ( TEXT="UI Text", IMAGE="fa-square" )
 	ACTION pg ( TEXT="ProgressBar", IMAGE="fa-toggle-right" )
+	ACTION inactive ( TEXT="Inactive", IMAGE="fa-eye-slash" )
 END -- AD
 
 TOPMENU
 	GROUP file (TEXT="File")
 		COMMAND showform
+		COMMAND inactive
 		COMMAND quit
 	END -- FIle
 	GROUP edit (TEXT="Edit")
@@ -44,6 +46,7 @@ TOOLBAR
 	ITEM editcopy
 	ITEM editpaste
 	ITEM showform
+	ITEM inactive
 	ITEM msg
 	ITEM err
 	ITEM win

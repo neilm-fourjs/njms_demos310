@@ -23,9 +23,4 @@
 		<MODULE>materialDesignTest.42r</MODULE>
 		<WEB_COMPONENT_DIRECTORY>$(res.path.njm_demo)/pics/webcomponents</WEB_COMPONENT_DIRECTORY>
 	</EXECUTION>
-	<UA_OUTPUT>
-		<PROXY>$(res.uaproxy.cmd)</PROXY>
-		<PUBLIC_IMAGEPATH>$(res.public.resources)</PUBLIC_IMAGEPATH>
-		<GWC-JS>gbc-njm</GWC-JS>
-	</UA_OUTPUT>
 </APPLICATION>

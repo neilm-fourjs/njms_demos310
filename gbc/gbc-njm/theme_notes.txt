@@ -1,0 +1,25 @@
+
+gbc-header-color                    : Table Heading / TopMenu / ToolBar - background color 
+
+gbc-primary-medium-color            : MainControlBar / Table Current Row - background color & Current Field Underline color & text color on end page
+
+gbc-primary-background-color        : Window primary background color
+gbc-primary-color                   : Button background color & Text on header / footer & Current FolderPage underline color
+gbc-primary-light-color             : Header / Footer backgound color & Field(not current) underline
+
+gbc-secondary-background-color      : Folder Page(including current tab) / Group / drop-down menu / SessionEnd main group - background color
+gbc-secondary-color                 : Checkbox border colour
+
+gbc-field-background-color          : Widget background color active fields and Table background
+gbc-field-disabled-background       : Widget disabled background input array only ?
+gbc-disabled-color                  : Disabled text color for Table Columns
+
+gbc-separator-color                 : Toolbar separator color
+gbc-message-color                   : Message background color
+gbc-error-color                     : Error message background color
+
+--------------------------------------------------------------------------------
+Not Documented:
+gbc-field-disabled-background-color : Disabled table item in input mode
+gbc-secondary-text-color            : TableWidget-currentRow-text-color / ButtonWidget Image Color / PagedScrollGridNavigation items
+
