@@ -119,3 +119,12 @@ footer {
 	background: linear-gradient( #B7B7CC, #F2F2F9 );
 	border-bottom: $gbc-primary-color groove 1px;
 }
+
+.gbc_style_center {
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	display: block;
+}
+
