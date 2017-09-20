@@ -7,7 +7,7 @@
   "gbc-sidebar-always-visible-min-width" : "999999px",
   "gbc-sidebar-default-width"            : "30px",
   "gbc-animation-duration"               : "0.7s",
-  "gbc-desactivate-ending-popup"         : false
+  "gbc-desactivate-ending-popup"         : false,
 
   "gbc-header-color"                     : "$mt-indigo-200",
   "gbc-primary-medium-color"             : "$mt-indigo-900",
@@ -27,5 +27,5 @@
 
   "gbc-separator-color"                  : "$mt-white",
   "gbc-message-color"                    : "$mt-grey-800",
-  "gbc-error-color"                      : "$mt-red-800",
+  "gbc-error-color"                      : "$mt-red-800"
 }

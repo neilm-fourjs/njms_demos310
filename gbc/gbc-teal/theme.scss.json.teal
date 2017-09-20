@@ -4,6 +4,9 @@
   "gbc-field-height-ratio" : "0.7",
   "gbc-radiobutton-size"   : "14px",
   "gbc-checkbox-size"      : "14px",
+  "gbc-sidebar-always-visible-min-width" : "999999px",
+  "gbc-sidebar-default-width"            : "30px",
+  "gbc-animation-duration"               : "0.7s",
 
   "gbc-primary-background-color"         : "$mt-grey-50",
   "gbc-primary-color"                    : "$mt-teal-500",
@@ -17,8 +20,5 @@
   "gbc-separator-color"                  : "$mt-teal-400",
   "gbc-header-color"                     : "$mt-teal-900",
   "gbc-message-color"                    : "$mt-teal-800",
-  "gbc-error-color"                      : "$mt-teal-800",
-  "gbc-sidebar-always-visible-min-width" : "999999px",
-  "gbc-sidebar-default-width"            : "30px",
-  "gbc-animation-duration"               : "0.7s"
+  "gbc-error-color"                      : "$mt-teal-800"
 }
