@@ -91,7 +91,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="file:FGLPROFILE_sql=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
