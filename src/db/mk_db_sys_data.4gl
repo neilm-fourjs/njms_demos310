@@ -89,6 +89,7 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION mk_demo_account()
 	DEFINE l_hash_type, l_login_pass, l_salt, l_pass_hash, l_email VARCHAR(128)
+	DEFINE l_dte DATE
 	CALL mkdb_progress( "Creating test account." )
 	LET l_email = "test@test.com"
 	SELECT * FROM sys_users WHERE email = l_email
@@ -98,10 +99,10 @@ FUNCTION mk_demo_account()
 	LET l_hash_type = lib_secure.glsec_getHashType()
 	LET l_salt = lib_secure.glsec_genSalt(l_hash_type)
 	LET l_pass_hash = lib_secure.glsec_genPasswordHash( l_login_pass, l_salt, l_hash_type )
-
+	LET l_dte = TODAY+365
 	TRY
 		INSERT INTO sys_users VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",
-			l_hash_type, "not stored", l_salt, l_pass_hash, TODAY+365)
+			l_hash_type, "not stored", l_salt, l_pass_hash, l_dte)
 -- NOTE: we don't store the clear text password
 		CALL mkdb_progress( "Test Account Inserted: "||l_email||" / "||l_login_pass||" with "||l_hash_type||" hash." )
 	CATCH
