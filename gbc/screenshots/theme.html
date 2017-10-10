@@ -1,0 +1,65 @@
+
+<html>
+<head>
+<title>GBC Theme</title>
+<script type="text/javascript">
+function setStuff( img, txt, tc ) {
+	document.getElementById('myImage').src = img;
+	document.getElementById('myText').textContent = txt;
+	document.getElementById("t2").textContent = " $mt-blue-500";
+	document.getElementById("t3").textContent = " $mt-grey-100";
+	document.getElementById("t4").textContent = " $mt-grey-50";
+	document.getElementById("t5").textContent = " $mt-blue-700";
+	document.getElementById("t6").textContent = " $mt-blue-100";
+	document.getElementById("t7").textContent = " $mt-white";
+	document.getElementById("t8").textContent = " $mt-grey-600";
+	document.getElementById("t9").textContent = " $mt-white";
+	document.getElementById("t10").textContent = " $mt-grey-400";
+	document.getElementById(tc).textContent = " $mt-red-500";
+	document.getElementById("t2").style.color = 'black';
+	document.getElementById("t3").style.color = 'black';
+	document.getElementById("t4").style.color = 'black';
+	document.getElementById("t5").style.color = 'black';
+	document.getElementById("t6").style.color = 'black';
+	document.getElementById("t7").style.color = 'black';
+	document.getElementById("t8").style.color = 'black';
+	document.getElementById("t9").style.color = 'black';
+	document.getElementById("t10").style.color = 'black';
+	document.getElementById(tc).style.color = 'red';
+};
+</script>
+<style>
+.el {
+	padding: 10px 5px 4px 4px;
+	border-bottom: 1px solid grey;
+	flex-direction: row;
+}
+.h {
+	font-size: 2em; 
+	font-weight: bold;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+<div style="display: flex;">
+	<div style="border: 1px solid black;">
+		<div id="myHeading" class="h">Theme Elements</div>
+		<div class="el" onclick="setStuff('theme1.png','Default','t1')">Default</div>
+		<div class="el" onclick="setStuff('theme2.png','gbc-primary-medium-color','t2')">gbc-primary-medium-color:<span id="t2">$mt-blue-500</span></div>
+		<div class="el" onclick="setStuff('theme3.png','gbc-header-color','t3')">gbc-header-color:<span id="t3">$mt-grey-100</span></div>
+		<div class="el" onclick="setStuff('theme4.png','gbc-primary-background-color','t4')">gbc-primary-background-color:<span id="t4">$mt-grey-50</span></div>
+		<div class="el" onclick="setStuff('theme5.png','gbc-primary-color','t5')">gbc-primary-color:<span id="t5">$mt-blue-700</span></div>
+		<div class="el" onclick="setStuff('theme6.png','gbc-primary-light-color','t6')">gbc-primary-light-color:<span id="t6">$mt-blue-100</span></div>
+		<div class="el" onclick="setStuff('theme7.png','gbc-secondary-background-color','t7')">gbc-secondary-background-color:<span id="t7">$mt-white</span></div>
+		<div class="el" onclick="setStuff('theme8.png','gbc-secondary-color','t8')">gbc-secondary-color:<span id="t8">$mt-grey-600</span></div>
+		<div class="el" onclick="setStuff('theme9.png','gbc-field-background-color','t9')">gbc-field-background-color:<span id="t9">$mt-white</span></div>
+		<div class="el" onclick="setStuff('theme10_inactive.png','gbc-disabled-color','t10')">gbc-disabled-color:<span id="t10">$mt-grey-400</span></div>
+	</div>
+	<div style="flex-direction: column; border: 1px solid black;">
+		<div id="myText" class="h">Default</div>
+		<img id="myImage" src="theme1.png">
+	</div>
+</div>
+</body>
+</html>
