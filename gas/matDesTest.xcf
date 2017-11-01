@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
-<APPLICATION Parent="defaultwa"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="http://www.4js.com/ns/gas/3.00/cfextwa.xsd">
+<APPLICATION Parent="defaultwa" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.4js.com/ns/gas/3.10/cfextwa.xsd">
+	<DESCRIPTION> 
+		<SHORT>This is a test program</SHORT> 
+		<LONG>This is a test program</LONG> 
+	</DESCRIPTION>
 	<RESOURCE Id="res.genver" Source="INTERNAL">310</RESOURCE>
 	<RESOURCE Id="res.gre" Source="INTERNAL">/opt/fourjs/gre$(res.genver)</RESOURCE>
 	<RESOURCE Id="res.path.isv" Source="INTERNAL">/home/neilm/all</RESOURCE>

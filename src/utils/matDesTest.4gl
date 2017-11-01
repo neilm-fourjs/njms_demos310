@@ -152,6 +152,7 @@ FUNCTION showForm()
 	OPEN WINDOW matDesTest_forms WITH FORM "matDesTest_forms"
 	DISPLAY ARRAY m_forms TO arr.*
 		ON ACTION accept CALL showForm2( m_forms[ arr_curr() ] )
+		ON ACTION win CALL win()
 	END DISPLAY
 	CLOSE WINDOW matDesTest_forms
 END FUNCTION
