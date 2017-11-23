@@ -1,0 +1,34 @@
+
+LAYOUT (TEXT="Lookup1", STYLE="lookup")
+VBOX
+GRID
+{
+ [                        :t:                        ]
+<T tab1                                                     >
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+ [tc1|tabc2|tabc3     |tabc4                  |tabc5|tabc6 ]
+}
+END -- GRID
+END -- VBOX
+
+ATTRIBUTES
+LABEL t = FORMONLY.tabtitl, STYLE="tabtitl";
+tc1 = FORMONLY.tabc1, JUSTIFY=RIGHT, TITLE="No";
+tabc2 = FORMONLY.tabc2, TITLE="Text";
+DATEEDIT tabc3 = FORMONLY.tabc3, TITLE="Date";
+COMBOBOX tabc4 = FORMONLY.tabc4, ITEMS=("Hello World!","Goodbye Cruel World","The World is not Enough!"), TITLE="Combo";
+BUTTONEDIT tabc5 = FORMONLY.tabc5, ACTION=be, TITLE="BE";
+CHECKBOX tabc6= FORMONLY.tabc6, TEXT="Okay", VALUECHECKED="Y", VALUEUNCHECKED="N", TITLE="Check";
+END
+
+INSTRUCTIONS
+SCREEN RECORD newarr2 ( tabc1 THRU tabc6 )
+END

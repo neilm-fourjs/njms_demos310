@@ -5,7 +5,6 @@
 IMPORT os
 IMPORT FGL gl_lib
 
-&include "schema.inc"
 &include "genero_lib.inc"
 &include "gl_db.inc"
 

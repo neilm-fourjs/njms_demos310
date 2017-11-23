@@ -123,6 +123,8 @@ MAIN
 		GL_DBGMSG(4,"done splash.")
 	END IF
 
+--	CALL ui.Interface.loadStartMenu("widgets")	
+
 	GL_DBGMSG(4,"before - open window.")
 	OPEN WINDOW widgets WITH FORM "widgets"
 	GL_DBGMSG(4,"after - open window.")

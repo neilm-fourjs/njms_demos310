@@ -1,10 +1,11 @@
 
-TOOLBAR
-	ITEM quit (IMAGE="quit")
-END -- TB
-
 LAYOUT  (STYLE="main2" )
 VBOX
+GRID
+{
+[quit]FGLIMAGEPATH:[a001                                   ]
+}
+END -- GRID
 HBOX ( SPLITTER )
 TABLE
 {
@@ -53,15 +54,10 @@ Row:
 }
 END -- GRID
 END -- HBOX
-GRID
-{
-FGLIMAGEPATH:
-[a001                                                       ]
-}
-END -- GRID
 END -- VBOX
 
 ATTRIBUTES
+BUTTON quit : quit;
 a001 = FORMONLY.fglimagepath, SCROLL;
 IMAGE i01 = FORMONLY.a01,TITLE="1", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;
 IMAGE i02 = FORMONLY.a02,TITLE="2", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;

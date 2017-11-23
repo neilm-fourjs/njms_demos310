@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1848127715" gstVersion="30a06" version="3.2">
+<Project defaultApplication="1663756762" gstVersion="30a07" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -231,6 +231,7 @@
           <File filePath="etc/widgets2.4st"/>
           <File filePath="etc/widgets3.4st"/>
         </VirtualFolder>
+        <File filePath="src/demos/table.per"/>
         <File filePath="src/demos/widgets.4gl"/>
         <File filePath="src/demos/widgets.per"/>
         <File filePath="src/demos/widgets_charts.4gl"/>
@@ -314,9 +315,9 @@
     </Group>
   </Group>
   <Group label="Packages" language="Genero">
-    <Package binaryName="gbc_njm" dependencies="-1375686528" label="gbc_njm" platform="GBC" rootDirectory="$(GBCPROJDIR)/dist/customization/gbc-njm">
-      <DynamicProperty name="packageId" value="gbc_njm"/>
-      <DynamicProperty name="packageLabel" value="gbc_njm"/>
+    <Package binaryName="gbc-njm-current" dependencies="-1375686528" label="gbc-njm-current" platform="GBC" rootDirectory="$(GBCPROJDIR)/dist/customization/gbc-njm">
+      <DynamicProperty name="packageId" value="gbc-njm"/>
+      <DynamicProperty name="packageLabel" value="gbc-njm"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/" label="build" sourceDirectory="$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-njm"/>
     </Package>
     <Package binaryName="njms_demos310_ifx" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810" description="NJMs Demos" label="njms_demos310_ifx" platform="Genero Application Server">
@@ -324,6 +325,7 @@
       <DynamicProperty name="packageLabel" value="NJMs Demos"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/bin" includedFiles="*.42?" label="bin" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="etc" recursive="false" sourceDirectory="$(ProjectDir)/etc"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/etc" includedFiles=".test.cfg" label="etc_hidden" recursive="false" sourceDirectory="$(ProjectDir)/etc"/>
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/ifx"/>

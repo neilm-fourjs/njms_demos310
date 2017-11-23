@@ -1,5 +1,10 @@
 <StyleList>
 
+  <!--Style name='StartMenu.startmenu'> Do not work!
+    <StyleAttribute name="backgroundColor" value="red"/>
+    <StyleAttribute name="textColor" value="red"/>
+  </Style-->
+
   <Style name="Folder.bottomx">
 		<StyleAttribute name="position"  value="bottom" />
   </Style>
@@ -145,6 +150,7 @@
      <StyleAttribute name="windowType" value="normal" />
      <StyleAttribute name="actionPanelPosition" value="none" />
      <StyleAttribute name="ringMenuPosition" value="none" />
+     <StyleAttribute name="startMenuPosition" value="tree" />
   </Style>
   <Style name="Window.dialog">
      <StyleAttribute name="windowType" value="modal" />
