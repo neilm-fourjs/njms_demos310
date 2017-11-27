@@ -8,7 +8,9 @@ cd distbin
 rm *.gar *.zip
 cd ..
 
-echo "Building GBC packages ..."
+export PROJBASE=$( pwd )
+
+echo "Building GBC packages BASE=$BASE ..."
 cd gbc
 make
 cd ..

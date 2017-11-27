@@ -221,6 +221,9 @@
         <File filePath="etc/picflow.4st"/>
         <File filePath="src/demos/picflow.per"/>
       </Application>
+      <Application binaryName="showfile" dependencies="14000" id="-1746016620" label="showfile">
+        <File filePath="src/demos/showfile.4gl"/>
+      </Application>
       <Application binaryName="widgets" dependencies="14000" id="1663756762" label="widgets">
         <VirtualFolder label="etc">
           <File filePath="etc/widgets.4ad"/>
@@ -230,6 +233,7 @@
           <File filePath="etc/widgets1.4st"/>
           <File filePath="etc/widgets2.4st"/>
           <File filePath="etc/widgets3.4st"/>
+          <File filePath="etc/widgets_arr.4tb"/>
         </VirtualFolder>
         <File filePath="src/demos/table.per"/>
         <File filePath="src/demos/widgets.4gl"/>

@@ -5,7 +5,9 @@ include ../makefile.inc
 
 CUSTOMNAME=$(shell basename $(PWD))
 
-all: ../../../../../$(DISTBIN)/$(CUSTOMNAME)-$(PACKVER).zip
+TARGET=$(DISTBIN)/$(CUSTOMNAME)-$(PACKVER).zip
+
+all: $(TARGET)
 
 # Create a symbolic link to our custom gbc files
 $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME): 
@@ -16,7 +18,7 @@ $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME): $(GBCBASE)/build/gbc-$(PACKV
 	cd $^ && grunt --customization=customization/$(CUSTOMNAME) | tee $(PWD)/$(CUSTOMNAME).build
 
 # Package our custom gbc
-../../../../../$(DISTBIN)/$(CUSTOMNAME)-$(PACKVER).zip: $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME)
+$(TARGET): $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME)
 	cd $(GBCBASE)/build/gbc-$(PACKVER)/dist/customization/$(CUSTOMNAME) && zip -r $@ *
 
 

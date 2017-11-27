@@ -89,7 +89,6 @@ DEFINE g_frm ui.Form
 
 DEFINE cnt SMALLINT
 DEFINE scal SMALLINT
-DEFINE g_defs STRING
 DEFINE f_n om.domNode
 DEFINE m_dbname VARCHAR(20)
 --------------------------------------------------------------------------------
@@ -143,6 +142,7 @@ MAIN
 	LET sort2 = TRUE
 	LET sort3 = TRUE
 	LET dec = 12.34
+
 	CALL arr_set()
 	FOR cnt = 1 TO arr.getLength()
 		LET oldarr[cnt].arr1 = "Item ",cnt USING "##"
@@ -398,35 +398,33 @@ MAIN
 
 -- Topmenu Source 4gl
 			ON ACTION src_4gl
-				CALL show_src("src", "widgets.4gl", "")
+				CALL show_src("src/demos", "widgets.4gl", "")
 			ON ACTION src_pb
-				CALL show_src("src", "genero_lib1.4gl", "")
+				CALL show_src("src/demos", "genero_lib1.4gl", "")
 			ON ACTION src_shwf
-				CALL show_src("src", "showfile.4gl", "")
+				CALL show_src("src/demos", "showfile.4gl", "")
 			ON ACTION src_shwt
 				CALL show_src("src", "editfile.4gl", "")
 			ON ACTION src_progbar
-				CALL show_src("src", "widgets.4gl", "gl_progBar")
+				CALL show_src("src/demos", "widgets.4gl", "gl_progBar")
 			ON ACTION src_idle
-				CALL show_src("src", "widgets.4gl", "ON IDLE")
+				CALL show_src("src/demos", "widgets.4gl", "ON IDLE")
 			ON ACTION src_winme
-				CALL show_src("src", "widgets.4gl", "fgl_winmess")
+				CALL show_src("src/demos", "widgets.4gl", "fgl_winmess")
 			ON ACTION src_winqu
-				CALL show_src("src", "widgets.4gl", "fgl_winquest")
+				CALL show_src("src/demos", "widgets.4gl", "fgl_winquest")
 			ON ACTION src_hide
-				CALL show_src("src", "widgets.4gl", "hide")
-			ON ACTION src_md
-				CALL show_src("src", "widgets210.4gl", "DIALOG")
+				CALL show_src("src/demos", "widgets.4gl", "hide")
 
 -- Topmenu Source per
 			ON ACTION src_per
-				CALL show_src("forms", "widgets.per", "Section")
+				CALL show_src("src/demos", "widgets.per", "Section")
 			ON ACTION src_tab
-				CALL show_src("forms", "table.per", "")
+				CALL show_src("src/demos", "table.per", "")
 			ON ACTION src_new
-				CALL show_src("forms", "newwin.per", "")
+				CALL show_src("src/demos", "newwin.per", "")
 			ON ACTION src_tm
-				CALL show_src("forms", "widgets.per", "TOPMENU")
+				CALL show_src("src/demos", "widgets.per", "TOPMENU")
 
 -- Topmenu Source xml
 			ON ACTION src_ad
@@ -621,7 +619,7 @@ END FUNCTION
 -- Input array code.
 FUNCTION do2()
 	
-	CALL change_tb("arr")
+	CALL change_tb("widgets_arr")
 
 	LET int_flag = FALSE
 	CALL set_count(arrmax)
@@ -674,7 +672,7 @@ FUNCTION do2()
 			CALL lookup1("I")
 	END INPUT
 
-	CALL change_tb(g_defs)
+	CALL change_tb("widgets")
 
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -795,7 +793,7 @@ END FUNCTION
 -- Display array code.
 FUNCTION do3()
 
-	CALL change_tb("arr")
+	CALL change_tb("widgets_arr")
 	CALL set_count(20)
 	DISPLAY ARRAY oldarr TO oldarr.*
 		ON KEY(F31)
@@ -821,7 +819,7 @@ FUNCTION do3()
 		ON ACTION lookup1
 			CALL lookup1("D")
 	END DISPLAY
-	CALL change_tb(g_defs)
+	CALL change_tb("widgets")
 
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -1308,12 +1306,13 @@ FUNCTION Init_Forms(frm)
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Changes the toolbar - used to switch toolbar for array navigation.
-FUNCTION change_tb(tb)
-	DEFINE tb STRING
-
-	DISPLAY "Widgets: Changing Toolbar to '"||tb||"'"
-	CALL g_frm.loadToolbar(tb)
-
+FUNCTION change_tb(l_tb STRING)
+	DISPLAY "Widgets: Changing Toolbar to '"||l_tb||"'"
+	TRY
+		CALL g_frm.loadToolbar(l_tb)
+	CATCH
+		ERROR SFMT("Failed to load toolbar %1",l_tb)
+	END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Changs the style file 
@@ -1470,7 +1469,7 @@ FUNCTION fix_path()
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Shows a source and highlights lines containing the specified string
-FUNCTION show_src(dir, fil,fld )
+FUNCTION show_src(dir, fil, fld )
 	DEFINE dir STRING
 	DEFINE fil STRING
 	DEFINE fld STRING
@@ -1484,7 +1483,7 @@ FUNCTION show_src(dir, fil,fld )
 		END CASE
 	END IF
 
-	LET run_stmt = "fglrun showfile $BASE/"||dir||"/",fil," \"",fld CLIPPED,"\""
+	LET run_stmt = "fglrun showfile ../"||dir||"/",fil," \"",fld CLIPPED,"\""
 	RUN run_stmt
 
 END FUNCTION
