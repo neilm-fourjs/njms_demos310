@@ -1,14 +1,10 @@
 --------------------------------------------------------------------------------
 #+ The Widgets Demo by Neil J Martin ( neilm@4js.com )
 #+
-#+ Changed so can run on Windows and be packaged easier, add about
-#+ Added the show source code feature
-#+ Added more/less to toolbar for folder page hiding + to dynamic ta
-#+ Added debug and widgets.inc
-#+ Change clock2 for Genero 2 to use util.math for sin/cos instead of db.
-#+
-#+ $Id: widgets.4gl 339 2014-11-27 10:03:31Z neilm $
---------------------------------------------------------------------------------
+#+ A simple demo of various UI features.
+
+-- bug: still contains some legacy options!
+-- todo: remove some legacy stuff.
 
 IMPORT util
 IMPORT FGL gl_lib
