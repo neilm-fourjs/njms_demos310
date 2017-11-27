@@ -50,6 +50,6 @@ Property of Four Js*
 	<ActionDefault name="save" text="Save" image="disk" contextMenu="yes"/>
 	<ActionDefault name="sample" text="Sample" image="fa-copy" contextMenu="no"/>
 
-	<ActionDefault name="testlogin" text="Test Login" image="fa-key" contextMenu="yes" acceleratorName="f9" />
+	<ActionDefault name="testlogin" text="Test Login" image="fa-key" contextMenu="yes" acceleratorName="f12" />
 
 </ActionDefaultList>

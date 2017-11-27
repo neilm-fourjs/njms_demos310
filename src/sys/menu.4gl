@@ -63,7 +63,12 @@ FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 	LET lib_login.m_logo_image = C_SPLASH
 	LET lib_login.m_new_acc_func = FUNCTION new_acct.new_acct
 
-	LET m_user = lib_login.login( C_TITLE, C_VER )
+-- For quick testing only
+	IF ARG_VAL(1) = "test@test.com" THEN
+		LET m_user = ARG_VAL(1)
+	ELSE
+		LET m_user = lib_login.login( C_TITLE, C_VER )
+	END IF
 	IF m_user = "Cancelled" THEN RETURN FALSE END IF
 
 	SELECT user_key INTO m_user_id FROM sys_users WHERE email = m_user

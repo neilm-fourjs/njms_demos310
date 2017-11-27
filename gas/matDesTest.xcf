@@ -7,8 +7,8 @@
 	</DESCRIPTION>
 	<RESOURCE Id="res.genver" Source="INTERNAL">310</RESOURCE>
 	<RESOURCE Id="res.gre" Source="INTERNAL">/opt/fourjs/gre$(res.genver)</RESOURCE>
-	<RESOURCE Id="res.path.isv" Source="INTERNAL">/home/neilm/all</RESOURCE>
-	<RESOURCE Id="res.path.njm_demo" Source="INTERNAL">$(res.path.isv)/demos/njms_demos310</RESOURCE>
+	<RESOURCE Id="res.path.isv" Source="INTERNAL">/home/neilm/all/my_github</RESOURCE>
+	<RESOURCE Id="res.path.njm_demo" Source="INTERNAL">$(res.path.isv)/njms_demos310</RESOURCE>
 	<!--RESOURCE Id="res.path.njm_demo" Source="INTERNAL">$(res.deployment.path)</RESOURCE-->
 	<EXECUTION>
 		<ENVIRONMENT_VARIABLE Id="FGLRESOURCEPATH">$(res.path.njm_demo)/etc</ENVIRONMENT_VARIABLE>
