@@ -1,4 +1,6 @@
 
+GBCPROJDIR=/opt/fourjs/gbc-current-project
+
 echo "Updating etc/app_info.txt ..."
 cat etc/app_name.txt > etc/app_info.txt
 git describe >> etc/app_info.txt

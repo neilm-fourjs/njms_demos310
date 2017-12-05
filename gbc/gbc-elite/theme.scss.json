@@ -1,4 +1,6 @@
 {
+  "theme-font-family"      : "\"Helvetica\",\"Century Gothic\",\"Droid Sans\", sans-serif",
+
   "gbc-font-size-ratio"    : "1",
   "gbc-margin-ratio"       : "0.6",
   "gbc-field-height-ratio" : "0.7",
@@ -27,6 +29,5 @@
 
   "gbc-sidebar-always-visible-min-width" : "999999px",
   "gbc-sidebar-default-width"            : "30px",
-  "gbc-animation-duration"               : "0.7s",
-  "gbc-desactivate-ending-popup"         : false
+  "gbc-animation-duration"               : "0.7s"
 }

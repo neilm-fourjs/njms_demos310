@@ -2,7 +2,7 @@
 # This script attempts to setup a GBC dev environment
 #
 # Example:
-# ./gbc-setup.sh 1.00.38 201707261501
+# ./gbc-setup.sh 1.00.41 201711301722
 
 set_default_build()
 {

@@ -1,4 +1,7 @@
 {
+
+  "theme-font-family"      : "\"Droid Sans\", sans-serif",
+
   "gbc-font-size-ratio"    : "0.8",
   "gbc-margin-ratio"       : "0.6",
   "gbc-field-height-ratio" : "0.7",
@@ -8,17 +11,23 @@
   "gbc-sidebar-default-width"            : "30px",
   "gbc-animation-duration"               : "0.7s",
 
+  "gbc-header-color"                     : "$mt-teal-900",
+  "gbc-primary-medium-color"             : "$mt-teal-800",
+
   "gbc-primary-background-color"         : "$mt-grey-50",
   "gbc-primary-color"                    : "$mt-teal-500",
-  "gbc-primary-medium-color"             : "$mt-teal-800",
   "gbc-primary-light-color"              : "$mt-white",
+
   "gbc-secondary-background-color"       : "$mt-teal-50",
+  "gbc-secondary-text-color"             : "$mt-white",
   "gbc-secondary-color"                  : "$mt-teal-600",
-  "gbc-field-background-color"           : "$mt-white",
+
+  "gbc-field-disabled-background-color"  : "rgba(0,0,0,0.04)",
   "gbc-field-disabled-background"        : "rgba(0,0,0,0.04)",
+  "gbc-field-background-color"           : "$mt-white",
   "gbc-disabled-color"                   : "$mt-teal-400",
+
   "gbc-separator-color"                  : "$mt-teal-400",
-  "gbc-header-color"                     : "$mt-teal-900",
   "gbc-message-color"                    : "$mt-teal-800",
   "gbc-error-color"                      : "$mt-teal-800"
 }
