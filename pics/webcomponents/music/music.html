@@ -1,0 +1,30 @@
+<html>
+
+    <head>
+        <title>Music player</title>
+        <meta name="keywords" lang="fr" content="genero,webcomponent,demo,music" />
+        <meta name="description" content="Music Player Web Component" />
+        <script src="music.js" type="text/javascript"></script>
+				<link rel="stylesheet" href="music.css" type="text/css">
+				<script src="main.js"></script>
+    </head>
+
+<body>
+
+<div id="name">
+none
+</div>
+
+<div id="player">
+  <audio controls id="myaudio">
+    <source id="mp3file" src="none" type="audio/mpeg"></source>
+    Your browser does not support the audio element.
+  </audio>
+</div>
+
+<canvas id="canvas" width="800" height="350"></canvas>
+
+<div id="debug1"></div>
+<div id="debug2"></div>
+</body>
+</html>

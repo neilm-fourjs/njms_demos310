@@ -146,13 +146,13 @@ MAIN
 		LET oldarr[cnt].arr3 = "Dummy"
 		LET arr[cnt].tabc1 = cnt
 		LET arr[cnt].tabc2 = arr[cnt].img
-		LET arr[cnt].tabc3 = TODAY
+		LET arr[cnt].tabc3 = TODAY-util.Math.rand(100)
 		LET newarr3[cnt].tabc1 = ASCII(64+cnt)
 		LET newarr3[cnt].tabc2 = "Row",cnt USING "<<<"
 		LET newarr2[cnt].tabc1 = cnt
 		IF cnt < 15 THEN -- done to leave some NULL data in the table
 			LET newarr2[cnt].tabc2 = "Row",cnt USING "<<<"
-			LET newarr2[cnt].tabc3 = TODAY
+			LET newarr2[cnt].tabc3 = TODAY-util.Math.rand(100)
 			LET newarr2[cnt].tabc4 = "Hello World!"
 			LET newarr2[cnt].tabc5 = "AB"
 			LET newarr2[cnt].tabc6 = "Y"
@@ -171,7 +171,7 @@ MAIN
 		LET arr[cnt].img = m_imgrec[cnt].img
 		LET arr[cnt].tabc1 = cnt
 		LET arr[cnt].tabc2 = m_imgrec[cnt].val||":"||m_imgrec[cnt].nam
-		LET arr[cnt].tabc3 = TODAY
+		LET arr[cnt].tabc3 = TODAY-util.Math.rand(100)
 	END FOR
 
 	LET aniyn = FALSE

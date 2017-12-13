@@ -19,7 +19,6 @@ DEFINE m_data2 DYNAMIC ARRAY OF RECORD
 MAIN
 	DEFINE l_data STRING
 
-
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	LET gl_lib.gl_noToolBar = TRUE
 

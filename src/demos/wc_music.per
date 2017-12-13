@@ -1,0 +1,34 @@
+
+LAYOUT ( TEXT="WC Music Demo", STYLE="main2" )
+GRID
+{
+[quit:                :prev:next:                 :about]
+[wc                                                     ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[                                                       ]
+[logo                                                   ]
+}
+END -- GRID
+
+ATTRIBUTES
+BUTTON quit : quit;
+BUTTON prev : previous;
+BUTTON next : next;
+BUTTON about : about;
+
+IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder center";
+
+WEBCOMPONENT wc = FORMONLY.l_data,
+	STRETCH=BOTH, 
+	SCROLLBARS=NONE,
+	PROPERTIES=(name="none",mp3file="none"),
+	COMPONENTTYPE="music"; 

@@ -42,7 +42,7 @@ Property of Four Js*
 	<ActionDefault name="dialogtouched" validate="no" defaultView="no"	contextMenu="no"/>
 
 	<ActionDefault name="about" text="About" image="about" acceleratorName="Shift-f1" contextMenu="no"/>
-	<ActionDefault name="quit" text="Quit" image="quit" acceleratorName="f12" contextMenu="no"/>
+	<ActionDefault name="quit" text="Quit" image="quit" acceleratorName="f11" contextMenu="no"/>
 	<ActionDefault name="new" image="new" text="Insert" acceleratorName="F3" contextMenu="no"/>
 	<ActionDefault name="getstock" acceleratorName="Control-F" image="find" comment="Select Stock Item"/>
 	<ActionDefault name="getcust" acceleratorName="Control-F" image="find" comment="Select Customer Item"/>

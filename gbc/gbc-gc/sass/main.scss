@@ -1,4 +1,4 @@
-
+/*
 @font-face {
 	font-family: Michroma;
 	src: url("../resources/img/Michroma.ttf") format("truetype");
@@ -18,11 +18,12 @@
 	font-style: italic;
 	src: url("../resources/img/AUdimat-Italic.otf") format("opentype");
 }
+*/
 
 body {
 	background: black;
 	-webkit-font-smoothing: antialiased;
-	font-family: Audimat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: /*Audimat,*/ "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	font-weight: 400;
 	/*font-stretch: extra-expanded;*/

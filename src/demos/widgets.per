@@ -87,28 +87,28 @@ LAYOUT (STYLE="main2")
 HBOX
 GRID
 {
-<G "Normal Inputs"                      >
- [l000      |f000                ]
- [l001      |f001                      ]
- [l006      |f007      ::l009:f012     ]
- [l06a      |f07a                      ]
- [l002      |f002                      ]
-            [                          ]
-            [                          ]
-            [                          ]
- ["Dec:"|f006   ][: :l010:f008     :pic]
-<                                       >
+<G "Normal Inputs"                        >
+ [l000    |f000                 ]
+ [l001    |f001                          ]
+ [l006    |f007         : :l009:f012     ]
+ [l06a    |f07a                          ]
+ [l002    |f002                          ]
+          [                              ]
+          [                              ]
+          [                              ]
+ [l011    |f006   :   :l010:f008     :pic]
+<                                         >
 
-<G grpsp                                >
-  Type           Entry             Value
- [l004          |f004           ] [val1]
- [l005          |f005                  ]
- [exp1                          ] [val2]
- [l003          |f003        |f03a|val3]
- [l007          |f010                  ]
- [l008          |f011  ]
- [f009                                 ]
-<                                       >
+<G grpsp                                  >
+  Type            Entry              Value
+ [l004           |f004            ] [val1]
+ [l005           |f005                   ]
+ [exp1                            ] [val2]
+ [l003           |f003         |f03a|val3]
+ [l007           |f010                   ]
+ [l008           |f011   ]
+ [f009                                   ]
+<                                         >
 }
 END -- GRID
 
@@ -385,6 +385,7 @@ LABEL l007 : labslider, JUSTIFY=RIGHT,STYLE="wgt_yellow",TEXT="Slider:";
 LABEL l008 : labspin  , JUSTIFY=RIGHT,STYLE="wgt_yellow",TEXT="SpinEdit:";
 LABEL l009 : labtime  , JUSTIFY=RIGHT,STYLE="wgt_yellow",TEXT="Time:";
 LABEL l010 : labpict  , JUSTIFY=RIGHT ,STYLE="wgt_yellow",TEXT="Picture:";
+LABEL l011 : labdec  , JUSTIFY=RIGHT ,STYLE="wgt_yellow",TEXT="Decimal:";
 
 -- Images
 IMAGE jpg=FORMONLY.jpg,STRETCH=BOTH, AUTOSCALE;
@@ -423,7 +424,7 @@ CHECKBOX f004 = FORMONLY.check, TEXT="Yes/No", VALUECHECKED="Y", VALUEUNCHECKED=
 RADIOGROUP f005 = FORMONLY.radio, ITEMS=(("F","Ford"),("R","Renault"),("V","Vauxhall")),ORIENTATION=HORIZONTAL;
 
 DATEEDIT dteed2 = FORMONLY.dateedit2,STYLE="parttime";
-DATEEDIT f007 = FORMONLY.DATEEDIT;
+DATEEDIT f007 = FORMONLY.dateedit,FORMAT="(ddd) dd mmm yyyy";
 &ifndef genero250
 DATETIMEEDIT f07a = FORMONLY.datetimeedit;
 &else
