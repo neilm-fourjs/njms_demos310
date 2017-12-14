@@ -1,5 +1,18 @@
 
 LAYOUT ( TEXT="WC Music Demo", STYLE="main2" )
+HBOX ( SPLITTER )
+TREE mytree ( PARENTIDCOLUMN=pid, IDCOLUMN=id, STYLE="tree"  )
+{
+[t001                   ]
+[t001                   ]
+[t001                   ]
+[t001                   ]
+[t001                   ]
+[t001                   ]
+[t001                   ]
+[t001                   ]
+}
+END -- TABLE
 GRID
 {
 [quit:                :prev:next:                 :about]
@@ -15,20 +28,34 @@ GRID
 [                                                       ]
 [                                                       ]
 [                                                       ]
-[logo                                                   ]
+[:                                                 :logo]
 }
 END -- GRID
+END -- VBOX
 
 ATTRIBUTES
+-- Tree
+PHANTOM FORMONLY.id;
+PHANTOM FORMONLY.pid;
+EDIT t001 = FORMONLY.name, TITLE="Songs", IMAGECOLUMN=img;
+PHANTOM FORMONLY.artist;
+PHANTOM FORMONLY.album;
+PHANTOM FORMONLY.track;
+PHANTOM FORMONLY.file;
+PHANTOM FORMONLY.img;
+
 BUTTON quit : quit;
 BUTTON prev : previous;
 BUTTON next : next;
 BUTTON about : about;
 
-IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder center";
+IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder";
 
 WEBCOMPONENT wc = FORMONLY.l_data,
 	STRETCH=BOTH, 
 	SCROLLBARS=NONE,
 	PROPERTIES=(name="none",mp3file="none"),
 	COMPONENTTYPE="music"; 
+
+INSTRUCTIONS
+SCREEN RECORD arr ( FORMONLY.id THRU FORMONLY.img )

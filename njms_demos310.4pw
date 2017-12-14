@@ -254,19 +254,30 @@
         <File filePath="src/demos/wc_aircraft_ud.per"/>
       </Application>
       <Application binaryName="wc_amCharts" dependencies="14000" id="-1954675472" label="wc_amCharts">
+        <VirtualFolder label="wc">
+          <File filePath="pics/webcomponents/amcharts/amcharts.html"/>
+        </VirtualFolder>
         <File filePath="src/demos/wc_amcharts.4gl"/>
         <File filePath="src/demos/wc_amcharts.per"/>
       </Application>
       <Application binaryName="wc_googleMaps" dependencies="14000" id="-2121135278" label="wc_googleMaps">
+        <VirtualFolder label="wc">
+          <File filePath="pics/webcomponents/gm/gm.html"/>
+          <File filePath="pics/webcomponents/gm/gm.js"/>
+        </VirtualFolder>
         <File filePath="src/demos/wc_gm.4gl"/>
         <File filePath="src/demos/wc_gm.per"/>
       </Application>
       <Application binaryName="wc_kite" commandLineArguments="S 1" dependencies="14000" id="-2014604027" label="wc_kite">
+        <VirtualFolder label="wc">
+          <File filePath="pics/webcomponents/kite/kite.html"/>
+          <File filePath="pics/webcomponents/kite/kite.js"/>
+        </VirtualFolder>
         <File filePath="src/demos/wc_kite.4gl"/>
         <File filePath="etc/wc_kite.4st"/>
         <File filePath="src/demos/wc_kite.per"/>
       </Application>
-      <Application binaryName="wc_music" dependencies="-1090563702" id="1103957492" label="wc_music">
+      <Application binaryName="wc_music" dependencies="-1090563702" environment="value:MUSICDIR=$(HOME)/Music" id="1103957492" label="wc_music">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/music/music.css"/>
           <File filePath="pics/webcomponents/music/music.html"/>

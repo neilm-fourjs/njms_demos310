@@ -8,15 +8,6 @@ function change_music( filename ) {
 	document.getElementById('debug2').innerHTML="Now:"+audioSource.src;
 }
 
-function load_music( filename ) {
-	var audioSource = document.getElementById('mp3file');
-	document.getElementById('debug1').innerHTML="Was:"+audioSource.src;
-	audioSource.src = filename;
-	var audioObj = document.getElementById('myaudio');
-	audioObj.load();
-	document.getElementById('debug2').innerHTML="Now:"+audioSource.src;
-}
-
 function onICHostReady(version) {
 	if ( version != 1.0 ) {
 		alert('Invalid API version');
