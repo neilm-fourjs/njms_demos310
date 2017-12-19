@@ -1,0 +1,67 @@
+
+<html>
+<head>
+<title>GBC Theme</title>
+<script type="text/javascript">
+var m_prev_tc="myText";
+function setStuff( l_img, l_txt, l_tc ) {
+	document.getElementById('myImage').src = l_img;
+	document.getElementById('myText').textContent = l_txt;
+
+	document.getElementById("p2").textContent = " $mt-blue";
+	document.getElementById("p3").textContent = " $mt-grey";
+	document.getElementById("p4").textContent = " $mt-grey";
+	document.getElementById("p5").textContent = " $mt-text-white";
+	document.getElementById("p6").textContent = " $mt-text-black";
+
+	document.getElementById("t2").textContent = " $mt-blue-500";
+	document.getElementById("t3").textContent = " $mt-grey-100";
+	document.getElementById("t4").textContent = " $mt-grey-50";
+
+	document.getElementById(l_tc).textContent = " $mt-red-500";
+	document.getElementById(l_tc).style.color = 'red';
+
+	document.getElementById("debug").textContent = "Prev:"+m_prev_tc+" Now:"+l_tc;
+	document.getElementById(m_prev_tc).style.color = 'black';
+	m_prev_tc = l_tc;
+};
+</script>
+<style>
+.el {
+	padding: 10px 5px 4px 4px;
+	border-bottom: 1px solid grey;
+	flex-direction: row;
+}
+.h {
+	font-size: 1.5em; 
+	font-weight: bold;
+	text-align: center;
+}
+</style>
+</head>
+<body onload="setStuff('t41_1.png','Default','t1')">
+<div style="display: flex;">
+	<div style="border: 1px solid black;">
+		<div id="myHeading" class="h">Theme Elements</div>
+		<div class="el" onclick="setStuff('t41_1.png','Default','t1')">Default<span id="t1" style="display: none;"></span></div>
+		<br>
+		<div class="el" onclick="setStuff('t41_p2.png','palette-primary','p2')">palette-primary:<span id="p2"></span></div>
+		<div class="el" onclick="setStuff('t41_p3.png','palette-secondary','p3')">palette-secondary:<span id="p3"></span></div>
+		<div class="el" onclick="setStuff('t41_p4.png','palette-disabled','p4')">palette-disabled:<span id="p4"></span></div>
+		<div class="el" onclick="setStuff('t41_p5.png','palette-text-primary','p5')">palette-text-primary:<span id="p5"></span></div>
+		<div class="el" onclick="setStuff('t41_p6.png','palette-text-secondary','p6')">palette-text-secondary:<span id="p6"></span></div>
+		<br>
+		<div class="el" onclick="setStuff('t41_2.png','gbc-primary-medium-color','t2')">gbc-primary-medium-color:<span id="t2"></span></div>
+		<div class="el" onclick="setStuff('t41_3.png','gbc-primary-light-color','t3')">gbc-primary-light-color:<span id="t3"></span></div>
+		<div class="el" onclick="setStuff('t41_4.png','gbc-primary-text-color','t4')">gbc-primary-text-color:<span id="t4"></span></div>
+	</div>
+	<div style="flex-direction: column; border: 1px solid black;">
+		<div id="myText" class="h">Default</div>
+		<img id="myImage" src="t41_1.png">
+	</div>
+	<div>
+	<span id="debug" style="display: none;"></span>
+	</div>
+</div>
+</body>
+</html>

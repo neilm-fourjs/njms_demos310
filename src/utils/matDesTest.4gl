@@ -1,5 +1,5 @@
 
--- This program is testing basic GBC UI look-n-feel customizations.
+-- This program is for testing basic GBC UI look-n-feel customizations.
 -- By: Neil J Martin ( neilm@4js.com )
 
 IMPORT os

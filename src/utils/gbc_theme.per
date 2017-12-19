@@ -1,0 +1,28 @@
+
+TOPMENU
+	GROUP file (TEXT="File")
+		COMMAND quit
+	END -- FIle
+	GROUP edit (TEXT="Edit")
+		COMMAND editcut
+		COMMAND editcopy
+		COMMAND editpaste
+	END -- FIle
+	GROUP help (TEXT="Help")
+		COMMAND about
+	END -- opt
+END -- TM
+
+TOOLBAR
+	ITEM quit
+	ITEM editcut
+	ITEM editcopy
+	ITEM editpaste
+END -- TB
+
+LAYOUT ( STYLE="main2" )
+GRID
+{
+GBC Theme
+}
+END -- GRID
