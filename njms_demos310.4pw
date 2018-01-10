@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="-1722719568" gstVersion="30a07" version="3.2">
+<Project defaultApplication="1554019048" gstVersion="30a07" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -96,13 +96,15 @@
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
         <File filePath="src/app/app_lib.4gl"/>
+        <File filePath="src/app/mk_form.4gl"/>
       </Library>
       <Application binaryName="cust_mnt" commandLineArguments="S 1" dependencies="-400184264,1986,14000,-1090563702" id="-1273407208" label="cust_mnt">
         <File filePath="src/app/cust_mnt.4fd"/>
         <File filePath="src/app/cust_mnt.4gl"/>
       </Application>
-      <Application binaryName="dynMaint" commandLineArguments="S 1 stock stock_code" dependencies="14000,1986,-1090563702" id="1873655788" label="dynMaint">
+      <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 stock stock_code" dependencies="14000,1986,-1090563702" id="1873655788" label="dynMaint">
         <File filePath="src/app/dynMaint.4gl"/>
+        <File filePath="src/app/dynMaint.inc"/>
       </Application>
       <Library binaryName="oe_lib" dependencies="14000" id="-272766546" label="oe_lib">
         <File filePath="src/app/getcust.per"/>

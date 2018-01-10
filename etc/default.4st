@@ -59,12 +59,17 @@ Property of Four Js*
 	<Style name="Table.disparr">
 		<StyleAttribute name="summaryLineAlwaysAtBottom" value="no" />
 	</Style>
+
+  <Style name="Label">
+    <StyleAttribute name="textColor" value="darkblue"/>
+  </Style>
   <Style name="Table.disparr:odd">
     <StyleAttribute name="backgroundColor" value="#D5FFD5"/>
   </Style>
 
 	<Style name="Window">
 		<StyleAttribute name="windowType" value="normal" />
+		<StyleAttribute name="defaultTTFColor" value="darkblue" />
 	</Style>
 	<Style name="Window.main">
 		<StyleAttribute name="windowType" value="normal" />

@@ -7,6 +7,9 @@ DEFINE m_dbtyp CHAR(3)
 DEFINE m_mkey, m_ukey, m_rkey INTEGER
 --------------------------------------------------------------------------------
 FUNCTION insert_system_data()
+	DEFINE l_db STRING
+
+	LET l_db = fgl_getEnv("DBNAME")
 
 	CALL mkdb_progress( "Loading system users / menus ..." )
 
@@ -63,14 +66,14 @@ FUNCTION insert_system_data()
 
 	CALL addMenu("enq","main","T","Enquiry Programs", "","")
 	CALL addMenu("enq","main","F","Customer Enquiry", "cust_mnt.42r YYNNNN","")
-	CALL addMenu("enq","main","F","Stock Enquiry", "dynMaint.42r stock stock_code YYNNNN","")
-	CALL addMenu("enq","main","F","Supplier Enquiry", "dynMaint.42r supplier supp_code YYNNNN","")
+	CALL addMenu("enq","main","F","Stock Enquiry", "dynMaint.42r "||l_db||" stock stock_code YYNNNN","")
+	CALL addMenu("enq","main","F","Supplier Enquiry", "dynMaint.42r "||l_db||" supplier supp_code YYNNNN","")
 
 	CALL addMenu("mnt","main","T","Maintenance Programs", "","")
 	CALL addMenu("mnt","main","F","Customer Maintenance", "cust_mnt.42r","")
-	CALL addMenu("mnt","main","F","Stock Maintenance", "dynMaint.42r stock stock_code","")
-	CALL addMenu("mnt","main","F","Stock Cat Maintenance", "dynMaint.42r stock_cat catid","")
-	CALL addMenu("mnt","main","F","Supplier Maintenance", "dynMaint.42r supplier supp_code","")
+	CALL addMenu("mnt","main","F","Stock Maintenance", "dynMaint.42r "||l_db||" stock stock_code","")
+	CALL addMenu("mnt","main","F","Stock Cat Maintenance", "dynMaint.42r "||l_db||" stock_cat catid","")
+	CALL addMenu("mnt","main","F","Supplier Maintenance", "dynMaint.42r "||l_db||" supplier supp_code","")
 
 	CALL addMenu("oe","main","T","Order Entry", "","")
 	CALL addMenu("oe","main","F","Order Entry", "orderEntry.42r ","")
