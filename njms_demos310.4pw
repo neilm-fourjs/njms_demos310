@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1873655788" gstVersion="30a07" version="3.2">
+<Project defaultApplication="1554019048" gstVersion="30a07" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -91,7 +91,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="file:FGLPROFILE_sql=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sql=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -278,7 +278,7 @@
         <File filePath="etc/wc_kite.4st"/>
         <File filePath="src/demos/wc_kite.per"/>
       </Application>
-      <Application binaryName="wc_music" dependencies="-1090563702" environment="value:MUSICDIR=$(HOME)/Music" id="1103957492" label="wc_music">
+      <Application binaryName="wc_music" dependencies="-1090563702" id="1103957492" label="wc_music">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/music/music.css"/>
           <File filePath="pics/webcomponents/music/music.html"/>
