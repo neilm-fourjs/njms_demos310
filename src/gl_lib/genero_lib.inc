@@ -3,4 +3,4 @@
 
 &define GL_MODULE_ERROR_HANDLER   WHENEVER ANY ERROR CALL gl_error
 
-&define GL_ABOUT ON ACTION about CALL gl_lib.gl_about( C_VER )
+&define GL_ABOUT ON ACTION about CALL gl_lib.gl_about( gl_version )

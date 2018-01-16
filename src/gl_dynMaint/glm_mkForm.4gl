@@ -1,17 +1,18 @@
 
 &include "dynMaint.inc"
 
+PUBLIC DEFINE m_fld_props DYNAMIC ARRAY OF t_fld_props
+PUBLIC DEFINE m_formName STRING
+PUBLIC DEFINE m_w ui.Window
+PUBLIC DEFINE m_f ui.Form
+
+--------------------------------------------------------------------------------
 # Build a form based on an array of field names and an array of properties.
 #+ @param l_db Database name
 #+ @param l_tab Table name
 #+ @param l_fld_per_page Fields per page ( folder tabs )
 #+ @param l_fields Array of field names / types
 #+ @param l_fld_props Array of field properties.
-PUBLIC DEFINE m_fld_props DYNAMIC ARRAY OF t_fld_props
-PUBLIC DEFINE m_formName STRING
-PUBLIC DEFINE m_w ui.Window
-PUBLIC DEFINE m_f ui.Form
---------------------------------------------------------------------------------
 FUNCTION init_form(
 	l_db STRING,
 	l_tab STRING, 
@@ -42,18 +43,28 @@ FUNCTION init_form(
 			END IF
 		END FOR
 	END FOR
+	CALL ui.Interface.getRootNode().writeXml("aui_"||l_tab||"_static.xml")
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION mk_form(l_tab STRING,	l_fld_per_page SMALLINT, 	l_fields DYNAMIC ARRAY OF t_fields)
+PRIVATE FUNCTION mk_form(l_tab STRING,	l_fld_per_page SMALLINT, 	l_fields DYNAMIC ARRAY OF t_fields)
 	DEFINE l_n_form, l_n_grid,l_n_formfield, l_n_widget, l_folder, l_container om.DomNode
 	DEFINE x, y, l_first_fld, l_last_fld, l_maxlablen SMALLINT
 	DEFINE l_pages DECIMAL(3,1)
+	DEFINE l_widget STRING
+	DEFINE l_cb ui.ComboBox
 
+	DISPLAY "Creating Form ..."
 	LET l_n_form = m_w.getNode()
 	CALL l_n_form.setAttribute("style","main2")
 	LET m_f = m_w.createForm(m_formName)
 	LET l_n_form = m_f.getNode()
 	CALL l_n_form.setAttribute("windowStyle","main2")
+
+	FOR x = 1 TO l_fields.getLength()
+		CALL setProperties(x, l_tab, l_fields, m_fld_props)
+		IF m_fld_props[x].label.getLength() > l_maxlablen THEN LET l_maxlablen = m_fld_props[x].label.getLength() END IF
+	END FOR
+	CALL custom_form_init() -- set custom labels or widgets
 
 	LET l_pages =  l_fields.getLength() / l_fld_per_page
 	IF l_pages > 1 THEN -- Folder Tabs
@@ -64,7 +75,6 @@ FUNCTION mk_form(l_tab STRING,	l_fld_per_page SMALLINT, 	l_fields DYNAMIC ARRAY 
 	END IF
 	LET l_first_fld = 1
 	DISPLAY "Fields:",l_fields.getLength()," Pages:",l_pages
-
 	FOR y = 1 TO (l_pages+1)
 		IF l_pages > 1 THEN
 			LET l_container = l_folder.createChild("Page")
@@ -77,36 +87,74 @@ FUNCTION mk_form(l_tab STRING,	l_fld_per_page SMALLINT, 	l_fields DYNAMIC ARRAY 
 		CALL m_w.setText(SFMT(%"Dynamic Maintenance for %1",l_tab))
 
 		FOR x = l_first_fld TO l_last_fld
-			CALL setProperties(x, l_tab, l_fields, m_fld_props)
 			LET l_n_formfield = l_n_grid.createChild("Label")
 			CALL l_n_formfield.setAttribute("text", m_fld_props[x].label )
 			CALL l_n_formfield.setAttribute("posY", x )
 			CALL l_n_formfield.setAttribute("posX", "1" )
+
 			CALL l_n_formfield.setAttribute("gridWidth", m_fld_props[x].label.getLength() )
-			IF m_fld_props[x].label.getLength() > l_maxlablen THEN LET l_maxlablen = m_fld_props[x].label.getLength() END IF
 		END FOR
 		FOR x = l_first_fld TO l_last_fld
 			LET l_n_formfield = l_n_grid.createChild("FormField")
 			LET m_fld_props[x].formFieldNode = l_n_formfield
-			CALL l_n_formfield.setAttribute("colName", l_fields[x].colname )
 			CALL l_n_formfield.setAttribute("name", m_fld_props[x].tabname||"."||l_fields[x].colname )
+			CALL l_n_formfield.setAttribute("colName", l_fields[x].colname )
+			CALL l_n_formfield.setAttribute("sqlType", l_fields[x].type )
+			CALL l_n_formfield.setAttribute("fieldId", x )
+			CALL l_n_formfield.setAttribute("sqlTabName", m_fld_props[x].tabname )
+			CALL l_n_formfield.setAttribute("tabIndex", x )
 			CALL l_n_formfield.setAttribute("numAlign", m_fld_props[x].numeric)
 
 			IF l_fields[x].type = "DATE" THEN
-				LET l_n_widget = l_n_formField.createChild("DateEdit")
+				LET l_widget = "DateEdit"
 			ELSE
-				LET l_n_widget = l_n_formField.createChild("Edit")
+				LET l_widget = "Edit"
+			END IF
+			IF m_fld_props[x].widget IS NOT NULL THEN -- handle custom widget
+				LET l_widget = m_fld_props[x].widget
+			END IF
+			LET l_n_widget = l_n_formField.createChild(l_widget)
+			CALL l_n_widget.setAttribute("width", m_fld_props[x].len)
+			IF m_fld_props[x].widget = "ComboBox" THEN
+				CALL l_n_widget.setAttribute("initializer", m_fld_props[x].widget_props)
 			END IF
 			CALL l_n_widget.setAttribute("posY", x )
 			CALL l_n_widget.setAttribute("posX", l_maxlablen+1 )
 			CALL l_n_widget.setAttribute("gridWidth", m_fld_props[x].len )
-			CALL l_n_widget.setAttribute("width", m_fld_props[x].len)
 			CALL l_n_widget.setAttribute("comment", "Type:"||l_fields[x].type )
 			IF m_fld_props[x].numeric THEN
 				CALL l_n_widget.setAttribute("justify", "right")
 			END IF
 		END FOR
 		LET l_first_fld = l_first_fld + l_fld_per_page
+	END FOR
+	DISPLAY "Form Created."
+
+-- for debug only
+	CALL ui.Interface.refresh()
+	CALL ui.Interface.getRootNode().writeXml("aui_"||l_tab||"_dynamic.xml")
+
+-- attempt to handle any comboboxes
+	FOR x = 1 TO m_fld_props.getLength()
+		IF m_fld_props[x].widget = "ComboBox" THEN
+			DISPLAY "Looking for cb of: ", m_fld_props[x].tabname||"."||m_fld_props[x].colname 
+			LET l_cb = ui.ComboBox.forName( m_fld_props[x].tabname||"."||m_fld_props[x].colname )
+			CALL m_fld_props[x].widget_callback( l_cb )
+		END IF
+	END FOR
+
+END FUNCTION
+--------------------------------------------------------------------------------
+-- set a specific field to a specific widget
+FUNCTION setWidget(l_fldName STRING, l_widget STRING, l_widget_prop STRING, f_init_cb t_init_cb) --l_widget_props STRING)
+	DEFINE x SMALLINT
+	FOR x = 1 TO m_fld_props.getLength()
+		IF m_fld_props[x].colname = l_fldName THEN
+			LET m_fld_props[x].widget = l_widget
+			LET m_fld_props[x].widget_props = l_widget_prop
+			LET m_fld_props[x].widget_callback = f_init_cb
+			RETURN
+		END IF
 	END FOR
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -121,7 +169,7 @@ FUNCTION update_form_value(l_sql_handle base.SqlHandle)
 	CALL ui.Interface.refresh()
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION setProperties(
+PRIVATE FUNCTION setProperties(
 	l_fldno SMALLINT,
 	l_tab STRING,
 	l_fields DYNAMIC ARRAY OF t_fields,
@@ -160,7 +208,7 @@ FUNCTION setProperties(
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Upshift 1st letter : replace _ with space : split capitalised names
-FUNCTION pretty_lab( l_lab VARCHAR(60) ) RETURNS STRING
+PRIVATE FUNCTION pretty_lab( l_lab VARCHAR(60) ) RETURNS STRING
 	DEFINE x,l_len SMALLINT
 	LET l_len = LENGTH( l_lab )
 	FOR x = 2 TO l_len

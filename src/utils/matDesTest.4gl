@@ -37,6 +37,8 @@ MAIN
 	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
+	--RUN "env | sort > env.txt"
+
 	FOR X = 1 TO 5
 		LET l_arr[x].col1 = "Row "||x
 		LET l_arr[x].col2 = x

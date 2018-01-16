@@ -51,9 +51,26 @@
 		<StyleAttribute name="summaryLineAlwaysAtBottom" value="no" />
 	</Style>
 
-  <Style name="Label">
-    <StyleAttribute name="textColor" value="darkblue"/>
-  </Style>
+
+	<Style name="*">
+		<StyleAttribute name="fontFamily" value="Century Gothic" />
+		<StyleAttribute name="fontSize" value="1.2em" />
+	</Style>
+	<Style name="Label">
+		<StyleAttribute name="textColor" value="darkblue" />
+		<StyleAttribute name="fontWeight" value="bold" />
+	</Style>
+	<Style name=":active">
+		<StyleAttribute name="backgroundColor" value="Azure" />
+	</Style>
+	<Style name=":inactive">
+		<StyleAttribute name="textColor" value="darkred" />
+	</Style>
+	<Style name=":active:focus">
+		<StyleAttribute name="backgroundColor" value="GhostWhite" />
+	</Style>
+
+
   <Style name="Table.disparr:odd">
     <StyleAttribute name="backgroundColor" value="#D5FFD5"/>
   </Style>

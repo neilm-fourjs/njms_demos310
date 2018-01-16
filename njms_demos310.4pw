@@ -96,15 +96,13 @@
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
         <File filePath="src/app/app_lib.4gl"/>
-        <File filePath="src/app/mk_form.4gl"/>
       </Library>
       <Application binaryName="cust_mnt" commandLineArguments="S 1" dependencies="-400184264,1986,14000,-1090563702" id="-1273407208" label="cust_mnt">
         <File filePath="src/app/cust_mnt.4fd"/>
         <File filePath="src/app/cust_mnt.4gl"/>
       </Application>
-      <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 stock stock_code" dependencies="14000,1986,-1090563702" id="1873655788" label="dynMaint">
-        <File filePath="src/app/dynMaint.4gl"/>
-        <File filePath="src/app/dynMaint.inc"/>
+      <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 stock stock_code" dependencies="14000,1986,-1090563702,-1557891896" id="1873655788" label="dynMaint">
+        <File filePath="src/gl_dynMaint/dynMaint.4gl"/>
       </Application>
       <Library binaryName="oe_lib" dependencies="14000" id="-272766546" label="oe_lib">
         <File filePath="src/app/getcust.per"/>
@@ -291,7 +289,13 @@
       </Application>
     </Group>
     <Group label="GL_Lib" language="Genero">
-      <Library binaryName="genero_lib" dependencies="1986" id="14000" label="genero_lib">
+      <Library binaryName="gl_dynMaint" dependencies="14000" id="-1557891896" label="gl_dynMaint">
+        <File filePath="src/gl_dynMaint/dynMaint.inc"/>
+        <File filePath="src/gl_dynMaint/glm_mkForm.4gl"/>
+        <File filePath="src/gl_dynMaint/glm_sql.4gl"/>
+        <File filePath="src/gl_dynMaint/glm_ui.4gl"/>
+      </Library>
+      <Library binaryName="gl_lib" dependencies="1986" id="14000" label="gl_lib">
         <File filePath="src/gl_lib/genero_lib.inc"/>
         <File filePath="src/gl_lib/gl_db.4gl"/>
         <File filePath="src/gl_lib/gl_db.inc"/>
