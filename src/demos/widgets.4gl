@@ -195,6 +195,7 @@ MAIN
 				LET f = DIALOG.getForm()
 				LET f_n = f.getNode()
 				GL_DBGMSG(2,"Before menu")
+			--	CALL f.setElementText("url","Button URL")
 			COMMAND "chgstyle0"
 				LET func = "0"
 				EXIT MENU
@@ -297,7 +298,7 @@ MAIN
 				DISPLAY BY NAME timeedit, datetimeedit
 
 			ON ACTION url
-				CALL ui.interface.frontCall("standard","shellexec","http://www.4js.com/",[tmp])
+				CALL ui.interface.frontCall("standard","launchURL","http://www.4js.com/",[tmp])
 
 			ON ACTION splash
 				CALL gl_lib.gl_splash( gl_lib.gl_progIcon )

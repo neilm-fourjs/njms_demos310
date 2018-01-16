@@ -14,9 +14,21 @@ function setStuff( l_img, l_txt, l_tc ) {
 	document.getElementById("p5").textContent = " $mt-text-white";
 	document.getElementById("p6").textContent = " $mt-text-black";
 
-	document.getElementById("t2").textContent = " $mt-blue-500";
-	document.getElementById("t3").textContent = " $mt-grey-100";
-	document.getElementById("t4").textContent = " $mt-grey-50";
+	document.getElementById("t1").textContent = " default";
+	document.getElementById("t2").textContent = " default";
+	document.getElementById("t3").textContent = " default";
+	document.getElementById("t4").textContent = " default";
+	document.getElementById("t5").textContent = " default";
+	document.getElementById("t6").textContent = " default";
+	document.getElementById("t7").textContent = " default";
+	document.getElementById("t8").textContent = " default";
+	document.getElementById("t9").textContent = " default";
+	document.getElementById("t10").textContent = " default";
+	document.getElementById("t11").textContent = " default";
+	document.getElementById("t12").textContent = " default";
+	document.getElementById("t13").textContent = " default";
+	document.getElementById("t14").textContent = " default";
+	document.getElementById("t15").textContent = " default";
 
 	document.getElementById(l_tc).textContent = " $mt-red-500";
 	document.getElementById(l_tc).style.color = 'red';
@@ -39,21 +51,35 @@ function setStuff( l_img, l_txt, l_tc ) {
 }
 </style>
 </head>
-<body onload="setStuff('t41_1.png','Default','t1')">
+<body onload="setStuff('t41_1.png','Default','t0')">
 <div style="display: flex;">
 	<div style="border: 1px solid black;">
-		<div id="myHeading" class="h">Theme Elements</div>
-		<div class="el" onclick="setStuff('t41_1.png','Default','t1')">Default<span id="t1" style="display: none;"></span></div>
+		<div class="el" onclick="setStuff('t41_1.png','Default','t0')">Default<span id="t0" style="display: none;"></span></div>
 		<br>
+		<div id="myHeading" class="h">Core Palette Vars</div>
 		<div class="el" onclick="setStuff('t41_p2.png','palette-primary','p2')">palette-primary:<span id="p2"></span></div>
 		<div class="el" onclick="setStuff('t41_p3.png','palette-secondary','p3')">palette-secondary:<span id="p3"></span></div>
 		<div class="el" onclick="setStuff('t41_p4.png','palette-disabled','p4')">palette-disabled:<span id="p4"></span></div>
 		<div class="el" onclick="setStuff('t41_p5.png','palette-text-primary','p5')">palette-text-primary:<span id="p5"></span></div>
 		<div class="el" onclick="setStuff('t41_p6.png','palette-text-secondary','p6')">palette-text-secondary:<span id="p6"></span></div>
 		<br>
-		<div class="el" onclick="setStuff('t41_2.png','gbc-primary-medium-color','t2')">gbc-primary-medium-color:<span id="t2"></span></div>
-		<div class="el" onclick="setStuff('t41_3.png','gbc-primary-light-color','t3')">gbc-primary-light-color:<span id="t3"></span></div>
-		<div class="el" onclick="setStuff('t41_4.png','gbc-primary-text-color','t4')">gbc-primary-text-color:<span id="t4"></span></div>
+		<div id="myHeading" class="h">Optional Theme Vars</div>
+		<div class="el" onclick="setStuff('t41_t1.png','theme-primary-color','t1')">theme-primary-color:<span id="t1"></span></div>
+		<div class="el" onclick="setStuff('t41_t2.png','theme-primary-background-color','t2')">theme-primary-background-color:<span id="t2"></span></div>
+		<div class="el" onclick="setStuff('t41_t3.png','theme-primary-emphasis-background-color','t3')">theme-primary-emphasis-background-color:<span id="t3"></span></div>
+		<div class="el" onclick="setStuff('t41_t4.png','theme-primary-faded-background-color','t4')">theme-primary-faded-background-color:<span id="t4"></span></div>
+		<div class="el" onclick="setStuff('t41_t5.png','theme-secondary-color','t5')">theme-secondary-color:<span id="t5"></span></div>
+		<div class="el" onclick="setStuff('t41_t6.png','theme-secondary-background-color','t6')">theme-secondary-background-color:<span id="t6"></span></div>
+		<div class="el" onclick="setStuff('t41_t7.png','theme-secondary-alternative-background-color','t7')">theme-secondary-alternative-background-color:<span id="t7"></span></div>
+		<div class="el" onclick="setStuff('t41_t8.png','theme-field-background-color','t8')">theme-field-background-color:<span id="t8"></span></div>
+		<div class="el" onclick="setStuff('t41_t9.png','theme-field-disabled-background-color','t9')">theme-field-disabled-background-color:<span id="t9"></span></div>
+		<div class="el" onclick="setStuff('t41_t10.png','theme-field-readonly-background-color','t10')">theme-field-readonly-background-color:<span id="t10"></span></div>
+		<div class="el" onclick="setStuff('t41_t11.png','theme-disabled-color','t11')">theme-disabled-color:<span id="t11"></span></div>
+		<div class="el" onclick="setStuff('t41_t12.png','theme-separator-color','t12')">theme-separator-color:<span id="t12"></span></div>
+		<div class="el" onclick="setStuff('t41_t13.png','theme-header-color','t13')">theme-header-color:<span id="t13"></span></div>
+		<div class="el" onclick="setStuff('t41_t14.png','theme-message-background-color','t14')">theme-message-background-color:<span id="t14"></span></div>
+		<div class="el" onclick="setStuff('t41_t15.png','theme-error-background-color','t15')">theme-error-background-color:<span id="t15"></span></div>
+		<br>
 	</div>
 	<div style="flex-direction: column; border: 1px solid black;">
 		<div id="myText" class="h">Default</div>
