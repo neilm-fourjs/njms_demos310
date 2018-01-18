@@ -71,9 +71,19 @@ FUNCTION gldb_connect( l_db STRING )
 				LET m_dbdes = "Informix "||m_dbdrv.subString(7,9)
 				LET m_dbsrc = fgl_getEnv("INFORMIXSERVER")
 				LET m_dbcon = l_db
-			WHEN "sqt"	
+			WHEN "sqt"
+				IF NOT os.path.EXISTS( m_dbdir ) THEN
+					IF NOT os.path.mkdir( m_dbdir ) THEN
+						CALL gl_winMessage("Error",SFMT("Failed to create dbdir '%1' !\n%2",m_dbdir,ERR_GET(STATUS)),"exclamation")
+					END IF
+				END IF
 				LET m_dbsrc = fgl_getEnv("SQLITEDB")
-				IF m_dbsrc IS NULL OR m_dbsrc = " " THEN LET m_dbsrc = os.path.join(m_dbdir,m_dbnam||".db") END IF
+				IF m_dbsrc IS NULL OR m_dbsrc = " " THEN LET m_dbsrc = m_dbdir||"/"||m_dbnam||".db" END IF
+				IF NOT os.path.EXISTS( m_dbsrc ) THEN
+					CALL gl_winMessage("Error",SFMT("Database file is missing? '%1' !\n",m_dbsrc),"exclamation")
+				ELSE
+					DISPLAY "Database file exists:",m_dbsrc
+				END IF
 				LET l_lockMode = FALSE
 				LET m_dbdes = "SQLite "||m_dbdrv.subString(7,9)
 				LET m_dbcon = "db+driver='"||m_dbdrv||"',source='"||m_dbsrc||"'"
