@@ -1,4 +1,5 @@
 
+IMPORT os
 IMPORT FGL gl_lib
 &include "genero_lib.inc"
 CONSTANT C_VER="3.1"
@@ -117,7 +118,7 @@ END FUNCTION
 FUNCTION load_arr()
 	DEFINE l_file STRING
 	DEFINE l_st base.StringTokenizer
-	LET l_st = base.StringTokenizer.create( fgl_getEnv("FGLIMAGEPATH"), ":" )
+	LET l_st = base.StringTokenizer.create( fgl_getEnv("FGLIMAGEPATH"), os.path.pathSeparator() )
 	WHILE l_st.hasMoreTokens()
 		LET l_file = l_st.nextToken()
 		IF l_file MATCHES "*.txt" THEN
