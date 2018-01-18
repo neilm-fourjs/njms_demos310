@@ -4,12 +4,11 @@
 -- To Do: locking, sample, listing report
 
 -- Command Args:
--- 1: MDI / SDI
--- 2: User ( not used !! )
--- 3: Database name
--- 4: Table name
--- 5: Primary Key name
--- 6: Allowed actions: Y/N > Find / Update / Insert / Delete / Sample / List  -- eg: YNNNNN = enquiry only.
+-- 1: MDI / SDI 
+-- 2: Database name
+-- 3: Table name
+-- 4: Primary Key name
+-- 5: Allowed actions: Y/N > Find / Update / Insert / Delete / Sample / List  -- eg: YNNNNN = enquiry only.
 
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
@@ -46,7 +45,7 @@ MAIN
 	CALL glm_sql.glm_mkSQL("*","1=2") -- not fetching any data.
 
 -- create Form
-	CALL glm_mkForm.init_form(m_dbname, m_tab, 10, glm_sql.m_fields) -- 10 fields by folder page
+	CALL glm_mkForm.init_form(m_dbname, m_tab, glm_sql.m_key_fld, 10, glm_sql.m_fields) -- 10 fields by folder page
 	CALL gl_lib.gl_titleWin(NULL)
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
@@ -57,7 +56,7 @@ MAIN
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION init_args()
-	DEFINE l_user INTEGER
+	DEFINE l_user SMALLINT
 	LET l_user = ARG_VAL(2)
 	LET m_dbname = ARG_VAL(3)
 	LET glm_sql.m_tab = ARG_VAL(4)

@@ -71,7 +71,7 @@ FUNCTION insert_system_data()
 
 	CALL addMenu("mnt","main","T","Maintenance Programs", "","")
 	CALL addMenu("mnt","main","F","Customer Maintenance", "cust_mnt.42r","")
-	CALL addMenu("mnt","main","F","Stock Maintenance", "dynMaint.42r "||l_db||" stock stock_code","")
+	CALL addMenu("mnt","main","F","Stock Maintenance", "dm_stock.42r","")
 	CALL addMenu("mnt","main","F","Stock Cat Maintenance", "dynMaint.42r "||l_db||" stock_cat catid","")
 	CALL addMenu("mnt","main","F","Supplier Maintenance", "dynMaint.42r "||l_db||" supplier supp_code","")
 

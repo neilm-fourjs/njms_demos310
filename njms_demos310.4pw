@@ -101,6 +101,9 @@
         <File filePath="src/app/cust_mnt.4fd"/>
         <File filePath="src/app/cust_mnt.4gl"/>
       </Application>
+      <Application binaryName="dm_stock" commandLineArguments="S 1" dependencies="14000,-1557891896" id="476951290" label="dm_stock">
+        <File filePath="src/app/dm_stock.4gl"/>
+      </Application>
       <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 stock stock_code" dependencies="14000,1986,-1090563702,-1557891896" id="1873655788" label="dynMaint">
         <File filePath="src/gl_dynMaint/dynMaint.4gl"/>
       </Application>

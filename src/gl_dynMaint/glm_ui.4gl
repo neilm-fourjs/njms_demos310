@@ -1,4 +1,5 @@
 
+IMPORT util
 IMPORT FGL gl_lib
 &include "genero_lib.inc"
 
@@ -7,8 +8,9 @@ IMPORT FGL glm_mkForm
 &include "dynMaint.inc"
 
 DEFINE m_dialog ui.Dialog
-PUBLIC DEFINE m_bi_func t_bi_func -- before input callback function
-PUBLIC DEFINE m_inpt_func t_inpt_func -- input function
+PUBLIC DEFINE m_before_inp_func t_before_inp_func -- callback function
+PUBLIC DEFINE m_after_inp_func t_after_inp_func -- callback function
+PUBLIC DEFINE m_inpt_func t_inpt_func -- input callback function
 --------------------------------------------------------------------------------
 FUNCTION glm_menu(l_allowedActions STRING )
 	IF m_inpt_func IS NULL THEN LET m_inpt_func = FUNCTION glm_inpt END IF
@@ -20,13 +22,13 @@ FUNCTION glm_menu(l_allowedActions STRING )
 		ON ACTION delete		CALL glm_sql.glm_SQLdelete()
 		ON ACTION find			CALL glm_constrct()
 			CALL setActions(glm_sql.m_row_cur,glm_sql.m_row_count, l_allowedActions)
-		ON ACTION firstrow	CALL glm_sql.glm_getRow(SQL_FIRST)
+		ON ACTION firstrow	CALL glm_sql.glm_getRow(SQL_FIRST, TRUE)
 			CALL setActions(glm_sql.m_row_cur,glm_sql.m_row_count, l_allowedActions)
-		ON ACTION prevrow		CALL glm_sql.glm_getRow(SQL_PREV)
+		ON ACTION prevrow		CALL glm_sql.glm_getRow(SQL_PREV, TRUE)
 			CALL setActions(glm_sql.m_row_cur,glm_sql.m_row_count, l_allowedActions)
-		ON ACTION nextrow		CALL glm_sql.glm_getRow(SQL_NEXT)
+		ON ACTION nextrow		CALL glm_sql.glm_getRow(SQL_NEXT, TRUE)
 			CALL setActions(glm_sql.m_row_cur,glm_sql.m_row_count, l_allowedActions)
-		ON ACTION lastrow		CALL glm_sql.glm_getRow(SQL_LAST)
+		ON ACTION lastrow		CALL glm_sql.glm_getRow(SQL_LAST, TRUE)
 			CALL setActions(glm_sql.m_row_cur,glm_sql.m_row_count, l_allowedActions)
 		ON ACTION quit			EXIT MENU
 		ON ACTION close			EXIT MENU
@@ -69,7 +71,7 @@ FUNCTION glm_constrct()
 	END FOR
 
 	CALL glm_sql.glm_mkSQL( glm_sql.m_cols, l_sql )
-	CALL glm_sql.glm_getRow(SQL_FIRST)
+	CALL glm_sql.glm_getRow(SQL_FIRST, TRUE)
 
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -83,7 +85,9 @@ FUNCTION glm_inpt(l_new BOOLEAN)
 	ELSE
 		IF glm_sql.m_row_cur = 0 THEN RETURN END IF
 		FOR x = 1 TO m_fields.getLength()
-			CALL m_dialog.setFieldValue(glm_mkForm.m_fld_props[x].tabname||"."||glm_sql.m_fields[x].colname, glm_sql.m_sql_handle.getResultValue(x))
+--			CALL m_dialog.setFieldValue(glm_mkForm.m_fld_props[x].name, glm_sql.m_sql_handle.getResultValue(x))
+			CALL m_dialog.setFieldValue(glm_mkForm.m_fld_props[x].name, glm_mkForm.m_fld_props[x].value )
+			DISPLAY glm_mkForm.m_fld_props[x].colname," = \"",glm_mkForm.m_fld_props[x].value,"\" AUI Value = \"",m_dialog.getFieldValue(glm_mkForm.m_fld_props[x].name),"\""
 			IF x = glm_sql.m_key_fld THEN
 				CALL m_dialog.setFieldActive(glm_sql.m_fields[x].colname, FALSE )
 			END IF
@@ -97,22 +101,46 @@ FUNCTION glm_inpt(l_new BOOLEAN)
 	WHILE TRUE
 		CASE m_dialog.nextEvent()
 			WHEN "BEFORE INPUT"
-				IF m_bi_func IS NOT NULL THEN CALL m_bi_func(l_new) END IF
+				IF m_before_inp_func IS NOT NULL THEN CALL m_before_inp_func(l_new, m_dialog) END IF
+			WHEN "AFTER INPUT"
+				CALL glm_updateJsonRec()
+				IF m_after_inp_func IS NOT NULL THEN 
+					IF m_after_inp_func(l_new, m_dialog) THEN
+						EXIT WHILE
+					END IF
+				ELSE
+					EXIT WHILE
+				END IF
 			WHEN "ON ACTION close"
 				LET int_flag = TRUE
 				EXIT WHILE
 			WHEN "ON ACTION accept"
-				IF l_new THEN 
-					CALL glm_sql.glm_SQLinsert(m_dialog)
-				ELSE
-					CALL glm_sql.glm_SQLupdate(m_dialog)
-				END IF
-				EXIT WHILE
+				CALL m_dialog.accept()
 			WHEN "ON ACTION cancel"
-				LET int_flag = TRUE
+				CALL m_dialog.cancel()
 				EXIT WHILE
 		END CASE
 	END WHILE
+	IF NOT int_flag THEN
+		IF l_new THEN 
+			CALL glm_sql.glm_SQLinsert(m_dialog)
+		ELSE
+			CALL glm_sql.glm_SQLupdate(m_dialog)
+		END IF
+	END IF
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION glm_updateJsonRec()
+	DEFINE x SMALLINT
+	LET glm_mkForm.m_json_rec = util.JSONObject.create()
+	FOR x = 1 TO m_fld_props.getLength()
+		IF  m_fld_props[x].formFieldNode IS NOT NULL THEN
+			LET glm_mkForm.m_fld_props[x].value = m_dialog.getFieldValue(glm_mkForm.m_fld_props[x].name)
+		END IF
+		CALL m_json_rec.put(glm_mkForm.m_fld_props[x].colname, glm_mkForm.m_fld_props[x].value)
+	END FOR
+	DISPLAY m_json_rec.toString()
+
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Setup actions based on a allowed actions
