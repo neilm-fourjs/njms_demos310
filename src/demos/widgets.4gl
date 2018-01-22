@@ -30,6 +30,7 @@ DEFINE func CHAR(1)
 DEFINE m_answer STRING
 DEFINE norm CHAR(20)
 DEFINE normbe CHAR(50)
+DEFINE completr STRING
 DEFINE wordw CHAR(500)
 DEFINE combo CHAR(10)
 DEFINE c_year SMALLINT
@@ -52,7 +53,7 @@ TYPE t_rec RECORD
 	val STRING
 END RECORD
 DEFINE m_imgrec DYNAMIC ARRAY OF t_rec
-
+DEFINE m_all_names DYNAMIC ARRAY OF STRING
 DEFINE oldarr ARRAY [arrmax] OF RECORD
 	arr1 CHAR(10),
 	arr2 CHAR(10),
@@ -478,7 +479,7 @@ END MAIN
 FUNCTION do1()
 	DEFINE val1,val2 CHAR(1)
 --NOTE val1/2 are noentry fields.
-	INPUT BY NAME norm, normbe,wordw, 
+	INPUT BY NAME norm, normbe, completr, wordw, 
 								dec, formt, check, 
 								radio, combo, c_year, 
 								dateedit, timeedit, datetimeedit,
@@ -543,6 +544,8 @@ FUNCTION do1()
 				ERROR "You entered error!"
 			END IF
 
+		ON CHANGE completr
+			CALL set_completer(DIALOG, completr)
 
 --		ON ACTION NEXTFIELD
 --			DISPLAY "NextField"
@@ -1356,6 +1359,7 @@ FUNCTION disp_form()
 
 	LET norm = "Normal entry"
 	LET normbe = "hit here for lookup ->"
+	LET completr = "Auto Complete - image names"
 	LET dec = 12.34
 	LET formt = "A1-12 ABXX"
 	LET wordw = "This is some text that as been wordwrapped to fit into this text box. The field in the program is 500 characters.",ASCII(10),"This is on a new line using ASCII(10)"
@@ -1363,7 +1367,7 @@ FUNCTION disp_form()
 	LET timeedit = CURRENT
 	LET datetimeedit = CURRENT
 
-	DISPLAY BY NAME norm, normbe, wordw, dec, formt, dateedit, timeedit, datetimeedit -- ATTRIBUTE(RED)
+	DISPLAY BY NAME norm, normbe,completr, wordw, dec, formt, dateedit, timeedit, datetimeedit -- ATTRIBUTE(RED)
 	DISPLAY check TO val1
 	DISPLAY radio TO val2
 	DISPLAY combo TO val3
@@ -1725,6 +1729,7 @@ FUNCTION load_new_imgarr()
 		IF c.read( [ l_rec.* ] ) THEN
 			DISPLAY l_rec.fld1," Font:",l_rec.fld2
 			CALL m_imgrec.appendElement()
+			LET m_all_names[ m_all_names.getLength() + 1 ] = l_rec.fld1
 			LET m_imgrec[ m_imgrec.getLength() ].img = l_rec.fld1
 			LET m_imgrec[ m_imgrec.getLength() ].nam = l_rec.fld1
 			LET x = l_rec.fld2.getIndexOf(":",1)
@@ -1847,4 +1852,19 @@ FUNCTION colours(l_ask BOOLEAN)
 
 	END WHILE
 
+END FUNCTION
+--------------------------------------------------------------------------------
+-- sets the completer items of a current form field
+FUNCTION set_completer(l_d ui.Dialog, l_in_str STRING)
+	DEFINE l_items DYNAMIC ARRAY OF STRING
+	DEFINE i INT
+	IF l_in_str.getLength() > 0 THEN
+		FOR i = 1 TO m_all_names.getLength()
+			IF UPSHIFT(m_all_names[i]) MATCHES UPSHIFT(l_in_str.append("*")) THEN -- case insensitive filter
+				LET l_items[ l_items.getLength() + 1 ] = m_all_names[i]
+				IF  l_items.getLength() == 50 THEN EXIT FOR END IF -- Completer is limited to 50 items			
+			END IF
+		END FOR
+	END IF
+	CALL l_d.setCompleterItems(l_items)
 END FUNCTION

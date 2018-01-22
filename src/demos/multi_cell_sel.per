@@ -1,0 +1,44 @@
+
+LAYOUT (TEXT="Matrix Demo")
+VBOX
+GRID
+{
+Demo for a multi-select matrix layout:  Like?[l]
+}
+END -- GRID
+HBOX
+TABLE colorus ( STYLE="noheading")
+{
+[a|c001      |b|c002      |c|c003      |d|c004      ]
+[a|c001      |b|c002      |c|c003      |d|c004      ]
+[a|c001      |b|c002      |c|c003      |d|c004      ]
+[a|c001      |b|c002      |c|c003      |d|c004      ]
+}
+END -- TABLE
+TABLE selcolorus
+{
+[colour     ]
+[colour     ]
+[colour     ]
+[colour     ]
+}
+END -- TABLE
+END -- HBOX
+END -- VBOX
+END -- LAYOUT
+ATTRIBUTES
+BUTTON l : like, IMAGE="fa-thumbs-o-up", STYLE="noborder";
+colour = FORMONLY.l_colour, TITLE="Selected";
+
+IMAGE a = FORMONLY.s1;
+c001 = FORMONLY.c1;
+IMAGE b = FORMONLY.s2;
+c002 = FORMONLY.c2;
+IMAGE c = FORMONLY.s3;
+c003 = FORMONLY.c3;
+IMAGE d = FORMONLY.s4;
+c004 = FORMONLY.c4;
+
+INSTRUCTIONS
+SCREEN RECORD cols ( FORMONLY.s1 THRU FORMONLY.c4 )
+SCREEN RECORD selcols ( FORMONLY.l_colour )

@@ -90,6 +90,7 @@ GRID
 <G "Normal Inputs"                        >
  [l000    |f000                 ]
  [l001    |f001                          ]
+ [l01a    |f01a                          ]
  [l006    |f007         : :l009:f012     ]
  [l06a    |f07a                          ]
  [l002    |f002                          ]
@@ -375,6 +376,7 @@ BUTTON sbut2 : chgstyle2, TEXT="Style2";
 BUTTON sbut3 : chgstyle3, TEXT="Style3";
 LABEL l000 : nedit, JUSTIFY=RIGHT, STYLE="njm", TEXT="Edit Field:";
 LABEL l001 : bedit, JUSTIFY=RIGHT, STYLE="njm", TEXT="ButtonEdit:";
+LABEL l01a : cmplt, JUSTIFY=RIGHT, STYLE="njm", TEXT="Completer:";
 LABEL l002 : tedit, JUSTIFY=RIGHT, STYLE="njm", TEXT="TextEdit:";
 LABEL l003 : combo, JUSTIFY=RIGHT, STYLE="wgt_yellow", TEXT="ComboBox:";
 LABEL l004 : chkbx, JUSTIFY=RIGHT, STYLE="wgt_yellow", TEXT="CheckBox:";
@@ -410,6 +412,7 @@ BUTTON p : pie, text="Pie Chart";
 EDIT f000 = FORMONLY.norm, SCROLL, TITLE="Title:", COMMENT="Enter error to see an error.";
 -- BUTTONEDIT f001 = FORMONLY.normbe,image="circle", ACTION=lookup;
 BUTTONEDIT f001 = FORMONLY.normbe,ACTION=lookup;
+EDIT f01a = FORMONLY.completr,COMPLETER;
 
 TEXTEDIT f002 = FORMONLY.wordw, COMMENT="Type some text and see it wrap.";
 

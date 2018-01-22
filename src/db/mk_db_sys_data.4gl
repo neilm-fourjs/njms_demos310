@@ -51,6 +51,7 @@ FUNCTION insert_system_data()
 	CALL addMenu("demo","main","F","ipodTree Demo", "ipodTree.42r","")
 	CALL addMenu("demo","main","F","picFlow Demo", "picFlow.42r ../pics","")
 	CALL addMenu("demo","main","F","Display Array Demo", "dispArr.42r","")
+	CALL addMenu("demo","main","F","Multi Cell Select","multi_cell_sel.42r","")
 	CALL addMenu("demo","main","M","Web Component Demos", "wcdemo","")
 
 	CALL addMenu("wcdemo","demo","T","Web Component Demos", "","")
