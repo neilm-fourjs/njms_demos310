@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1663756762" gstVersion="30a07" version="3.2">
+<Project defaultApplication="-1964806629" gstVersion="30a07" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -206,6 +206,30 @@
       <Library binaryName="mk_db_lib" dependencies="-400184264,1986" id="726830537" label="mk_db_lib">
         <File filePath="src/db/mk_db_app_data.4gl"/>
         <File filePath="src/db/mk_db_app_ifx.4gl"/>
+      </Library>
+    </Group>
+    <Group label="Demos MD Wizard">
+      <Application binaryName="wizard1_sd" dependencies="-1757926610" id="1486280688" label="wizard1_sd">
+        <File filePath="src/demos/wizard_main_sd.4gl"/>
+        <File filePath="src/demos/wizard_sd.per"/>
+        <File filePath="src/demos/wizard_ui_sd.4gl"/>
+      </Application>
+      <Application binaryName="wizard2_md" dependencies="-1757926610" id="-1964806629" label="wizard2_md">
+        <File filePath="src/demos/wizard_main_md.4gl"/>
+        <File filePath="src/demos/wizard_ui_md.4gl"/>
+      </Application>
+      <Application binaryName="wizard3_mrs" dependencies="-1757926610" id="1320948536" label="wizard3_mrs">
+        <File filePath="src/demos/wizard_main_mrs.4gl"/>
+        <File filePath="src/demos/wizard_ui_mrs.4gl"/>
+      </Application>
+      <Application binaryName="wizard4_dnd" dependencies="-1757926610" id="985734158" label="wizard4_dnd">
+        <File filePath="src/demos/wizard_main_dnd.4gl"/>
+        <File filePath="src/demos/wizard_ui_dnd.4gl"/>
+      </Application>
+      <Library binaryName="wizard_lib" dependencies="-400184264,14000" id="-1757926610" label="wizard_lib">
+        <File filePath="src/demos/wizard_common.4gl"/>
+        <File filePath="src/demos/wizard_glob.inc"/>
+        <File filePath="src/demos/wizard_md.per"/>
       </Library>
     </Group>
     <Group label="Demos UI" language="Genero">

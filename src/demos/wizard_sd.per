@@ -1,0 +1,59 @@
+
+LAYOUT (STYLE="main2")
+GRID ( STYLE="white" )
+{
+[img                            ][titl                       ]
+[                               ][                           ]
+[                               ][                           ]
+[btab                        ]
+[tab:tabs                    ]
+<T tab1                      >    <T tab2                      >
+ [flda                      ]      [fldc                      ]
+ [flda                      ]      [fldc                      ]
+ [flda                      ] [r ] [fldc                      ]
+ [flda                      ] [ra] [fldc                      ]
+ [flda                      ]      [fldc                      ]
+ [flda                      ] [l ] [fldc                      ]
+ [flda                      ] [la] [fldc                      ]
+ [flda                      ]      [fldc                      ]
+ [flda                      ]      [fldc                      ]
+ [flda                      ]      [fldc                      ]
+<                            >    <                            >
+ [goleft  ]                        [goright]
+----------------------------------------------------------------
+[canlwiz:                                              :finiwiz]
+}
+END -- GRID
+
+ATTRIBUTES
+LABEL tab : tab, TEXT="Table:";
+BUTTON btab : gocombo, TEXT="Select Table";
+
+IMAGE img : img, IMAGE="poweredBy", STYLE="noborder";
+LABEL titl : titl, TEXT=%"Which fields would you\nlike to use?", STYLE="bold pt16";
+
+TABLE tab1 : tab1, DOUBLECLICK=RIGHT, STYLE="wizard";
+TABLE tab2 : tab2, DOUBLECLICK=LEFT, STYLE="wizard";
+
+COMBOBOX tabs = FORMONLY.currtable, INITIALIZER=cb_init;
+
+flda = FORMONLY.flda, TITLE="Available";
+
+BUTTON r  : right,IMAGE="fa-angle-right";
+BUTTON ra : allright,IMAGE="fa-angle-double-right";
+BUTTON l  : left,IMAGE="fa-angle-left";
+BUTTON la : allleft,IMAGE="fa-angle-double-left";
+
+fldc = FORMONLY.fldc, TITLE="Selected";
+
+BUTTON goleft : goleft, TEXT="Select Array";
+BUTTON goright : goright, TEXT="Select Array";
+
+BUTTON canlwiz : canlwiz, IMAGE="cancel", TEXT="Cancel";
+BUTTON finiwiz : finiwiz, IMAGE="accept", TEXT="Finish";
+
+END -- ATTRIBUTES
+INSTRUCTIONS
+SCREEN RECORD l[10] ( flda );
+SCREEN RECORD r[10] ( fldc );
+END -- INSTRUCTIONS
