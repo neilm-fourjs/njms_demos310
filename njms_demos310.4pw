@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="-1964806629" gstVersion="30a07" version="3.2">
+<Project defaultApplication="1554019048" gstVersion="30a07" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -91,7 +91,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sql=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:GDCUPDATESERVER=http://localhost:8090,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -330,6 +330,7 @@
         <File filePath="src/gl_lib/genero_lib.inc"/>
         <File filePath="src/gl_lib/gl_db.4gl"/>
         <File filePath="src/gl_lib/gl_db.inc"/>
+        <File filePath="src/gl_lib/gl_gdcupd.4gl"/>
         <File filePath="src/gl_lib/gl_lib.4gl"/>
         <File filePath="src/gl_lib/gl_lib_aui.4gl"/>
         <File filePath="src/gl_lib/gl_lookup3.4gl"/>
@@ -337,6 +338,9 @@
       <Library binaryName="gl_rpt" dependencies="14000,-400184264" externalDependencies="libgre.42x" id="923654133" label="gl_rpt">
         <File filePath="src/gl_rpt/gl_grw.4gl"/>
         <File filePath="src/gl_rpt/gl_grwCfg.per"/>
+      </Library>
+      <Library binaryName="gl_ws" id="654551740" label="gl_ws">
+        <File filePath="src/gl_lib/gl_restful_lib.4gl"/>
       </Library>
     </Group>
     <Library binaryName="README" id="-1076375655" label="README">
@@ -377,6 +381,14 @@
         <File filePath="src/utils/matDesTest.per"/>
         <File filePath="src/utils/matDesTest_forms.per"/>
         <File filePath="src/utils/matDesTest_modal.per"/>
+      </Application>
+    </Group>
+    <Group environment="value:GDCUPDATEDIR=../gdcupdate,value:FGLAPPSERVER=8090" label="WS_Restful">
+      <Application binaryName="gdc_update_srv" dependencies="654551740" id="-580790058" label="gdc_update_srv">
+        <File filePath="src/sys/gdc_update_srv.4gl"/>
+      </Application>
+      <Application binaryName="restful_srv" dependencies="654551740" id="366608832" label="restful_srv">
+        <File filePath="src/demos/restful_srv.4gl"/>
       </Application>
     </Group>
   </Group>

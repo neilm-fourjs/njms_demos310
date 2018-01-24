@@ -1,5 +1,7 @@
 GLOBALS "wizard_glob.inc"
 FUNCTION wizard_ui_sd(l_state STRING)
+	CALL upd_left()
+	CALL upd_right()
 	WHILE l_state!="exit" AND l_state!="accept" 
 		CASE l_state
 			WHEN "combo"

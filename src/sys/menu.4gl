@@ -2,6 +2,7 @@
 IMPORT os
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
+IMPORT FGL gl_gdcupd
 IMPORT FGL lib_login
 IMPORT FGL new_acct
 
@@ -31,7 +32,6 @@ DEFINE m_curMenu SMALLINT
 DEFINE m_args STRING
 DEFINE m_mdi CHAR(1)
 MAIN
-
 	CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,FALSE)
 	LET m_mdi = gl_lib.m_mdi
@@ -42,6 +42,7 @@ MAIN
 	LET m_curMenu = 1
   LET m_menus[m_curMenu] = "main"
 	IF do_dbconnect_and_login() THEN
+		CALL gl_gdcupd.gl_gdcupd()
 		CALL do_menu()
 	END IF
 	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
