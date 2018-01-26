@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ANSI_X3.4-1968"?>
+<StartMenu text="Template">
+  <StartMenuGroup text="Main Menu">
+    <StartMenuCommand text="Test" exec="fglrun materialDesignTest.42r C"/>
+  </StartMenuGroup>
+</StartMenu>

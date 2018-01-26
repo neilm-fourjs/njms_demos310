@@ -51,7 +51,6 @@ PUBLIC DEFINE m_mdi CHAR(1)
 
 DEFINE m_key STRING
 DEFINE m_user_agent STRING
-
 --------------------------------------------------------------------------------
 #+ Initialize Function
 #+
@@ -63,8 +62,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	DEFINE l_desc, l_container STRING
 
 	LET gl_progName = base.Application.getProgramName()
-	CALL gl_userName()
-	CALL startLog( os.path.join( gl_getLogDir(),gl_progName||"."||gl_userName||".log"))
+	CALL startLog( os.path.join( gl_getLogDir(),gl_progName||".log"))
 
 	GL_MODULE_ERROR_HANDLER
 	OPTIONS ON CLOSE APPLICATION CALL gl_appClose
@@ -128,6 +126,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	LET gl_cli_dir = "?"
 	IF gl_fe_typ = "GBC" THEN LET gl_cli_os = "WWW" END IF
 	IF m_mdi != "M" AND m_mdi != "C" AND gl_fe_typ != "GBC" THEN
+		DISPLAY "Getting feinfo ..."
 		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
 		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )
 		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
@@ -146,14 +145,6 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 			GL_DBGMSG(0, "gl_init: Styles '"||m_key||"' FAILED to load!")
 		END TRY
 	END TRY
-
-{
-	LET l_key = fgl_getEnv("FJS_STYLE2")
-	IF l_key.getLength() > 1 THEN
-		CALL gl_mergeST(l_key) -- Merge this style file in with the default one.
-	END IF
-	CALL gl_addStyles() -- Add default colours and font sizes.
-}
 
 	LET l_key = fgl_getEnv("FJS_ACTIONS")
 	IF l_key.getLength() < 1 THEN LET l_key = m_key END IF
@@ -190,7 +181,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 -- MDI code
 	LET l_container = fgl_getEnv("FJS_MDICONT")
 	IF l_container IS NULL OR l_container = " " THEN
-		LET l_container = "MDIcontain"
+		LET l_container = "container1"
 	END IF
 	LET l_desc = fgl_getEnv("FJS_MDITITLE")
 	IF l_desc IS NULL OR l_desc = " " THEN
@@ -207,6 +198,10 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 			CALL ui.Interface.setType("container")
 			CALL ui.Interface.setName(l_container)
 	END CASE
+
+	CALL gl_userName() -- Breaks MDI!!!
+	CALL startLog( os.path.join( gl_getLogDir(),gl_progName||"."||gl_userName||".log"))
+
 	CALL ui.Interface.setText( gl_progName )
 
 END FUNCTION --}}}

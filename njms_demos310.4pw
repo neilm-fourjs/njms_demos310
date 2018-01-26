@@ -91,7 +91,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:GDCUPDATESERVER=http://localhost:8090,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FJS_GL_DBGLEV=3,value:GDCUPDATESERVER=http://localhost:8090,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -347,12 +347,19 @@
       <File filePath="README.md"/>
     </Library>
     <Group label="System" language="Genero">
+      <Application binaryName="container" dependencies="-400184264" id="248425532" label="container">
+        <File filePath="src/sys/container.4gl"/>
+        <File filePath="etc/container.4sm"/>
+        <File filePath="etc/container.4st"/>
+        <File filePath="etc/container.4tb"/>
+        <File filePath="src/sys/container.per"/>
+      </Application>
       <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">
         <File filePath="src/gl_lib/lib_login.4gl"/>
         <File filePath="src/gl_lib/lib_secure.4gl"/>
         <File filePath="src/sys/login.per"/>
       </Library>
-      <Application binaryName="menu" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
+      <Application binaryName="menu" commandLineArguments="M" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
         <File filePath="src/sys/menu.4gl"/>
         <File filePath="src/sys/menu.per"/>
         <File filePath="src/sys/new_acct.4gl"/>
@@ -376,7 +383,7 @@
         <File filePath="src/utils/gbc_theme.4gl"/>
         <File filePath="src/utils/gbc_theme.per"/>
       </Application>
-      <Application binaryName="materialDesignTest" commandLineArguments="gbc=gbc_njm" dependencies="14000,-400184264" id="1848127715" label="materialDesignTest">
+      <Application binaryName="materialDesignTest" dependencies="14000,-400184264" id="1848127715" label="materialDesignTest">
         <File filePath="src/utils/matDesTest.4gl"/>
         <File filePath="src/utils/matDesTest.per"/>
         <File filePath="src/utils/matDesTest_forms.per"/>
@@ -384,7 +391,7 @@
       </Application>
     </Group>
     <Group environment="value:GDCUPDATEDIR=../gdcupdate,value:FGLAPPSERVER=8090" label="WS_Restful">
-      <Application binaryName="gdc_update_srv" dependencies="654551740" id="-580790058" label="gdc_update_srv">
+      <Application binaryName="gdc_update_srv" dependencies="654551740,14000" id="-580790058" label="gdc_update_srv">
         <File filePath="src/sys/gdc_update_srv.4gl"/>
       </Application>
       <Application binaryName="restful_srv" dependencies="654551740" id="366608832" label="restful_srv">

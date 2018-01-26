@@ -35,9 +35,11 @@ MAIN
 	CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,FALSE)
 	LET m_mdi = gl_lib.m_mdi
-	IF m_mdi = "M" THEN LET m_mdi = "C" END IF -- if MDI container set so child programs are children
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+
 	CLOSE WINDOW SCREEN
+
+	IF m_mdi = "M" THEN LET m_mdi = "C" END IF -- if MDI container set so child programs are children
 
 	LET m_curMenu = 1
   LET m_menus[m_curMenu] = "main"
@@ -51,12 +53,14 @@ END MAIN
 -- Connect to the database to do the login process.
 FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 
-	LET gl_lib.gl_splash = C_SPLASH
-	CALL gl_lib.gl_splash( 0 ) -- open splash
+	IF gl_lib.gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
+		LET gl_lib.gl_splash = C_SPLASH
+		CALL gl_lib.gl_splash( 0 ) -- open splash
+	END IF
 
 	CALL gl_db.gldb_connect( NULL )
 
-	IF gl_lib.gl_fe_typ != "GBC" THEN
+	IF gl_lib.gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
 		SLEEP 2
 		CALL gl_lib.gl_splash( -1 ) -- close splash
 	END IF
@@ -93,6 +97,9 @@ FUNCTION do_menu()
 	DEFINE l_dummy CHAR(1)
 
 	OPEN WINDOW menu WITH FORM "menu"
+--	OPEN FORM menu FROM "menu"
+--	DISPLAY FORM menu
+
 	DISPLAY C_SPLASH TO logo
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 

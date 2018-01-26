@@ -86,7 +86,9 @@
 	</Style>
 	<Style name="Window.main">
 		<StyleAttribute name="windowType" value="normal" />
-		<StyleAttribute name="startMenuPosition" value="menu" />
+		<StyleAttribute name="startMenuPosition" value="tree" />
+		<StyleAttribute name="tabbedContainer" value="yes" />
+		<StyleAttribute name="tabbedContainerCloseMethod" value="both" />
 	</Style>
 	<Style name="Window.main2">
 		<StyleAttribute name="windowType" value="normal" />
@@ -149,7 +151,7 @@
 		<StyleAttribute name="toolBarPosition" value="none" />
 		<StyleAttribute name="statusBarType" value="none" />
 	</Style>
-	<Style name="UserInterface">
+	<!--Style name="UserInterface">
 		<StyleAttribute name="browserMultiPage" value="no" />
-	</Style>
+	</Style-->
 </StyleList>

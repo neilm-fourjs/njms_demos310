@@ -34,7 +34,15 @@ MAIN
 	DEFINE x SMALLINT
 
 	CALL gl_lib.gl_setInfo(C_VER, NULL, C_PRGICON, NULL, PRGDESC, PRGAUTH)
-	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
+
+{	IF ARG_VAL(1) = "C" THEN
+		CALL ui.Interface.loadStyles("default_"||UPSHIFT(ui.interface.getFrontEndName()))
+		CALL ui.Interface.setType("child")
+		CALL ui.Interface.setContainer("mycontain")
+	ELSE}
+		CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
+--	END IF
+
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
 	--RUN "env | sort > env.txt"
