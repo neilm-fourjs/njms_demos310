@@ -68,13 +68,13 @@ FUNCTION gl_gdcupd()
 		RETURN
 	END IF
 
-	CALL gl_lib_aui.gl_winInfo(1,"Preparing for GDC Update, Please Wait ...","information")
+	CALL gl_lib_aui.gl_winInfo(1,SFMT(%"%1\nPreparing\nPlease Wait ...",m_ret.reply),"information")
 
 -- does the GDC update file exist on our server
 	LET l_localFile = os.path.join(m_gdcUpdateDir,m_ret.upd_file)
 	IF NOT os.path.exists( l_localFile ) THEN
 		IF m_ret.upd_url IS NOT NULL THEN
-			CALL gl_lib_aui.gl_winInfo(1,"Getting GDC Update File, Please Wait ...","information")
+			CALL gl_lib_aui.gl_winInfo(1,SFMT(%"%1\nServer Downloading Update File\nPlease Wait ...",m_ret.reply),"information")
 			IF NOT getGDCUpdateZipFile( l_localFile, m_ret.upd_url, m_ret.upd_file ) THEN
 				CALL gl_GDCUpdateAbort(SFMT(%"Getting GDC Update file failed!\nFile:%1",l_localFile))
 				RETURN
@@ -99,6 +99,7 @@ FUNCTION gl_gdcupd()
 -- Put the local GDC update file to the client
 	LET l_newFile = l_tmp||m_ret.upd_file
 	DISPLAY "Put:",l_localFile," to ",l_newFile
+	CALL gl_lib_aui.gl_winInfo(1,SFMT(%"%1\nClient Downloading Update File\nPlease Wait ...",m_ret.reply),"information")
 	TRY
 		CALL fgl_putFile(l_localFile,  l_tmp||m_ret.upd_file )
 	CATCH

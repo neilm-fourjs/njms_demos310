@@ -390,7 +390,7 @@ FUNCTION gl_winInfo( l_meth SMALLINT, l_txt STRING, l_icon STRING ) --{{{
 	DEFINE l_win, l_frm, l_grid, l_frmf, l_msg om.DomNode
 	DEFINE l_len SMALLINT
 -- open window and create form
-	IF l_meth = 1 OR l_meth = 0 THEN
+	IF l_meth = 1 AND NOT m_gl_winInfo THEN
 		OPEN WINDOW gl_winInfo WITH 1 ROWS, 50 COLUMNS
 		LET l_len = l_txt.getLength() + 10
 		IF l_len < 40 THEN LET l_len = 40 END IF
