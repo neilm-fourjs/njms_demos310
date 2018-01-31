@@ -1,6 +1,6 @@
 IMPORT com
 IMPORT util 
-IMPORT FGL gl_restful_lib
+IMPORT FGL gl_lib_restful
 
 CONSTANT ERR_OPERATION	  = "Operation not found"
 CONSTANT ERR_METHOD		 = "Method not supported"
@@ -35,14 +35,14 @@ MAIN
 	  TRY
   		# create the server
 		  LET l_req = com.WebServiceEngine.getHTTPServiceRequest(-1)
-		  CALL gl_restful_lib.getReqInfo(l_req)
+		  CALL gl_lib_restful.gl_getReqInfo(l_req)
 
-		  DISPLAY "Processing request, Method:", gl_restful_lib.m_reqInfo.method, " Path:", gl_restful_lib.m_reqInfo.path, " format:", gl_restful_lib.m_reqInfo.outformat
+		  DISPLAY "Processing request, Method:", gl_lib_restful.m_reqInfo.method, " Path:", gl_lib_restful.m_reqInfo.path, " format:", gl_lib_restful.m_reqInfo.outformat
 		  -- parse the url, retrieve the operation and the operand
-		  CASE gl_restful_lib.m_reqInfo.method
+		  CASE gl_lib_restful.m_reqInfo.method
 			  WHEN "GET"
 					CASE
-						WHEN gl_restful_lib.m_reqInfo.path.equalsIgnoreCase("/ginfo") 
+						WHEN gl_lib_restful.m_reqInfo.path.equalsIgnoreCase("/ginfo") 
 							CALL ginfo() RETURNING l_reply.*
 						OTHERWISE
 							LET l_reply.reply = ERR_OPERATION
@@ -51,9 +51,9 @@ MAIN
 					END CASE
 					LET l_str = util.JSON.stringify(l_reply)
 			  OTHERWISE
-					CALL setError("Unknown request:\n"||m_reqInfo.path||"\n"||m_reqInfo.method)
-					LET gl_restful_lib.m_err.code = -3
-					LET gl_restful_lib.m_err.desc = ERR_METHOD
+					CALL gl_lib_restful.gl_setError("Unknown request:\n"||m_reqInfo.path||"\n"||m_reqInfo.method)
+					LET gl_lib_restful.m_err.code = -3
+					LET gl_lib_restful.m_err.desc = ERR_METHOD
 					LET l_str = util.JSON.stringify(m_err)
 		  END CASE
 			-- send back the response.
@@ -77,9 +77,9 @@ END MAIN
 FUNCTION ginfo()
 	DEFINE x SMALLINT
 	DEFINE l_ret t_myReply
-	LET x = gl_restful_lib.getParameterIndex("fgl") 
+	LET x = gl_lib_restful.gl_getParameterIndex("fgl") 
 	IF x > 0 THEN
-		LET l_ret.reply =  "Param 'fgl' = ",gl_restful_lib.getParameterValue(x)
+		LET l_ret.reply =  "Param 'fgl' = ",gl_lib_restful.gl_getParameterValue(x)
 		LET l_ret.txt = "OK"
 		LET l_ret.stat = 200
 	ELSE

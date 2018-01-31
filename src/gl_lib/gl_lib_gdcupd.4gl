@@ -23,7 +23,7 @@ FUNCTION gl_validGDCUpdateDir() RETURNS BOOLEAN
 		RETURN FALSE
 	END IF
 	IF NOT os.Path.exists(m_gdcUpdateDir) THEN
-		CALL gl_setReply(205,%"ERR", SFMT(%"GDCUPDATEDIR '%1' Doesn't Exist",m_gdcUpdateDir))
+		CALL gl_setReply(206,%"ERR", SFMT(%"GDCUPDATEDIR '%1' Doesn't Exist",m_gdcUpdateDir))
 		RETURN FALSE
 	END IF
 	DISPLAY base.application.getProgramName(),":GDC Update Dir:",m_gdcUpdateDir
@@ -38,7 +38,7 @@ FUNCTION gl_getCurrentGDC() RETURNS (STRING, STRING)
 
 	LET l_current = os.path.join(m_gdcUpdateDir,"current.txt")
 	IF NOT os.Path.exists(l_current) THEN
-		CALL gl_setReply(205,%"ERR", SFMT(%"'%1' Doesn't Exist",l_current))
+		CALL gl_setReply(207,%"ERR", SFMT(%"'%1' Doesn't Exist",l_current))
 		RETURN NULL, NULL
 	END IF
 	LET m_ret.upd_dir = m_gdcUpdateDir
@@ -50,16 +50,16 @@ FUNCTION gl_getCurrentGDC() RETURNS (STRING, STRING)
 		LET l_gdcBuild = c.readLine()
 		CALL c.close()
 	CATCH
-		CALL gl_setReply(205,%"ERR", SFMT(%"Failed to read '%1' '%2'",l_current,ERR_GET(STATUS)))
+		CALL gl_setReply(208,%"ERR", SFMT(%"Failed to read '%1' '%2'",l_current,ERR_GET(STATUS)))
 		RETURN NULL, NULL
 	END TRY
 	IF l_gdcVer.getLength() < 2 THEN
-		CALL gl_setReply(205,%"ERR", SFMT(%"GDC Version is not set in '%1'!",l_gdcVer))
+		CALL gl_setReply(209,%"ERR", SFMT(%"GDC Version is not set in '%1'!",l_gdcVer))
 
 		RETURN NULL, NULL
 	END IF
 	IF l_gdcBuild.getLength() < 2 THEN
-		CALL gl_setReply(205,%"ERR", SFMT(%"GDC Build is not set in '%1'!",l_gdcBuild) )
+		CALL gl_setReply(210,%"ERR", SFMT(%"GDC Build is not set in '%1'!",l_gdcBuild) )
 		RETURN NULL, NULL
 	END IF
 
@@ -73,13 +73,13 @@ FUNCTION gl_chkIfUpdate( l_curGDC STRING, l_newGDC STRING ) RETURNS BOOLEAN
 
 	CALL gl_getVer( l_curGDC ) RETURNING l_cur_maj, l_cur_min
 	IF l_cur_maj = 0 THEN
-		CALL gl_setReply(206,%"ERR", SFMT(%"Current GDC Version is not correct format '%1'!",l_curGDC))
+		CALL gl_setReply(211,%"ERR", SFMT(%"Current GDC Version is not correct format '%1'!",l_curGDC))
 		RETURN FALSE 
 	END IF
 
 	CALL gl_getVer( l_newGDC ) RETURNING l_new_maj, l_new_min
 	IF l_new_maj = 0 THEN
-		CALL gl_setReply(207,%"ERR", SFMT(%"New GDC Version is not correct format '%1'!",l_newGDC))
+		CALL gl_setReply(212,%"ERR", SFMT(%"New GDC Version is not correct format '%1'!",l_newGDC))
 		RETURN FALSE
 	END IF
 
@@ -97,7 +97,7 @@ FUNCTION gl_chkIfUpdate( l_curGDC STRING, l_newGDC STRING ) RETURNS BOOLEAN
 		CALL gl_setReply(1,%"OK",SFMT(%"There is new GDC minor release available: %1",l_newGDC))
 		RETURN TRUE
 	END IF
-	CALL gl_setReply(208,%"ERR", %"chkIfUpdate: Something is not right!")
+	CALL gl_setReply(213,%"ERR", %"chkIfUpdate: Something is not right!")
 	RETURN FALSE
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ FUNCTION gl_getUpdateFileName(l_newGDC STRING, l_gdcBuild STRING, l_gdcos STRING
 	DEFINE l_updFile STRING
 	LET l_updFile = "fjs-gdc-"||l_newGDC||"-"||l_gdcBuild||"-"||l_gdcos||"-autoupdate.zip"
 	IF NOT os.path.exists( os.path.join(m_gdcUpdateDir,l_updFile) ) THEN
-		CALL gl_setReply(211,%"ERR", SFMT(%"GDC Update File '%1' is Missing!",l_updFile))
+		CALL gl_setReply(214,%"ERR", SFMT(%"GDC Update File '%1' is Missing!",l_updFile))
 		RETURN FALSE
 	END IF
 	DISPLAY base.application.getProgramName(),":GDC Update file exists:",os.path.join(m_gdcUpdateDir,l_updFile)

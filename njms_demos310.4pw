@@ -91,7 +91,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=http://localhost:8090,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=http://localhost/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -180,6 +180,9 @@
         <File filePath="gas_deploy/njmweb2_t.xcf"/>
         <File filePath="gas_deploy/njmweb_d.xcf"/>
         <File filePath="gas_deploy/njmweb_t.xcf"/>
+      </Library>
+      <Library binaryName="xcf_files_deploy_ws" id="-850398834" label="xcf_files_deploy_ws">
+        <File filePath="gas_deploy_ws/gdc_update_srv.xcf"/>
       </Library>
       <Library binaryName="xcf_files" id="1211289508" label="xcf_files_local">
         <File filePath="gas/demo310.xcf"/>
@@ -391,12 +394,12 @@
         <File filePath="src/utils/matDesTest_modal.per"/>
       </Application>
     </Group>
-    <Group environment="value:GDCUPDATEURL=http://localhost/gdcupdates,value:GDCUPDATEDIR=../gdcupdate,value:FGLAPPSERVER=8090" label="WS_Restful">
-      <Application binaryName="gdc_update_srv" dependencies="654551740,14000" id="-580790058" label="gdc_update_srv">
-        <File filePath="src/sys/gdc_update_srv.4gl"/>
-      </Application>
+    <Group environment="value:GDCUPDATEURL=http://^/gdcupdates,value:GDCUPDATEDIR=../gdcupdate,value:FGLAPPSERVER=8090" label="WS_Restful">
       <Application binaryName="restful_srv" dependencies="654551740" id="366608832" label="restful_srv">
         <File filePath="src/demos/restful_srv.4gl"/>
+      </Application>
+      <Application binaryName="ws_gdc_update_srv" dependencies="654551740,14000,-850398834" id="-580790058" label="ws_gdc_update_srv">
+        <File filePath="src/sys/ws_gdc_update_srv.4gl"/>
       </Application>
     </Group>
   </Group>
@@ -405,6 +408,14 @@
       <DynamicProperty name="packageId" value="gbc-njm"/>
       <DynamicProperty name="packageLabel" value="gbc-njm"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/" label="build" sourceDirectory="$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-njm"/>
+    </Package>
+    <Package binaryName="gdc_update_srv" dependencies="-580790058,-850398834,654551740,14000" description="GDC Update WebService" label="gdc_update_srv" platform="Genero Application Server">
+      <DynamicProperty name="packageId" value="gdcupdate"/>
+      <DynamicProperty name="packageLabel" value="gdcupdate"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/bin" includedFiles="ws_*.42?" label="bin" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy_ws"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/gdcupdate" includedFiles="*.txt" label="gdcupdate" sourceDirectory="$(ProjectDir)/gdcupdate"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/bin" includedFiles="gl_lib_gdcupd.42m,gl_lib_restful.42m" label="lib" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
     </Package>
     <Package binaryName="njms_demos310_ifx" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810" description="NJMs Demos" label="njms_demos310_ifx" platform="Genero Application Server">
       <DynamicProperty name="packageId" value="njmsdemos"/>

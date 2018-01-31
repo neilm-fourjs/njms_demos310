@@ -131,7 +131,7 @@ PRIVATE FUNCTION useGDCUpdateWS(l_url STRING)
 		IF l_stat = 200 THEN
 			CALL util.JSON.parse( l_resp.getTextResponse(), gl_lib_gdcupd.m_ret )
 		ELSE
-			CALL abortGDCUpdate(SFMT(" chkgdc cal failed:%1-%2",l_stat, l_resp.getStatusDescription()))
+			CALL abortGDCUpdate(SFMT("WS chkgdc call failed!\n%1\n%1-%2",l_url,l_stat, l_resp.getStatusDescription()))
 		END IF
 	CATCH
 		LET l_stat = STATUS

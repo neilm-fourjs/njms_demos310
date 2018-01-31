@@ -1,4 +1,5 @@
 IMPORT com
+IMPORT os
 IMPORT FGL WSHelper
 
 TYPE t_status RECORD
@@ -50,6 +51,13 @@ FUNCTION gl_getReqInfo(l_req com.HTTPServiceRequest)
             m_reqInfo.port,
             m_reqInfo.path,
             m_reqInfo.query
+
+	LET m_reqInfo.path = os.path.baseName( m_reqInfo.path )
+
+	DISPLAY "Host:",m_reqInfo.host
+	DISPLAY "Port:",m_reqInfo.port
+	DISPLAY "Path:",m_reqInfo.path
+	DISPLAY "Query:",m_reqInfo.query
 
 	LET m_reqInfo.ctype = gl_getHeaderByName(l_req,"Content-Type")
 	IF m_reqInfo.ctype.getIndexOf("/xml",1) THEN

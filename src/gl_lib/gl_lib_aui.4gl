@@ -403,20 +403,22 @@ FUNCTION gl_winInfo( l_meth SMALLINT, l_txt STRING, l_icon STRING ) --{{{
 
 		LET l_grid = l_frm.createChild('Grid')
 
+		IF l_icon IS NOT NULL THEN
+			LET l_msg = l_grid.createChild('Image')
+			CALL l_msg.setAttribute("width",1)
+			CALL l_msg.setAttribute("posX",1)
+			CALL l_msg.setAttribute("image",l_icon)
+			CALL l_msg.setAttribute("style","noborder")
+		END IF
+
 		LET l_frmf = l_grid.createChild('FormField')
 		CALL l_frmf.setAttribute("colName","message")
 		CALL l_frmf.setAttribute("value",0)
 		LET l_msg = l_frmf.createChild('Label')
 		CALL l_msg.setAttribute("width",l_len)
-		CALL l_msg.setAttribute("posX",1)
+		CALL l_msg.setAttribute("posX",2)
 		CALL l_msg.setAttribute("sizePolicy","dynamic")
-		IF l_icon IS NOT NULL THEN
-			LET l_msg = l_grid.createChild('Image')
-			CALL l_msg.setAttribute("width",1)
-			CALL l_msg.setAttribute("posX",l_len+1)
-			CALL l_msg.setAttribute("image",l_icon)
-			CALL l_msg.setAttribute("style","noborder")
-		END IF
+
 		LET m_gl_winInfo = TRUE
 	END IF
 

@@ -15,13 +15,12 @@ MAIN
 	DEFINE l_quit BOOLEAN
   DEFER INTERRUPT
 	
--- URL To the web server for the GDC Update file zips
-	LET gl_lib_gdcupd.m_ret.upd_url = fgl_getEnv("GDCUPDATEURL")
-
 	IF NOT gl_lib_gdcupd.gl_validGDCUpdateDir() THEN -- sets m_gdcUpdateDir
 		DISPLAY m_ret.reply
 		EXIT PROGRAM
 	END IF
+
+	DISPLAY "GDC UpdateDir:", m_gdcUpdateDir, " URL:", gl_lib_gdcupd.m_ret.upd_url
 
   DISPLAY "Starting server..."
   #
@@ -47,9 +46,9 @@ MAIN
 		  CASE gl_lib_restful.m_reqInfo.method
 			  WHEN "GET"
 					CASE
-						WHEN gl_lib_restful.m_reqInfo.path.equalsIgnoreCase("/chkgdc") 
+						WHEN gl_lib_restful.m_reqInfo.path.equalsIgnoreCase("chkgdc") 
 							CALL gdcchk()
-						WHEN gl_lib_restful.m_reqInfo.path.equalsIgnoreCase("/restart")
+						WHEN gl_lib_restful.m_reqInfo.path.equalsIgnoreCase("restart")
 							CALL gl_lib_gdcupd.gl_setReply(200,%"OK",%"Service Exiting")
 							LET l_quit = TRUE
 						OTHERWISE
@@ -113,6 +112,9 @@ FUNCTION gdcchk()
 		RETURN
 	END IF
 
+-- URL To the web server for the GDC Update file zips
+	LET gl_lib_gdcupd.m_ret.upd_url = getUpdateURL( fgl_getEnv("GDCUPDATEURL") )
+
 -- is the 'current' GDC > than the one passed to us?
 	IF NOT gl_lib_gdcupd.gl_chkIfUpdate( l_curGDC, l_newGDC ) THEN
 		RETURN
@@ -123,5 +125,15 @@ FUNCTION gdcchk()
 		LET m_ret.upd_url = fgl_getEnv("GDCREMOTESERVER")
 	END IF
 
-	DISPLAY "Upd File:",m_ret.upd_file," URL:",m_ret.upd_url
+	DISPLAY "Upd File:",gl_lib_gdcupd.m_ret.upd_file," URL:",gl_lib_gdcupd.m_ret.upd_url
 END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION getUpdateURL( l_url STRING ) RETURNS STRING
+	DEFINE x SMALLINT
+	LET x = l_url.getIndexOf("^",1)
+	IF x > 1 THEN
+		LET l_url = l_url.subString(1,x-1),gl_lib_restful.m_reqInfo.host,l_url.subString(x+1,l_url.getLength())
+	END IF
+	RETURN l_url
+END FUNCTION
+--------------------------------------------------------------------------------
