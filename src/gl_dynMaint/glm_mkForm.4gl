@@ -11,6 +11,7 @@ PUBLIC DEFINE m_json_rec util.JSONObject
 DEFINE m_tab STRING
 DEFINE m_key_fld SMALLINT
 DEFINE m_fld_per_page SMALLINT
+DEFINE m_max_fld_len SMALLINT
 DEFINE m_fields DYNAMIC ARRAY OF t_fields
 --------------------------------------------------------------------------------
 # Build a form based on an array of field names and an array of properties.
@@ -33,6 +34,7 @@ FUNCTION init_form(
 	LET m_tab = l_tab
 	LET m_key_fld = l_key_fld
 	LET m_fld_per_page = l_fld_per_page
+	IF m_max_fld_len IS NULL OR m_max_fld_len = 0 THEN LET m_max_fld_len = 60 END IF
 	LET m_fields = l_fields
 	LET m_formName = "dm_"||l_db.trim().toLowerCase()||"_"||l_tab.trim().toLowerCase()
 	MESSAGE "looking for ",m_formName," ..."
@@ -63,7 +65,7 @@ END FUNCTION
 --------------------------------------------------------------------------------
 PRIVATE FUNCTION mk_form()
 	DEFINE l_n_form, l_n_grid,l_n_formfield, l_n_widget, l_folder, l_container om.DomNode
-	DEFINE x, y, l_posy, l_first_fld, l_last_fld, l_maxlablen SMALLINT
+	DEFINE x, y, l_posy, l_first_fld, l_last_fld, l_len, l_maxlablen SMALLINT
 	DEFINE l_pages DECIMAL(3,1)
 	DEFINE l_widget STRING
 
@@ -131,21 +133,29 @@ PRIVATE FUNCTION mk_form()
 			END IF
 			IF m_fld_props[x].widget IS NOT NULL THEN -- handle custom widget
 				LET l_widget = m_fld_props[x].widget
+			ELSE
+				IF m_fld_props[x].len > 50 THEN
+					LET l_widget = "TextEdit"
+					LET l_len = ( m_fld_props[x].len / m_max_fld_len ) + 1
+					LET m_fld_props[x].widget_prop1 = l_len
+					LET m_fld_props[x].widget_prop2 = m_max_fld_len
+					LET m_fld_props[x].widget_prop3 = "none"
+				END IF
 			END IF
 			LET l_n_widget = l_n_formField.createChild(l_widget)
 			CALL l_n_widget.setAttribute("posY", l_posY )
 			CALL l_n_widget.setAttribute("posX", l_maxlablen+1 )
 			CALL l_n_widget.setAttribute("width", m_fld_props[x].len)
-			IF m_fld_props[x].widget = "CheckBox" THEN
+			IF l_widget = "CheckBox" THEN
 				CALL l_n_widget.setAttribute("valueChecked", m_fld_props[x].widget_prop1)
 				CALL l_n_widget.setAttribute("valueUnchecked", m_fld_props[x].widget_prop2)
 			END IF
-			IF m_fld_props[x].widget = "TextEdit" THEN
+			IF l_widget = "TextEdit" THEN
 				CALL l_n_widget.setAttribute("gridHeight", m_fld_props[x].widget_prop1)
 				CALL l_n_widget.setAttribute("height", m_fld_props[x].widget_prop1)
 				CALL l_n_widget.setAttribute("gridWidth", m_fld_props[x].widget_prop2)
 				CALL l_n_widget.setAttribute("width", m_fld_props[x].widget_prop2)
-				CALL l_n_widget.setAttribute("scroll", m_fld_props[x].widget_prop3)
+				CALL l_n_widget.setAttribute("scrollBars", m_fld_props[x].widget_prop3)
 				LET l_posY = l_posY + m_fld_props[x].widget_prop1
 			ELSE
 				CALL l_n_widget.setAttribute("gridWidth", m_fld_props[x].len )

@@ -91,7 +91,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:FJS_GL_DBGLEV=3,value:GDCUPDATESERVER=http://localhost:8090,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=http://localhost:8090,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -359,7 +359,7 @@
         <File filePath="src/gl_lib/lib_secure.4gl"/>
         <File filePath="src/sys/login.per"/>
       </Library>
-      <Application binaryName="menu" commandLineArguments="M" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
+      <Application binaryName="menu" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
         <File filePath="src/sys/menu.4gl"/>
         <File filePath="src/sys/menu.per"/>
         <File filePath="src/sys/new_acct.4gl"/>
@@ -390,7 +390,7 @@
         <File filePath="src/utils/matDesTest_modal.per"/>
       </Application>
     </Group>
-    <Group environment="value:GDCUPDATEDIR=../gdcupdate,value:FGLAPPSERVER=8090" label="WS_Restful">
+    <Group environment="value:GDCUPDATEURL=http://localhost/gdcupdates,value:GDCUPDATEDIR=../gdcupdate,value:FGLAPPSERVER=8090" label="WS_Restful">
       <Application binaryName="gdc_update_srv" dependencies="654551740,14000" id="-580790058" label="gdc_update_srv">
         <File filePath="src/sys/gdc_update_srv.4gl"/>
       </Application>

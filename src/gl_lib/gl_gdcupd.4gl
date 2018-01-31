@@ -1,66 +1,62 @@
 
+-- The goal of the module is to allow the application to detect and trigger an
+-- update of the GDC.
+-- Contains library functions also used by the gdc_update_srv restful WS.
+
 IMPORT com
 IMPORT util
 IMPORT os
 
 TYPE t_myReply RECORD
 		stat SMALLINT,
-		txt STRING,
+		stat_txt STRING,
 		reply STRING,
+		upd_url STRING,
 		upd_dir STRING,
 		upd_file STRING
 	END RECORD
 PUBLIC DEFINE m_ret t_myReply
 PUBLIC DEFINE m_gdcUpdateDir STRING
-
+--------------------------------------------------------------------------------
+-- Primary function to call from program to test for and do GDC update.
 FUNCTION gl_gdcupd()
-	DEFINE l_updServer, l_url STRING
-	DEFINE l_ver, l_os, l_osTarget, l_tmp, l_localFile, l_newFile STRING
+	DEFINE l_updServer STRING
+	DEFINE l_curGDC, l_os, l_osTarget, l_tmp, l_localFile, l_newFile STRING
+	DEFINE l_newGDC, l_newGDCBuild STRING
 	DEFINE x SMALLINT
 	DEFINE l_stat SMALLINT
-	DEFINE l_req com.HttpRequest
-	DEFINE l_resp com.HttpResponse
 	DEFINE l_ret SMALLINT
 
-	DISPLAY "gl_gdcupd:", DOWNSHIFT(ui.Interface.getFrontEndName())
 	IF DOWNSHIFT(ui.Interface.getFrontEndName()) != "gdc" THEN RETURN END IF
 
-	LET l_updServer = fgl_getEnv("GDCUPDATESERVER")
-	IF l_updServer.getLength() < 2 THEN
---TODO: look for local update files
-		CALL gl_winMessage("Error","GDCUPDATESERVER is not valid!","exclamation")
+	LET l_curGDC = ui.Interface.getFrontEndVersion()
+	LET x = l_curGDC.getIndexOf("-",1)
+	IF x < 5 THEN
+		CALL gl_winMessage("Error",SFMT(%"Invalid GDC Version error '%1'!",l_curGDC),"exclamation")
+		RETURN
+	END IF
+	LET l_curGDC = l_curGDC.subString(1,x-1)
+	CALL ui.Interface.frontCall("standard","feinfo", "target", l_osTarget)
+
+	IF NOT validGDCUpdateDir() THEN
+		DISPLAY m_ret.stat_txt,":",m_ret.reply
 		RETURN
 	END IF
 
-	LET l_ver = ui.Interface.getFrontEndVersion()
-	LET x = l_ver.getIndexOf("-",1)
-	IF x < 5 THEN
-		CALL gl_winMessage("Error",SFMT(%"GDC Version error '%1'!",l_ver),"exclamation")
-		RETURN
-	END IF
-	LET l_ver = l_ver.subString(1,x-1)
-	CALL ui.Interface.frontCall("standard","feinfo", "target", l_osTarget)
-	DISPLAY "Ver:",l_ver," OS:",l_osTarget," UpdateServer:",l_updServer
-	LET l_url = l_updServer||"/chkgdc?ver=" ||l_ver|| "&os="||l_osTarget
-	DISPLAY "URL:",l_url
--- Do Rest call to find out if we have a new GDC Update
-	TRY
-		LET l_req = com.HttpRequest.Create(l_url)
-		CALL l_req.setMethod("GET")
-		CALL l_req.setHeader("Content-Type", "application/json")
-		CALL l_req.setHeader("Accept", "application/json")
-		CALL l_req.doRequest()
-		LET l_resp = l_req.getResponse()
-		LET l_stat = l_resp.getStatusCode()
-		IF l_stat = 200 THEN
-			CALL util.JSON.parse( l_resp.getTextResponse(), m_ret )
-		ELSE
-			CALL gl_winMessage("Error",SFMT(" chkgdc cal failed:%1-%2",l_stat, l_resp.getStatusDescription()),"exclamation")
+-- Do we have an update server defined?
+	LET l_updServer = fgl_getEnv("GDCUPDATESERVER")
+	IF l_updServer.getLength() > 1 THEN
+		CALL useGDCUpdateWS( l_updServer||"/chkgdc?ver=" ||l_curGDC|| "&os="||l_osTarget )
+	ELSE -- no update server, try a local update
+		CALL getCurrentGDC() RETURNING l_newGDC, l_newGDCBuild
+		IF NOT chkIfUpdate( l_curGDC, l_newGDC ) THEN
+			RETURN
 		END IF
-	CATCH
-		LET l_stat = STATUS
-		LET m_ret.reply = ERR_GET( l_stat )
-	END TRY
+		IF NOT getUpdateFileName(l_newGDC, l_newGDCBuild, l_osTarget) THEN
+			RETURN
+		END IF
+	END IF
+
 	DISPLAY "Stat:",l_stat," Reply:",m_ret.reply," ReplyStat:",m_ret.stat
 	IF m_ret.stat != 1 THEN RETURN END IF
 
@@ -70,11 +66,17 @@ FUNCTION gl_gdcupd()
 	END IF
 
 -- does the GDC update file exist on our server
-	LET l_localFile = os.path.join(m_ret.upd_dir,m_ret.upd_file)
+	LET l_localFile = os.path.join(m_gdcUpdateDir,m_ret.upd_file)
 	IF NOT os.path.exists( l_localFile ) THEN
---TODO: feature to get it from a remote server
-		CALL gl_winMessage(%"Error",SFMT(%"The GDC Update file is missing!\nFile:%1",l_localFile),"exclamation")
-		RETURN
+		IF m_ret.upd_url IS NOT NULL THEN
+			IF NOT getGDCUpdateZipFile( l_localFile, m_ret.upd_url, m_ret.upd_file ) THEN
+				CALL gl_winMessage(%"Error",SFMT(%"Getting GDC Update file failed!\nFile:%1",l_localFile),"exclamation")
+				RETURN
+			END IF
+		ELSE
+			CALL gl_winMessage(%"Error",SFMT(%"The GDC Update file is missing!\nFile:%1",l_localFile),"exclamation")
+			RETURN
+		END IF
 	END IF
 
 -- we have a new GDC to update to - a client temp folder name
@@ -105,22 +107,59 @@ FUNCTION gl_gdcupd()
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION getCurrentGDC()
+-- Do the web service REST call to check for a new GDC
+FUNCTION useGDCUpdateWS(l_url STRING)
+	DEFINE l_req com.HttpRequest
+	DEFINE l_resp com.HttpResponse
+	DEFINE l_stat SMALLINT
+-- DISPLAY "URL:",l_url
+-- Do Rest call to find out if we have a new GDC Update
+	TRY
+		LET l_req = com.HttpRequest.Create(l_url)
+		CALL l_req.setMethod("GET")
+		CALL l_req.setHeader("Content-Type", "application/json")
+		CALL l_req.setHeader("Accept", "application/json")
+		CALL l_req.doRequest()
+		LET l_resp = l_req.getResponse()
+		LET l_stat = l_resp.getStatusCode()
+		IF l_stat = 200 THEN
+			CALL util.JSON.parse( l_resp.getTextResponse(), m_ret )
+		ELSE
+			CALL gl_winMessage("Error",SFMT(" chkgdc cal failed:%1-%2",l_stat, l_resp.getStatusDescription()),"exclamation")
+		END IF
+	CATCH
+		LET l_stat = STATUS
+		LET m_ret.reply = ERR_GET( l_stat )
+	END TRY
+END FUNCTION
+--------------------------------------------------------------------------------
+-- Valid the folder for the GDC update zip files
+FUNCTION validGDCUpdateDir() RETURNS BOOLEAN
+	LET m_gdcUpdateDir = fgl_getEnv("GDCUPDATEDIR")
+	IF m_gdcUpdateDir.getLength() < 2 THEN
+		CALL setReply(205,%"ERR", %"GDCUPDATEDIR Is not set!" )
+		RETURN FALSE
+	END IF
+	IF NOT os.Path.exists(m_gdcUpdateDir) THEN
+		CALL setReply(205,%"ERR", SFMT(%"GDCUPDATEDIR '%1' Doesn't Exist",m_gdcUpdateDir))
+		RETURN FALSE
+	END IF
+	DISPLAY base.application.getProgramName(),":GDC Update Dir:",m_gdcUpdateDir
+	RETURN TRUE
+END FUNCTION
+--------------------------------------------------------------------------------
+-- Used by local and WS to get the version & build of the 'current' latest GDC.
+FUNCTION getCurrentGDC() RETURNS (STRING, STRING)
 	DEFINE c base.Channel
 	DEFINE l_current STRING
 	DEFINE l_gdcVer, l_gdcBuild STRING
 
-	LET m_gdcUpdateDir = fgl_getEnv("GDCUPDATEDIR")
-	IF m_gdcUpdateDir.getLength() < 2 THEN
-		RETURN NULL, %"GDCUPDATEDIR Is not set!"
-	END IF
-	IF NOT os.Path.exists(m_gdcUpdateDir) THEN
-		RETURN NULL, SFMT(%"GDCUPDATEDIR '%1' Doesn't Exist",m_gdcUpdateDir)
-	END IF
 	LET l_current = os.path.join(m_gdcUpdateDir,"current.txt")
 	IF NOT os.Path.exists(l_current) THEN
-		RETURN NULL, SFMT(%"'%1' Doesn't Exist",l_current)
+		CALL setReply(205,%"ERR", SFMT(%"'%1' Doesn't Exist",l_current))
+		RETURN NULL, NULL
 	END IF
+	LET m_ret.upd_dir = m_gdcUpdateDir
 -- Reads the current gdc version from current.txt file 
 	LET c = base.Channel.create()
 	TRY
@@ -129,20 +168,73 @@ FUNCTION getCurrentGDC()
 		LET l_gdcBuild = c.readLine()
 		CALL c.close()
 	CATCH
-		RETURN NULL,SFMT(%"Failed to read '%1' '%2'",l_current,ERR_GET(STATUS))
+		CALL setReply(205,%"ERR", SFMT(%"Failed to read '%1' '%2'",l_current,ERR_GET(STATUS)))
+		RETURN NULL, NULL
 	END TRY
 	IF l_gdcVer.getLength() < 2 THEN
-		RETURN NULL, SFMT(%"GDC Version is not set in '%1'!",l_gdcVer)
+		CALL setReply(205,%"ERR", SFMT(%"GDC Version is not set in '%1'!",l_gdcVer))
+
+		RETURN NULL, NULL
 	END IF
 	IF l_gdcBuild.getLength() < 2 THEN
-		RETURN NULL,SFMT(%"GDC Build is not set in '%1'!",l_gdcBuild)
+		CALL setReply(205,%"ERR", SFMT(%"GDC Build is not set in '%1'!",l_gdcBuild) )
+		RETURN NULL, NULL
 	END IF
 
 	RETURN l_gdcVer, l_gdcBuild
-
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION getVer( l_str STRING )
+-- Check to see if the current GDC version of old then the potential new version
+FUNCTION chkIfUpdate( l_curGDC STRING, l_newGDC STRING ) RETURNS BOOLEAN
+	DEFINE l_cur_maj, l_new_maj DECIMAL(4,2)
+	DEFINE l_cur_min, l_new_min SMALLINT
+
+	CALL getVer( l_curGDC ) RETURNING l_cur_maj, l_cur_min
+	IF l_cur_maj = 0 THEN
+		CALL setReply(206,%"ERR", SFMT(%"Current GDC Version is not correct format '%1'!",l_curGDC))
+		RETURN FALSE 
+	END IF
+
+	CALL getVer( l_newGDC ) RETURNING l_new_maj, l_new_min
+	IF l_new_maj = 0 THEN
+		CALL setReply(207,%"ERR", SFMT(%"New GDC Version is not correct format '%1'!",l_newGDC))
+		RETURN FALSE
+	END IF
+
+	IF l_new_maj = l_cur_maj AND l_new_min = l_cur_min THEN
+		CALL setReply(0,%"OK", %"GDC is current version")
+		RETURN FALSE
+	END IF
+
+-- Is the GDC version older than the requesting GDC
+	IF l_new_maj > l_cur_maj THEN
+		CALL setReply(1,"OK",SFMT(%"There is new GDC major release available: %1",l_newGDC))
+		RETURN TRUE
+	END IF
+	IF l_new_maj = l_cur_maj AND l_new_min > l_cur_min THEN
+		CALL setReply(1,"OK",SFMT(%"There is new GDC minor release available: %1",l_newGDC))
+		RETURN TRUE
+	END IF
+	CALL setReply(208,%"ERR", %"chkIfUpdate: Something is not right!")
+	RETURN FALSE
+END FUNCTION
+--------------------------------------------------------------------------------
+-- Sets the upd_file name and checks that it exists in the m_gdcUpdateDir
+FUNCTION getUpdateFileName(l_newGDC STRING, l_gdcBuild STRING, l_gdcos STRING ) RETURNS BOOLEAN
+	DEFINE l_updFile STRING
+	LET l_updFile = "fjs-gdc-"||l_newGDC||"-"||l_gdcBuild||"-"||l_gdcos||"-autoupdate.zip"
+	IF NOT os.path.exists( os.path.join(m_gdcUpdateDir,l_updFile) ) THEN
+		LET m_ret.stat = 211
+		LET m_ret.reply = SFMT(%"GDC Update File '%1' is Missing!",l_updFile)
+		RETURN FALSE
+	END IF
+	DISPLAY base.application.getProgramName(),":GDC Update file exists:",os.path.join(m_gdcUpdateDir,l_updFile)
+	LET m_ret.upd_file = l_updFile
+	RETURN TRUE
+END FUNCTION
+--------------------------------------------------------------------------------
+-- Break the GDC Version string into major and minor
+FUNCTION getVer( l_str STRING ) RETURNS (DECIMAL, INT)
 	DEFINE l_major DECIMAL(4,2)
 	DEFINE l_minor SMALLINT
 	DEFINE l_st base.StringTokenizer
@@ -158,4 +250,26 @@ FUNCTION getVer( l_str STRING )
 	LET l_minor = l_st.nextToken()
 	--DISPLAY "Maj:",l_major," Min:",l_minor
 	RETURN l_major, l_minor
+END FUNCTION
+--------------------------------------------------------------------------------
+-- get the zip file from a remote server
+FUNCTION getGDCUpdateZipFile( l_localFile STRING, l_url STRING, l_file STRING ) RETURNS BOOLEAN
+	DEFINE l_cmd STRING
+
+	MESSAGE "Getting GDC zip from "||l_url||"  Please wait ... "
+	CALL ui.interface.refresh()
+
+	LET l_cmd = "wget -q -O "||l_localFile||" "||l_url||"/"||l_file
+	RUN l_cmd
+
+	IF os.Path.exists( l_localFile ) THEN RETURN TRUE END IF
+	RETURN FALSE
+END FUNCTION
+--------------------------------------------------------------------------------
+-- Set the reply record structure values for status, text, reply message
+FUNCTION setReply(l_stat INT, l_txt STRING, l_msg STRING)
+	LET m_ret.stat = l_stat
+	LET m_ret.stat_txt = l_txt
+	LET m_ret.reply = l_msg
+	DISPLAY base.application.getProgramName(),":Set Reply:",l_stat,":",l_txt,":",l_msg
 END FUNCTION

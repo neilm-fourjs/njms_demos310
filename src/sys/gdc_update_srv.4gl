@@ -1,3 +1,7 @@
+
+-- GDCUPDATEURL is the url for the Genero App server to fetch the zip file
+-- if the server is not the same machine.
+
 IMPORT com
 IMPORT util
 IMPORT os
@@ -11,6 +15,14 @@ MAIN
 	DEFINE l_quit BOOLEAN
   DEFER INTERRUPT
 	
+-- URL To the web server for the GDC Update file zips
+	LET gl_gdcupd.m_ret.upd_url = fgl_getEnv("GDCUPDATEURL")
+
+	IF NOT gl_gdcupd.validGDCUpdateDir() THEN -- sets m_gdcUpdateDir
+		DISPLAY m_ret.reply
+		EXIT PROGRAM
+	END IF
+
   DISPLAY "Starting server..."
   #
   # Starts the server on the port number specified by the FGLAPPSERVER environment variable
@@ -72,10 +84,7 @@ END MAIN
 --------------------------------------------------------------------------------
 FUNCTION gdcchk()
 	DEFINE x SMALLINT
-	DEFINE l_gdcVer, l_gdcBuild, l_gdcOS STRING
-	DEFINE l_major, l_new_maj DECIMAL(4,2)
-	DEFINE l_minor, l_new_min SMALLINT
-	DEFINE l_updFile STRING
+	DEFINE l_curGDC, l_newGDC, l_gdcBuild, l_gdcOS STRING
 
 	LET x = gl_restful_lib.getParameterIndex("ver") 
 	IF x = 0 THEN
@@ -87,9 +96,9 @@ FUNCTION gdcchk()
 		CALL setReply(202,%"ERR",%"Missing parameter 'os'!")
 		RETURN
 	END IF
-	CALL gl_gdcupd.getVer( gl_restful_lib.getParameterValue(1) ) RETURNING l_major, l_minor
-	IF l_major = 0 THEN
-		CALL setReply(203,%"ERR",SFMT(%"Expected GDC version x.xx.xx got '%1'!",gl_restful_lib.getParameterValue(1)))
+	LET l_curGDC = gl_restful_lib.getParameterValue(1)
+	IF l_curGDC.getIndexOf(".",1) < 1 THEN
+		CALL setReply(203,%"ERR",SFMT(%"Expected GDC version x.xx.xx got '%1'!",l_curGDC))
 		RETURN
 	END IF
 	LET l_gdcos = gl_restful_lib.getParameterValue(2)
@@ -97,50 +106,22 @@ FUNCTION gdcchk()
 		CALL setReply(204,%"ERR",SFMT(%"Expected GDC OS is invalid '%1'!",l_gdcos))
 		RETURN
 	END IF
-	
-	CALL gl_gdcupd.getCurrentGDC() RETURNING l_gdcVer, l_gdcBuild
-	IF l_gdcVer IS NULL THEN
-		CALL setReply(205,%"ERR", l_gdcBuild)
+
+-- Get the new GDC version from the directory structure
+	CALL gl_gdcupd.getCurrentGDC() RETURNING l_newGDC, l_gdcBuild
+	IF l_newGDC IS NULL THEN
 		RETURN
 	END IF
 
-	CALL gl_gdcupd.getVer( l_gdcVer ) RETURNING l_new_maj, l_new_min
-	IF l_new_maj = 0 THEN
-		CALL setReply(210,%"ERR",SFMT(%"Current GDC Version is not correct format '%1'!",l_gdcver))
+-- is the 'current' GDC > than the one passed to us?
+	IF NOT gl_gdcupd.chkIfUpdate( l_curGDC, l_newGDC ) THEN
 		RETURN
-	END IF
-
-	IF l_new_maj = l_major AND l_new_min = l_minor THEN
-		CALL setReply(0,%"OK",%"GDC is current version")
-		RETURN
-	END IF
-
--- Is the GDC version older than the requesting GDC
-	IF l_new_maj > l_major THEN
-		CALL setReply(1,%"OK",SFMT(%"There is new GDC major release available: %1",l_gdcver))
-	END IF
-	IF l_new_maj = l_major OR l_new_min > l_minor THEN
-		CALL setReply(1,%"OK",SFMT(%"There is new GDC minor release available: %1",l_gdcver))
 	END IF
 
 -- Does the autoupdate.zip file exist
-	LET l_updFile = "fjs-gdc-"||l_gdcVer||"-"||l_gdcBuild||"-"||l_gdcos||"-autoupdate.zip"
-	IF NOT os.path.exists( os.path.join(m_gdcUpdateDir,l_updFile) ) THEN
-		CALL setReply(211,%"ERR",SFMT(%"GDC Update File '%1' is Missing!",l_updFile))
-		RETURN
+	IF NOT getUpdateFileName(l_newGDC, l_gdcBuild, l_gdcos) THEN
+		LET m_ret.upd_url = fgl_getEnv("GDCREMOTESERVER")
 	END IF
 
-	IF m_ret.stat = 0 THEN
-		RETURN
-	END IF
-
-	LET m_ret.upd_dir = m_gdcUpdateDir
-	LET m_ret.upd_file = l_updFile
-	DISPLAY "Upd File:",m_ret.upd_file
-END FUNCTION
---------------------------------------------------------------------------------
-FUNCTION setReply(l_stat INT, l_txt STRING, l_msg STRING)
-	LET m_ret.stat = l_stat
-	LET m_ret.txt = l_txt
-	LET m_ret.reply = l_msg
+	DISPLAY "Upd File:",m_ret.upd_file," URL:",m_ret.upd_url
 END FUNCTION
