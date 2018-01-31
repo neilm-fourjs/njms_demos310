@@ -18,7 +18,7 @@ MAIN
 -- URL To the web server for the GDC Update file zips
 	LET gl_gdcupd.m_ret.upd_url = fgl_getEnv("GDCUPDATEURL")
 
-	IF NOT gl_gdcupd.validGDCUpdateDir() THEN -- sets m_gdcUpdateDir
+	IF NOT gl_gdcupd.gl_validGDCUpdateDir() THEN -- sets m_gdcUpdateDir
 		DISPLAY m_ret.reply
 		EXIT PROGRAM
 	END IF
@@ -50,10 +50,10 @@ MAIN
 						WHEN gl_restful_lib.m_reqInfo.path.equalsIgnoreCase("/chkgdc") 
 							CALL gdcchk()
 						WHEN gl_restful_lib.m_reqInfo.path.equalsIgnoreCase("/restart")
-							CALL setReply(200,%"OK",%"Service Exiting")
+							CALL gl_gdcupd.gl_setReply(200,%"OK",%"Service Exiting")
 							LET l_quit = TRUE
 						OTHERWISE
-							CALL setReply(201,%"ERR",SFMT(%"Operation '%1' not found",gl_restful_lib.m_reqInfo.path))
+							CALL gl_gdcupd.gl_setReply(201,%"ERR",SFMT(%"Operation '%1' not found",gl_restful_lib.m_reqInfo.path))
 					END CASE
 					DISPLAY "Reply:", m_ret.reply
 					LET l_str = util.JSON.stringify(m_ret)
@@ -88,38 +88,38 @@ FUNCTION gdcchk()
 
 	LET x = gl_restful_lib.getParameterIndex("ver") 
 	IF x = 0 THEN
-		CALL setReply(201,%"ERR",%"Missing parameter 'ver'!")
+		CALL gl_gdcupd.gl_setReply(201,%"ERR",%"Missing parameter 'ver'!")
 		RETURN
 	END IF
 	LET x = gl_restful_lib.getParameterIndex("os") 
 	IF x = 0 THEN
-		CALL setReply(202,%"ERR",%"Missing parameter 'os'!")
+		CALL gl_gdcupd.gl_setReply(202,%"ERR",%"Missing parameter 'os'!")
 		RETURN
 	END IF
 	LET l_curGDC = gl_restful_lib.getParameterValue(1)
 	IF l_curGDC.getIndexOf(".",1) < 1 THEN
-		CALL setReply(203,%"ERR",SFMT(%"Expected GDC version x.xx.xx got '%1'!",l_curGDC))
+		CALL gl_gdcupd.gl_setReply(203,%"ERR",SFMT(%"Expected GDC version x.xx.xx got '%1'!",l_curGDC))
 		RETURN
 	END IF
 	LET l_gdcos = gl_restful_lib.getParameterValue(2)
 	IF l_gdcos.getLength() < 1 THEN
-		CALL setReply(204,%"ERR",SFMT(%"Expected GDC OS is invalid '%1'!",l_gdcos))
+		CALL gl_gdcupd.gl_setReply(204,%"ERR",SFMT(%"Expected GDC OS is invalid '%1'!",l_gdcos))
 		RETURN
 	END IF
 
 -- Get the new GDC version from the directory structure
-	CALL gl_gdcupd.getCurrentGDC() RETURNING l_newGDC, l_gdcBuild
+	CALL gl_gdcupd.gl_getCurrentGDC() RETURNING l_newGDC, l_gdcBuild
 	IF l_newGDC IS NULL THEN
 		RETURN
 	END IF
 
 -- is the 'current' GDC > than the one passed to us?
-	IF NOT gl_gdcupd.chkIfUpdate( l_curGDC, l_newGDC ) THEN
+	IF NOT gl_gdcupd.gl_chkIfUpdate( l_curGDC, l_newGDC ) THEN
 		RETURN
 	END IF
 
 -- Does the autoupdate.zip file exist
-	IF NOT getUpdateFileName(l_newGDC, l_gdcBuild, l_gdcos) THEN
+	IF NOT gl_gdcupd.gl_getUpdateFileName(l_newGDC, l_gdcBuild, l_gdcos) THEN
 		LET m_ret.upd_url = fgl_getEnv("GDCREMOTESERVER")
 	END IF
 
