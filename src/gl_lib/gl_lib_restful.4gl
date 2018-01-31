@@ -23,7 +23,7 @@ END RECORD
 PUBLIC DEFINE m_err t_status
 PUBLIC DEFINE m_reqInfo t_reqInfoTyp
 --------------------------------------------------------------------------------
-FUNCTION getHeaderByName(l_req com.HTTPServiceRequest, l_head STRING) RETURNS STRING
+FUNCTION gl_getHeaderByName(l_req com.HTTPServiceRequest, l_head STRING) RETURNS STRING
 	DEFINE l_name STRING
 	DEFINE x INTEGER
 
@@ -37,7 +37,7 @@ FUNCTION getHeaderByName(l_req com.HTTPServiceRequest, l_head STRING) RETURNS ST
 	RETURN NULL
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION getReqInfo(l_req com.HTTPServiceRequest)
+FUNCTION gl_getReqInfo(l_req com.HTTPServiceRequest)
 	INITIALIZE m_reqInfo TO NULL
 
 	LET m_reqInfo.informat = "JSON"
@@ -51,12 +51,12 @@ FUNCTION getReqInfo(l_req com.HTTPServiceRequest)
             m_reqInfo.path,
             m_reqInfo.query
 
-	LET m_reqInfo.ctype = getHeaderByName(l_req,"Content-Type")
+	LET m_reqInfo.ctype = gl_getHeaderByName(l_req,"Content-Type")
 	IF m_reqInfo.ctype.getIndexOf("/xml",1) THEN
 		LET m_reqInfo.informat = "XML"
 	END IF
 	
-	LET m_reqInfo.caccept = getHeaderByName(l_req,"Accept")
+	LET m_reqInfo.caccept = gl_getHeaderByName(l_req,"Accept")
 	IF m_reqInfo.caccept.getIndexOf("/xml",1) THEN
 		LET m_reqInfo.outformat = "XML"
 	END IF
@@ -65,12 +65,12 @@ FUNCTION getReqInfo(l_req com.HTTPServiceRequest)
   
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION setError(l_str STRING)
+FUNCTION gl_setError(l_str STRING)
 	DISPLAY l_str
 END FUNCTION
 --------------------------------------------------------------------------------
 -- returns 0 if element not found
-FUNCTION getParameterIndex(l_str STRING) RETURNS INTEGER
+FUNCTION gl_getParameterIndex(l_str STRING) RETURNS INTEGER
 	DEFINE x INTEGER
 
 	FOR x = 1 TO m_reqInfo.items.getLength()
@@ -82,6 +82,6 @@ FUNCTION getParameterIndex(l_str STRING) RETURNS INTEGER
 	RETURN 0
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION getParameterValue(x INTEGER) RETURNS STRING
+FUNCTION gl_getParameterValue(x INTEGER) RETURNS STRING
 	RETURN m_reqInfo.items[x].value
 END FUNCTION

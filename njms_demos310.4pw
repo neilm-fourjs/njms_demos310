@@ -333,6 +333,7 @@
         <File filePath="src/gl_lib/gl_gdcupd.4gl"/>
         <File filePath="src/gl_lib/gl_lib.4gl"/>
         <File filePath="src/gl_lib/gl_lib_aui.4gl"/>
+        <File filePath="src/gl_lib/gl_lib_gdcupd.4gl"/>
         <File filePath="src/gl_lib/gl_lookup3.4gl"/>
       </Library>
       <Library binaryName="gl_rpt" dependencies="14000,-400184264" externalDependencies="libgre.42x" id="923654133" label="gl_rpt">
@@ -340,7 +341,7 @@
         <File filePath="src/gl_rpt/gl_grwCfg.per"/>
       </Library>
       <Library binaryName="gl_ws" id="654551740" label="gl_ws">
-        <File filePath="src/gl_lib/gl_restful_lib.4gl"/>
+        <File filePath="src/gl_lib/gl_lib_restful.4gl"/>
       </Library>
     </Group>
     <Library binaryName="README" id="-1076375655" label="README">
