@@ -7,6 +7,9 @@ IMPORT com
 IMPORT util
 IMPORT os
 
+IMPORT FGL gl_lib
+IMPORT FGL gl_lib_aui
+
 TYPE t_myReply RECORD
 		stat SMALLINT,
 		stat_txt STRING,
@@ -32,7 +35,7 @@ FUNCTION gl_gdcupd()
 	LET l_curGDC = ui.Interface.getFrontEndVersion()
 	LET x = l_curGDC.getIndexOf("-",1)
 	IF x < 5 THEN
-		CALL gl_winMessage("Error",SFMT(%"Invalid GDC Version error '%1'!",l_curGDC),"exclamation")
+		CALL gl_lib.gl_winMessage("Error",SFMT(%"Invalid GDC Version error '%1'!",l_curGDC),"exclamation")
 		RETURN
 	END IF
 	LET l_curGDC = l_curGDC.subString(1,x-1)
@@ -61,20 +64,23 @@ FUNCTION gl_gdcupd()
 	IF m_ret.stat != 1 THEN RETURN END IF
 
 -- We have a new GDC Update ! confirm with user
-	IF gl_winQuestion("GDC Update",SFMT(%"%1\nUpdate Now?",m_ret.reply),"Yes","Yes|No","question") = "No" THEN
+	IF gl_lib.gl_winQuestion("GDC Update",SFMT(%"%1\nUpdate Now?",m_ret.reply),"Yes","Yes|No","question") = "No" THEN
 		RETURN
 	END IF
+
+	CALL gl_lib_aui.gl_winInfo(1,"Preparing for GDC Update, Please Wait ...","information")
 
 -- does the GDC update file exist on our server
 	LET l_localFile = os.path.join(m_gdcUpdateDir,m_ret.upd_file)
 	IF NOT os.path.exists( l_localFile ) THEN
 		IF m_ret.upd_url IS NOT NULL THEN
+			CALL gl_lib_aui.gl_winInfo(1,"Getting GDC Update File, Please Wait ...","information")
 			IF NOT getGDCUpdateZipFile( l_localFile, m_ret.upd_url, m_ret.upd_file ) THEN
-				CALL gl_winMessage(%"Error",SFMT(%"Getting GDC Update file failed!\nFile:%1",l_localFile),"exclamation")
+				CALL gl_GDCUpdateAbort(SFMT(%"Getting GDC Update file failed!\nFile:%1",l_localFile))
 				RETURN
 			END IF
 		ELSE
-			CALL gl_winMessage(%"Error",SFMT(%"The GDC Update file is missing!\nFile:%1",l_localFile),"exclamation")
+			CALL gl_GDCUpdateAbort(SFMT(%"The GDC Update file is missing!\nFile:%1",l_localFile))
 			RETURN
 		END IF
 	END IF
@@ -96,15 +102,23 @@ FUNCTION gl_gdcupd()
 	TRY
 		CALL fgl_putFile(l_localFile,  l_tmp||m_ret.upd_file )
 	CATCH
-		CALL gl_winMessage(%"Error",SFMT(%"Copy of GDC auto update file failed!\nSource:%1\nDest:%2\nErr:%3",os.path.join(m_ret.upd_dir,m_ret.upd_file),l_newFile,ERR_GET(STATUS)),"exclamation")
+		CALL gl_GDCUpdateAbort(SFMT(%"Copy of GDC auto update file failed!\nSource:%1\nDest:%2\nErr:%3",os.path.join(m_ret.upd_dir,m_ret.upd_file),l_newFile,ERR_GET(STATUS)))
 		RETURN
 	END TRY
+
+	CALL gl_winInfo(3,"","")
 
 -- Trigger the GDC update
 	CALL ui.Interface.frontCall("monitor", "update", [l_newFile], [l_ret]) 
 	IF l_ret != 0 THEN
-		CALL gl_winMessage("Error","GDC Autoupdate Failed!", "exclamation")
+		CALL gl_lib.gl_winMessage("Error","GDC Autoupdate Failed!", "exclamation")
 	END IF
+END FUNCTION
+--------------------------------------------------------------------------------
+-- Do the web service REST call to check for a new GDC
+FUNCTION gl_GDCUpdateAbort(l_msg STRING)
+	CALL gl_winInfo(3,"","")
+	CALL gl_lib.gl_winMessage(%"Error",l_msg, "exclamation")
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Do the web service REST call to check for a new GDC
@@ -125,7 +139,7 @@ FUNCTION useGDCUpdateWS(l_url STRING)
 		IF l_stat = 200 THEN
 			CALL util.JSON.parse( l_resp.getTextResponse(), m_ret )
 		ELSE
-			CALL gl_winMessage("Error",SFMT(" chkgdc cal failed:%1-%2",l_stat, l_resp.getStatusDescription()),"exclamation")
+			CALL gl_lib.gl_winMessage("Error",SFMT(" chkgdc cal failed:%1-%2",l_stat, l_resp.getStatusDescription()),"exclamation")
 		END IF
 	CATCH
 		LET l_stat = STATUS

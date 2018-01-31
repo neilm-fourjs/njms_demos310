@@ -3,7 +3,7 @@ IMPORT os
 IMPORT util
 
 &include "genero_lib.inc"
-
+DEFINE m_gl_winInfo BOOLEAN
 --------------------------------------------------------------------------------
 #+ Return the node for a named window.
 #+
@@ -325,42 +325,41 @@ END FUNCTION --}}}
 #+ END FOR
 #+ CALL gl_progBar(3,0,NULL)   Close the window
 #+
-#+ @param meth 1=Open Window / 2=Update bar / 3=Close Window
-#+ @param curval 1=Max value for Bar / 2=Current value position for Bar / 3=Ignored.
-#+ @param txt Text display below the bar in the window.
+#+ @param l_meth 1=Open Window / 2=Update bar / 3=Close Window
+#+ @param l_curval 1=Max value for Bar / 2=Current value position for Bar / 3=Ignored.
+#+ @param l_txt Text display below the bar in the window.
 #+ @return Nothing.
 FUNCTION gl_progBar( l_meth SMALLINT, l_curval INT, l_txt STRING ) --{{{
-	DEFINE winnode, frm, g, frmf, pbar om.DomNode
+	DEFINE l_win, l_frm, l_grid, l_frmf, l_pbar om.DomNode
 -- open window and create form
 	IF l_meth = 1 OR l_meth = 0 THEN
 		OPEN WINDOW progbar WITH 1 ROWS, 50 COLUMNS
-		LET winnode = gl_getWinNode(NULL)
-		CALL winnode.setAttribute("style","naked")
-		CALL winnode.setAttribute("width",45)
-		CALL winnode.setAttribute("height",2)
-		CALL winnode.setAttribute("text",l_txt)
-		LET frm = gl_genForm("gl_progbar")
-		CALL frm.setAttribute("text","ProgressBar")
+		LET l_win = gl_getWinNode(NULL)
+		CALL l_win.setAttribute("style","naked")
+		CALL l_win.setAttribute("width",45)
+		CALL l_win.setAttribute("height",2)
+		LET l_frm = gl_genForm("gl_progbar")
+		CALL l_frm.setAttribute("text","ProgressBar")
 
-		LET g = frm.createChild('Grid')
+		LET l_grid = l_frm.createChild('Grid')
 
-		LET frmf = g.createChild('FormField')
-		CALL frmf.setAttribute("colName","progress")
-		CALL frmf.setAttribute("value",0)
-		LET pbar = frmf.createChild('ProgressBar')
-		CALL pbar.setAttribute("width",40)
-		CALL pbar.setAttribute("posY",1)
-		CALL pbar.setAttribute("valueMax",l_curval)
-		CALL pbar.setAttribute("valueMin",1)
+		LET l_frmf = l_grid.createChild('FormField')
+		CALL l_frmf.setAttribute("colName","progress")
+		CALL l_frmf.setAttribute("value",0)
+		LET l_pbar = l_frmf.createChild('ProgressBar')
+		CALL l_pbar.setAttribute("width",40)
+		CALL l_pbar.setAttribute("posY",1)
+		CALL l_pbar.setAttribute("valueMax",l_curval)
+		CALL l_pbar.setAttribute("valueMin",1)
 
-		CALL gl_addLabel(g, 0,2,l_txt,NULL,NULL)
+		CALL gl_addLabel(l_grid, 0,2,l_txt,NULL,NULL)
 		IF l_meth = 0 THEN
-			LET g = g.createChild('HBox')
-			CALL g.setAttribute("posY",3)
-			LET frmf = g.createChild('SpacerItem')
-			LET frmf = g.createChild('Button')
-			CALL frmf.setAttribute("name","cancel")
-			LET frmf = g.createChild('SpacerItem')
+			LET l_grid = l_grid.createChild('HBox')
+			CALL l_grid.setAttribute("posY",3)
+			LET l_frmf = l_grid.createChild('SpacerItem')
+			LET l_frmf = l_grid.createChild('Button')
+			CALL l_frmf.setAttribute("name","cancel")
+			LET l_frmf = l_grid.createChild('SpacerItem')
 		END IF
 	END IF
 -- update the progressbar
@@ -370,6 +369,67 @@ FUNCTION gl_progBar( l_meth SMALLINT, l_curval INT, l_txt STRING ) --{{{
 -- close the window
 	IF l_meth = 3 THEN
 		CLOSE WINDOW progbar
+	END IF
+
+	CALL ui.interface.refresh()
+
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Generic Windows info popup window. 
+#+ Example call:
+#+ @code 
+#+ CALL gl_winInfo(1,"Processing, Please Wait ...","info")
+#+ CALL doProcess()
+#+ CALL gl_winInfo(3,"","")
+#+
+#+ @param l_meth 1=Open Window / 2=Message / 3=Close Window
+#+ @param l_txt The Message
+#+ @param l_icon Optional Icon
+#+ @return Nothing.
+FUNCTION gl_winInfo( l_meth SMALLINT, l_txt STRING, l_icon STRING ) --{{{
+	DEFINE l_win, l_frm, l_grid, l_frmf, l_msg om.DomNode
+	DEFINE l_len SMALLINT
+-- open window and create form
+	IF l_meth = 1 OR l_meth = 0 THEN
+		OPEN WINDOW gl_winInfo WITH 1 ROWS, 50 COLUMNS
+		LET l_len = l_txt.getLength() + 10
+		IF l_len < 40 THEN LET l_len = 40 END IF
+		LET l_win = gl_getWinNode(NULL)
+		CALL l_win.setAttribute("style","naked")
+		CALL l_win.setAttribute("width",l_len+2)
+		CALL l_win.setAttribute("height",3)
+		LET l_frm = gl_genForm("gl_wininfo")
+		CALL l_frm.setAttribute("text","Info")
+
+		LET l_grid = l_frm.createChild('Grid')
+
+		LET l_frmf = l_grid.createChild('FormField')
+		CALL l_frmf.setAttribute("colName","message")
+		CALL l_frmf.setAttribute("value",0)
+		LET l_msg = l_frmf.createChild('Label')
+		CALL l_msg.setAttribute("width",l_len)
+		CALL l_msg.setAttribute("posX",1)
+		CALL l_msg.setAttribute("sizePolicy","dynamic")
+		IF l_icon IS NOT NULL THEN
+			LET l_msg = l_grid.createChild('Image')
+			CALL l_msg.setAttribute("width",1)
+			CALL l_msg.setAttribute("posX",l_len+1)
+			CALL l_msg.setAttribute("image",l_icon)
+			CALL l_msg.setAttribute("style","noborder")
+		END IF
+		LET m_gl_winInfo = TRUE
+	END IF
+
+	IF l_meth < 3 AND m_gl_winInfo THEN
+	-- update the message
+		CURRENT WINDOW IS gl_winInfo
+		DISPLAY l_txt TO message
+	END IF
+
+-- close the window
+	IF l_meth = 3 AND m_gl_winInfo THEN
+		LET m_gl_winInfo = FALSE
+		CLOSE WINDOW gl_winInfo
 	END IF
 
 	CALL ui.interface.refresh()
