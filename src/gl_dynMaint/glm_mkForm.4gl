@@ -34,7 +34,7 @@ FUNCTION init_form(
 	LET m_tab = l_tab
 	LET m_key_fld = l_key_fld
 	LET m_fld_per_page = l_fld_per_page
-	IF m_max_fld_len IS NULL OR m_max_fld_len = 0 THEN LET m_max_fld_len = 60 END IF
+	IF m_max_fld_len IS NULL OR m_max_fld_len = 0 THEN LET m_max_fld_len = 80 END IF
 	LET m_fields = l_fields
 	LET m_formName = "dm_"||l_db.trim().toLowerCase()||"_"||l_tab.trim().toLowerCase()
 	MESSAGE "looking for ",m_formName," ..."

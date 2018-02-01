@@ -10,8 +10,8 @@ DEFINE m_ordHead RECORD LIKE ord_head.*
 DEFINE m_ordDet RECORD LIKE ord_detail.*
 DEFINE m_cust RECORD LIKE customer.*
 
-CONSTANT MAX_ORDERS = 30
-CONSTANT MAX_LINES = 25
+CONSTANT MAX_ORDERS = 50
+CONSTANT MAX_LINES = 20
 CONSTANT MAX_QTY = 25
 
 DEFINE m_bc_cnt, m_prod_key INTEGER
@@ -280,8 +280,8 @@ FUNCTION genOrders()
 	FOR x = 1 TO MAX_ORDERS
 		LET c = util.math.rand( cst.getLength() )
 		IF c = 0 OR c > cst.getLength() THEN LET c = 3 END IF
-		LET dte = "01/01/2004"
-		LET dte = dte + util.math.rand(3650)
+		LET dte = TODAY - 1825
+		LET dte = dte + util.math.rand(1825)
 		CALL orderHead(cst[c] CLIPPED,dte)
 		LET l = util.math.rand(MAX_LINES+1)
 		CALL dets.clear()

@@ -78,8 +78,9 @@ FUNCTION drop_app()
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION mkdb_progress(l_mess STRING)
-	LET m_stat = m_stat.append( NVL(l_mess,"NULL!")||"\n" )
-	DISPLAY NVL(l_mess,"NULL!")
+	LET l_mess = CURRENT,":", NVL(l_mess,"NULL!")
+	LET m_stat = m_stat.append(l_mess||"\n" )
+	DISPLAY l_mess
 	DISPLAY BY NAME m_stat
 	CALL ui.Interface.refresh()
 END FUNCTION

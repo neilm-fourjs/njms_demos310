@@ -62,11 +62,11 @@ MAIN
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
 	TRY
-		DECLARE fetch_row CURSOR FOR SELECT * FROM TABNAME 
-			,OUTER( TABNAME2 )
+		DECLARE fetch_row CURSOR FOR SELECT * FROM TABNAME, TABNAME2
 				WHERE KEYFLD = ?
 					AND JOIN1
 	CATCH
+		EXIT PROGRAM
 	END TRY
 
 	DECLARE fetch_row2 CURSOR FOR SELECT * FROM TABNAME2 
@@ -138,7 +138,7 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION getRec() RETURNS BOOLEAN
 	DEFINE stmt STRING
-	LET stmt = "SELECT "||KEYFLDQ||","||LABFLDQ||" FROM "||TABNAMEQ||",OUTER("||TABNAME2Q||") WHERE "||m_wher||" AND "||JOIN1Q
+	LET stmt = "SELECT "||KEYFLDQ||","||LABFLDQ||" FROM "||TABNAMEQ||","||TABNAME2Q||" WHERE "||m_wher||" AND "||JOIN1Q
 	IF stmt IS NULL THEN RETURN FALSE END IF
 	DISPLAY stmt
 	PREPARE q_pre FROM stmt
