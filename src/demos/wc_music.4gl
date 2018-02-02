@@ -2,6 +2,7 @@
 IMPORT util
 IMPORT os
 IMPORT FGL gl_lib
+IMPORT FGL gl_lib_aui
 &include "genero_lib.inc"	
 CONSTANT C_VER="3.1"
 
@@ -25,17 +26,68 @@ END RECORD
 DEFINE m_songno SMALLINT
 MAIN
 	DEFINE l_data STRING
-	DEFINE x, pid SMALLINT
-	DEFINE l_prev_art, l_prev_alb, l_art_pid STRING
+
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	LET gl_lib.gl_noToolBar = FALSE
 	LET m_base = fgl_getEnv("MUSICDIR")
 
-	CALL get_artist_list()
+	CALL get_artist_list(TRUE)
 
-	OPEN FORM f FROM "wc_music"
-	DISPLAY FORM f
+	CLOSE WINDOW SCREEN
+	OPEN WINDOW w WITH FORM "wc_music"
 
+	CALL buildTree()
+	LET m_songno = 1
+
+	DIALOG  ATTRIBUTES(UNBUFFERED)
+		DISPLAY ARRAY m_tree TO arr.*
+			ON ACTION accept
+				LET m_songno = arr_curr()
+				CALL change_song()
+		END DISPLAY
+		INPUT BY NAME l_data
+		END INPUT
+		ON ACTION quit EXIT DIALOG
+		ON ACTION previous
+			IF m_songno > 1 THEN LET m_songno = m_songno - 1 END IF
+			CALL change_song()
+		ON ACTION next
+			IF m_songno < m_songs.getLength() THEN LET m_songno = m_songno + 1 END IF
+			CALL change_song()
+		ON ACTION close EXIT DIALOG
+		ON ACTION refresh
+			CALL get_artist_list(FALSE)
+			CALL buildTree()
+		GL_ABOUT
+	END DIALOG
+
+	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
+END MAIN
+--------------------------------------------------------------------------------
+#+ Change Song
+FUNCTION change_song()
+	CALL wc_setProp("mp3file", ui.Interface.filenameToURI(m_tree[m_songno].file) )
+	CALL wc_setProp("name", m_tree[m_songno].artist||" - "||m_tree[m_songno].album||" - "||m_tree[m_songno].track )
+	DISPLAY ui.Interface.filenameToURI(m_tree[m_songno].file) TO fn
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ Set a Property in the AUI
+FUNCTION wc_setProp(l_prop_name STRING, l_value STRING)
+	DEFINE w ui.Window
+	DEFINE n om.domNode
+	LET w = ui.Window.getCurrent()
+	LET n = w.findNode("Property",l_prop_name)
+	IF n IS NULL THEN
+		DISPLAY "can't find property:",l_prop_name
+		RETURN
+	END IF
+	CALL n.setAttribute("value",l_value)
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ Build the tree array strucure
+FUNCTION buildTree()
+	DEFINE x, pid SMALLINT
+	DEFINE l_prev_art, l_prev_alb, l_art_pid STRING
 	LET x = 1
 	LET pid = 0
 	LET l_prev_art = "."
@@ -70,54 +122,37 @@ MAIN
 		LET m_tree[x].img = "fa-music"
 		LET x = x + 1
 	END FOR
-
-	LET m_songno = 1
-
-	DIALOG  ATTRIBUTES(UNBUFFERED)
-		DISPLAY ARRAY m_tree TO arr.*
-			ON ACTION accept
-				LET m_songno = arr_curr()
-				CALL change_song()
-		END DISPLAY
-		INPUT BY NAME l_data
-		END INPUT
-		ON ACTION quit EXIT DIALOG
-		ON ACTION previous
-			IF m_songno > 1 THEN LET m_songno = m_songno - 1 END IF
-			CALL change_song()
-		ON ACTION next
-			IF m_songno < m_songs.getLength() THEN LET m_songno = m_songno + 1 END IF
-			CALL change_song()
-		ON ACTION close EXIT DIALOG
-		GL_ABOUT
-	END DIALOG
-
-	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
-END MAIN
---------------------------------------------------------------------------------
-#+ Change Song
-FUNCTION change_song()
-	CALL wc_setProp("mp3file", ui.Interface.filenameToURI(m_tree[m_songno].file) )
-	CALL wc_setProp("name", m_tree[m_songno].artist||" - "||m_tree[m_songno].album||" - "||m_tree[m_songno].track )
-	DISPLAY ui.Interface.filenameToURI(m_tree[m_songno].file) TO fn
 END FUNCTION
 --------------------------------------------------------------------------------
-#+ Set a Property in the AUI
-FUNCTION wc_setProp(l_prop_name STRING, l_value STRING)
-	DEFINE w ui.Window
-	DEFINE n om.domNode
-	LET w = ui.Window.getCurrent()
-	LET n = w.findNode("Property",l_prop_name)
-	IF n IS NULL THEN
-		DISPLAY "can't find property:",l_prop_name
-		RETURN
-	END IF
-	CALL n.setAttribute("value",l_value)
+#+ Get a songs from $MUSICDIR/musiccache.json
+FUNCTION loadCache( l_file STRING )
+	DEFINE c base.Channel
+	DEFINE l_json_str STRING
+	LET c = base.Channel.create()
+	CALL c.openFile(l_file,"r")
+	WHILE NOT c.isEof()
+		LET l_json_str = l_json_str.append( c.readLine() )
+	END WHILE
+	CALL c.close()
+	CALL util.JSONArray.parse(l_json_str).toFGL(m_songs)
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ Save song list to $MUSICDIR/musiccache.json
+FUNCTION saveCache( l_file STRING )
+	DEFINE c base.Channel
+	DEFINE l_json util.JSONArray
+	DEFINE l_json_str STRING
+	LET l_json =  util.JSONArray.fromFGL(m_songs)
+	LET l_json_str = l_json.toString()
+	LET c = base.Channel.create()
+	CALL c.openFile(l_file,"w")
+	CALL c.writeLine( l_json_str )
+	CALL c.close()
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Get a songs from $MUSICDIR folder
-FUNCTION get_artist_list()
-	DEFINE l_path STRING
+FUNCTION get_artist_list(l_useCache BOOLEAN)
+	DEFINE l_path, l_cache STRING
 	DEFINE d INTEGER
 
 	IF NOT os.path.exists(m_base) THEN
@@ -125,6 +160,13 @@ FUNCTION get_artist_list()
 		RETURN
 	END IF
 
+	LET l_cache = os.Path.join( m_base, "musiccache.json")
+	IF os.path.exists( l_cache ) AND l_useCache THEN
+		CALL loadCache( l_cache )
+		RETURN
+	END IF
+
+	CALL gl_lib_aui.gl_winInfo(1,"Getting Music Info, please wait ...","information")
 	DISPLAY "Getting Artists from ",m_base
 	LET m_songno = 1
 	CALL m_songs.clear()
@@ -136,6 +178,7 @@ FUNCTION get_artist_list()
 			IF l_path IS NULL THEN EXIT WHILE END IF
 			IF l_path = "." OR l_path = ".." THEN CONTINUE WHILE END IF
 			IF l_path = "Audacity" THEN CONTINUE WHILE END IF
+			CALL gl_lib_aui.gl_winInfo(1,"Getting Music Info, please wait ...\nDirectory: "||l_path,"")
 			IF os.path.isDirectory( os.path.join(m_base,l_path) ) THEN
 				LET m_songs[ m_songno ].artist = l_path
 --				DISPLAY "Processing Dir:",l_path, " songno=",(m_songno USING "&&&&")," Artist:", m_songs[ m_songno ].artist
@@ -144,6 +187,11 @@ FUNCTION get_artist_list()
 --				DISPLAY "Skipping File:",l_path
 			END IF
 		END WHILE
+	END IF
+	CALL gl_lib_aui.gl_winInfo(3,"","")
+	IF NOT os.path.exists( l_cache ) THEN
+		CALL saveCache( l_cache )
+		RETURN
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------

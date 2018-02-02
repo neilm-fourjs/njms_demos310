@@ -11,7 +11,7 @@ all: $(TARGET)
 
 # Create a symbolic link to our custom gbc files
 $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME): 
-	ln -s ../../../$(CUSTOMNAME) $@
+	ln -s $(PWD) $@
 
 # Build our custom gbc
 $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME): $(GBCBASE)/build/gbc-$(PACKVER) $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME)
