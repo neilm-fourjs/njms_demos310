@@ -39,6 +39,7 @@ ATTRIBUTES
 PHANTOM FORMONLY.id;
 PHANTOM FORMONLY.pid;
 EDIT t001 = FORMONLY.name, TITLE="Songs", IMAGECOLUMN=img;
+PHANTOM FORMONLY.genre;
 PHANTOM FORMONLY.artist;
 PHANTOM FORMONLY.album;
 PHANTOM FORMONLY.track;
@@ -51,7 +52,7 @@ BUTTON next : next;
 BUTTON about : about;
 
 fn = FORMONLY.fn;
-BUTTON refr : refresh,TEXT="refresh",IMAGE="refresh";
+BUTTON refr : refresh,TEXT="Refresh music tree",IMAGE="refresh";
 IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder";
 
 WEBCOMPONENT wc = FORMONLY.l_data,
