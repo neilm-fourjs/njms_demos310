@@ -41,3 +41,4 @@
 distbin
 build
 *.build
+bin/aui_stock_dynamic.xml

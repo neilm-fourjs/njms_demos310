@@ -91,7 +91,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=..\\pics;..\\etc\\image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=http://localhost/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,value:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics;../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -100,6 +100,9 @@
       <Application binaryName="cust_mnt" commandLineArguments="S 1" dependencies="-400184264,1986,14000,-1090563702" id="-1273407208" label="cust_mnt">
         <File filePath="src/app/cust_mnt.4fd"/>
         <File filePath="src/app/cust_mnt.4gl"/>
+      </Application>
+      <Application binaryName="dm_stock" commandLineArguments="S 1" dependencies="14000,-1557891896" id="476951290" label="dm_stock">
+        <File filePath="src/app/dm_stock.4gl"/>
       </Application>
       <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 stock stock_code" dependencies="14000,1986,-1090563702,-1557891896" id="1873655788" label="dynMaint">
         <File filePath="src/gl_dynMaint/dynMaint.4gl"/>
@@ -178,6 +181,9 @@
         <File filePath="gas_deploy/njmweb_d.xcf"/>
         <File filePath="gas_deploy/njmweb_t.xcf"/>
       </Library>
+      <Library binaryName="xcf_files_deploy_ws" id="-850398834" label="xcf_files_deploy_ws">
+        <File filePath="gas_deploy_ws/gdc_update_srv.xcf"/>
+      </Library>
       <Library binaryName="xcf_files" id="1211289508" label="xcf_files_local">
         <File filePath="gas/demo310.xcf"/>
         <File filePath="gas/demo310_d.xcf"/>
@@ -205,6 +211,30 @@
         <File filePath="src/db/mk_db_app_ifx.4gl"/>
       </Library>
     </Group>
+    <Group label="Demos MD Wizard">
+      <Application binaryName="wizard1_sd" dependencies="-1757926610" id="1486280688" label="wizard1_sd">
+        <File filePath="src/demos/wizard_main_sd.4gl"/>
+        <File filePath="src/demos/wizard_sd.per"/>
+        <File filePath="src/demos/wizard_ui_sd.4gl"/>
+      </Application>
+      <Application binaryName="wizard2_md" dependencies="-1757926610" id="-1964806629" label="wizard2_md">
+        <File filePath="src/demos/wizard_main_md.4gl"/>
+        <File filePath="src/demos/wizard_ui_md.4gl"/>
+      </Application>
+      <Application binaryName="wizard3_mrs" dependencies="-1757926610" id="1320948536" label="wizard3_mrs">
+        <File filePath="src/demos/wizard_main_mrs.4gl"/>
+        <File filePath="src/demos/wizard_ui_mrs.4gl"/>
+      </Application>
+      <Application binaryName="wizard4_dnd" dependencies="-1757926610" id="985734158" label="wizard4_dnd">
+        <File filePath="src/demos/wizard_main_dnd.4gl"/>
+        <File filePath="src/demos/wizard_ui_dnd.4gl"/>
+      </Application>
+      <Library binaryName="wizard_lib" dependencies="-400184264,14000" id="-1757926610" label="wizard_lib">
+        <File filePath="src/demos/wizard_common.4gl"/>
+        <File filePath="src/demos/wizard_glob.inc"/>
+        <File filePath="src/demos/wizard_md.per"/>
+      </Library>
+    </Group>
     <Group label="Demos UI" language="Genero">
       <Application binaryName="dispArr" dependencies="14000" id="62326091" label="dispArr">
         <File filePath="src/demos/disp_arr.4gl"/>
@@ -216,6 +246,10 @@
         <File filePath="src/demos/ipod.per"/>
         <File filePath="src/demos/ipod_sax.4gl"/>
         <File filePath="etc/ipodtree.4st"/>
+      </Application>
+      <Application binaryName="multi_cell_sel" dependencies="14000" id="1197855432" label="multi_cell_sel">
+        <File filePath="src/demos/multi_cell_sel.4gl"/>
+        <File filePath="src/demos/multi_cell_sel.per"/>
       </Application>
       <Application binaryName="picFlow" commandLineArguments="S 1 ../pics" dependencies="14000" id="-183914303" label="picFlow">
         <File filePath="src/demos/picflow.4gl"/>
@@ -299,19 +333,31 @@
         <File filePath="src/gl_lib/genero_lib.inc"/>
         <File filePath="src/gl_lib/gl_db.4gl"/>
         <File filePath="src/gl_lib/gl_db.inc"/>
+        <File filePath="src/gl_lib/gl_gdcupd.4gl"/>
         <File filePath="src/gl_lib/gl_lib.4gl"/>
         <File filePath="src/gl_lib/gl_lib_aui.4gl"/>
+        <File filePath="src/gl_lib/gl_lib_gdcupd.4gl"/>
         <File filePath="src/gl_lib/gl_lookup3.4gl"/>
       </Library>
       <Library binaryName="gl_rpt" dependencies="14000,-400184264" externalDependencies="libgre.42x" id="923654133" label="gl_rpt">
         <File filePath="src/gl_rpt/gl_grw.4gl"/>
         <File filePath="src/gl_rpt/gl_grwCfg.per"/>
       </Library>
+      <Library binaryName="gl_ws" id="654551740" label="gl_ws">
+        <File filePath="src/gl_lib/gl_lib_restful.4gl"/>
+      </Library>
     </Group>
     <Library binaryName="README" id="-1076375655" label="README">
       <File filePath="README.md"/>
     </Library>
     <Group label="System" language="Genero">
+      <Application binaryName="container" dependencies="-400184264" id="248425532" label="container">
+        <File filePath="src/sys/container.4gl"/>
+        <File filePath="etc/container.4sm"/>
+        <File filePath="etc/container.4st"/>
+        <File filePath="etc/container.4tb"/>
+        <File filePath="src/sys/container.per"/>
+      </Application>
       <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">
         <File filePath="src/gl_lib/lib_login.4gl"/>
         <File filePath="src/gl_lib/lib_secure.4gl"/>
@@ -341,11 +387,19 @@
         <File filePath="src/utils/gbc_theme.4gl"/>
         <File filePath="src/utils/gbc_theme.per"/>
       </Application>
-      <Application binaryName="materialDesignTest" commandLineArguments="gbc=gbc_njm" dependencies="14000,-400184264" id="1848127715" label="materialDesignTest">
+      <Application binaryName="materialDesignTest" dependencies="14000,-400184264" id="1848127715" label="materialDesignTest">
         <File filePath="src/utils/matDesTest.4gl"/>
         <File filePath="src/utils/matDesTest.per"/>
         <File filePath="src/utils/matDesTest_forms.per"/>
         <File filePath="src/utils/matDesTest_modal.per"/>
+      </Application>
+    </Group>
+    <Group environment="value:GDCUPDATEURL=http://^/gdcupdates,value:GDCUPDATEDIR=../gdcupdate,value:FGLAPPSERVER=8090" label="WS_Restful">
+      <Application binaryName="restful_srv" dependencies="654551740" id="366608832" label="restful_srv">
+        <File filePath="src/demos/restful_srv.4gl"/>
+      </Application>
+      <Application binaryName="ws_gdc_update_srv" dependencies="654551740,14000,-850398834" id="-580790058" label="ws_gdc_update_srv">
+        <File filePath="src/sys/ws_gdc_update_srv.4gl"/>
       </Application>
     </Group>
   </Group>
@@ -354,6 +408,14 @@
       <DynamicProperty name="packageId" value="gbc-njm"/>
       <DynamicProperty name="packageLabel" value="gbc-njm"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/" label="build" sourceDirectory="$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-njm"/>
+    </Package>
+    <Package binaryName="gdc_update_srv" dependencies="-580790058,-850398834,654551740,14000" description="GDC Update WebService" label="gdc_update_srv" platform="Genero Application Server">
+      <DynamicProperty name="packageId" value="gdcupdate"/>
+      <DynamicProperty name="packageLabel" value="gdcupdate"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/bin" includedFiles="ws_*.42?" label="bin" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy_ws"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/gdcupdate" includedFiles="*.txt" label="gdcupdate" sourceDirectory="$(ProjectDir)/gdcupdate"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/bin" includedFiles="gl_lib_gdcupd.42m,gl_lib_restful.42m" label="lib" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
     </Package>
     <Package binaryName="njms_demos310_ifx" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810" description="NJMs Demos" label="njms_demos310_ifx" platform="Genero Application Server">
       <DynamicProperty name="packageId" value="njmsdemos"/>
