@@ -1727,7 +1727,7 @@ FUNCTION load_new_imgarr()
 	CALL c.setDelimiter("=")
 	WHILE NOT c.isEOF()
 		IF c.read( [ l_rec.* ] ) THEN
-			DISPLAY l_rec.fld1," Font:",l_rec.fld2
+--			DISPLAY l_rec.fld1," Font:",l_rec.fld2
 			CALL m_imgrec.appendElement()
 			LET m_all_names[ m_all_names.getLength() + 1 ] = l_rec.fld1
 			LET m_imgrec[ m_imgrec.getLength() ].img = l_rec.fld1
