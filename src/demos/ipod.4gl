@@ -881,7 +881,7 @@ FUNCTION getAlbumArtURL( art, alb )
 	WHILE NOT eof
 		LET line = soc.readLine()
 		LET eof = soc.isEof()
-		DISPLAY line
+--		DISPLAY line
 		LET x =  line.getIndexOf("main_left",1)
 		IF x > 1 THEN LET gotDiv = TRUE END IF
 		IF gotDiv THEN
@@ -898,11 +898,12 @@ FUNCTION getAlbumArtURL( art, alb )
 
 	CALL soc.close()
 	IF img IS NULL OR img = "noimage" THEN
+		DISPLAY CURRENT,": getting album artwork - Failed"
 		MESSAGE "getting album artwork - Failed"
 	END IF
 	CALL ui.Interface.refresh()
 --	LET img = "http://ecx.images-amazon.com/images/I/414M73KT6NL._SL160_.jpg"
-
+	DISPLAY CURRENT,": Found image:",img
 	RETURN img
 END FUNCTION
 --------------------------------------------------------------------------------

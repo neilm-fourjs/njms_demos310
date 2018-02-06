@@ -1,3 +1,9 @@
+IMPORT FGL gl_lib
+
+&include "genero_lib.inc"
+CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "OnFocus Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 TYPE t_matrix4 RECORD
 		s1 STRING,
@@ -18,6 +24,11 @@ DEFINE m_attr_matrix DYNAMIC ARRAY OF t_matrix4 -- colours attributes for highli
 DEFINE m_sel_colours DYNAMIC ARRAY OF STRING -- selected colours
 DEFINE m_like BOOLEAN
 MAIN
+
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, C_PRGDESC, C_PRGAUTH)
+	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
+	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+
 	OPEN FORM f FROM "multi_cell_sel"
 	DISPLAY FORM f
 

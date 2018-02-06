@@ -40,6 +40,9 @@
 		<StyleAttribute name="border" value="none" />
 	</Style>
 
+	<Style name="Table.noheading">
+		<StyleAttribute name="headerHidden" value="yes" />
+	</Style>
 	<Style name="Table.menu">
 		<StyleAttribute name="headerHidden" value="yes" />
 		<StyleAttribute name="highlightCurrentRow" value="no" />
@@ -65,10 +68,10 @@
 		<StyleAttribute name="textColor" value="darkblue" />
 		<StyleAttribute name="fontWeight" value="bold" />
 	</Style>
-	<Style name=":active">
+	<Style name=".test:active">
 		<StyleAttribute name="backgroundColor" value="Azure" />
 	</Style>
-	<Style name=":active:focus">
+	<Style name=".test:active:focus">
 		<StyleAttribute name="backgroundColor" value="GhostWhite" />
 	</Style>
 	<Style name=":inactive">
