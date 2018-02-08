@@ -30,6 +30,11 @@ modulum('FrontCallService.modules.mymodule', ['FrontCallService'],
 				}
 			},
 
+//NJM Get the count the current number of running applications
+			appcount: function () {
+				return [gbc.SessionService._sessions[0]._applications.length];
+			},
+
 			myCustomSyncFunction: function (name) {
 				if (name === undefined) {
 					this.parametersError();
