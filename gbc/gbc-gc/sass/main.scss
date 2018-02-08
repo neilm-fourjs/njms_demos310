@@ -1,32 +1,10 @@
-/*
-@font-face {
-	font-family: Michroma;
-	src: url("../resources/img/Michroma.ttf") format("truetype");
-}
-@font-face {
-	font-family: AUdimat ;
-	font-style: normal;
-	src: url("../resources/img/AUdimat-Regular.otf") format("opentype");
-}
-@font-face {
-	font-family: AUdimat ;
-	font-weight: bold;
-	src: url("../resources/img/AUdimat-Bold.otf") format("opentype");
-}
-@font-face {
-	font-family: AUdimat ;
-	font-style: italic;
-	src: url("../resources/img/AUdimat-Italic.otf") format("opentype");
-}
-*/
+
 
 body {
 	background: black;
 	-webkit-font-smoothing: antialiased;
-	font-family: /*Audimat,*/ "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 14px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: 400;
-	/*font-stretch: extra-expanded;*/
 }
 
 h1 {
@@ -49,16 +27,11 @@ footer {
 }
 
 .gbc_WindowMainContainer > .gbc_WindowMenuContainerMiddle > .gbc_WindowContent {
-	padding: 0px 3px 0px 3px;
+	padding: 0px;
 }
 
 .gbc_FormWidget {
 	background: linear-gradient( #F2F2F9, #B7B7CC );
-}
-
-.mt-card {
-	color: $gbc-primary-light-color;
-	background-color: $gbc-primary-background-color;
 }
 
 .gbc_style_style2 {
@@ -76,7 +49,6 @@ footer {
 }
 
 
-/* Folders */
 .gbc_FolderWidget {
 	background: linear-gradient( #F2F2F9, #B7B7CC );
 }
@@ -91,41 +63,9 @@ footer {
 	background-color: $gbc-primary-background-color;
 }
 
-.mt-tab-titles-bar[__FolderWidget=top], .mt-tab-titles-bar[__FolderWidget=bottom] {
-	border-bottom: $gbc-primary-color solid 1px;
+.vmLink {
+	display: none;
 }
-
-/* GroupBox */
-.gbc_GroupWidgetContent > .gbc_GroupTitleWidget:not(.empty) {
-	padding: 2px 0 2px 0;
+.uaLink {
+	display: none;
 }
-.gbc_GroupTitleWidget {
-	background: linear-gradient( #B7B7CC, #F2F2F9 );
-	border-bottom: $gbc-primary-color groove 1px;
-	font-family: Michroma, "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-/* Modal Window */
-.gbc_ModalWidget.movable .mt-dialog-header {
-	background: linear-gradient( #B7B7CC, #F2F2F9 );
-	border-bottom: $gbc-primary-color groove 1px;
-	font-family: Michroma, "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-.gbc_ModalWidget .mt-dialog-header {
-	padding: 2px 0px 0px 0px;
-}
-
-/* Table */
-.gbc_TableWidget .gbc_TableColumnsHeaders, .gbc_TableWidget .gbc_TableLeftColumnsHeaders, .gbc_TableWidget .gbc_TableRightColumnsHeaders {
-	background: linear-gradient( #B7B7CC, #F2F2F9 );
-	border-bottom: $gbc-primary-color groove 1px;
-}
-
-.gbc_style_center {
-	width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-	display: block;
-}
-
