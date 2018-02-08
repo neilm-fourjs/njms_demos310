@@ -35,6 +35,7 @@ modulum('FrontCallService.modules.mymodule', ['FrontCallService'],
 				return [gbc.SessionService._sessions[0]._applications.length];
 			},
 
+// Some default examples of doing something
 			myCustomSyncFunction: function (name) {
 				if (name === undefined) {
 					this.parametersError();
