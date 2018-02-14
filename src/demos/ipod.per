@@ -93,7 +93,8 @@ GRID
  [lab7|ai03                 ]
  [lab8|ai04 ]
  [chk                       ]
- [showbig]
+ [showbig    ]
+ [musicbrainz]
 }
 END -- GRID
 GRID
@@ -156,6 +157,8 @@ EDIT ai04 = FORMONLY.nooftracks, STYLE="info";
 LABEL s005 = FORMONLY.playtime,STYLE="info", SIZEPOLICY=DYNAMIC;
 CHECKBOX chk = FORMONLY.getAlbumArt, TEXT="Fetch Album Art", VALUECHECKED=1, VALUEUNCHECKED=0, NOT NULL;
 BUTTON showbig : showbig,TEXT="Show Album Cover";
+BUTTON musicbrainz : musicbrainz,TEXT="Musicbrainz";
+
 -- Tree
 EDIT f001 = FORMONLY.name, TITLE="Name", IMAGECOLUMN=image;
 EDIT f004 = FORMONLY.year, TITLE="Year";

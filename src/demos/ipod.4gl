@@ -96,6 +96,7 @@ DEFINE m_album_art_artist DYNAMIC ARRAY OF RECORD
 		name STRING
 	END RECORD
 DEFINE m_album_art_cover STRING
+DEFINE m_musicbrainz_url STRING
 MAIN
 	DEFINE l_file STRING
 
@@ -144,7 +145,7 @@ MAIN
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION mainDialog()
-	DEFINE r_search, t_search, a_search STRING
+	DEFINE r_search, t_search, a_search, l_ret STRING
 	DEFINE n om.DomNode
 
 	DISPLAY CURRENT,": Starting main dialog."
@@ -218,6 +219,13 @@ FUNCTION mainDialog()
 			IF m_album_art_cover IS NOT NULL THEN	
 				CALL show_big_cover(m_album_art_cover)
 			END IF
+		ON ACTION musicbrainz
+			DISPLAY "URL: ",m_musicbrainz_url
+			IF m_musicbrainz_url IS NOT NULL THEN
+				CALL ui.Interface.frontCall("standard","launchURL", m_musicbrainz_url, [l_ret])
+				DISPLAY "launchURL Ret:",l_ret
+			END IF
+
 		ON ACTION open CALL openLibrary(NULL)
 		ON ACTION close EXIT DIALOG
 		GL_ABOUT
@@ -857,11 +865,12 @@ FUNCTION getAlbumArtURL( l_art STRING, l_alb STRING )
 	DEFINE l_artist_id, l_album_id, l_img STRING
 	CALL gl_lib.gl_message("Getting album artwork...")
 	LET m_album_art_cover = NULL
+	LET m_musicbrainz_url = NULL
 
 	LET l_artist_id = getArtistID( l_art )
 	IF l_artist_id IS NULL THEN RETURN "noimagewa" END IF
 
-	LET l_album_id = getAlbum( l_alb )
+	LET l_album_id = getAlbumID( l_alb )
 	IF l_album_id IS NULL THEN RETURN "noimagewa" END IF
 
 	LET l_img = getArtworkURL( l_album_id )
@@ -930,7 +939,7 @@ END FUNCTION
       "count": 1,
       "title": "Blackbirds",
 }
-FUNCTION getAlbum( l_alb STRING )
+FUNCTION getAlbumID( l_alb STRING )
 	DEFINE l_url, l_line, l_id, l_title STRING
 	DEFINE l_result RECORD
 			count SMALLINT,
@@ -973,6 +982,7 @@ FUNCTION getAlbum( l_alb STRING )
 		DISPLAY "Score: ",l_result.releases[x].score,":",l_result.releases[x].title
 	END FOR
 	DISPLAY "Album: ",NVL(l_id,"NULL"), " : ",l_title
+	LET m_musicbrainz_url = "https://musicbrainz.org/release/"||l_id
 	CALL gl_lib.gl_message(SFMT("Album %1 Found, id:%2",l_title,l_id))
 	RETURN l_id
 END FUNCTION
@@ -1030,6 +1040,7 @@ FUNCTION getArtistID( l_art STRING )
 	END FOR
 	LET l_id = m_album_art_artist[ 1 ].id
 	LET l_name = m_album_art_artist[ 1 ].name
+	LET m_musicbrainz_url = "https://musicbrainz.org/artist/"||l_id
 	DISPLAY "Artist: ",NVL(l_id,"NULL"), " : ",l_name
 	CALL gl_lib.gl_message(SFMT("Artist %1 Found, id:%2",l_name,l_id))
 	RETURN l_id
