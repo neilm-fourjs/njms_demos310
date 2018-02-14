@@ -90,6 +90,12 @@ DEFINE f om.SaxDocumentHandler
 DEFINE t_sec, t_min, t_hr, t_day INTEGER
 DEFINE getAlbumArt, workFromDB BOOLEAN
 
+DEFINE m_album_art_artist DYNAMIC ARRAY OF RECORD
+		score SMALLINT,
+		id STRING,
+		name STRING
+	END RECORD
+DEFINE m_album_art_cover STRING
 MAIN
 	DEFINE l_file STRING
 
@@ -208,6 +214,10 @@ FUNCTION mainDialog()
 			CALL DIALOG.setSelectionMode("tree",TRUE)
 			LET n = ui.Interface.getRootNode()
 
+		ON ACTION showbig
+			IF m_album_art_cover IS NOT NULL THEN	
+				CALL show_big_cover(m_album_art_cover)
+			END IF
 		ON ACTION open CALL openLibrary(NULL)
 		ON ACTION close EXIT DIALOG
 		GL_ABOUT
@@ -846,11 +856,12 @@ END FUNCTION
 FUNCTION getAlbumArtURL( l_art STRING, l_alb STRING )
 	DEFINE l_artist_id, l_album_id, l_img STRING
 	CALL gl_lib.gl_message("Getting album artwork...")
+	LET m_album_art_cover = NULL
 
 	LET l_artist_id = getArtistID( l_art )
 	IF l_artist_id IS NULL THEN RETURN "noimagewa" END IF
 
-	LET l_album_id = getAlbum( l_artist_id, l_alb )
+	LET l_album_id = getAlbum( l_alb )
 	IF l_album_id IS NULL THEN RETURN "noimagewa" END IF
 
 	LET l_img = getArtworkURL( l_album_id )
@@ -900,6 +911,7 @@ FUNCTION getArtworkURL( l_album_id STRING )
 		RETURN NULL
 	END TRY
 	LET l_img = json_rec.images[1].image
+	LET m_album_art_cover = l_img
 	IF json_rec.images[1].thumbnails.small IS NOT NULL THEN
 		LET l_img = json_rec.images[1].thumbnails.small
 	END IF
@@ -918,7 +930,7 @@ END FUNCTION
       "count": 1,
       "title": "Blackbirds",
 }
-FUNCTION getAlbum( l_artist_id STRING, l_alb STRING )
+FUNCTION getAlbum( l_alb STRING )
 	DEFINE l_url, l_line, l_id, l_title STRING
 	DEFINE l_result RECORD
 			count SMALLINT,
@@ -929,18 +941,28 @@ FUNCTION getAlbum( l_artist_id STRING, l_alb STRING )
 			END RECORD
   	END RECORD
 	DEFINE x, l_score SMALLINT
-	LET l_url = 'http://musicbrainz.org/ws/2/release/?query="'||l_alb||'" AND arid:'||l_artist_id||'&fmt=json'
-	LET l_line = getRestRequest( l_url  )
-	IF l_line IS NULL THEN RETURN NULL END IF
-	TRY
-		CALL util.JSON.parse(l_line, l_result)
-	CATCH
-		ERROR "JSON Error:"||STATUS||":"||ERR_GET(STATUS)
+
+	FOR x = 1 TO m_album_art_artist.getLength()
+		LET l_url = 'http://musicbrainz.org/ws/2/release/?query="'||l_alb||'" AND arid:'||m_album_art_artist[x].id||'&fmt=json'
+		LET l_line = getRestRequest( l_url  )
+		IF l_line IS NULL THEN RETURN NULL END IF
+		TRY
+			CALL util.JSON.parse(l_line, l_result)
+		CATCH
+			ERROR "JSON Error:"||STATUS||":"||ERR_GET(STATUS)
+			RETURN NULL
+		END TRY
+		IF l_result.count > 0 THEN EXIT FOR END IF
+	END FOR
+
+	DISPLAY "Found ", l_result.count, " Albums ..."
+	IF l_result.count = 0 THEN
+		DISPLAY "Line:",l_line
+		CALL gl_lib.gl_message("Album not found!")
 		RETURN NULL
-	END TRY
+	END IF
 
 	LET l_score = 0
-	DISPLAY "Found ", l_result.count, " Albums ..."
 	FOR x = 1 TO l_result.count
 		IF l_result.releases[x].score > l_score THEN
 			LET l_score = l_result.releases[x].score
@@ -976,7 +998,7 @@ FUNCTION getArtistID( l_art STRING )
 				name STRING
 			END RECORD
   	END RECORD
-	DEFINE x, l_score SMALLINT
+	DEFINE x SMALLINT
 
 	LET l_url = 'http://musicbrainz.org/ws/2/artist/?query="'||l_art.trim()||'"&fmt=json'
 	LET l_line = getRestRequest( l_url  )
@@ -987,15 +1009,27 @@ FUNCTION getArtistID( l_art STRING )
 		ERROR "JSON Error:"||STATUS||":"||ERR_GET(STATUS)
 		RETURN NULL
 	END TRY
+	IF l_artist.count = 0 THEN
+		CALL gl_lib.gl_message("Artist not found!")
+		RETURN NULL
+	END IF
 
-	LET l_score = 0
 	FOR x = 1 TO l_artist.count
-		IF l_artist.artists[x].score > l_score THEN
-			LET l_score = l_artist.artists[x].score
-			LET l_id = l_artist.artists[x].id
-			LET l_name = l_artist.artists[x].name
+		IF l_artist.artists[x].score > 80 THEN
+			LET m_album_art_artist[ m_album_art_artist.getLength() + 1 ].score = l_artist.artists[x].score
+			LET m_album_art_artist[ m_album_art_artist.getLength() ].id = l_artist.artists[x].id
+			LET m_album_art_artist[ m_album_art_artist.getLength() ].name = l_artist.artists[x].name
 		END IF
 	END FOR
+	CALL m_album_art_artist.sort("score",TRUE)
+	DISPLAY "Found Artists:"
+	FOR x = 1 TO m_album_art_artist.getLength()
+		DISPLAY m_album_art_artist[ x ].score," : ",
+						m_album_art_artist[ x ].id, " : ",
+						m_album_art_artist[ x ].name
+	END FOR
+	LET l_id = m_album_art_artist[ 1 ].id
+	LET l_name = m_album_art_artist[ 1 ].name
 	DISPLAY "Artist: ",NVL(l_id,"NULL"), " : ",l_name
 	CALL gl_lib.gl_message(SFMT("Artist %1 Found, id:%2",l_name,l_id))
 	RETURN l_id
@@ -1336,6 +1370,15 @@ FUNCTION db_read()
 
 	CALL buildTree()
 
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION show_big_cover( l_img STRING )
+	OPEN WINDOW big_cover WITH FORM "ipod_big_cover"
+	DISPLAY BY NAME l_img
+	MENU
+		ON ACTION close EXIT MENU
+	END MENU
+	CLOSE WINDOW big_cover
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION erro()

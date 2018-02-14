@@ -244,6 +244,7 @@
       <Application binaryName="ipodTree" dependencies="14000" id="-217822240" label="ipodTree">
         <File filePath="src/demos/ipod.4gl"/>
         <File filePath="src/demos/ipod.per"/>
+        <File filePath="src/demos/ipod_big_cover.per"/>
         <File filePath="src/demos/ipod_sax.4gl"/>
         <File filePath="etc/ipodtree.4st"/>
       </Application>
