@@ -153,6 +153,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 		GL_DBGMSG(1, "gl_init: Action Defaults '"||l_key.trim()||"' loaded.")
 	CATCH
 		GL_DBGMSG(0, "gl_init: Action Defaults '"||l_key.trim()||"' FAILED to load!")
+		CALL ui.interface.loadActionDefaults( "default" )
 	END TRY
 
 	IF NOT l_use_fi AND NOT gl_noToolBar THEN

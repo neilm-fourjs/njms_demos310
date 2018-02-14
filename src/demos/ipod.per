@@ -87,13 +87,23 @@ END -- TABLE
 HBOX ( SPLITTER, STYLE="grad qtcurve" )
 GRID
 {
-<G "Album"                                      >
- [aimg             ][lab5|ai01                 ]
- [                 ][lab6|ai02                 ]
- [                 ][lab7|ai03                 ]
- [                 ][lab8|ai04                 ]
+<G "Album Details"           >
+ [lab5|ai01                 ]
+ [lab6|ai02                 ]
+ [lab7|ai03                 ]
+ [lab8|ai04 ]
+ [chk                       ]
+}
+END -- GRID
+GRID
+{
+<G "Artwork"        >
+ [aimg             ]
  [                 ]
- [                 ][chk                  ]
+ [                 ]
+ [                 ]
+ [                 ]
+ [                 ]
 }
 END -- GRID
 GRID
@@ -133,7 +143,7 @@ LABEL lab5 : lab5, TEXT=%"Genre:";
 LABEL lab6 : lab6, TEXT=%"Artist:";
 LABEL lab7 : lab7, TEXT=%"Album:";
 LABEL lab8 : lab8, TEXT=%"Tracks:";
-IMAGE aimg = FORMONLY.album_art, HEIGHT=200 PIXELS, WIDTH=200 PIXELS, AUTOSCALE, SIZEPOLICY=DYNAMIC;
+IMAGE aimg = FORMONLY.album_art, HEIGHT=250 PIXELS, WIDTH=250 PIXELS, AUTOSCALE, SIZEPOLICY=DYNAMIC, STYLE="noborder";
 EDIT s001 = FORMONLY.genres,STYLE="info";
 EDIT s002 = FORMONLY.artists,STYLE="info";
 EDIT s003 = FORMONLY.albums,STYLE="info";

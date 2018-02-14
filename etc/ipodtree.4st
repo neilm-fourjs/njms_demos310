@@ -1,27 +1,7 @@
 <StyleList>
-  <!-- Style name="ToolBar">
-    <StyleAttribute name="backgroundColor"      value="#F2F2F9" />
-		<StyleAttribute name="backgroundGradientType" value="linear|top|bottom" />
-		<StyleAttribute name="backgroundGradientColor" value="#B7B7CC" />
-  </Style-->
-  <Style name="Window.oxygen">
-		<StyleAttribute name="lookAndFeel"  value="Oxygen" />
-  </Style>
-  <Style name="Form.oxygen">
-		<StyleAttribute name="lookAndFeel"  value="Oxygen" />
-  </Style>
-  <Style name="Window.bespin">
-		<StyleAttribute name="lookAndFeel"  value="Bespin" />
-  </Style>
-  <Style name="Form.bespin">
-		<StyleAttribute name="lookAndFeel"  value="Bespin" />
-  </Style>
-  <Style name="Window.qtcurve">
-		<StyleAttribute name="lookAndFeel"  value="QtCurve" />
-  </Style>
-  <Style name="Form.qtcurve">
-		<StyleAttribute name="lookAndFeel"  value="QtCurve" />
-  </Style>
+	<Style name=".noborder">
+    <StyleAttribute name="border"   value="none" />
+	</Style>
   <Style name="Label">
      <StyleAttribute name="textColor" value="darkblue" />
      <StyleAttribute name="fontWeight" value="bold" />

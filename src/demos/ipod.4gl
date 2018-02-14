@@ -9,6 +9,8 @@
 -- database and set IPOD_DBNAME = to the name of that database.
 
 IMPORT os
+IMPORT util
+IMPORT com
 IMPORT FGL gl_lib
 
 &include "genero_lib.inc"
@@ -839,8 +841,206 @@ FUNCTION setSelTrack( x )
 	LET sel_tracks_a[ sel_tracks_a.getLength() ].rating = tracks_a[x].rating USING "&&"
 
 END FUNCTION
+------------------------------------------------------------------------------------
+-- 
+FUNCTION getAlbumArtURL( l_art STRING, l_alb STRING )
+	DEFINE l_artist_id, l_album_id, l_img STRING
+	CALL gl_lib.gl_message("Getting album artwork...")
+
+	LET l_artist_id = getArtistID( l_art )
+	IF l_artist_id IS NULL THEN RETURN "noimagewa" END IF
+
+	LET l_album_id = getAlbum( l_artist_id, l_alb )
+	IF l_album_id IS NULL THEN RETURN "noimagewa" END IF
+
+	LET l_img = getArtworkURL( l_album_id )
+	IF l_img IS NULL THEN RETURN "noimagewa" END IF
+
+	CALL gl_lib.gl_message("Album art found: "||l_img)
+	RETURN l_img
+END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION getAlbumArtURL( art, alb )
+-- GET /release/76df3287-6cda-33eb-8e9a-044b5e15ffdd HTTP/1.1
+-- Host: coverartarchive.org
+FUNCTION getArtworkURL( l_album_id STRING )
+	DEFINE l_url, l_line STRING
+	DEFINE json_rec RECORD
+		images DYNAMIC ARRAY OF RECORD
+			image STRING,
+			thumbnails RECORD
+				large STRING,
+				small STRING
+			END RECORD
+		END RECORD
+	END RECORD
+	DEFINE l_img STRING
+	DEFINE c base.channel
+
+	LET l_url = 'http://coverartarchive.org/release/'||l_album_id.trim()
+	CALL gl_lib.gl_message("Getting Album artwork from:"||NVL(l_url,"NULL"))
+
+	-- redirection that happens causes a bug in gws library
+	-- failing back to wget
+	LET l_line = "unset LD_LIBRARY_PATH && wget -o tmp.out -O - "||l_url
+	LET c = base.channel.create()
+	CALL c.openPipe(l_line,"r")
+	LET l_line = c.readLine()
+	CALL c.close()
+
+	--  LET l_line = getRestRequest( l_url  )
+
+	DISPLAY "Line:",l_line
+
+	IF l_line IS NULL THEN RETURN NULL END IF
+
+	TRY
+		CALL util.JSON.parse(l_line,json_rec)
+	CATCH
+		ERROR "JSON Error:"||STATUS||":"||ERR_GET(STATUS)
+		RETURN NULL
+	END TRY
+	LET l_img = json_rec.images[1].image
+	IF json_rec.images[1].thumbnails.small IS NOT NULL THEN
+		LET l_img = json_rec.images[1].thumbnails.small
+	END IF
+	DISPLAY "Img: ",l_img
+	RETURN l_img.trim()
+END FUNCTION
+--------------------------------------------------------------------------------
+-- http://musicbrainz.org/ws/2/release/?query=%22blackbirds%22%20AND%20arid:ca311a64-0a30-4fdb-ad0c-02444b8b0b8b&fmt=json;
+{
+  "count": 2,
+  "offset": 0,
+  "releases": [
+    {
+      "id": "b00b75e9-ccc2-4e7e-b880-92990eed6204",
+      "score": "100",
+      "count": 1,
+      "title": "Blackbirds",
+}
+FUNCTION getAlbum( l_artist_id STRING, l_alb STRING )
+	DEFINE l_url, l_line, l_id, l_title STRING
+	DEFINE l_result RECORD
+			count SMALLINT,
+			releases DYNAMIC ARRAY OF RECORD
+				id STRING,
+				score SMALLINT,
+				title STRING
+			END RECORD
+  	END RECORD
+	DEFINE x, l_score SMALLINT
+	LET l_url = 'http://musicbrainz.org/ws/2/release/?query="'||l_alb||'" AND arid:'||l_artist_id||'&fmt=json'
+	LET l_line = getRestRequest( l_url  )
+	IF l_line IS NULL THEN RETURN NULL END IF
+	TRY
+		CALL util.JSON.parse(l_line, l_result)
+	CATCH
+		ERROR "JSON Error:"||STATUS||":"||ERR_GET(STATUS)
+		RETURN NULL
+	END TRY
+
+	LET l_score = 0
+	DISPLAY "Found ", l_result.count, " Albums ..."
+	FOR x = 1 TO l_result.count
+		IF l_result.releases[x].score > l_score THEN
+			LET l_score = l_result.releases[x].score
+			LET l_id = l_result.releases[x].id
+			LET l_title = l_result.releases[x].title
+			IF l_score = 100 THEN EXIT FOR END IF
+		END IF
+		DISPLAY "Score: ",l_result.releases[x].score,":",l_result.releases[x].title
+	END FOR
+	DISPLAY "Album: ",NVL(l_id,"NULL"), " : ",l_title
+	CALL gl_lib.gl_message(SFMT("Album %1 Found, id:%2",l_title,l_id))
+	RETURN l_id
+END FUNCTION
+--------------------------------------------------------------------------------
+-- https://musicbrainz.org/ws/2/artist/?query=%22gretchen%20peters%22&fmt=json;
+-- result:
+{
+  "created": "2018-02-13T09:43:27.157Z",
+  "count": 1,
+  "offset": 0,
+  "artists": [
+    {
+      "id": "ca311a64-0a30-4fdb-ad0c-02444b8b0b8b",
+			"score": "100",
+}
+FUNCTION getArtistID( l_art STRING )
+	DEFINE l_url, l_line, l_id, l_name STRING
+	DEFINE l_artist RECORD
+			count SMALLINT,
+			artists DYNAMIC ARRAY OF RECORD
+				id STRING,
+				score SMALLINT,
+				name STRING
+			END RECORD
+  	END RECORD
+	DEFINE x, l_score SMALLINT
+
+	LET l_url = 'http://musicbrainz.org/ws/2/artist/?query="'||l_art.trim()||'"&fmt=json'
+	LET l_line = getRestRequest( l_url  )
+	IF l_line IS NULL THEN RETURN NULL END IF
+	TRY
+		CALL util.JSON.parse(l_line, l_artist)
+	CATCH
+		ERROR "JSON Error:"||STATUS||":"||ERR_GET(STATUS)
+		RETURN NULL
+	END TRY
+
+	LET l_score = 0
+	FOR x = 1 TO l_artist.count
+		IF l_artist.artists[x].score > l_score THEN
+			LET l_score = l_artist.artists[x].score
+			LET l_id = l_artist.artists[x].id
+			LET l_name = l_artist.artists[x].name
+		END IF
+	END FOR
+	DISPLAY "Artist: ",NVL(l_id,"NULL"), " : ",l_name
+	CALL gl_lib.gl_message(SFMT("Artist %1 Found, id:%2",l_name,l_id))
+	RETURN l_id
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION getRestRequest( l_url STRING )
+	DEFINE l_err BOOLEAN
+	DEFINE l_req com.HttpRequest
+	DEFINE l_resp com.HttpResponse
+	DEFINE l_line STRING
+
+	DISPLAY CURRENT,": URL=",l_url
+	TRY
+		LET l_req = com.HttpRequest.Create(l_url)
+		CALL l_req.setMethod("GET")
+		CALL l_req.setVersion("1.1")
+		CALL l_req.setHeader("Content-Type", "application/json")
+		CALL l_req.setHeader("Accept", "application/json")
+		CALL l_req.setHeader("Expect","100-continue") --??
+		CALL l_req.doRequest()
+		LET l_resp = l_req.getResponse()
+	CATCH
+		RETURN NULL
+	END TRY
+
+	DISPLAY CURRENT,": Reading result ..."
+	LET l_err = TRUE
+	TRY
+		IF  l_resp.getStatusCode()  = 200 THEN
+			LET l_line = l_resp.getTextResponse()
+			LET l_err = FALSE
+		ELSE
+			LET l_line = SFMT("WARN:%1-%2",l_resp.getStatusCode(), l_resp.getStatusDescription())
+		END IF
+	CATCH
+		LET l_line = SFMT("ERR:%1-%2", STATUS, SQLCA.SQLERRM)
+	END TRY
+
+	DISPLAY CURRENT,": Line:",l_line
+	IF l_err THEN RETURN NULL END IF
+
+	RETURN l_line
+END FUNCTION
+----------------------------------------------------------------------------
+FUNCTION getAlbumArtURL_old( art, alb )
 	DEFINE art, alb, url, line, img STRING
 	DEFINE x,y INTEGER
 	DEFINE tmp base.StringBuffer
@@ -1144,30 +1344,6 @@ FUNCTION erro()
 		DISPLAY STATUS,":",SQLERRMESSAGE
 	END IF
 	DISPLAY base.application.getstacktrace()
-END FUNCTION
---------------------------------------------------------------------------------
-FUNCTION webkit(what)
-	DEFINE url,what STRING
-
-	OPEN WINDOW webkit WITH FORM "webkit"
-	LET int_flag = FALSE
-	LET url = "http://www.4js.com/online_documentation/fjs-fgl-2.20.02-manual-html/"
-	DISPLAY BY NAME url
-	DISPLAY url TO browser
-	WHILE NOT int_flag
-		INPUT BY NAME url ATTRIBUTE(WITHOUT DEFAULTS,UNBUFFERED)
-			ON ACTION exit EXIT INPUT
-			ON ACTION close EXIT INPUT
-			ON ACTION google LET url = "http://www.google.com/" EXIT INPUT
-			ON ACTION fourjs LET url = "http://www.fourjs.com/" EXIT INPUT
-			ON ACTION manual LET url = "http://www.4js.com/online_documentation/fjs-fgl-2.20.02-manual-html/" EXIT INPUT
-		END INPUT
-		IF NOT int_flag THEN 
-			DISPLAY url TO browser
-		END IF
-	END WHILE
-	CLOSE WINDOW webkit
-	LET int_flag = FALSE
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION tidyup()
