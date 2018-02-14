@@ -641,10 +641,10 @@ FUNCTION buildTree()
 	CALL gl_progBar(1,genre_a.getLength(),"Processing XML - Phase 3 of 3")
 
 	CALL tree_a.clear()
-	DISPLAY CURRENT,": Genre:"||genre_a.getLength()||
+{	DISPLAY CURRENT,": Genre:"||genre_a.getLength()||
 					" Artists:"||artist_a.getLength()||
 					" Albums:"||album_a.getLength()||
-					" Tracks:"||tracks_a.getLength()
+					" Tracks:"||tracks_a.getLength()}
 	DISPLAY CURRENT,": Building Tree ..."
 	LET t_cnt = 1
 	FOR x = 1 TO genre_a.getLength()
@@ -680,9 +680,9 @@ FUNCTION buildTree()
 		LET tree_a[ g ].name = genre_a[x].genre||" ("||genre_a[x].artist_cnt||")"
 	END FOR
 
-	FOR x = 1 TO tree_a.getLength()
+{	FOR x = 1 TO tree_a.getLength()
 		DISPLAY tree_a[ x ].id, " PID:", tree_a[ x ].pid, " NAME:",tree_a[ x ].name
-	END FOR
+	END FOR}
 	CALL gl_progBar(3,0,"")
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -698,7 +698,7 @@ FUNCTION showBranch( g, ar, al, tf )
 	LET id1 = (g USING "&&&&&")
 	LET id2 = (ar USING "&&&&&")
 	LET id3 = (al USING "&&&&&")
-	DISPLAY "Id:",id1,"-",id2,"-",id3
+	--DISPLAY "Id:",id1,"-",id2,"-",id3
 
 	IF g =0 AND al = 0 AND ar = 0 THEN
 		FOR y = 1 TO tree_a.getLength()
@@ -901,7 +901,12 @@ FUNCTION getArtworkURL( l_album_id STRING )
 
 	-- redirection that happens causes a bug in gws library
 	-- failing back to wget
-	LET l_line = "unset LD_LIBRARY_PATH && wget -o tmp.out -O - "||l_url
+	IF os.path.pathSeparator() = ":" THEN -- Linux / Mac
+		LET l_line = "unset LD_LIBRARY_PATH && wget -o tmp.out -O - "||l_url
+	ELSE -- DOS
+		LET l_line = "wget.exe -o tmp.out -O - "||l_url
+	END IF
+	DISPLAY "Opening Pipe for: ",l_line
 	LET c = base.channel.create()
 	CALL c.openPipe(l_line,"r")
 	LET l_line = c.readLine()
@@ -1057,6 +1062,7 @@ FUNCTION getRestRequest( l_url STRING )
 		LET l_req = com.HttpRequest.Create(l_url)
 		CALL l_req.setMethod("GET")
 		CALL l_req.setVersion("1.1")
+--		CALL l_req.setCharset("UTF-8")
 		CALL l_req.setHeader("Content-Type", "application/json")
 		CALL l_req.setHeader("Accept", "application/json")
 		CALL l_req.setHeader("Expect","100-continue") --??
@@ -1083,73 +1089,6 @@ FUNCTION getRestRequest( l_url STRING )
 	IF l_err THEN RETURN NULL END IF
 
 	RETURN l_line
-END FUNCTION
-----------------------------------------------------------------------------
-FUNCTION getAlbumArtURL_old( art, alb )
-	DEFINE art, alb, url, line, img STRING
-	DEFINE x,y INTEGER
-	DEFINE tmp base.StringBuffer
-	DEFINE gotDiv, eof BOOLEAN
-	DEFINE soc base.channel
-	
-	LET tmp = base.stringBuffer.create()
-	CALL tmp.append(art||"+"||alb)
-	CALL tmp.replace(" ","+",0)
-	LET art = tmp.toString()
-
-	LET img = "noimage"
-	LET eof = FALSE
-
---	LET url = "http://albumart.org/index.php?srchkey=roger+waters+pros+cons&itempage=1&newsearch=1&searchindex=Music"
-	LET url = "/index.php?srchkey="||art||"&itempage=1&newsearch=1&searchindex=Music"
-	--DISPLAY CURRENT,": Attempting to fetch album art from:"
-	DISPLAY CURRENT," http://albumart.org",url
-
-	MESSAGE "getting album artwork..." CALL ui.Interface.refresh()
-	LET soc = base.channel.create()
-	TRY
-		CALL soc.openClientSocket("albumart.org",80,"ub",15)
-		--CALL s.openClientSocket("78.46.52.7",80,"ub",15)
-	CATCH
-		--DISPLAY CURRENT," :Failed to connect to albumart.org"
-		MESSAGE "getting album artwork - Failed" CALL ui.Interface.refresh()
-		LET getAlbumArt = FALSE
-		RETURN "noimagewa"
-	END TRY
-	--DISPLAY CURRENT,": Connected, sending GET ... "
-
-	CALL soc.writeLine("GET "||url||" HTTP/1.0\r")
-	CALL soc.writeLine("\r")
-
-	DISPLAY CURRENT,": Reading result ..."
-	LET gotDiv = FALSE
-	WHILE NOT eof
-		LET line = soc.readLine()
-		LET eof = soc.isEof()
---		DISPLAY line
-		LET x =  line.getIndexOf("main_left",1)
-		IF x > 1 THEN LET gotDiv = TRUE END IF
-		IF gotDiv THEN
-			LET x =  line.getIndexOf("img src=\"",1)
-			IF x > 1 THEN
-				LET y =  line.getIndexOf("\"",x+9)
-				LET img = line.subString(x+9,y-1)
-				DISPLAY "IMG:",img
-				EXIT WHILE
-			END IF
-		END IF
-	END WHILE
-	--DISPLAY CURRENT,": Done."
-
-	CALL soc.close()
-	IF img IS NULL OR img = "noimage" THEN
-		DISPLAY CURRENT,": getting album artwork - Failed"
-		MESSAGE "getting album artwork - Failed"
-	END IF
-	CALL ui.Interface.refresh()
---	LET img = "http://ecx.images-amazon.com/images/I/414M73KT6NL._SL160_.jpg"
-	DISPLAY CURRENT,": Found image:",img
-	RETURN img
 END FUNCTION
 --------------------------------------------------------------------------------
 --DB Functions.
