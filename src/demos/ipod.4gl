@@ -154,6 +154,8 @@ FUNCTION mainDialog()
 	LET m_prev_album = "."
 	DISPLAY CURRENT,": Starting main dialog."
 	DISPLAY "noimage" TO album_art
+	CALL fgl_setTitle("My Genero Music Tree Demo")
+
 	DIALOG ATTRIBUTES(UNBUFFERED)
 		DISPLAY ARRAY tree_a TO tree.*
 			BEFORE ROW
