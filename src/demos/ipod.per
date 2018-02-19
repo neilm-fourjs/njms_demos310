@@ -92,8 +92,11 @@ GRID
  [lab6|ai02                 ]
  [lab7|ai03                 ]
  [lab8|ai04 ]
- [chk                       ]
- [showbig    ]
+<                            >
+<G "Musicbrainz"             >
+ [mb                        ]
+ [                          ]
+ [                          ]
  [musicbrainz]
 }
 END -- GRID
@@ -106,6 +109,7 @@ GRID
  [                 ]
  [                 ]
  [                 ]
+ [chk      :showbig]
 }
 END -- GRID
 GRID
@@ -145,7 +149,6 @@ LABEL lab5 : lab5, TEXT=%"Genre:";
 LABEL lab6 : lab6, TEXT=%"Artist:";
 LABEL lab7 : lab7, TEXT=%"Album:";
 LABEL lab8 : lab8, TEXT=%"Tracks:";
-IMAGE aimg = FORMONLY.album_art, HEIGHT=250 PIXELS, WIDTH=250 PIXELS, AUTOSCALE, SIZEPOLICY=DYNAMIC, STYLE="noborder";
 EDIT s001 = FORMONLY.genres,STYLE="info";
 EDIT s002 = FORMONLY.artists,STYLE="info";
 EDIT s003 = FORMONLY.albums,STYLE="info";
@@ -155,9 +158,13 @@ EDIT ai02 = FORMONLY.artist, STYLE="info", SIZEPOLICY=DYNAMIC;
 EDIT ai03 = FORMONLY.album, STYLE="info", SIZEPOLICY=DYNAMIC;
 EDIT ai04 = FORMONLY.nooftracks, STYLE="info";
 LABEL s005 = FORMONLY.playtime,STYLE="info", SIZEPOLICY=DYNAMIC;
-CHECKBOX chk = FORMONLY.getAlbumArt, TEXT="Fetch Album Art", VALUECHECKED=1, VALUEUNCHECKED=0, NOT NULL;
-BUTTON showbig : showbig,TEXT="Show Album Cover";
+TEXTEDIT mb = FORMONLY.m_mb, STRETCH=BOTH, SCROLLBARS=NONE, NOENTRY;
 BUTTON musicbrainz : musicbrainz,TEXT="Musicbrainz";
+
+IMAGE aimg = FORMONLY.album_art, HEIGHT=250 PIXELS, WIDTH=250 PIXELS, AUTOSCALE, SIZEPOLICY=DYNAMIC, STYLE="noborder";
+CHECKBOX chk = FORMONLY.m_getAlbumArt, TEXT="Fetch Album Art", VALUECHECKED=1, VALUEUNCHECKED=0, NOT NULL;
+BUTTON showbig : showbig,TEXT="Show Album Cover";
+
 
 -- Tree
 EDIT f001 = FORMONLY.name, TITLE="Name", IMAGECOLUMN=image;
@@ -166,6 +173,7 @@ PHANTOM FORMONLY.pid;
 PHANTOM FORMONLY.id;
 PHANTOM FORMONLY.image;
 PHANTOM FORMONLY.expanded;
+PHANTOM FORMONLY.artist_name;
 
 -- Tracks
 PHANTOM FORMONLY.genre_key;
@@ -181,5 +189,5 @@ PHANTOM FORMONLY.img;
 
 END
 INSTRUCTIONS
-SCREEN RECORD tree ( name, year, pid, id, image, expanded )
+SCREEN RECORD tree ( FORMONLY.name THRU FORMONLY.artist_name )
 SCREEN RECORD tracks ( FORMONLY.genre_key THRU img )

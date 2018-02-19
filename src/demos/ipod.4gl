@@ -44,7 +44,8 @@ TYPE t_tree RECORD
 		pid STRING,
 		id STRING,
 		img STRING, 
-		expanded BOOLEAN
+		expanded BOOLEAN,
+		artist_name STRING
 	END RECORD
 
 TYPE t_tracks RECORD
@@ -88,7 +89,7 @@ DEFINE album_a DYNAMIC ARRAY OF RECORD
 DEFINE f om.SaxDocumentHandler
 
 DEFINE t_sec, t_min, t_hr, t_day INTEGER
-DEFINE getAlbumArt, workFromDB BOOLEAN
+DEFINE m_getAlbumArt, workFromDB BOOLEAN
 
 DEFINE m_album_art_artist DYNAMIC ARRAY OF RECORD
 		score SMALLINT,
@@ -97,6 +98,8 @@ DEFINE m_album_art_artist DYNAMIC ARRAY OF RECORD
 	END RECORD
 DEFINE m_album_art_cover STRING
 DEFINE m_musicbrainz_url STRING
+DEFINE m_mb STRING
+DEFINE m_artist, m_prev_artist, m_album, m_prev_album STRING
 MAIN
 	DEFINE l_file STRING
 
@@ -138,7 +141,7 @@ MAIN
 
 	CALL song_a.clear() -- This array not needed now, just used to create tree from xml.
 
-	LET getAlbumArt = TRUE
+	LET m_getAlbumArt = TRUE
 	CALL dispInfo()
 	CALL mainDialog()
 	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
@@ -147,23 +150,40 @@ END MAIN
 FUNCTION mainDialog()
 	DEFINE r_search, t_search, a_search, l_ret STRING
 	DEFINE n om.DomNode
-
+	LET m_prev_artist = "."
+	LET m_prev_album = "."
 	DISPLAY CURRENT,": Starting main dialog."
 	DISPLAY "noimage" TO album_art
 	DIALOG ATTRIBUTES(UNBUFFERED)
 		DISPLAY ARRAY tree_a TO tree.*
 			BEFORE ROW
-				MESSAGE "Current Row:",ARR_CURR()
 				IF tree_a.getLength() > 0 THEN
 					CALL loadTracks( tree_a[ arr_curr() ].id )
 				END IF
+				IF tree_a[ ARR_CURR() ].img IS NOT NULL THEN -- artist or album
+					LET m_artist = tree_a[ ARR_CURR() ].artist_name
+					IF m_artist != m_prev_artist THEN
+						LET m_mb = "Artist:",m_artist," (", getArtistID( m_artist ),")"
+						LET m_album = "."
+					END IF
+					LET m_prev_artist = m_artist
+					IF tree_a[ ARR_CURR() ].img != "user" THEN -- it's an album
+						LET m_album = tree_a[ ARR_CURR() ].name
+						IF m_prev_album != m_album AND m_getAlbumArt THEN
+							DISPLAY getAlbumArtURL( m_album ) TO album_art
+						END IF
+						LET m_prev_album = m_album
+						CALL ui.interface.refresh()
+					END IF
+				END IF
+				DISPLAY CURRENT, ":Current Row:",ARR_CURR()," Artist:",m_artist, " Album:",m_album
 			ON ACTION search
 				NEXT FIELD search
 			ON UPDATE
 				CALL upd_tree_item( arr_curr(), scr_line() )
 		END DISPLAY
 
-		INPUT BY NAME r_search, a_search, t_search ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
+		INPUT BY NAME r_search, a_search, t_search, m_mb ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
 			ON ACTION t_search
 				IF t_search.getLength() > 0 THEN
 					IF workFromDB THEN
@@ -202,11 +222,11 @@ FUNCTION mainDialog()
 				END IF
 		END DISPLAY
 
-		INPUT BY NAME getAlbumArt ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
+		INPUT BY NAME m_getAlbumArt ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
 			ON ACTION search
 				NEXT FIELD r_search
-			ON CHANGE getalbumart
-				IF NOT getAlbumArt THEN
+			ON CHANGE m_getAlbumArt
+				IF NOT m_getAlbumArt THEN
 					DISPLAY "noimage" TO album_art
 				END IF
 		END INPUT
@@ -670,11 +690,12 @@ FUNCTION buildTree()
 				LET tree_a[ t_cnt ].img = "cd16"
 				LET tree_a[ t_cnt ].name = album_a[y].album
 				LET tree_a[ t_cnt ].year = album_a[y].year
+				LET tree_a[ t_cnt ].artist_name = album_a[y].artist
 				LET tree_a[ t_cnt ].pid = (genre_a[x].genre_key USING "&&&&&")||"-"||(album_a[y].artist_key USING "&&&&&")
 				LET tree_a[ t_cnt ].id = (genre_a[x].genre_key USING "&&&&&")||"-"||(album_a[y].artist_key USING "&&&&&")||"-"||(album_a[y].album_key USING "&&&&&")
-
 				LET t_cnt = t_cnt + 1
 				LET tree_a[ a ].name = album_a[y].artist||" ("||album_cnt||")"
+				LET tree_a[ a ].artist_name = album_a[y].artist
 			END IF
 		END FOR
 		LET tree_a[ g ].name = genre_a[x].genre||" ("||genre_a[x].artist_cnt||")"
@@ -834,12 +855,6 @@ FUNCTION loadTracks( id )
 	END FOR
 
 	CALL dispRowDetails(g, art, alb)
-	DISPLAY "noimage" TO album_art
-	CALL ui.interface.refresh()
-
-	IF getAlbumArt AND alb > 0 THEN
-		DISPLAY getAlbumArtURL(artist_a[ art ].artist, album_a[ alb ].album ) TO album_art
-	END IF
 
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -861,20 +876,23 @@ FUNCTION setSelTrack( x )
 END FUNCTION
 ------------------------------------------------------------------------------------
 -- 
-FUNCTION getAlbumArtURL( l_art STRING, l_alb STRING )
-	DEFINE l_artist_id, l_album_id, l_img STRING
+FUNCTION getAlbumArtURL( l_alb STRING )
+	DEFINE l_album_id, l_img STRING
 	CALL gl_lib.gl_message("Getting album artwork...")
 	LET m_album_art_cover = NULL
 	LET m_musicbrainz_url = NULL
+	DISPLAY "noimage" TO album_art
 
-	LET l_artist_id = getArtistID( l_art )
-	IF l_artist_id IS NULL THEN RETURN "noimagewa" END IF
+	IF m_album_art_artist.getLength() = 0 THEN
+		RETURN "noimage"
+	END IF
 
 	LET l_album_id = getAlbumID( l_alb )
-	IF l_album_id IS NULL THEN RETURN "noimagewa" END IF
+	IF l_album_id IS NULL THEN RETURN "noimage" END IF
+	LET m_mb = m_mb.append("\nAlbum:"||l_alb||" ("||l_album_id||")")
 
 	LET l_img = getArtworkURL( l_album_id )
-	IF l_img IS NULL THEN RETURN "noimagewa" END IF
+	IF l_img IS NULL THEN RETURN "noimage" END IF
 
 	CALL gl_lib.gl_message("Album art found: "||l_img)
 	RETURN l_img
@@ -912,15 +930,18 @@ FUNCTION getArtworkURL( l_album_id STRING )
 	LET l_line = c.readLine()
 	CALL c.close()
 
-	--  LET l_line = getRestRequest( l_url  )
+--  LET l_line = getRestRequest( l_url  )
 
-	DISPLAY "Line:",l_line
-
-	IF l_line IS NULL THEN RETURN NULL END IF
+	IF l_line IS NULL THEN
+		RUN "cat tmp.out"
+		CALL gl_lib.gl_message("Failed to get album art!")
+		RETURN NULL
+	END IF
 
 	TRY
 		CALL util.JSON.parse(l_line,json_rec)
 	CATCH
+		DISPLAY "Line:",l_line
 		ERROR "JSON Error:"||STATUS||":"||ERR_GET(STATUS)
 		RETURN NULL
 	END TRY
@@ -954,7 +975,8 @@ FUNCTION getAlbumID( l_alb STRING )
 				title STRING
 			END RECORD
   	END RECORD
-	DEFINE x, l_score SMALLINT
+	DEFINE l_album_art_artist_id STRING
+	DEFINE x, y, l_score SMALLINT
 
 	FOR x = 1 TO m_album_art_artist.getLength()
 		LET l_url = 'http://musicbrainz.org/ws/2/release/?query="'||l_alb||'" AND arid:'||m_album_art_artist[x].id||'&fmt=json'
@@ -976,12 +998,24 @@ FUNCTION getAlbumID( l_alb STRING )
 		RETURN NULL
 	END IF
 
+	-- replace m_mb with actually artist for this album
+	LET l_album_art_artist_id = m_album_art_artist[x].id
+	LET m_mb = "Artist:", m_artist," (",l_album_art_artist_id,")"
+
+-- delete the album_art_artist entries that are for this album
+	FOR y = 1 TO m_album_art_artist.getLength()
+		IF y != x THEN
+			CALL m_album_art_artist.deleteElement(y)
+		END IF
+	END FOR
+
 	LET l_score = 0
 	FOR x = 1 TO l_result.count
 		IF l_result.releases[x].score > l_score THEN
 			LET l_score = l_result.releases[x].score
 			LET l_id = l_result.releases[x].id
 			LET l_title = l_result.releases[x].title
+			
 			IF l_score = 100 THEN EXIT FOR END IF
 		END IF
 		DISPLAY "Score: ",l_result.releases[x].score,":",l_result.releases[x].title
@@ -1028,6 +1062,7 @@ FUNCTION getArtistID( l_art STRING )
 		CALL gl_lib.gl_message("Artist not found!")
 		RETURN NULL
 	END IF
+	CALL m_album_art_artist.clear()
 
 	FOR x = 1 TO l_artist.count
 		IF l_artist.artists[x].score > 80 THEN
@@ -1037,7 +1072,7 @@ FUNCTION getArtistID( l_art STRING )
 		END IF
 	END FOR
 	CALL m_album_art_artist.sort("score",TRUE)
-	DISPLAY "Found Artists:"
+	DISPLAY "Found ",m_album_art_artist.getLength()," Artists:"
 	FOR x = 1 TO m_album_art_artist.getLength()
 		DISPLAY m_album_art_artist[ x ].score," : ",
 						m_album_art_artist[ x ].id, " : ",
@@ -1069,6 +1104,7 @@ FUNCTION getRestRequest( l_url STRING )
 		CALL l_req.doRequest()
 		LET l_resp = l_req.getResponse()
 	CATCH
+		LET m_getAlbumArt = FALSE
 		RETURN NULL
 	END TRY
 

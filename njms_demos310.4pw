@@ -396,7 +396,7 @@
       </Application>
     </Group>
     <Group environment="value:GDCUPDATEURL=http://^/gdcupdates,value:GDCUPDATEDIR=../gdcupdate,value:FGLAPPSERVER=8090" label="WS_Restful">
-      <Application binaryName="restful_srv" dependencies="654551740" id="366608832" label="restful_srv">
+      <Application binaryName="restful_srv" dependencies="654551740" id="-20198048" label="restful_srv">
         <File filePath="src/demos/restful_srv.4gl"/>
       </Application>
       <Application binaryName="ws_gdc_update_srv" dependencies="654551740,14000,-850398834" id="-580790058" label="ws_gdc_update_srv">
