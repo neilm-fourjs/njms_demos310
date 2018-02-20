@@ -21,7 +21,8 @@ DEFINE m_arr DYNAMIC ARRAY OF RECORD
 		pri DECIMAL(10,2),
 		qty SMALLINT,
 		tot DECIMAL(10,2),
-		chked STRING	
+		chkd STRING,
+		seld STRING
 	END RECORD
 
 MAIN
@@ -34,15 +35,78 @@ MAIN
 	DISPLAY FORM f
 
 	WHILE NOT int_flag
-
 		CALL poparr()
+		MENU "Choice" ATTRIBUTES(STYLE="dialog",
+				COMMENT="Display Array Demo", IMAGE="question")
+			COMMAND "Multiple Row Select #1"
+				CALL disp_arr1()
+				LET int_flag = FALSE
+
+			COMMAND "Multiple Row Select #2"
+				CALL disp_arr2()
+				LET int_flag = FALSE
+
+			COMMAND "Quit"
+				LET int_flag = TRUE
+		END MENU
+
+	END WHILE
+
+END MAIN
+-------------------------------------------------------------------------------
+-- Multi Row Selection - Method 1
+FUNCTION disp_arr1()
 		DISPLAY ARRAY m_arr TO arr.*  ATTRIBUTES(UNBUFFERED)
 			BEFORE DISPLAY
 				CALL DIALOG.setSelectionMode( "arr", TRUE )
-				--CALL DIALOG.setActionActive( "dialogtouched", TRUE )
+				CALL DIALOG.getForm().setElementHidden("formonly.chkd",TRUE)
+				CALL DIALOG.getForm().setElementHidden("formonly.seld",FALSE)
 
 			ON SELECTION CHANGE
 				CALL totals( DIALOG, "SELC" )
+
+			ON ACTION tot
+				CALL totals( DIALOG, "ACT " )
+
+-- Popualtte or clear the array
+			ON ACTION poparr CALL poparr()
+			ON ACTION clrarr
+				CALL m_arr.clear()
+				MESSAGE "Rows:",m_arr.getLength()
+
+-- Maintenance Triggers
+			ON APPEND CALL editRow(FALSE)
+			ON INSERT CALL editRow(FALSE)
+			ON UPDATE CALL editRow(TRUE)
+			ON DELETE
+				IF gl_lib.gl_winQuestion("Confirm","Delete this row?\n"||m_arr[arr_curr()].desc,"No","Yes|No","questions") = "No" THEN
+					LET int_flag = TRUE
+				END IF
+
+-- Default actions to leave the statement
+			ON ACTION close EXIT DISPLAY
+			ON ACTION quit EXIT DISPLAY
+
+		END DISPLAY
+END FUNCTION
+-------------------------------------------------------------------------------
+-- Multi Row Selection - Method 2
+FUNCTION disp_arr2()
+		DISPLAY ARRAY m_arr TO arr.*  ATTRIBUTES(UNBUFFERED, FOCUSONFIELD)
+			BEFORE DISPLAY
+				CALL DIALOG.getForm().setElementHidden("formonly.chkd",FALSE)
+				CALL DIALOG.getForm().setElementHidden("formonly.seld",TRUE)
+				--CALL DIALOG.setActionActive( "dialogtouched", TRUE )
+				CALL totals( DIALOG, "BD " )
+
+			BEFORE FIELD chkd
+				IF m_arr[ arr_curr() ].chkd = "fa-check-square-o" THEN
+					LET m_arr[ arr_curr() ].chkd = "fa-square-o"
+				ELSE
+					LET m_arr[ arr_curr() ].chkd = "fa-check-square-o"
+				END IF
+				CALL totals( DIALOG, "BF " )
+				NEXT FIELD seld
 
 			ON ACTION tot
 				CALL totals( DIALOG, "ACT " )
@@ -65,23 +129,11 @@ MAIN
 				END IF
 
 -- Default actions to leave the statement
-			ON ACTION close EXIT WHILE
-			ON ACTION quit EXIT WHILE
+			ON ACTION close EXIT DISPLAY
+			ON ACTION quit EXIT DISPLAY
 
 		END DISPLAY
-
-		MENU "Continue" ATTRIBUTES(STYLE="dialog",
-				COMMENT="Display Array "||IIF(int_flag,"Cancelled.","Accepted."),
-				IMAGE="question")
-			COMMAND "Again"
-				LET int_flag = FALSE
-			COMMAND "Quit"
-				LET int_flag = TRUE
-		END MENU
-
-	END WHILE
-
-END MAIN
+END FUNCTION
 -------------------------------------------------------------------------------
 #+ Edit / Enter row details
 #+
@@ -121,16 +173,19 @@ FUNCTION totals(d ui.Dialog, l_when STRING)
 	LET stot = 0
 	LET t = 0
 	FOR x = 1 TO m_arr.getLength()
-		IF d.isRowSelected( "arr",x ) OR d.getCurrentRow("arr") = x THEN
+		DISPLAY x, " isRowSelected:", d.isRowSelected( "arr",x ), ":", m_arr[x].chkd
+		IF d.isRowSelected( "arr",x ) 
+	--	OR d.getCurrentRow("arr") = x 
+		OR m_arr[x].chkd = "fa-check-square-o" THEN
 			LET stot = stot + m_arr[x].tot
-			LET m_arr[x].chked = "fa-check-square-o"
+			LET m_arr[x].seld = "fa-check-square-o"
 			LET t = t + 1
 		ELSE
-			LET m_arr[x].chked = "fa-square-o"
+			LET m_arr[x].seld = "fa-square-o"
 		END IF
 	END FOR
 	DISPLAY BY NAME stot, t
-	DISPLAY l_when," Curr Row:",d.getCurrentRow("arr")," Selected:",t
+	DISPLAY l_when," Curr Row:",d.getCurrentRow("arr")," Selected:",t, " isRowSelected:", d.isRowSelected( "arr",x ) 
 END FUNCTION
 -------------------------------------------------------------------------------
 #+ Populate the array with test data
@@ -146,7 +201,8 @@ FUNCTION poparr()
 		LET m_arr[ x ].qty = util.math.rand(10) + 1
 		LET m_arr[ x ].pri = util.math.rand(10) + 1 + (util.math.rand(99) / 100 )
 		LET m_arr[ x ].tot = (m_arr[ x ].pri * m_arr[ x ].qty)
-		LET m_arr[ x ].chked = FALSE
+		LET m_arr[ x ].chkd = "fa-square-o"
+		LET m_arr[ x ].seld = "fa-square-o"
 	END FOR
 	FOR x = 1 TO m_arr.getLength()
 		DISPLAY m_arr[x].*

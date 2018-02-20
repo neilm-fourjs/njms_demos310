@@ -61,7 +61,7 @@
 	</Style>
 
 	<Style name="*">
-		<StyleAttribute name="fontFamily" value="Century Gothic" />
+		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
 		<StyleAttribute name="fontSize" value="1.2em" />
 	</Style>
 	<Style name="Label">

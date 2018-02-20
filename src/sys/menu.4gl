@@ -8,7 +8,7 @@ IMPORT FGL new_acct
 
 &include "schema.inc"
 
-CONSTANT C_VER="3.1"
+CONSTANT C_VER="3.1b"
 CONSTANT C_TITLE="NJM's Demos"
 CONSTANT C_SPLASH="logo_dark"
 CONSTANT C_ICON="njm_demo_icon"
@@ -42,7 +42,7 @@ MAIN
 	IF m_mdi = "M" THEN LET m_mdi = "C" END IF -- if MDI container set so child programs are children
 
 	LET m_curMenu = 1
-  LET m_menus[m_curMenu] = "main"
+	LET m_menus[m_curMenu] = "main"
 	IF do_dbconnect_and_login() THEN
 		CALL gl_gdcupd.gl_gdcupd()
 		CALL do_menu()
@@ -111,25 +111,11 @@ FUNCTION do_menu()
 	DISPLAY BY NAME m_user
 
 	WHILE NOT int_flag
+		DISPLAY CURRENT,":Dialog Started."
 		DIALOG ATTRIBUTE(UNBUFFERED)
 			INPUT BY NAME l_dummy
-				ON ACTION about
-					CALL gl_lib.gl_about( C_VER )
-
-				ON ACTION exit 
-					IF quit() THEN LET int_flag = TRUE EXIT DIALOG END IF
-
-				ON ACTION close 
-					IF quit() THEN LET int_flag = TRUE EXIT DIALOG END IF
-
-				ON ACTION back
-					IF m_curMenu > 1 THEN
-						IF populate_menu(m_menus[m_curMenu - 1]) THEN
-							LET m_curMenu = m_curMenu - 1
-						END IF
-						LET int_flag = TRUE
-					END IF
-					EXIT DIALOG
+				BEFORE FIELD l_dummy
+					DISPLAY "BF Dummy"
 			END INPUT
 
 			DISPLAY ARRAY m_menu TO menu.* 
@@ -139,6 +125,35 @@ FUNCTION do_menu()
 				ON ACTION accept
 					EXIT DIALOG
 			END DISPLAY
+
+			BEFORE DIALOG
+				IF m_curMenu > 1 THEN
+					CALL DIALOG.setActionActive("back",TRUE)
+				ELSE
+					CALL DIALOG.setActionActive("back",FALSE)
+				END IF
+
+			ON ACTION about
+				CALL gl_lib.gl_about( C_VER )
+
+			ON ACTION exit 
+				IF quit() THEN LET int_flag = TRUE EXIT DIALOG END IF
+
+			ON ACTION close 
+				IF quit() THEN LET int_flag = TRUE EXIT DIALOG END IF
+
+			ON ACTION back
+				DISPLAY CURRENT,":BACK m_curMenu:",m_curMenu
+				IF m_curMenu > 1 THEN
+					IF populate_menu(m_menus[m_curMenu - 1]) THEN
+						LET m_curMenu = m_curMenu - 1
+					END IF
+					IF m_curMenu = 1 THEN
+						CALL DIALOG.setActionActive("back",FALSE)
+					END IF
+					NEXT FIELD l_dummy
+				END IF
+
 		END DIALOG
 		IF NOT int_flag THEN CALL process_menu_item( arr_curr() ) END IF
 	END WHILE
@@ -147,7 +162,7 @@ END FUNCTION
 FUNCTION process_menu_item( x SMALLINT )
 	DEFINE l_prog, l_args STRING
 
-	DISPLAY "process_menu_item:"||x||":",m_menu[x].m_type||"-"||m_menu[x].m_text
+	DISPLAY CURRENT,":Process_menu_item:"||x||":",m_menu[x].m_type||"-"||m_menu[x].m_text
 
 	CASE m_menu[ x ].m_type 
 		WHEN "C"
@@ -156,11 +171,9 @@ FUNCTION process_menu_item( x SMALLINT )
 					IF quit() THEN LET int_flag = TRUE RETURN END IF
 
 				WHEN "back" 
-					--DISPLAY "back:",m_curMenu
 					IF m_curMenu > 1 AND populate_menu(m_menus[m_curMenu - 1]) THEN
 						LET m_curMenu = m_curMenu - 1
 					END IF
-					--DISPLAY "back:",m_curMenu
 			END CASE
 
 		WHEN "F" 
@@ -197,7 +210,7 @@ FUNCTION populate_menu(l_mname LIKE sys_menus.m_id ) RETURNS BOOLEAN
 	DEFINE l_prev_key LIKE sys_menus.menu_key
 	DEFINE l_titl LIKE sys_menus.m_text
 
-	DISPLAY "menu:",l_mname," n:",m_curMenu
+	DISPLAY CURRENT,": Menu:",l_mname," m_curMenu:",m_curMenu
 	SELECT m_text INTO l_titl FROM sys_menus 
 		WHERE m_id = l_mname AND m_type = "T"
 	IF STATUS = NOTFOUND THEN 
@@ -219,9 +232,10 @@ FUNCTION populate_menu(l_mname LIKE sys_menus.m_id ) RETURNS BOOLEAN
 
 	LET l_prev_key  = -1
 	FOREACH cur INTO m_menu[ m_menu.getLength() + 1 ].*, l_role_name
+		--DISPLAY "Got Menu:", m_menu[ m_menu.getLength() ].m_text
 		IF l_role_name IS NOT NULL THEN
-			DISPLAY "Role:",l_role_name
-			{IF NOT checkUserRoles(m_user_id ,l_role_name, FALSE) THEN
+			{DISPLAY "Role:",l_role_name
+			IF NOT checkUserRoles(m_user_id ,l_role_name, FALSE) THEN
 				CALL m_menu.deleteElement( m_menu.getLength() )
 				CONTINUE FOREACH
 			END IF}

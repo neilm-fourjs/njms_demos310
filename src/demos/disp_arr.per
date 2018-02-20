@@ -35,9 +35,6 @@ TOOLBAR
 	ITEM accept
 	ITEM cancel
 	SEPARATOR
-	ITEM clrarr
-	ITEM poparr
-	SEPARATOR
 	ITEM insert
 	ITEM append
 	ITEM update
@@ -48,16 +45,16 @@ LAYOUT ( TEXT="2.40 Display Array Features.", STYLE="main2" )
 VBOX
 TABLE ( DOUBLECLICK=select, STYLE="disparr" )
 {
-[a001][a002             ][a003    ][a04][a005        ][a ]
-[a001][a002             ][a003    ][a04][a005        ][a ]
-[a001][a002             ][a003    ][a04][a005        ][a ]
-[a001][a002             ][a003    ][a04][a005        ][a ]
-[a001][a002             ][a003    ][a04][a005        ][a ]
-[a001][a002             ][a003    ][a04][a005        ][a ]
-[a001][a002             ][a003    ][a04][a005        ][a ]
-[a001][a002             ][a003    ][a04][a005        ][a ]
-[a001][a002             ][a003    ][a04][a005        ][a ]
-[a001][a002             ][a003    ][a04][a005        ][a ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
+[a001][a002             ][a003    ][a04][a005        ][a |b ]
                                    [t1 ][t2          ]
 }
 END -- TABLE
@@ -75,8 +72,8 @@ a002 = FORMONLY.desc,TITLE="Description",REQUIRED;
 a003 = FORMONLY.pri,TITLE="Price", NOT NULL,REQUIRED;
 a04  = FORMONLY.qty,TITLE="Qty", NOT NULL,REQUIRED;
 a005 = FORMONLY.tot,TITLE="Total", NOENTRY;
--- a = FORMONLY.chkd;
-IMAGE a = FORMONLY.chkd;
+IMAGE a = FORMONLY.chkd, TITLE="Chk";
+IMAGE b = FORMONLY.seld, TITLE="Sel";
 
 AGGREGATE t1 = FORMONLY.t1,AGGREGATETEXT="Totals:";
 AGGREGATE t2 = FORMONLY.t2;
@@ -87,4 +84,4 @@ t = FORMONLY.t;
 stot = FORMONLY.stot;
 BUTTON btot : tot,TEXT="Total Selected";
 INSTRUCTIONS
-SCREEN RECORD arr ( key THRU chkd );
+SCREEN RECORD arr ( key THRU seld );

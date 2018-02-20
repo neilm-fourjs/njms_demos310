@@ -10,7 +10,7 @@ IMPORT FGL gl_lib
 &include "schema.inc"
 
 TYPE f_new_account FUNCTION() RETURNS STRING
-CONSTANT C_VER="3.1"
+CONSTANT C_VER="3.1b"
 CONSTANT EMAILPROG = "sendemail.sh" --"fglrun sendemail.42r"
 CONSTANT c_sym = "!$%^&*,.;@#?<>" -- valid symbols for use in a password
 PUBLIC DEFINE m_logo_image STRING
@@ -53,6 +53,13 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 				CALL DIALOG.setActionHidden( "acct_new",TRUE )
 				CALL f.setElementHidden( "acct_new",TRUE )
 			END IF
+
+		AFTER FIELD l_login
+			IF l_login = "t" THEN
+				LET l_login = "test@test.com"
+				LET l_pass = "12test"
+				ACCEPT INPUT
+			END IF
 		AFTER INPUT
 			IF NOT int_flag THEN
 				IF NOT validate_login(l_login,l_pass) THEN
@@ -62,16 +69,20 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 			ELSE
 				LET l_login = "Cancelled"
 			END IF
+
 		ON ACTION acct_new
 			LET l_login = m_new_acc_func() -- create a new account
 			IF l_login IS NOT NULL THEN EXIT INPUT END IF
+
 		ON ACTION forgotten CALL forgotten(l_login)
+
 		ON ACTION testlogin
 			LET l_login = "test@test.com"
 			LET l_pass = "12test"
 			IF validate_login( l_login, l_pass ) THEN
 				EXIT INPUT
 			END IF
+
 		GL_ABOUT
 	END INPUT
 	CLOSE WINDOW login
