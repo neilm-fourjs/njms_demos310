@@ -341,6 +341,7 @@ FUNCTION enquire()
 	DEFINE f ui.Form
 	DEFINE l_arg4 STRING
 	DEFINE benchmark BOOLEAN
+	DEFINE l_stock_cat LIKE stock.stock_cat
 
 	DECLARE ordCur CURSOR FOR SELECT stock_code,pack_flag, price, quantity, disc_percent, 
 				disc_value, tax_code, tax_rate, tax_value, nett_value, gross_value
@@ -405,16 +406,31 @@ FUNCTION enquire()
 			LET detailArray_tree[ detailArray_tree.getLength() ].id = detailArray_tree.getLength()
 			LET detailArray_tree[ detailArray_tree.getLength() ].parentid = 0
 
-			SELECT description
-				INTO detailArray_tree[ detailArray_tree.getLength() ].description
+			SELECT description, stock_cat
+				INTO detailArray_tree[ detailArray_tree.getLength() ].description,
+						l_stock_cat
 				FROM stock WHERE stock_code = detailArray_tree[ detailArray_tree.getLength() ].stock_code
-
+{			CASE l_stock_cat
+				WHEN "ARMY"
+					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-bomb"
+				WHEN "FRUIT"
+					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-apply"
+				WHEN "GAMES"
+					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-dribbble"
+				WHEN "SUPPLIES"
+					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-pencil"
+				OTHERWISE}
+					DISPLAY "Cat:",l_stock_cat
+					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-square"
+			--END CASE
 			IF detailArray_tree[ detailArray_tree.getLength() ].pack_flag = "P" THEN
+				LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-th"
 				LET l_pack_id = detailArray_tree.getLength()
 				LET l_pack_qty = detailArray_tree[ detailArray_tree.getLength() ].quantity
 				FOREACH packCur USING detailArray_tree[ detailArray_tree.getLength() ].stock_code
 					INTO l_packcode,l_pack.*
 					LET detailArray_tree[ detailArray_tree.getLength() + 1 ].stock_code = l_pack.stock_code
+					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-genderless"
 					LET detailArray_tree[ detailArray_tree.getLength() ].description = l_pack.description
 					LET detailArray_tree[ detailArray_tree.getLength() ].quantity = l_pack.qty * l_pack_qty
 					LET detailArray_tree[ detailArray_tree.getLength() ].price = 0

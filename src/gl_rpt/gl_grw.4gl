@@ -166,8 +166,8 @@ FUNCTION glGRW_rptStart(l_filename STRING) RETURNS om.saxdocumenthandler
 		IF opts.r_fileName = "ASCII" THEN
 			DISPLAY "ascii_"||opts.r_orientation TO preview
 		ELSE
-			IF os.path.exists( os.path.rootName( m_imagePath||opts.r_filename )||".jpg" ) THEN
-				DISPLAY os.path.rootName( opts.r_filename )||".jpg" TO preview
+			IF os.path.exists( os.path.rootName( m_imagePath||opts.r_filename )||".png" ) THEN
+				DISPLAY os.path.rootName( opts.r_filename )||".png" TO preview
 			ELSE
 				DISPLAY "nopreview" TO preview
 			END IF
@@ -191,8 +191,8 @@ FUNCTION glGRW_rptStart(l_filename STRING) RETURNS om.saxdocumenthandler
 				CALL DIALOG.setFieldActive("r_outputfilename",FALSE)
 				DISPLAY "Before input."
 			ON CHANGE r_filename
-				IF os.path.exists( os.path.rootName( m_imagePath||opts.r_filename )||".jpg" ) THEN
-					DISPLAY os.path.rootName( opts.r_filename )||".jpg" TO preview
+				IF os.path.exists( os.path.rootName( m_imagePath||opts.r_filename )||".png" ) THEN
+					DISPLAY os.path.rootName( opts.r_filename )||".png" TO preview
 				ELSE
 					DISPLAY "nopreview" TO preview
 				END IF

@@ -147,10 +147,11 @@ inv_postc=ord_head.inv_postcode, tabIndex=19;
 -- Tree
 PHANTOM formonly.parentid;
 PHANTOM formonly.id;
+PHANTOM formonly.img;
 PHANTOM formonly.stock_code;
 --BUTTONEDIT stock_c=formonly.stock_code, action=getstock, tabIndex=20, title=%"P-Code", upShift, scroll, style="entry";
 PHANTOM stock.barcode;
-description=stock.description, tabIndex=22, title=%"Description", noEntry, scroll, style="noentry";
+description=stock.description, tabIndex=22, title=%"Description", noEntry, scroll, STYLE="noentry", IMAGECOLUMN=img;
 PHANTOM stock.pack_flag;
 price=stock.price, tabIndex=23, title=%"Price", noEntry, style="noentry";
 stock=formonly.stock, tabIndex=24, title=%"Stock", noEntry, style="noentry",HIDDEN;
@@ -181,5 +182,3 @@ END -- ATTRIBUTES
 
 INSTRUCTIONS
 SCREEN RECORD details(formonly.parentid THRU formonly.accepted)
-
-

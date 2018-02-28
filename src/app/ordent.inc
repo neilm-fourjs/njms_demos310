@@ -25,6 +25,7 @@ TYPE t_detailLine_tree
 	RECORD
 		parentid SMALLINT,
 		id SMALLINT,
+		img STRING,
 		stock_code LIKE ord_detail.stock_code,
 		barcode LIKE stock.barcode,
 		description LIKE stock.description,

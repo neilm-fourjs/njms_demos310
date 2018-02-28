@@ -82,6 +82,7 @@ FUNCTION glm_getRow(l_row INTEGER, l_msg BOOLEAN)
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
+-- NOTE: Need to find an alternative way to handle the SQL to stop sql-injection
 FUNCTION glm_SQLupdate(l_dialog ui.Dialog)
 	DEFINE l_sql, l_val, l_key STRING
 	DEFINE x SMALLINT
@@ -126,6 +127,7 @@ FUNCTION glm_SQLupdate(l_dialog ui.Dialog)
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
+-- NOTE: Need to find an alternative way to handle the SQL to stop sql-injection
 FUNCTION glm_SQLinsert(l_dialog ui.Dialog)
 	DEFINE l_sql, l_val STRING
 	DEFINE x SMALLINT

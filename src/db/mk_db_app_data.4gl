@@ -57,16 +57,16 @@ FUNCTION insert_app_data()
 	CALL insPackItem("GM04","GM06",1)
 	CALL insStock("GM04","E","Poker Set",NULL, 25.99, "AA", NULL)
 
-	CALL insStock("GM15",NULL,"Artist Sketch Pad",NULL, 2.49, "AA", NULL)
-	CALL insStock("GM16",NULL,"5 Pencils HB-B4",NULL, 3.49, "AA", NULL)
-	CALL insStock("GM17",NULL,"5 Pencils H4-HB",NULL, 3.49, "AA", NULL)
-	CALL insStock("GM18",NULL,"Artists Eraser",NULL, 1.49, "AA", NULL)
+	CALL insStock("ST15",NULL,"Artist Sketch Pad",NULL, 2.49, "AA", NULL)
+	CALL insStock("ST16",NULL,"5 Pencils HB-B4",NULL, 3.49, "AA", NULL)
+	CALL insStock("ST17",NULL,"5 Pencils H4-HB",NULL, 3.49, "AA", NULL)
+	CALL insStock("ST18",NULL,"Artists Eraser",NULL, 1.49, "AA", NULL)
 
-	CALL insPackItem("GM19","GM15",2)
-	CALL insPackItem("GM19","GM16",1)
-	CALL insPackItem("GM19","GM17",1)
-	CALL insPackItem("GM19","GM18",2)
-	CALL insStock("GM19","P", "Artists Starter Pack",NULL, 12.99, "AA", NULL)
+	CALL insPackItem("ST19","ST15",2)
+	CALL insPackItem("ST19","ST16",1)
+	CALL insPackItem("ST19","ST17",1)
+	CALL insPackItem("ST19","ST18",2)
+	CALL insStock("ST19","P", "Artists Starter Pack",NULL, 12.99, "AA", NULL)
 
 	CALL insStock("ST13",NULL,"Calculator",NULL, 9.99, "CC", NULL)
 	CALL insStock("ST02-10",NULL,"Envelope x 10",NULL, 2.25, "CC", NULL)
@@ -80,7 +80,6 @@ FUNCTION insert_app_data()
 	CALL insStock("WW10",NULL,"Flame Thrower",NULL, 1229.99, "DD", NULL)
 	CALL insStock("WW01-DES",NULL,"Combat Jacket - Desert",NULL, 59.99, "DD", NULL)
 	CALL insStock("WW01-JUN",NULL, "Combat Jacket - Jungle",NULL, 59.99, "DD", NULL)
-
 
 	CALL genStock( "../pics/products", "??", FALSE)
 
