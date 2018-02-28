@@ -308,7 +308,7 @@ MAIN
 
 			ON ACTION gl_lookup
 				IF NOT db_opened THEN
-					DATABASE m_dbname
+					CALL gldb_connect( m_dbname )
 					MESSAGE "DB Open:",m_dbname
 					LET db_opened = TRUE
 				END IF
@@ -477,14 +477,13 @@ END MAIN
 --------------------------------------------------------------------------------
 -- Do an input by name on the all the widgets.
 FUNCTION do1()
-	DEFINE val1,val2 CHAR(1)
---NOTE val1/2 are noentry fields.
+
 	INPUT BY NAME norm, normbe, completr, wordw, 
 								dec, formt, check, 
 								radio, combo, c_year, 
 								dateedit, timeedit, datetimeedit,
-								slider,spinedit,
-								val1,val2 ATTRIBUTES(UNBUFFERED, WITHOUT DEFAULTS)
+								slider,spinedit
+								 ATTRIBUTES(UNBUFFERED, WITHOUT DEFAULTS)
 
 		ON ACTION dialogTouched
 			MESSAGE "Touched!"
@@ -572,19 +571,17 @@ FUNCTION do1()
 
 		BEFORE FIELD check
 			DISPLAY 6 TO progress
-		AFTER FIELD check
-			DISPLAY check TO val1
 
 		ON CHANGE check
 			DISPLAY check TO val1
+			DISPLAY "Check:",check
 
 		BEFORE FIELD radio
 			DISPLAY 7 TO progress
-		AFTER FIELD radio
-			DISPLAY radio TO val2
 	
 		ON CHANGE radio
 			CALL set_combo(radio)
+			DISPLAY radio TO val2
 			DISPLAY combo TO val3
 
 		BEFORE FIELD combo 
