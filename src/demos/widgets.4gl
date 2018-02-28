@@ -215,10 +215,12 @@ MAIN
 				EXIT MENU
 	
 			COMMAND "inputa" "Do the inputs arrays"
+				CALL hide_item("Page","arrays",0)
 				LET func = "A"
 				EXIT MENU
 	
 			COMMAND "displaya" "Do the display arrays"
+				CALL hide_item("Page","arrays",0)
 				LET func = "D"
 				EXIT MENU
 
@@ -1724,14 +1726,16 @@ FUNCTION load_new_imgarr()
 	CALL c.setDelimiter("=")
 	WHILE NOT c.isEOF()
 		IF c.read( [ l_rec.* ] ) THEN
---			DISPLAY l_rec.fld1," Font:",l_rec.fld2
-			CALL m_imgrec.appendElement()
-			LET m_all_names[ m_all_names.getLength() + 1 ] = l_rec.fld1
-			LET m_imgrec[ m_imgrec.getLength() ].img = l_rec.fld1
-			LET m_imgrec[ m_imgrec.getLength() ].nam = l_rec.fld1
-			LET x = l_rec.fld2.getIndexOf(":",1)
-			LET m_imgrec[ m_imgrec.getLength() ].font= l_rec.fld2.subString(1,x-1)
-			LET m_imgrec[ m_imgrec.getLength() ].val = l_rec.fld2.subString(x+1, l_rec.fld2.getLength())
+		--	DISPLAY "load_new_imgarr:",l_rec.fld1," Font:",l_rec.fld2
+			IF l_rec.fld2 IS NOT NULL THEN
+				CALL m_imgrec.appendElement()
+				LET m_all_names[ m_all_names.getLength() + 1 ] = l_rec.fld1
+				LET m_imgrec[ m_imgrec.getLength() ].img = l_rec.fld1
+				LET m_imgrec[ m_imgrec.getLength() ].nam = l_rec.fld1
+				LET x = l_rec.fld2.getIndexOf(":",1)
+				LET m_imgrec[ m_imgrec.getLength() ].font= l_rec.fld2.subString(1,x-1)
+				LET m_imgrec[ m_imgrec.getLength() ].val = l_rec.fld2.subString(x+1, l_rec.fld2.getLength())
+			END IF
 		END IF
 	END WHILE
 	CALL c.close()
