@@ -140,6 +140,8 @@
   </Style>
 
   <Style name="Window">
+    <StyleAttribute name='fontSize' value='1.5em'/>
+
      <StyleAttribute name="windowType" value="normal" />
   </Style>
   <Style name="Window.main">

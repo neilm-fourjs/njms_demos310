@@ -1356,9 +1356,9 @@ FUNCTION disp_form()
 	--DISPLAY "Radio Group:" TO lab5
 	--DISPLAY "Date Edit:" TO lab6
 
-	LET norm = "Normal entry"
-	LET normbe = "hit here for lookup ->"
-	LET completr = "Auto Complete - image names"
+	LET norm = ""
+	LET normbe = ""
+	LET completr = ""
 	LET dec = 12.34
 	LET formt = "A1-12 ABXX"
 	LET wordw = "This is some text that as been wordwrapped to fit into this text box. The field in the program is 500 characters.",ASCII(10),"This is on a new line using ASCII(10)"

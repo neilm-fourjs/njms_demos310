@@ -409,10 +409,10 @@ BUTTON k1 : crt,TEXT="Key", IMAGE="key";
 BUTTON b : bar, text="Bar Chart";
 BUTTON p : pie, text="Pie Chart";
 
-EDIT f000 = FORMONLY.norm, SCROLL, TITLE="Title:", COMMENT="Enter error to see an error.";
+EDIT f000 = FORMONLY.norm, SCROLL, TITLE="Title:", COMMENT="Enter error to see an error.", PLACEHOLDER="Normal entry";
 -- BUTTONEDIT f001 = FORMONLY.normbe,image="circle", ACTION=lookup;
-BUTTONEDIT f001 = FORMONLY.normbe,ACTION=lookup;
-EDIT f01a = FORMONLY.completr,COMPLETER;
+BUTTONEDIT f001 = FORMONLY.normbe,ACTION=lookup, PLACEHOLDER="hit here for lookup ->";
+EDIT f01a = FORMONLY.completr,COMPLETER, PLACEHOLDER="Auto Complete - image names";
 
 TEXTEDIT f002 = FORMONLY.wordw, COMMENT="Type some text and see it wrap.";
 
