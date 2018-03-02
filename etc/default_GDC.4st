@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="ANSI_X3.4-1968"?>
 
 <StyleList>
+	<Style name=".grad1">
+		<StyleAttribute name="backgroundColor"         value="#F2F2F9" />
+		<StyleAttribute name="backgroundGradientType"  value="linear|top|bottom" />
+		<StyleAttribute name="backgroundGradientColor" value="#B7B7CC" />
+	</Style>
+	<Style name=".grad2">
+		<StyleAttribute name="backgroundColor"         value="#F2F2F9" />
+		<StyleAttribute name="backgroundGradientType"  value="linear|bottom|top" />
+		<StyleAttribute name="backgroundGradientColor" value="#B7B7CC" />
+	</Style>
+
 	<Style name=".hidden">
 		<StyleAttribute name="textColor" value="window" />
 		<StyleAttribute name="backgroundColor" value="window" />
@@ -62,7 +73,7 @@
 
 	<Style name="*">
 		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
-		<StyleAttribute name="fontSize" value="1.5em" />
+		<StyleAttribute name="fontSize" value="1.2em" />
 	</Style>
 	<Style name="Label">
 		<StyleAttribute name="textColor" value="darkblue" />

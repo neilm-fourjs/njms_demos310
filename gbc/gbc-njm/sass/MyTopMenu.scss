@@ -1,6 +1,11 @@
 
 .gbc_topMenuContainer {
 	border-bottom: 1px solid $gbc-secondary-text-color;
+	color: $gbc-secondary-text-color;
+}
+
+.gbc_TopMenuWidget .gbc_TopMenuGroupWidget:not(.disabled).touchHover {
+	color: gbc-secondary-background-color;
 }
 
 .gbc_ChoiceDropDownWidget > div:not(.disabled):hover, .gbc_ChoiceDropDownWidget > div:not(.disabled).current {

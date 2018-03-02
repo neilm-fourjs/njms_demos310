@@ -552,8 +552,8 @@ FUNCTION do1()
 --			DISPLAY "NextField"
 
 		BEFORE FIELD normbe
-			CALL setFieldValue("formonly.normbe","ButtonEdit")
-			LET normbe = "Testing"
+		--	CALL setFieldValue("formonly.normbe","ButtonEdit")
+		--	LET normbe = "Testing"
 			DISPLAY 2 TO progress
 
 		AFTER FIELD normbe

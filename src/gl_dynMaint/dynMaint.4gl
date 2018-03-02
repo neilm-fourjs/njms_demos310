@@ -24,7 +24,7 @@ CONSTANT C_PRGDESC = "Dynamic Maintenance Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT C_APP_SPLASH = "njm_demo_logo_256"
 CONSTANT C_APP_ICON = "njm_demo_icon"
-CONSTANT C_FIELDS_PER_PAGE = 15
+CONSTANT C_FIELDS_PER_PAGE = 10
 DEFINE m_dbname STRING
 DEFINE m_allowedActions CHAR(6)
 MAIN

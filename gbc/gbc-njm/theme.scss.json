@@ -18,6 +18,7 @@
   "gbc-primary-color"                    : "$mt-indigo-600",
   "gbc-primary-light-color"              : "$mt-indigo-900",    
 
+  "gbc-WindowWidget-header-color"        : "#7780b3",
   "gbc-secondary-background-color"       : "$mt-indigo-50",
   "gbc-secondary-text-color"             : "$mt-white",
   "gbc-secondary-color"                  : "$mt-white",
