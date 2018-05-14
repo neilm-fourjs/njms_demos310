@@ -266,10 +266,9 @@ FUNCTION populate_menu(l_mname LIKE sys_menus.m_id ) RETURNS BOOLEAN
 END FUNCTION
 --------------------------------------------------------------------------------
 -- split program and args to two variables.
-FUNCTION progArgs( l_prog STRING )
+FUNCTION progArgs( l_prog STRING ) RETURNS (STRING,STRING)
   DEFINE l_args STRING
   DEFINE y SMALLINT
-  DISPLAY "l_prog:",l_prog
   LET y = l_prog.getIndexOf(" ",1)
   LET l_args = " "
   IF y > 0 THEN

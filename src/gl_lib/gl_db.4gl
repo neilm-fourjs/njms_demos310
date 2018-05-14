@@ -1,6 +1,6 @@
 
 #+ General library code for Database access.
-#+
+#+ http://4js.com/online_documentation/fjs-fgl-manual-html/#fgl-topics/c_fgl_Connections_011.html
 
 IMPORT os
 IMPORT FGL gl_lib

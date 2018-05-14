@@ -191,6 +191,7 @@ FUNCTION signin()
 
 		BEFORE INPUT 
 			LET l_form = DIALOG.getForm()
+
 		ON ACTION newuser
 			CALL l_form.setElementHidden("newuser",FALSE)
 			CALL DIALOG.setFieldActive("l_em",FALSE)
@@ -201,6 +202,7 @@ FUNCTION signin()
 		AFTER FIELD l_pwd
 			LET l_password1 = l_pwd
 			LET l_password2 = l_pwd
+
 		AFTER FIELD l_email
 			SELECT customer_code,customer_name
 					FROM customer WHERE email = l_email
@@ -209,8 +211,10 @@ FUNCTION signin()
 				NEXT FIELD l_email
 			END IF
 			DISPLAY "" TO msg
+
 		AFTER FIELD l_password1
 			DISPLAY "" TO msg
+
 		AFTER INPUT
 			IF int_flag THEN EXIT INPUT END IF
 			IF l_newuser THEN
@@ -238,7 +242,7 @@ FUNCTION signin()
 			END IF
 
 			SELECT * INTO g_cust.* FROM customer
-			WHERE email = l_em AND web_passwd = l_pwd
+	  		WHERE email = l_em AND web_passwd = l_pwd
 			IF STATUS = NOTFOUND THEN
 				DISPLAY "Invalid Login!" TO msg
 				NEXT FIELD l_em
