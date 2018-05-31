@@ -23,13 +23,13 @@ MAIN
 	CALL gl_db.gldb_connect(NULL)
 	CALL mkdb_progress( "Connected to db okay" )
 	CALL mkdb_progress( SFMT("typ:%1 nam:%2 des:%3 src:%4 drv:%5 dir:%6 con:%7",
-							m_dbtyp,
-							m_dbnam,
-							m_dbdes,
-							m_dbsrc,
-							m_dbdrv,
-							m_dbdir,
-							m_dbcon) )
+							gl_db.m_dbtyp,
+							gl_db.m_dbnam,
+							gl_db.m_dbdes,
+							gl_db.m_dbsrc,
+							gl_db.m_dbdrv,
+							gl_db.m_dbdir,
+							gl_db.m_dbcon) )
 
 	IF l_arg = "SYS" OR l_arg = "ALL" THEN
 		CALL drop_sys()

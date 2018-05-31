@@ -1,5 +1,6 @@
 
 IMPORT FGL gl_lib
+IMPORT FGL gl_db
 IMPORT FGL lib_secure
 &include "schema.inc"
 
@@ -124,8 +125,8 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION addRole(l_type CHAR,l_name VARCHAR(30))
 
-	IF m_dbtyp = "pgs" THEN
-		INSERT INTO sys_roles VALUES(nextval('sys_roles_role_key_seq'),l_type,l_name,"Y")
+	IF gl_db.m_dbtyp = "pgs" THEN
+		INSERT INTO sys_roles ( role_type, role_name, active) VALUES(l_type,l_name,"Y")
 	ELSE
 		INSERT INTO sys_roles VALUES(m_rkey,l_type,l_name,"Y")
 	END IF
@@ -140,7 +141,7 @@ FUNCTION addMenu(
 		l_item    VARCHAR(80),
 		l_passw   VARCHAR(8) )
 
-	IF m_dbtyp = "pgs" THEN
+	IF gl_db.m_dbtyp = "pgs" THEN
 		INSERT INTO sys_menus VALUES(nextval('sys_menus_menu_key_seq'),l_id,l_pid,l_type,l_text,l_item,l_passw)
 	ELSE
 		INSERT INTO sys_menus VALUES(m_mkey,l_id,l_pid,l_type,l_text,l_item,l_passw)

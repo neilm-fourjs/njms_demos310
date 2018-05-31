@@ -63,9 +63,8 @@ FUNCTION gldb_connect( l_db STRING )
 	IF NOT l_fglprofile THEN -- no fglprofile setting to do it the long way.
 		CASE m_dbtyp
 			WHEN "pgs"
-				LET m_dbsrc = fgl_getEnv("PGSERVER") -- ???
 				LET m_dbdes = "PostgreSQL "||m_dbdrv.subString(7,9)
-				LET m_dbcon = "db+driver='"||m_dbdrv||"',source='"||m_dbsrc||"'"
+				LET m_dbcon = "db+driver='"||m_dbdrv||"',source='"||m_dbnam||"'"
 			WHEN "ifx"
 				LET m_dbsrc = fgl_getEnv("INFORMIXSERVER")
 				LET m_dbdes = "Informix "||m_dbdrv.subString(7,9)

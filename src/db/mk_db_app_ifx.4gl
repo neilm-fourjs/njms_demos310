@@ -59,7 +59,7 @@ FUNCTION ifx_create_app_tables()
 		img_url VARCHAR(100),
 		UNIQUE( barcode )
 	);
-	IF gl_db.m_dbtyp != "sqt" THEN
+	IF gl_db.m_dbtyp != "sqt" AND gl_db.m_dbtyp != "pgs" THEN
 		EXECUTE IMMEDIATE "ALTER TABLE stock ADD CONSTRAINT CHECK (free_stock >= 0)"
 	END IF
 	CREATE INDEX stk_idx ON stock ( description );
@@ -119,9 +119,10 @@ FUNCTION ifx_create_app_tables()
 		total_nett DECIMAL(12,2),
 		total_tax DECIMAL(12,2),
 		total_gross DECIMAL(12,2),
-		total_disc DECIMAL(12,3)
+		total_disc DECIMAL(12,3),
+			PRIMARY KEY (order_number)
 	);
-	IF gl_db.m_dbtyp != "sqt" THEN
+	IF gl_db.m_dbtyp != "sqt" AND gl_db.m_dbtyp != "pgs" THEN
 		EXECUTE IMMEDIATE "ALTER TABLE ord_head MODIFY( order_number SERIAL PRIMARY KEY )"
 	END IF
 --	CREATE UNIQUE INDEX oh_idx ON ord_head ( order_number )

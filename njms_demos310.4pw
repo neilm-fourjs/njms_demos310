@@ -91,7 +91,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=http://localhost/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE=$(ProjectDir)/etc/ifx/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=http://localhost/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE=$(ProjectDir)/etc/pgs/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -197,7 +197,7 @@
     </Group>
     <Group label="Database" language="Genero">
       <Library binaryName="Databases" id="1986" label="Databases">
-        <File filePath="etc/njm_demo310.4db"/>
+        <File filePath="../../../../../opt/fourjs/all/my_github/njms_demos310/etc/njm_demo310.4db"/>
         <File filePath="src/schema.inc"/>
       </Library>
       <Application binaryName="mk_db" commandLineArguments="ALL" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">
@@ -428,14 +428,14 @@
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/ifx"/>
     </Package>
-    <Package binaryName="njms_demos310_mys" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810" description="NJMs Demos" label="njms_demos310_mys" platform="Genero Application Server">
+    <Package binaryName="njms_demos310_pgs" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810" description="NJMs Demos" label="njms_demos310_pgs" platform="Genero Application Server">
       <DynamicProperty name="packageId" value="njmsdemos"/>
       <DynamicProperty name="packageLabel" value="NJMs Demos"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/bin" includedFiles="*.42?" label="bin" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="etc" recursive="false" sourceDirectory="$(ProjectDir)/etc"/>
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
-      <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/mys"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/pgs"/>
     </Package>
     <Package binaryName="njms_demos310_sqt" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810" description="NJMs Demos" label="njms_demos310_sqt" platform="Genero Application Server">
       <DynamicProperty name="packageId" value="njmsdemos"/>
