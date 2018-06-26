@@ -94,16 +94,6 @@ MAIN
 	END DIALOG
 END MAIN
 --------------------------------------------------------------------------------
--- A simple modal window
-FUNCTION win()
-	OPEN WINDOW win WITH FORM "matDesTest_modal"
-	MENU
-		ON ACTION close EXIT MENU
-		ON ACTION cancel EXIT MENU
-	END MENU
-	CLOSE WINDOW win
-END FUNCTION
---------------------------------------------------------------------------------
 -- Function just to cause everything to go inactive
 FUNCTION dummy()
 	MENU "dummy"
@@ -180,4 +170,14 @@ FUNCTION showForm2(l_formName STRING)
 		ON ACTION quit EXIT MENU
 	END MENU
 	CLOSE WINDOW aform
+END FUNCTION
+--------------------------------------------------------------------------------
+-- A simple modal window
+FUNCTION win()
+	OPEN WINDOW win WITH FORM "matDesTest_modal"
+	MENU
+		ON ACTION close EXIT MENU
+		ON ACTION cancel EXIT MENU
+	END MENU
+	CLOSE WINDOW win
 END FUNCTION

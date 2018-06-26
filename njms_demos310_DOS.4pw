@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="30a07" version="3.2">
+<Project defaultApplication="-1954675472" gstVersion="30a07" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -393,6 +393,11 @@
         <File filePath="src/utils/matDesTest.per"/>
         <File filePath="src/utils/matDesTest_forms.per"/>
         <File filePath="src/utils/matDesTest_modal.per"/>
+      </Application>
+      <Application binaryName="gre_test4rp" externalDependencies="libgre.42x" id="1852932452" label="gre_test4rp">
+        <File filePath="src/utils/filelist.per"/>
+        <File filePath="src/utils/gre_test4rp.4gl"/>
+        <File filePath="src/utils/gre_test4rp.per"/>
       </Application>
     </Group>
     <Group environment="value:GDCUPDATEURL=http://^/gdcupdates,value:GDCUPDATEDIR=../gdcupdate,value:FGLAPPSERVER=8090" label="WS_Restful">

@@ -1,0 +1,40 @@
+--
+ACTION DEFAULTS
+	ACTION accept ( TEXT="Run Report", IMAGE="play" )
+	ACTION cancel ( TEXT="Exit Program", IMAGE="quit" )
+END --  AD
+LAYOUT (TEXT="GRE Report from XML data")
+GRID
+{
+[l0               |f0                                    ]
+[l1               |f1                                    ]
+[l2               |f2                                    ]
+[l3               |f3                                    ]
+[l4               |f4] [l7             |f7               ]
+[l5               |f5] [l8             |f8      |l9  |f9 ]
+[l6               |f6                             |open  ]
+}
+END -- GRID
+
+ATTRIBUTES
+LABEL l0 : l0, TEXT="FontDir:",JUSTIFY=RIGHT;
+LABEL l1 : l1, TEXT="Input XML filename:",JUSTIFY=RIGHT;
+LABEL l2 : l2, TEXT="GRE 4RP filename:",JUSTIFY=RIGHT;
+LABEL l3 : l3, TEXT="Output Device:",JUSTIFY=RIGHT;
+LABEL l4 : l4, TEXT="Preview:",JUSTIFY=RIGHT;
+LABEL l5 : l5 TEXT="Merge Cells(XLS):",JUSTIFY=RIGHT;
+LABEL l6 : l6 TEXT="Target filename:",JUSTIFY=RIGHT;
+LABEL l7 : l7 TEXT="GRE Server:",JUSTIFY=RIGHT;
+LABEL l8 : l8 TEXT="Server Port:",JUSTIFY=RIGHT;
+LABEL l9 : l9 TEXT="Use?",JUSTIFY=RIGHT;
+f0 = FORMONLY.m_fontdir;
+BUTTONEDIT f1 = FORMONLY.l_inFile, NOT NULL,REQUIRED,ACTION=browse,IMAGE="fileopen";
+BUTTONEDIT f2 = FORMONLY.l_4rp, REQUIRED,ACTION=browse,IMAGE="fileopen";
+COMBOBOX f3 = FORMONLY.l_device,ITEMS=("SVG","PDF","XLS","XLSX","Image"), NOT NULL;
+CHECKBOX f4 = FORMONLY.l_preview, VALUECHECKED=1, VALUEUNCHECKED=0,NOT NULL;
+CHECKBOX f5 = FORMONLY.l_merge_cells, VALUECHECKED=1, VALUEUNCHECKED=0,NOT NULL;
+f6 = FORMONLY.l_targetname;
+f7 = FORMONLY.m_greserver;
+f8 = FORMONLY.m_greserverPort;
+CHECKBOX f9 = FORMONLY.m_gresrv, VALUECHECKED=1, VALUEUNCHECKED=0,NOT NULL;
+BUTTON open : open, IMAGE="open",TEXT="Open";

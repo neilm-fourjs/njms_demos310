@@ -115,7 +115,7 @@ FUNCTION do_menu()
 		DIALOG ATTRIBUTE(UNBUFFERED)
 			INPUT BY NAME l_dummy
 				BEFORE FIELD l_dummy
-					DISPLAY "BF Dummy"
+				--	DISPLAY "BF Dummy"
 			END INPUT
 
 			DISPLAY ARRAY m_menu TO menu.* 
@@ -176,7 +176,7 @@ FUNCTION process_menu_item( x SMALLINT )
 					END IF
 			END CASE
 
-		WHEN "F" 
+		WHEN "F" -- Run a standard 42r - with defaults args
 			CALL progArgs( m_menu[ x ].m_item ) RETURNING l_prog, l_args
 			CALL gl_logit("RUN:fglrun "||l_prog||" "||m_args||" "||l_args)
 			--DISPLAY "l_prog:",l_prog," m_args:",m_args, " l_args:",l_args
@@ -185,6 +185,13 @@ FUNCTION process_menu_item( x SMALLINT )
 				CALL gl_lib.gl_errPopup(SFMT(%"This program '%1' appears to not be installed!",l_prog))
 			END IF
 			RUN "fglrun "||l_prog||" "||m_args||" "||l_args WITHOUT WAITING
+
+		WHEN "S" -- Run a simple 42r - no args
+			CALL gl_logit("RUN:fglrun "||m_menu[ x ].m_item)
+			IF NOT os.path.exists( m_menu[ x ].m_item ) THEN
+				CALL gl_lib.gl_errPopup(SFMT(%"This program '%1' appears to not be installed!", m_menu[ x ].m_item))
+			END IF
+			RUN "fglrun "||m_menu[ x ].m_item WITHOUT WAITING
 
 		WHEN "P"
 			CALL progArgs( m_menu[ x ].m_item ) RETURNING l_prog, l_args
@@ -250,6 +257,7 @@ FUNCTION populate_menu(l_mname LIKE sys_menus.m_id ) RETURNS BOOLEAN
 			WHEN "M" LET m_menu[ m_menu.getLength() ].m_img = "fa-angle-double-right"
 			WHEN "P" LET m_menu[ m_menu.getLength() ].m_img = "fa-gear"
 			WHEN "F" LET m_menu[ m_menu.getLength() ].m_img = "fa-gear"
+			WHEN "S" LET m_menu[ m_menu.getLength() ].m_img = "fa-gear"
 		END CASE
 	END FOREACH
 	LET m_menu[m_menu.getLength()].m_type = "C"
