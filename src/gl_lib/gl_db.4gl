@@ -70,6 +70,8 @@ FUNCTION gldb_connect( l_db STRING )
 				LET m_dbdes = "Informix "||m_dbdrv.subString(7,9)
 				LET m_dbsrc = fgl_getEnv("INFORMIXSERVER")
 				LET m_dbcon = l_db
+			WHEN "mdb"
+				LET l_lockMode = FALSE
 			WHEN "sqt"
 				IF NOT os.path.EXISTS( m_dbdir ) THEN
 					IF NOT os.path.mkdir( m_dbdir ) THEN
@@ -97,11 +99,15 @@ FUNCTION gldb_connect( l_db STRING )
 		LET l_msg = "Connection to database failed\nDB:",m_dbnam,"\nSource:",m_dbsrc, "\nDriver:",m_dbdrv,"\n",
 			 "Status:",SQLCA.SQLCODE,"\n",SQLERRMESSAGE
 		DISPLAY l_msg
-		IF m_cre_db AND m_dbtyp = "ifx" AND SQLCA.SQLCODE = -329 THEN
+		IF m_cre_db AND SQLCA.SQLCODE = -329 AND m_dbtyp = "ifx" THEN
 			CALL gldb_ifx_createdb()
 			LET l_msg = NULL
 		END IF
-		IF m_cre_db AND m_dbtyp = "sqt" AND SQLCA.SQLCODE = -6372 THEN
+		IF m_cre_db AND SQLCA.SQLCODE = -6372 AND ( m_dbtyp = "mdb" OR m_dbtyp = "mys" ) THEN
+			CALL gldb_mdb_createdb()
+			LET l_msg = NULL
+		END IF
+		IF m_cre_db AND SQLCA.SQLCODE = -6372 AND m_dbtyp = "sqt" THEN
 			CALL gldb_sqt_createdb(m_dbdir, m_dbsrc)
 			LET l_msg = NULL
 		END IF
@@ -145,6 +151,20 @@ FUNCTION gldb_sqt_createdb(l_dir STRING, l_file STRING)
 	CALL c.close()
 	LET m_cre_db = FALSE -- avoid infintate loop!
 	CALL gldb_connect( m_dbnam )
+END FUNCTION
+--------------------------------------------------------------------------------
+-- create file and folder for the empty sqlite db and then call the db_connect again
+FUNCTION gldb_mdb_createdb()
+	DEFINE l_sql_stmt STRING
+	LET l_sql_stmt =  "CREATE DATABASE "||m_dbnam||" default character set utf8mb4 collate utf8mb4_unicode_ci"
+	TRY
+		EXECUTE IMMEDIATE l_sql_stmt
+	CATCH
+		IF NOT gldb_sqlStatus( __LINE__, "gl_db", l_sql_stmt ) THEN
+			CALL gl_lib.gl_exitProgram(STATUS,"DB Creation Failed!")
+		END IF
+	END TRY
+	LET m_cre_db = FALSE -- avoid in
 END FUNCTION
 --------------------------------------------------------------------------------
 -- create a new informix database and then call the db_connect again

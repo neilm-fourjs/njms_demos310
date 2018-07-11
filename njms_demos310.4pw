@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="-2121135278" gstVersion="30a09" version="3.2">
+<Project defaultApplication="1554019048" gstVersion="30a09" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -94,7 +94,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE=$(ProjectDir)/etc/pgs/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,file:FGLPROFILE_mys=$(ProjectDir)/etc/mys/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -165,6 +165,9 @@
       </Library>
       <Library binaryName="profile_ifx" id="-1049145178" label="profile_ifx">
         <File filePath="etc/ifx/profile"/>
+      </Library>
+      <Library binaryName="profile_mdb" id="1811942608" label="profile_mdb">
+        <File filePath="etc/mdb/profile"/>
       </Library>
       <Library binaryName="profile_mys" id="1722734712" label="profile_mys">
         <File filePath="etc/mys/profile"/>
@@ -454,6 +457,16 @@
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/sqt"/>
+    </Package>
+    <Package binaryName="njms_demos310_mdb" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810" description="NJMs Demos" label="njms_demos310_mdb" platform="Genero Application Server">
+      <DynamicProperty name="packageId" value="njmsdemos"/>
+      <DynamicProperty name="packageLabel" value="NJMs Demos"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/bin" includedFiles="*.42?" label="bin" recursive="false" sourceDirectory="$(ProjectDir)/bin"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/db" includedFiles="*.db" label="db" recursive="false" sourceDirectory="$(ProjectDir)/db"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="etc" recursive="false" sourceDirectory="$(ProjectDir)/etc"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/mdb"/>
     </Package>
   </Group>
   <Group label="Tests" language="Genero">

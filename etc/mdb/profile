@@ -1,0 +1,8 @@
+
+# MariaDB
+dbi.default.driver = "dbmmdb"
+
+dbi.database.njm_demo310.mdb.config = "/etc/mysql/my.cnf"
+
+dbi.database.njm_demo310.username = "neilm"
+dbi.database.njm_demo310.password = "12neilm"

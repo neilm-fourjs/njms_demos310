@@ -6,7 +6,7 @@ FUNCTION ifx_create_system_tables()
 	CALL mkdb_progress( "Creating system tables..." )
 
 	CREATE TABLE sys_users (
-		user_key     SERIAL NOT NULL,
+		user_key    SERIAL NOT NULL,
 		salutation  VARCHAR(60),
 		forenames   VARCHAR(60) NOT NULL,
 		surname     VARCHAR(60) NOT NULL,
@@ -31,10 +31,10 @@ FUNCTION ifx_create_system_tables()
 	);
 
 	CREATE TABLE sys_roles (
-		role_key SERIAL,
+		role_key  SERIAL,
 		role_type CHAR(1),
 		role_name VARCHAR(30),
-		active CHAR(1)
+		active    CHAR(1)
 	);
 
 	CREATE TABLE sys_menus (
@@ -50,7 +50,7 @@ FUNCTION ifx_create_system_tables()
 	CREATE TABLE sys_menu_roles (
 		menu_key INTEGER,
 		role_key INTEGER,
-		active CHAR(1),
+		active   CHAR(1),
 			PRIMARY KEY (menu_key, role_key)
 	);
 

@@ -93,6 +93,13 @@ FUNCTION ifx_create_app_tables()
 		email VARCHAR(60)
 	);
 
+	CREATE TABLE disc (
+		stock_disc CHAR(2),
+		customer_disc CHAR(2),
+		disc_percent DECIMAL(5,2),
+			PRIMARY KEY (stock_disc, customer_disc)
+	);
+
 	CREATE TABLE ord_head (
 		order_number SERIAL,
 		order_datetime DATETIME YEAR TO SECOND,
@@ -119,13 +126,14 @@ FUNCTION ifx_create_app_tables()
 		total_nett DECIMAL(12,2),
 		total_tax DECIMAL(12,2),
 		total_gross DECIMAL(12,2),
-		total_disc DECIMAL(12,3),
-			PRIMARY KEY (order_number)
+		total_disc DECIMAL(12,3)
 	);
-	IF gl_db.m_dbtyp != "sqt" AND gl_db.m_dbtyp != "pgs" THEN
-		EXECUTE IMMEDIATE "ALTER TABLE ord_head MODIFY( order_number SERIAL PRIMARY KEY )"
-	END IF
---	CREATE UNIQUE INDEX oh_idx ON ord_head ( order_number )
+	CASE gl_db.m_dbtyp 
+		WHEN "ifx"
+			EXECUTE IMMEDIATE "ALTER TABLE ord_head MODIFY( order_number SERIAL PRIMARY KEY )"
+		WHEN "pgs"
+			EXECUTE IMMEDIATE "ALTER TABLE ord_head ADD PRIMARY KEY (order_number)"
+	END CASE
 
 	CREATE TABLE ord_payment (
 		order_number INTEGER,
@@ -155,15 +163,9 @@ FUNCTION ifx_create_app_tables()
 		nett_value DECIMAL(10,2),
 		gross_value DECIMAL(10,2),
 			PRIMARY KEY (order_number, line_number),
-			FOREIGN KEY (order_number) REFERENCES ord_head
+			FOREIGN KEY (order_number) REFERENCES ord_head(order_number)
 	);
 
-	CREATE TABLE disc (
-		stock_disc CHAR(2),
-		customer_disc CHAR(2),
-		disc_percent DECIMAL(5,2),
-			PRIMARY KEY (stock_disc, customer_disc)
-	);
 
 	CALL mkdb_progress( "Done." )
 END FUNCTION
