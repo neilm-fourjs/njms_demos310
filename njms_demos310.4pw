@@ -94,7 +94,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,file:FGLPROFILE_mys=$(ProjectDir)/etc/mys/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sql=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/image2font.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -169,8 +169,8 @@
       <Library binaryName="profile_mdb" id="1811942608" label="profile_mdb">
         <File filePath="etc/mdb/profile"/>
       </Library>
-      <Library binaryName="profile_mys" id="1722734712" label="profile_mys">
-        <File filePath="etc/mys/profile"/>
+      <Library binaryName="profile_pgs" id="-1248408576" label="profile_pgs">
+        <File filePath="etc/pgs/profile"/>
       </Library>
       <Library binaryName="profile_sqt" id="-1222789264" label="profile_sqt">
         <File filePath="etc/sqt/profile"/>
