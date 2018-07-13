@@ -25,9 +25,6 @@ FUNCTION insert_app_data()
 	INSERT INTO customer VALUES(3,"Gerrit Enterprises Co.","Gerrit Le Roux","glr@glr-ent.com","12gerrit",3,3, "AA", 8000, 0 ,0)
 
 	IF gl_db.m_dbtyp = "pgs" OR gl_db.m_dbtyp = "snc" THEN
---		INSERT INTO addresses VALUES(nextval('addresses_rec_key_seq'),"The Road","The Small Town","Sussex","U.K.","","BN12 XYZ","GBR")
---		INSERT INTO addresses VALUES(nextval('addresses_rec_key_seq'),"Some Road","The Large Town","London","U.K.","","SW12","GBR")
---		INSERT INTO addresses VALUES(nextval('addresses_rec_key_seq'),"The Street","The Village","Surry","U.K.","","RH1 XYZ","GBR")
 		INSERT INTO addresses ( line1, line2, line3, line4, line5, postal_code, country_code ) 
 			VALUES ("The Road","The Small Town","Sussex","U.K.","","BN12 XYZ","GBR")
 		INSERT INTO addresses ( line1, line2, line3, line4, line5, postal_code, country_code )

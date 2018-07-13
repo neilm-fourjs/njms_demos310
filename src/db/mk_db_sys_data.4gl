@@ -143,7 +143,6 @@ FUNCTION addMenu(
 		l_passw   VARCHAR(8) )
 
 	IF gl_db.m_dbtyp = "pgs" OR gl_db.m_dbtyp = "snc" THEN
---		INSERT INTO sys_menus VALUES(nextval('sys_menus_menu_key_seq'),l_id,l_pid,l_type,l_text,l_item,l_passw)
 		INSERT INTO sys_menus (m_id, m_pid, m_type, m_text, m_item, m_passw) VALUES(l_id,l_pid,l_type,l_text,l_item,l_passw)
 	ELSE
 		INSERT INTO sys_menus VALUES(m_mkey,l_id,l_pid,l_type,l_text,l_item,l_passw)
