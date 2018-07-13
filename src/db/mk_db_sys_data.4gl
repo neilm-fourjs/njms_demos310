@@ -115,12 +115,32 @@ FUNCTION mk_demo_account()
 	LET l_pass_hash = lib_secure.glsec_genPasswordHash( l_login_pass, l_salt, l_hash_type )
 	LET l_dte = TODAY+365
 	TRY
-		INSERT INTO sys_users VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",
-			l_hash_type, "not stored", l_salt, l_pass_hash, l_dte)
+		IF gl_db.m_dbtyp = "pgs" OR gl_db.m_dbtyp = "snc" THEN
+			INSERT INTO sys_users 
+					( salutation ,
+						forenames  ,
+						surname    ,
+						position   ,
+						email      ,
+						comment    ,
+						acct_type  ,
+						active     ,
+						forcepwchg ,
+						hash_type	,
+						login_pass ,
+						salt       ,
+						pass_hash  ,
+						pass_expire)
+				VALUES("Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",	l_hash_type, "not stored", l_salt, l_pass_hash, l_dte)
+		ELSE
+			INSERT INTO sys_users 
+				VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",	l_hash_type, "not stored", l_salt, l_pass_hash, l_dte)
+		END IF
 -- NOTE: we don't store the clear text password
 		CALL mkdb_progress( "Test Account Inserted: "||l_email||" / "||l_login_pass||" with "||l_hash_type||" hash." )
 	CATCH
 		CALL mkdb_progress( "Insert test account failed!\n"||STATUS||":"||SQLERRMESSAGE )
+		EXIT PROGRAM
 	END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
