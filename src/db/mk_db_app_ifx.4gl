@@ -59,7 +59,7 @@ FUNCTION ifx_create_app_tables()
 		img_url VARCHAR(100),
 		UNIQUE( barcode )
 	);
-	IF gl_db.m_dbtyp != "sqt" AND gl_db.m_dbtyp != "pgs" THEN
+	IF gl_db.m_dbtyp != "sqt" AND gl_db.m_dbtyp != "pgs" AND gl_db.m_dbtyp != "snc" THEN
 		EXECUTE IMMEDIATE "ALTER TABLE stock ADD CONSTRAINT CHECK (free_stock >= 0)"
 	END IF
 	CREATE INDEX stk_idx ON stock ( description );
@@ -100,6 +100,19 @@ FUNCTION ifx_create_app_tables()
 			PRIMARY KEY (stock_disc, customer_disc)
 	);
 
+	CREATE TABLE ord_payment (
+		order_number INTEGER,
+		payment_type CHAR(1),
+		del_type CHAR(1),
+		card_type CHAR(1),
+		card_no CHAR(20),
+		expires_m SMALLINT,
+		expires_y SMALLINT,
+		issue_no SMALLINT,
+		payment_amount DECIMAL(12,2),
+		del_amount DECIMAL(6,2)
+	);
+
 	CREATE TABLE ord_head (
 		order_number SERIAL,
 		order_datetime DATETIME YEAR TO SECOND,
@@ -133,20 +146,9 @@ FUNCTION ifx_create_app_tables()
 			EXECUTE IMMEDIATE "ALTER TABLE ord_head MODIFY( order_number SERIAL PRIMARY KEY )"
 		WHEN "pgs"
 			EXECUTE IMMEDIATE "ALTER TABLE ord_head ADD PRIMARY KEY (order_number)"
+		WHEN "snc"
+			EXECUTE IMMEDIATE "ALTER TABLE ord_head ADD PRIMARY KEY (order_number)"
 	END CASE
-
-	CREATE TABLE ord_payment (
-		order_number INTEGER,
-		payment_type CHAR(1),
-		del_type CHAR(1),
-		card_type CHAR(1),
-		card_no CHAR(20),
-		expires_m SMALLINT,
-		expires_y SMALLINT,
-		issue_no SMALLINT,
-		payment_amount DECIMAL(12,2),
-		del_amount DECIMAL(6,2)
-	);
 
 	CREATE TABLE ord_detail (
 		order_number INTEGER,
@@ -165,7 +167,6 @@ FUNCTION ifx_create_app_tables()
 			PRIMARY KEY (order_number, line_number),
 			FOREIGN KEY (order_number) REFERENCES ord_head(order_number)
 	);
-
 
 	CALL mkdb_progress( "Done." )
 END FUNCTION

@@ -779,9 +779,11 @@ FUNCTION gl_getLogDir() RETURNS STRING
 			CALL gl_errPopup(SFMT(%"Failed to make logdir '%1.\nProgram aborting",m_logDir))
 			CALL gl_exitProgram(200,"log dir issues")
 		ELSE
-			IF NOT os.path.chrwx( m_logDir,  ( (7 *64) + (7 * 8) + 5 )  ) THEN
-				CALL gl_errPopup(SFMT(%"Failed set permissions on logdir '%1'",m_logDir))
-				CALL gl_exitProgram(201,"log permissions")
+			IF os.path.pathSeparator() = ":" THEN -- Linux/Unix/Mac/Android - ie not MSDOS!
+				IF NOT os.path.chrwx( m_logDir,  ( (7 *64) + (7 * 8) + 5 )  ) THEN
+					CALL gl_errPopup(SFMT(%"Failed set permissions on logdir '%1'",m_logDir))
+					CALL gl_exitProgram(201,"log permissions")
+				END IF
 			END IF
 		END IF
 	END IF
