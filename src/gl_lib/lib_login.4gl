@@ -88,7 +88,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 	CLOSE WINDOW login
 
 	CALL  gl_lib.gl_logIt("after input for login:"||l_login)
-
+	CALL fgl_setEnv("APPUSER",l_login)
 	RETURN l_login
 END FUNCTION
 --------------------------------------------------------------------------------

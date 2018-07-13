@@ -206,7 +206,7 @@
     </Group>
     <Group label="Database" language="Genero">
       <Library binaryName="Databases" id="1986" label="Databases">
-        <File filePath="../../../../../opt/fourjs/all/my_github/njms_demos310/etc/njm_demo310.4db"/>
+        <File filePath="etc/njm_demo310.4db"/>
         <File filePath="src/schema.inc"/>
       </Library>
       <Application binaryName="mk_db" commandLineArguments="ALL" dependencies="1986,-1463189462,14000,726830537" id="1521876251" label="mk_db">

@@ -40,6 +40,8 @@ MAIN
 
 	CALL gl_db.gldb_connect(NULL)
 
+	DISPLAY "Env AppUser:",fgl_getEnv("APPUSER")
+
 	IF NOT app_lib.checkUserRoles(m_this_user_key,"System Admin",TRUE) THEN
 		EXIT PROGRAM
 	END IF
