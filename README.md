@@ -40,3 +40,28 @@ The xcf files are:
 * njmweb2 - Web Ordering demo using default GBC - 'pagedScrollGrid'
 * njmweb2_c - Web Ordering demo using custom GBC - 'pagedScrollGrid'
 * njmdemodb - Create the demo database
+
+
+Databases:
+* Informix
+* PostgreSQL
+* Maria DB
+* SQL Server
+
+
+For PostgreSQL
+        sudo -u postgres createuser <appuser>
+        sudo -u postgres createdb njm_demo310
+        sudo -u postgres psql
+        psql (9.6.7)
+        Type "help" for help.
+
+        postgres=# grant all privileges on database njm_demo310 to <appuser>;
+        GRANT
+        postgres=# \q
+
+
+For MariaDB added a user of 'dbuser' to connect to the database.
+MariaDB [(none)]> CREATE USER 'dbuser'@'%';
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON *.* TO 'dbuser'@'%';
+

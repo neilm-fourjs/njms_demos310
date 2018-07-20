@@ -1,5 +1,5 @@
 {
-  "theme-font-family"      : "\"Helvetica\",\"Century Gothic\",\"Droid Sans\", sans-serif",
+  "theme-font-family"      : "'\"Century Gothic\",\"Droid Sans\", sans-serif'",
 
   "gbc-font-size-ratio"    : "1",
   "gbc-margin-ratio"       : "0.6",

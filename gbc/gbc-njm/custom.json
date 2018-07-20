@@ -1,0 +1,37 @@
+{
+  "compile": {
+    "mode": "cdev",
+    "customization": "customization/default"
+  },
+  "themes": [{
+      "name": "default",
+      "title": "NJM Blue",
+      "uses": ["platform/desktop"]
+    },
+    {
+      "name": "elite",
+      "title": "NJM Elite",
+      "uses": ["platform/desktop", "colors/elite"]
+    },
+    {
+      "name": "hivis",
+      "title": "NJM High Visibility",
+      "uses": ["platform/desktop", "colors/hivis"]
+    },
+    {
+      "name": "gbc_default",
+      "title": "GBC Default",
+      "uses": ["platform/desktop", "colors/gbc_default"]
+    },
+    {
+      "name": "default_mobile",
+      "title": "Default",
+      "uses": ["platform/mobile"]
+    },
+    {
+      "name": "highcontrast_mobile",
+      "title": "High contrast",
+      "uses": ["platform/mobile", "colors/highcontrast"]
+    }
+  ]
+}

@@ -4,7 +4,7 @@ GBCBASE=$(PWD)
 include makefile.inc
 
 BASE=$(shell pwd)
-dirs=gbc-njm gbc-elite gbc-teal gbc-gc gbc-hivis
+dirs=gbc-njm gbc-teal gbc-gc
 
 all: build/gbc-current subdirs
 
