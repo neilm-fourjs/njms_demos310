@@ -26,7 +26,8 @@ FUNCTION init_form(
 	l_tab STRING,
 	l_key_fld SMALLINT,
 	l_fld_per_page SMALLINT, 
-	l_fields DYNAMIC ARRAY OF t_fields
+	l_fields DYNAMIC ARRAY OF t_fields,
+	l_style STRING
 	)
 	DEFINE l_n om.DomNode
 	DEFINE l_nl om.NodeList
@@ -44,7 +45,7 @@ FUNCTION init_form(
 		MESSAGE "Using:",m_formName
 	CATCH
 		MESSAGE "Using a Dynamic Form."
-		CALL mk_form()
+		CALL mk_form(l_style)
 		RETURN
 	END TRY
 	DISPLAY FORM dynMaint 
@@ -63,7 +64,7 @@ FUNCTION init_form(
 	CALL ui.Interface.getRootNode().writeXml("aui_"||l_tab||"_static.xml")
 END FUNCTION
 --------------------------------------------------------------------------------
-PRIVATE FUNCTION mk_form()
+PRIVATE FUNCTION mk_form(l_style STRING)
 	DEFINE l_n_form, l_n_grid,l_n_formfield, l_n_widget, l_folder, l_container om.DomNode
 	DEFINE x, y, l_posy, l_first_fld, l_last_fld, l_len, l_maxlablen SMALLINT
 	DEFINE l_pages DECIMAL(3,1)
@@ -71,10 +72,10 @@ PRIVATE FUNCTION mk_form()
 
 	DISPLAY "Creating Form ..."
 	LET l_n_form = m_w.getNode()
-	CALL l_n_form.setAttribute("style","main2")
+	CALL l_n_form.setAttribute("style",l_style)
 	LET m_f = m_w.createForm(m_formName)
 	LET l_n_form = m_f.getNode()
-	CALL l_n_form.setAttribute("windowStyle","main2")
+	CALL l_n_form.setAttribute("windowStyle",l_style)
 
 	FOR x = 1 TO m_fields.getLength()
 		CALL setProperties(x)

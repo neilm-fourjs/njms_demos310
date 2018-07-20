@@ -64,6 +64,13 @@
 		<StyleAttribute name="tabbedContainer" value="yes" />
 		<StyleAttribute name="tabbedContainerCloseMethod" value="both" />
 	</Style>
+	<Style name="Window.centered">
+		<StyleAttribute name="windowType" value="normal" />
+		<StyleAttribute name="actionPanelPosition" value="none" />
+		<StyleAttribute name="ringMenuPosition" value="none" />
+		<StyleAttribute name="sizable" value="no" />
+		<StyleAttribute name="position" value="center" />
+	</Style>
 	<Style name="Window.main2">
 		<StyleAttribute name="windowType" value="normal" />
 		<StyleAttribute name="actionPanelPosition" value="none" />

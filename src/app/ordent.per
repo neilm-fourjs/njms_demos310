@@ -50,12 +50,11 @@ ToolBar ToolBar1
 	Item help
 END -- ToolBar
 
-LAYOUT(TEXT=%"Order Entry",windowStyle="main2", VERSION="$Id: ordent2.per 763 2012-03-16 09:56:09Z neilm $")
-VBox VBox1 --(splitter)
-VBOX vb2
-Grid head
+LAYOUT(TEXT=%"Order Entry",windowStyle="main2")
+VBOX VBox1 (STYLE="border")
+GRID head
 {
- [welcome                                               ]
+ [: :welcome                                                    : :]
  [cust|custome][cus1|customer_name                      ]
  [ordn|order_n][ordd|order_datetime    ][due |reqduedate][op  |user]
  [ordr|order_ref                                        ]
@@ -78,7 +77,6 @@ GRID addr
     <                             ><                           >
 }
 END -- GRID
-END -- Vb2
 TABLE details
 {
 [stock_c|description      |price      |stock|quan|disc_p|disc_v|tax_c|tax_r|tax_valu|gross_va|a]

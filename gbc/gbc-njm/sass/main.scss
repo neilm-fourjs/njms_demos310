@@ -44,7 +44,7 @@ body {
 }
 
 .gbc_style_heading {
-	border-radius: 25px 25px 25px 25px;
+	border-radius: 15px 15px 15px 15px;
 	font-size: 1.2em;
 	font-weight: bold;
 	padding: 1px 20px 1px 20px;
@@ -71,4 +71,14 @@ body {
 
 .gbc_style_maxheight {
 	height: 100% !important;
+}
+
+.gbc_style_formborder {
+	border-radius: 15px 15px 15px 15px;
+	border: solid 1px;
+	padding: 5px;
+}
+
+.gbc_ImageWidget.stretch:not(.gbc_fixedSvg) {
+	overflow: visible;
 }

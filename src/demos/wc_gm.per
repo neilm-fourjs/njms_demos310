@@ -6,7 +6,7 @@ ACTION DEFAULTS
 	ACTION cancel (TEXT="Exit", IMAGE="quit")
 END -- ACTIONS
 
-LAYOUT (TEXT="Google Map Demo", STYLE="main2")
+LAYOUT (TEXT="Google Map Demo", STYLE="main2", MINWIDTH=120, MINHEIGHT=40)
 GRID
 {
 [quit    : :logo                                    : :about    ]
@@ -46,7 +46,7 @@ EDIT lat = FORMONLY.lat;
 EDIT lng = FORMONLY.lng;
 TEXTEDIT indata = FORMONLY.in_data, NOENTRY, STYLE="noborder",SCROLLBARS=NONE;
 WEBCOMPONENT wc_gm = FORMONLY.wc_gm, 
-	STRETCH=BOTH, SCROLLBARS=NONE, HEIGHT=640 PIXELS, WIDTH=640 PIXELS,
+	STRETCH=BOTH, SCROLLBARS=NONE, HEIGHT=800 PIXELS, WIDTH=800 PIXELS,
 	COMPONENTTYPE="gm", 	PROPERTIES=(lat="0",lng="0"); 
 
 IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder";

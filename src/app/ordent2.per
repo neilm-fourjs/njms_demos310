@@ -50,23 +50,22 @@ ToolBar ToolBar1
 	Item help
 END -- ToolBar
 
-LAYOUT(TEXT=%"Order Entry",windowStyle="main2", VERSION="$Id: ordent2.per 763 2012-03-16 09:56:09Z neilm $")
-VBox VBox1 --(splitter)
-VBOX vb2
-Grid head
+LAYOUT(TEXT=%"Order Entry",windowStyle="centered")
+VBOX VBox1 (STYLE="formborder")
+GRID head (STYLE="center")
 {
- [welcome                                               ]
- [cust|custome][cus1|customer_name                      ]
- [ordn|order_n][ordd|order_datetime    ][due |reqduedate][op  |user]
- [ordr|order_ref                                        ]
+ [: :welcome                                                   : :]
+ [cust|custome][cus1|customer_name                                ]
+ [ordn|order_n][ordd|order_datetime    ][due |reqduedate|op  |user]
+ [ordr|order_ref                                                  ]
 }
 END
-GRID addr2 (HIDDEN)
+GRID addr2 (HIDDEN, STYLE="center")
 {
 [y] Show Addresses ...
 }
 END 
-GRID addr
+GRID addr (STYLE="center")
 {
 [x] <G del                        ><G inv                      >
      [del_address1               ]  [inv_address1             ]
@@ -78,7 +77,6 @@ GRID addr
     <                             ><                           >
 }
 END -- GRID
-END -- Vb2
 TREE details (PARENTIDCOLUMN=parentid, IDCOLUMN=id)
 {
 [description      |price      |stock|quan|disc_p|disc_v|tax_c|tax_r|tax_valu|gross_va|a]
@@ -93,9 +91,10 @@ TREE details (PARENTIDCOLUMN=parentid, IDCOLUMN=id)
 [description      |price      |stock|quan|disc_p|disc_v|tax_c|tax_r|tax_valu|gross_va|a]
 }
 END -- TREE
-Grid Grid1
+Grid Grid1 (STYLE="center")
 {
  [ordt|item|ord1|total_|ord2|total1|ord3|total2]    [ord4|total_gross  |ord5|total_nett   ]
+ [""]
 }
 END
 END -- VBox

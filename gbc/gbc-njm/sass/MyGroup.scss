@@ -4,8 +4,7 @@
 }
 
 .gbc_GroupWidgetContainer {
-	/*border-radius: 25px 25px 0px 0px;*/
-	border-radius: 25px 25px 25px 25px;
+	border-radius: 15px 15px 15px 15px;
 	border: 1px solid $gbc-primary-medium-color;
 	box-shadow: none;
 	padding: 5px;
@@ -17,7 +16,7 @@
 	.gbc_GroupWidgetContent {
 
 		.gbc_GroupTitleWidget:not(.empty) {
-			border-radius: 25px 25px 0px 0px;
+			border-radius: 15px 15px 0px 0px;
 			font-size: 1.2em;
 			font-weight: bold;
 			padding: 1px;

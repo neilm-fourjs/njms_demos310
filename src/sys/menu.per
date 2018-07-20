@@ -34,6 +34,7 @@ GRID (STYLE="menu grad1")
  [: :lb:f001                  :d  :]
  [:     :back  :close :about:     :]
  [sp1:logo                     :sp2]
+     [                         ]
 }
 END -- GRID
 END -- VBOX
@@ -53,9 +54,6 @@ IMAGE hsp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
 --IMAGE vsp1 : spacer, IMAGE="fa-fw", STRETCH=Y, STYLE="noborder";
 --IMAGE vsp2 : spacer, IMAGE="fa-fw", STRETCH=Y, STYLE="noborder";
 
-IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
-IMAGE logo = FORMONLY.logo, SIZEPOLICY=INITIAL,STRETCH=NONE, STYLE="noborder center";
-IMAGE sp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
 LABEL titl = FORMONLY.l_titl,STYLE="heading",JUSTIFY=CENTER;
 
 TABLE menu : menu, STYLE="menu oneclick";
@@ -77,6 +75,10 @@ d = FORMONLY.l_dummy, STYLE="hidden",INVISIBLE,SAMPLE=".";
 BUTTON back : back, TEXT=%"Back", IMAGE="fa-arrow-circle-left";
 BUTTON close : close, TEXT="Quit", IMAGE="fa-power-off";
 BUTTON about : about, TEXT="About", IMAGE="help";
+
+IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
+IMAGE logo = FORMONLY.logo, SIZEPOLICY=INITIAL,STRETCH=NONE, STYLE="noborder center";
+IMAGE sp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
 
 INSTRUCTIONS
 SCREEN RECORD menu [12] ( menu_key THRU m_img )
