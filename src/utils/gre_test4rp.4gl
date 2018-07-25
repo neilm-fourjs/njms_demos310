@@ -2,10 +2,10 @@
 -- ie output from : fgl_report_createProcessLevelDataFile
 --	LET l_handler = fgl_report_createProcessLevelDataFile(l_targetName) -- Debug output
 --
--- Arg1: 	 l_inFile
--- Arg2:	 l_4rp
--- Arg3:	 l_device
--- Arg4:	 l_targetName
+-- Arg1: 	 l_inFile : XML data file produced by fgl_report_createProcessLevelDataFile
+-- Arg2:	 l_4rp : The report designed file
+-- Arg3:	 l_device : Output to - SVG / PDF etc
+-- Arg4:	 l_targetName : File name for output if not using preview option. Setting this will default to not preview!
 
 IMPORT os
 	DEFINE m_fontdir, m_greserver,m_greserverPort, m_fglserver STRING
