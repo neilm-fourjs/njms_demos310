@@ -32,7 +32,7 @@ END -- GRID
 GRID (STYLE="menu grad1")
 {
  [: :lb:f001                  :d  :]
- [:     :back  :close :about:     :]
+ [:  :back :close:logout:about:   :]
  [sp1:logo                     :sp2]
      [                         ]
 }
@@ -74,6 +74,7 @@ d = FORMONLY.l_dummy, STYLE="hidden",INVISIBLE,SAMPLE=".";
 --BUTTON accept : accept, TEXT=%"Select", IMAGE="fa-arrow-circle-right";
 BUTTON back : back, TEXT=%"Back", IMAGE="fa-arrow-circle-left";
 BUTTON close : close, TEXT="Quit", IMAGE="fa-power-off";
+BUTTON logout : logout, TEXT="Quit + Logout", IMAGE="fa-power-off";
 BUTTON about : about, TEXT="About", IMAGE="help";
 
 IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";

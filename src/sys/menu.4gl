@@ -136,6 +136,10 @@ FUNCTION do_menu()
 			ON ACTION about
 				CALL gl_lib.gl_about( C_VER )
 
+			ON ACTION logout
+				CALL lib_login.logout( )
+				IF quit() THEN LET int_flag = TRUE EXIT DIALOG END IF
+
 			ON ACTION exit 
 				IF quit() THEN LET int_flag = TRUE EXIT DIALOG END IF
 

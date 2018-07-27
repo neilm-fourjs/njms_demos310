@@ -22,6 +22,7 @@ IMPORT os
 IMPORT security
 IMPORT util
 IMPORT FGL gl_lib
+IMPORT FGL gl_encrypt
 
 -- For Genero 3.10 we are going to default to BCRYPT
 &define G310
@@ -356,34 +357,44 @@ FUNCTION glsec_updCreds(l_typ STRING, l_user STRING, l_pass STRING) RETURNS BOOL
 	RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION glsec_save_session(l_id, l_user)
-	DEFINE l_id, l_user, l_val STRING
+FUNCTION glsec_save_session(l_id STRING, l_user STRING)
+	DEFINE l_val STRING
 	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN END IF
-	LET l_val = CURRENT YEAR TO MINUTE||"|"||l_user||"|"||security.RandomGenerator.CreateUUIDString()
-	CALL gl_lib.gl_logIt(SFMT("Save Session id=%1 val=%2",l_id,l_val))
-	CALL ui.Interface.frontCall("localStorage", "setItem", [l_id, l_val], [])
+	CALL gl_encrypt.gl_encryptInit("../etc/publickey.crt","../etc/private.key")
+	LET l_val =  gl_encrypt.gl_encrypt(CURRENT YEAR TO MINUTE||"|"||l_user)
+	IF l_val IS NOT NULL THEN
+		CALL gl_lib.gl_logIt(SFMT("Save Session id=%1 val=%2",l_id,l_val))
+		CALL ui.Interface.frontCall("localStorage", "setItem", [l_id, l_val], [])
+	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION glsec_get_session(l_id, l_age)
-	DEFINE l_id, l_val STRING
+FUNCTION glsec_get_session(l_id STRING, l_age INTEGER) RETURNS STRING
+	DEFINE l_val STRING
 	DEFINE l_ts DATETIME YEAR TO MINUTE
-	DEFINE l_age SMALLINT
-	DEFINE x,y SMALLINT
-	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN NULL,NULL END IF
+	DEFINE x SMALLINT
+	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN NULL END IF
+	CALL gl_encrypt.gl_encryptInit("../etc/publickey.crt","../etc/private.key")
 	CALL ui.Interface.frontCall("localStorage", "getItem", l_id,l_val)
 	CALL gl_lib.gl_logIt(SFMT("Get Session id=%1 val=%2",l_id,l_val))
-	IF l_val IS NULL THEN RETURN NULL,NULL END IF
+	IF l_val IS NULL THEN RETURN NULL END IF
+	LET l_val = gl_encrypt.gl_decrypt( l_val )
+--	CALL gl_lib.gl_logIt(SFMT("Get Session val=%1",l_val))
 	LET x = l_val.getIndexOf("|",1)
-	LET y = l_val.getIndexOf("|",x+1)
 	LET l_ts = l_val.subString(1,x-1)
-	IF l_ts IS NULL THEN RETURN NULL,NULL END IF
+	IF l_ts IS NULL THEN RETURN NULL END IF
 	--DISPLAY "TS:",l_ts," CURR:",CURRENT YEAR TO MINUTE, " Calcd:",( CURRENT - l_age UNITS MINUTE )
 	IF ( CURRENT - l_age UNITS MINUTE ) > l_ts THEN
-		RETURN "expired",NULL
+		RETURN "expired"
 	END IF
-	LET l_id = l_val.subString(x+1,y-1)
-	LET l_val = l_val.subString(y+1,l_val.getLength())
-	RETURN l_id, l_val
+	LET l_id = l_val.subString(x+1,l_val.getLength())
+	RETURN l_id
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION glsec_remove_session(l_id STRING)
+	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN END IF
+
+	CALL ui.Interface.frontCall("localStorage", "removeItem", [l_id], [])
+
 END FUNCTION
 --------------------------------------------------------------------------------
 

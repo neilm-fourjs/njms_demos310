@@ -111,6 +111,10 @@ PUBLIC FUNCTION sql_checkEmail(l_email VARCHAR(80)) RETURNS BOOLEAN
 	RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
+PUBLIC FUNCTION logout()
+	CALL lib_secure.glsec_remove_session( C_SESSION_KEY )
+END FUNCTION
+--------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
 --  PRIVATE FUNCTIONS
@@ -333,8 +337,8 @@ PRIVATE FUNCTION pass_ok( l_pass LIKE sys_users.login_pass ) RETURNS BOOLEAN
 END FUNCTION
 --------------------------------------------------------------------------------
 PRIVATE FUNCTION checkForSession()
-	DEFINE l_id, l_uuid STRING
-	CALL lib_secure.glsec_get_session(C_SESSION_KEY, C_SESSION_MINS) RETURNING l_id, l_uuid
+	DEFINE l_id STRING
+	LET l_id = lib_secure.glsec_get_session(C_SESSION_KEY, C_SESSION_MINS)
 	IF l_id = "expired" THEN
 		CALL gl_winMessage(%"Login",%"Your Session has expired.","information")
 		RETURN NULL
