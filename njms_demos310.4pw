@@ -343,6 +343,7 @@
         <File filePath="src/gl_lib/genero_lib.inc"/>
         <File filePath="src/gl_lib/gl_db.4gl"/>
         <File filePath="src/gl_lib/gl_db.inc"/>
+        <File filePath="src/gl_lib/gl_encrypt.4gl"/>
         <File filePath="src/gl_lib/gl_gdcupd.4gl"/>
         <File filePath="src/gl_lib/gl_lib.4gl"/>
         <File filePath="src/gl_lib/gl_lib_aui.4gl"/>
@@ -489,6 +490,9 @@
     <Application binaryName="test_app" dependencies="14000" id="-110946196" label="test_app">
       <File filePath="test_app/test_app.4gl"/>
       <File filePath="test_app/test_form.per"/>
+    </Application>
+    <Application binaryName="test_encrypt" dependencies="14000" id="1714291644" label="test_encrypt">
+      <File filePath="test_app/test_encrypt.4gl"/>
     </Application>
   </Group>
 </Project>
