@@ -356,6 +356,36 @@ FUNCTION glsec_updCreds(l_typ STRING, l_user STRING, l_pass STRING) RETURNS BOOL
 	RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
+FUNCTION glsec_save_session(l_id, l_user)
+	DEFINE l_id, l_user, l_val STRING
+	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN END IF
+	LET l_val = CURRENT YEAR TO MINUTE||"|"||l_user||"|"||security.RandomGenerator.CreateUUIDString()
+	CALL gl_lib.gl_logIt(SFMT("Save Session id=%1 val=%2",l_id,l_val))
+	CALL ui.Interface.frontCall("localStorage", "setItem", [l_id, l_val], [])
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION glsec_get_session(l_id, l_age)
+	DEFINE l_id, l_val STRING
+	DEFINE l_ts DATETIME YEAR TO MINUTE
+	DEFINE l_age SMALLINT
+	DEFINE x,y SMALLINT
+	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN NULL,NULL END IF
+	CALL ui.Interface.frontCall("localStorage", "getItem", l_id,l_val)
+	CALL gl_lib.gl_logIt(SFMT("Get Session id=%1 val=%2",l_id,l_val))
+	IF l_val IS NULL THEN RETURN NULL,NULL END IF
+	LET x = l_val.getIndexOf("|",1)
+	LET y = l_val.getIndexOf("|",x+1)
+	LET l_ts = l_val.subString(1,x-1)
+	IF l_ts IS NULL THEN RETURN NULL,NULL END IF
+	--DISPLAY "TS:",l_ts," CURR:",CURRENT YEAR TO MINUTE, " Calcd:",( CURRENT - l_age UNITS MINUTE )
+	IF ( CURRENT - l_age UNITS MINUTE ) > l_ts THEN
+		RETURN "expired",NULL
+	END IF
+	LET l_id = l_val.subString(x+1,y-1)
+	LET l_val = l_val.subString(y+1,l_val.getLength())
+	RETURN l_id, l_val
+END FUNCTION
+--------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
 --  PRIVATE FUNCTIONS

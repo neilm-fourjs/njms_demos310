@@ -13,6 +13,8 @@ TYPE f_new_account FUNCTION() RETURNS STRING
 CONSTANT C_VER="3.1b"
 CONSTANT EMAILPROG = "sendemail.sh" --"fglrun sendemail.42r"
 CONSTANT c_sym = "!$%^&*,.;@#?<>" -- valid symbols for use in a password
+CONSTANT C_SESSION_KEY = "NJMDEMOSESSION"
+CONSTANT C_SESSION_MINS = 20 -- how long betweeen logins.
 PUBLIC DEFINE m_logo_image STRING
 PUBLIC DEFINE m_new_acc_func f_new_account
 --------------------------------------------------------------------------------
@@ -27,6 +29,9 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 	DEFINE l_login, l_pass STRING
 	DEFINE l_allow_new BOOLEAN
 	DEFINE f ui.Form
+
+	LET l_login = checkForSession() -- check to see if they have already logged in
+	IF l_login IS NOT NULL THEN RETURN l_login END IF
 
 	LET l_allow_new = TRUE
 	IF m_new_acc_func IS NULL THEN LET l_allow_new = FALSE END IF
@@ -86,6 +91,10 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 		GL_ABOUT
 	END INPUT
 	CLOSE WINDOW login
+
+	IF l_login IS NOT NULL AND l_login != "Cancelled" THEN
+		CALL lib_secure.glsec_save_session(C_SESSION_KEY, l_login)
+	END IF
 
 	CALL  gl_lib.gl_logIt("after input for login:"||l_login)
 	CALL fgl_setEnv("APPUSER",l_login)
@@ -321,4 +330,14 @@ PRIVATE FUNCTION pass_ok( l_pass LIKE sys_users.login_pass ) RETURNS BOOLEAN
 	END IF
 
 	RETURN TRUE
+END FUNCTION
+--------------------------------------------------------------------------------
+PRIVATE FUNCTION checkForSession()
+	DEFINE l_id, l_uuid STRING
+	CALL lib_secure.glsec_get_session(C_SESSION_KEY, C_SESSION_MINS) RETURNING l_id, l_uuid
+	IF l_id = "expired" THEN
+		CALL gl_winMessage(%"Login",%"Your Session has expired.","information")
+		RETURN NULL
+	END IF
+	RETURN l_id	
 END FUNCTION
