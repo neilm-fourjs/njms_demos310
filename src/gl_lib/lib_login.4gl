@@ -8,9 +8,8 @@ IMPORT FGL gl_lib
 
 &include "genero_lib.inc"
 &include "schema.inc"
-
+&include "app.inc"
 TYPE f_new_account FUNCTION() RETURNS STRING
-CONSTANT C_VER="3.1b"
 CONSTANT EMAILPROG = "sendemail.sh" --"fglrun sendemail.42r"
 CONSTANT c_sym = "!$%^&*,.;@#?<>" -- valid symbols for use in a password
 CONSTANT C_SESSION_KEY = "NJMDEMOSESSION"

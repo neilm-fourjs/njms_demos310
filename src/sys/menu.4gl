@@ -7,8 +7,8 @@ IMPORT FGL lib_login
 IMPORT FGL new_acct
 
 &include "schema.inc"
+&include "app.inc"
 
-CONSTANT C_VER="3.1c"
 CONSTANT C_TITLE="NJM's Demos"
 CONSTANT C_SPLASH="logo_dark"
 CONSTANT C_ICON="njm_demo_icon"

@@ -7,7 +7,6 @@ IMPORT FGL app_lib
 
 &include "genero_lib.inc"
 &include "app.inc"
-CONSTANT C_VER="3.1"
 CONSTANT C_PRGDESC = "Menu Maintenance Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 

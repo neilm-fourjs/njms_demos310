@@ -18,7 +18,6 @@ IMPORT FGL oe_lib
 &include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
 &include "app.inc"
 &include "ordent.inc"
-CONSTANT C_VER="3.1"
 CONSTANT C_PRGDESC = "Order Entry Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 
