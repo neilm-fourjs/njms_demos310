@@ -415,7 +415,7 @@ FUNCTION glsec_updCreds(l_typ STRING, l_user STRING, l_pass STRING) RETURNS BOOL
 	RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION glsec_save_session(l_id STRING, l_user STRING)
+FUNCTION glsec_saveSession(l_id STRING, l_user STRING)
 	DEFINE l_val STRING
 	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN END IF
 	CALL gl_encrypt.gl_encryptInit("../etc/publickey.crt","../etc/private.key")
@@ -426,7 +426,7 @@ FUNCTION glsec_save_session(l_id STRING, l_user STRING)
 	END IF
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION glsec_get_session(l_id STRING, l_age INTEGER) RETURNS STRING
+FUNCTION glsec_getSession(l_id STRING, l_age INTEGER) RETURNS STRING
 	DEFINE l_val STRING
 	DEFINE l_ts DATETIME YEAR TO MINUTE
 	DEFINE x SMALLINT
@@ -448,7 +448,7 @@ FUNCTION glsec_get_session(l_id STRING, l_age INTEGER) RETURNS STRING
 	RETURN l_id
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION glsec_remove_session(l_id STRING)
+FUNCTION glsec_removeSession(l_id STRING)
 	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN END IF
 
 	CALL ui.Interface.frontCall("localStorage", "removeItem", [l_id], [])

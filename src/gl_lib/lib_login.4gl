@@ -92,7 +92,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 	CLOSE WINDOW login
 
 	IF l_login IS NOT NULL AND l_login != "Cancelled" THEN
-		CALL lib_secure.glsec_save_session(C_SESSION_KEY, l_login)
+		CALL lib_secure.glsec_saveSession(C_SESSION_KEY, l_login)
 	END IF
 
 	CALL  gl_lib.gl_logIt("after input for login:"||l_login)
@@ -111,7 +111,7 @@ PUBLIC FUNCTION sql_checkEmail(l_email VARCHAR(80)) RETURNS BOOLEAN
 END FUNCTION
 --------------------------------------------------------------------------------
 PUBLIC FUNCTION logout()
-	CALL lib_secure.glsec_remove_session( C_SESSION_KEY )
+	CALL lib_secure.glsec_removeSession( C_SESSION_KEY )
 END FUNCTION
 --------------------------------------------------------------------------------
 
@@ -286,7 +286,7 @@ END FUNCTION
 -- Check to see if we have already logged in recently.
 PRIVATE FUNCTION checkForSession()
 	DEFINE l_id STRING
-	LET l_id = lib_secure.glsec_get_session(C_SESSION_KEY, C_SESSION_MINS)
+	LET l_id = lib_secure.glsec_getSession(C_SESSION_KEY, C_SESSION_MINS)
 	IF l_id = "expired" THEN
 		CALL gl_winMessage(%"Login",%"Your Session has expired.","information")
 		RETURN NULL
