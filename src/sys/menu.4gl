@@ -8,7 +8,7 @@ IMPORT FGL new_acct
 
 &include "schema.inc"
 
-CONSTANT C_VER="3.1b"
+CONSTANT C_VER="3.1c"
 CONSTANT C_TITLE="NJM's Demos"
 CONSTANT C_SPLASH="logo_dark"
 CONSTANT C_ICON="njm_demo_icon"

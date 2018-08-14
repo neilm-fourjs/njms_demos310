@@ -24,6 +24,10 @@ GRID
 [forcepwch |rd|b]
 [""]          [generate            ]
 [passwd    |rp|p001                              ]
+[rules                                                            ]
+[                                                                 ]
+[                                                                 ]
+[                                                                 ]
 [passexp   |pe|p002             ]
 }
 END -- GRID
@@ -72,6 +76,7 @@ CHECKBOX a = sys_users.active,VALUECHECKED=1,VALUEUNCHECKED=0,DEFAULT=1,NOT NULL
 CHECKBOX b = sys_users.forcepwchg, VALUECHECKED="Y", VALUEUNCHECKED="N",NOT NULL;
 
 BUTTONEDIT p001 = sys_users.login_pass, INVISIBLE, VERIFY, NOT NULL, TABINDEX=8, ACTION=generate, IMAGE="fa-cog";
+TEXTEDIT rules = FORMONLY.l_rules, STRETCH=BOTH;
 BUTTON generate:generate, TEXT="Re-generate", IMAGE="fa-cog", HIDDEN;
 --EDIT p001 = sys_users.login_pass, NOENTRY, FONTPITCH=FIXED, NOT NULL, TABINDEX=8, STYLE="em12";
 
