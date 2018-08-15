@@ -55,6 +55,7 @@ FUNCTION drop_sys()
 	DROP TABLE sys_roles
 	DROP TABLE sys_menus
 	DROP TABLE sys_menu_roles
+	DROP TABLE sys_login_hist
 	WHENEVER ERROR STOP
 	CALL mkdb_progress( "Done." )
 END FUNCTION

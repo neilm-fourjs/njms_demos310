@@ -54,5 +54,15 @@ FUNCTION ifx_create_system_tables()
 			PRIMARY KEY (menu_key, role_key)
 	);
 
+	CREATE TABLE sys_login_hist (
+		hist_key		SERIAL,
+		email       VARCHAR(60) NOT NULL,
+		stat				CHAR(1),
+		last_login	DATETIME YEAR TO SECOND,
+		loggedout		DATETIME YEAR TO SECOND,
+		client			CHAR(3),
+		client_ip		CHAR(25)
+	);
+
 	CALL mkdb_progress( "Done" )
 END FUNCTION

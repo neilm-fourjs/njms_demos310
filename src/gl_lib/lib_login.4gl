@@ -11,11 +11,12 @@ IMPORT FGL gl_lib
 &include "app.inc"
 TYPE f_new_account FUNCTION() RETURNS STRING
 CONSTANT EMAILPROG = "sendemail.sh" --"fglrun sendemail.42r"
-CONSTANT c_sym = "!$%^&*,.;@#?<>" -- valid symbols for use in a password
 CONSTANT C_SESSION_KEY = "NJMDEMOSESSION"
 CONSTANT C_SESSION_MINS = 20 -- how long betweeen logins.
 PUBLIC DEFINE m_logo_image STRING
 PUBLIC DEFINE m_new_acc_func f_new_account
+DEFINE m_login_audit_key INTEGER
+DEFINE m_login_stat CHAR(1)
 --------------------------------------------------------------------------------
 #+ Login function - One day when this program grows up it will have single signon 
 #+ then hackers only have one password to crack :)
@@ -112,6 +113,7 @@ END FUNCTION
 --------------------------------------------------------------------------------
 PUBLIC FUNCTION logout()
 	CALL lib_secure.glsec_removeSession( C_SESSION_KEY )
+	CALL audit_logout()
 END FUNCTION
 --------------------------------------------------------------------------------
 
@@ -130,12 +132,14 @@ PRIVATE FUNCTION validate_login(
 	SELECT * INTO l_acc.* FROM sys_users WHERE email = l_login
 	IF STATUS = NOTFOUND THEN
 		CALL gl_logIt("No account for:"||l_login)
+	CALL audit_login(l_login,"A")
 		RETURN FALSE
 	END IF
 
 -- is password correct?
 	IF NOT lib_secure.glsec_chkPassword(l_pass,l_acc.pass_hash,l_acc.salt,l_acc.hash_type) THEN
 		DISPLAY "Hash wrong for:",l_login," PasswordHash:",l_acc.pass_hash, " Hashtype:",l_acc.hash_type
+		CALL audit_login(l_login,"P")
 		RETURN FALSE
 	END IF
 
@@ -151,10 +155,11 @@ PRIVATE FUNCTION validate_login(
 -- do we need to force a password change?
 	IF l_acc.forcepwchg = "Y" THEN
 		IF NOT passchg(l_login) THEN
+			CALL audit_login(l_login,"C")
 			RETURN FALSE
 		END IF
 	END IF
-
+	CALL audit_login(l_login,"I")
 -- all okay
 	RETURN TRUE
 END FUNCTION
@@ -287,9 +292,43 @@ END FUNCTION
 PRIVATE FUNCTION checkForSession()
 	DEFINE l_id STRING
 	LET l_id = lib_secure.glsec_getSession(C_SESSION_KEY, C_SESSION_MINS)
+	IF l_id IS NULL THEN RETURN NULL END IF
+
 	IF l_id = "expired" THEN
 		CALL gl_winMessage(%"Login",%"Your Session has expired.","information")
 		RETURN NULL
 	END IF
+
+	SELECT MAX( hist_key ) INTO m_login_audit_key FROM sys_login_hist
+		WHERE email = l_id
+			AND stat = "I"
+	IF m_login_audit_key IS NULL OR m_login_audit_key = 0 THEN -- can't find a login audit record?
+		CALL audit_login(l_id,"E")
+	END IF
+
 	RETURN l_id	
+END FUNCTION
+--------------------------------------------------------------------------------
+PRIVATE FUNCTION audit_logout( )
+	DEFINE l_dt DATETIME YEAR TO SECOND
+ 
+	LET l_dt = CURRENT
+	IF m_login_audit_key != 0 THEN
+		LET m_login_stat = DOWNSHIFT(m_login_stat)
+		UPDATE sys_login_hist SET (stat, loggedout) = ( m_login_stat, l_dt) WHERE hist_key = m_login_audit_key
+	END IF
+END FUNCTION
+--------------------------------------------------------------------------------
+PRIVATE FUNCTION audit_login( l_email LIKE sys_users.email, l_stat CHAR(1) )
+	DEFINE l_audit_rec RECORD LIKE sys_login_hist.*
+	IF l_email IS NULL THEN RETURN END IF
+	LET m_login_stat = l_stat
+	LET l_audit_rec.hist_key = 0
+	LET l_audit_rec.email = l_email
+	LET l_audit_rec.client = ui.interface.getFrontEndName()
+	LET l_audit_rec.client_ip = fgl_getEnv("FGL_WEBSERVER_REMOTE_ADDR")
+	LET l_audit_rec.last_login = CURRENT
+	LET l_audit_rec.stat = l_stat
+	INSERT INTO sys_login_hist VALUES l_audit_rec.*
+	LET m_login_audit_key = SQLCA.SQLERRD[2]
 END FUNCTION

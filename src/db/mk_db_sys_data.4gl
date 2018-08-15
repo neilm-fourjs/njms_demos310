@@ -72,6 +72,7 @@ FUNCTION insert_system_data()
 	CALL addMenu("sys","main","T","System Maintenance", "","")
 	CALL addMenu("sys","main","F","User/Role Maintenance", "user_mnt.42r","")
 	CALL addMenu("sys","main","F","Menu/Role Maintenance", "menu_mnt.42r","")
+	CALL addMenu("sys","main","F","View Login History", "login_hist.42r","")
 
 	CALL addMenu("enq","main","T","Enquiry Programs", "","")
 	CALL addMenu("enq","main","F","Customer Enquiry", "cust_mnt.42r YYNNNN","")

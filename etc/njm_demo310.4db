@@ -27,7 +27,7 @@
   <Table active="true" name="countries" status="U" uuid="db/table509">
     <Column fglLength="3" fglType="0" name="country_code" notNull="true" order="1" status="U" uuid="db/column3966"/>
     <Column fglLength="40" fglType="0" name="country_name" notNull="false" order="2" status="U" uuid="db/column3968"/>
-    <Index indexColumns="country_code" indexConstraint="primaryKey" name="u892_1140" status="U" uuid="db/index1"/>
+    <Index indexColumns="country_code" indexConstraint="primaryKey" name="u914_1169" status="U" uuid="db/index10"/>
   </Table>
   <Table active="true" name="customer" status="U" uuid="db/table511">
     <Column fglLength="8" fglType="0" name="customer_code" notNull="true" order="1" status="U" uuid="db/column3970"/>
@@ -41,13 +41,13 @@
     <Column fglLength="4" fglType="2" name="credit_limit" notNull="false" order="9" status="U" uuid="db/column3986"/>
     <Column fglLength="3074" fglType="5" name="total_invoices" notNull="false" order="10" status="U" uuid="db/column3988"/>
     <Column fglLength="3074" fglType="5" name="outstanding_amount" notNull="false" order="11" status="U" uuid="db/column3990"/>
-    <Index indexColumns="customer_code" indexConstraint="primaryKey" name="u891_1139" status="U" uuid="db/index2"/>
+    <Index indexColumns="customer_code" indexConstraint="primaryKey" name="u913_1168" status="U" uuid="db/index11"/>
   </Table>
   <Table active="true" name="disc" status="U" uuid="db/table513">
     <Column fglLength="2" fglType="0" name="stock_disc" notNull="true" order="1" status="U" uuid="db/column3992"/>
     <Column fglLength="2" fglType="0" name="customer_disc" notNull="true" order="2" status="U" uuid="db/column3994"/>
     <Column fglLength="1282" fglType="5" name="disc_percent" notNull="false" order="3" status="U" uuid="db/column3996"/>
-    <Index indexColumns="stock_disc, customer_disc" indexConstraint="primaryKey" name="u898_1145" status="U" uuid="db/index3"/>
+    <Index indexColumns="stock_disc, customer_disc" indexConstraint="primaryKey" name="u920_1174" status="U" uuid="db/index12"/>
   </Table>
   <Table active="true" name="ord_detail" status="U" uuid="db/table515">
     <Column fglLength="4" fglType="2" name="order_number" notNull="true" order="1" status="U" uuid="db/column3998"/>
@@ -63,7 +63,7 @@
     <Column fglLength="2562" fglType="5" name="tax_value" notNull="false" order="11" status="U" uuid="db/column4018"/>
     <Column fglLength="2562" fglType="5" name="nett_value" notNull="false" order="12" status="U" uuid="db/column4020"/>
     <Column fglLength="2562" fglType="5" name="gross_value" notNull="false" order="13" status="U" uuid="db/column4022"/>
-    <Index indexColumns="order_number, line_number" indexConstraint="primaryKey" name="u901_1149" status="U" uuid="db/index4"/>
+    <Index indexColumns="order_number, line_number" indexConstraint="primaryKey" name="u923_1178" status="U" uuid="db/index13"/>
   </Table>
   <Table active="true" name="ord_head" status="U" uuid="db/table517">
     <Column fglLength="4" fglType="6" name="order_number" notNull="true" order="1" status="U" uuid="db/column4024"/>
@@ -92,7 +92,7 @@
     <Column fglLength="3074" fglType="5" name="total_tax" notNull="false" order="24" status="U" uuid="db/column4070"/>
     <Column fglLength="3074" fglType="5" name="total_gross" notNull="false" order="25" status="U" uuid="db/column4072"/>
     <Column fglLength="3075" fglType="5" name="total_disc" notNull="false" order="26" status="U" uuid="db/column4074"/>
-    <Index indexColumns="order_number" indexConstraint="primaryKey" name="u899_1147" status="U" uuid="db/index5"/>
+    <Index indexColumns="order_number" indexConstraint="primaryKey" name="u922_1176" status="U" uuid="db/index14"/>
   </Table>
   <Table active="true" name="ord_payment" status="U" uuid="db/table519">
     <Column fglLength="4" fglType="2" name="order_number" notNull="false" order="1" status="U" uuid="db/column4076"/>
@@ -132,8 +132,8 @@
     <Column fglLength="100" fglType="13" name="long_desc" notNull="false" order="14" status="U" uuid="db/column4136"/>
     <Column fglLength="100" fglType="13" name="img_url" notNull="false" order="15" status="U" uuid="db/column4138"/>
     <Index indexColumns="description" indexConstraint="index" name="stk_idx" status="U" uuid="db/index235"/>
-    <Index indexColumns="stock_code" indexConstraint="primaryKey" name="u894_1142" status="U" uuid="db/index6"/>
-    <Index indexColumns="barcode" indexConstraint="unique" name="u894_1143" status="U" uuid="db/index7"/>
+    <Index indexColumns="stock_code" indexConstraint="primaryKey" name="u916_1171" status="U" uuid="db/index15"/>
+    <Index indexColumns="barcode" indexConstraint="unique" name="u916_1172" status="U" uuid="db/index16"/>
   </Table>
   <Table active="true" name="stock_cat" status="U" uuid="db/table525">
     <Column fglLength="10" fglType="0" name="catid" notNull="false" order="1" status="U" uuid="db/column4140"/>
@@ -152,11 +152,20 @@
     <Column fglLength="20" fglType="0" name="tel" notNull="false" order="10" status="U" uuid="db/column4162"/>
     <Column fglLength="60" fglType="13" name="email" notNull="false" order="11" status="U" uuid="db/column4164"/>
   </Table>
+  <Table active="true" name="sys_login_hist" status="U" uuid="db/table1">
+    <Column fglLength="4" fglType="6" name="hist_key" notNull="true" order="1" status="U" uuid="db/column5"/>
+    <Column fglLength="60" fglType="13" name="email" notNull="true" order="2" status="U" uuid="db/column6"/>
+    <Column fglLength="1" fglType="0" name="stat" notNull="false" order="3" status="U" uuid="db/column7"/>
+    <Column fglLength="3594" fglType="10" name="last_login" notNull="false" order="4" status="U" uuid="db/column8"/>
+    <Column fglLength="3594" fglType="10" name="loggedout" notNull="false" order="5" status="U" uuid="db/column9"/>
+    <Column fglLength="3" fglType="0" name="client" notNull="false" order="6" status="U" uuid="db/column10"/>
+    <Column fglLength="25" fglType="0" name="client_ip" notNull="false" order="7" status="U" uuid="db/column11"/>
+  </Table>
   <Table active="true" name="sys_menu_roles" status="U" uuid="db/table529">
     <Column fglLength="4" fglType="2" name="menu_key" notNull="true" order="1" status="U" uuid="db/column4166"/>
     <Column fglLength="4" fglType="2" name="role_key" notNull="true" order="2" status="U" uuid="db/column4168"/>
     <Column fglLength="1" fglType="0" name="active" notNull="false" order="3" status="U" uuid="db/column4170"/>
-    <Index indexColumns="menu_key, role_key" indexConstraint="primaryKey" name="u890_1138" status="U" uuid="db/index8"/>
+    <Index indexColumns="menu_key, role_key" indexConstraint="primaryKey" name="u911_1165" status="U" uuid="db/index17"/>
   </Table>
   <Table active="true" name="sys_menus" status="U" uuid="db/table531">
     <Column fglLength="4" fglType="6" name="menu_key" notNull="true" order="1" status="U" uuid="db/column4172"/>
@@ -177,7 +186,7 @@
     <Column fglLength="4" fglType="2" name="user_key" notNull="true" order="1" status="U" uuid="db/column4194"/>
     <Column fglLength="4" fglType="2" name="role_key" notNull="true" order="2" status="U" uuid="db/column4196"/>
     <Column fglLength="1" fglType="0" name="active" notNull="false" order="3" status="U" uuid="db/column4198"/>
-    <Index indexColumns="user_key, role_key" indexConstraint="primaryKey" name="u887_1135" status="U" uuid="db/index9"/>
+    <Index indexColumns="user_key, role_key" indexConstraint="primaryKey" name="u908_1162" status="U" uuid="db/index18"/>
   </Table>
   <Table active="true" name="sys_users" status="U" uuid="db/table537">
     <Column fglLength="4" fglType="6" name="user_key" notNull="true" order="1" status="U" uuid="db/column4200"/>
@@ -271,11 +280,11 @@
     <Column fglLength="60" fglType="0" name="token" notNull="false" order="4" status="U" uuid="db/column4340"/>
     <Column fglLength="3594" fglType="10" name="token_date" notNull="false" order="5" status="U" uuid="db/column4342"/>
   </Table>
-  <ForeignKey cascadeDelete="false" fkColumns="" fkRefColumns="" name="r901_1150" refTable="ord_head" status="U" table="ord_detail" uuid="db/foreignkey1"/>
+  <ForeignKey cascadeDelete="false" fkColumns="" fkRefColumns="" name="r923_1179" refTable="ord_head" status="U" table="ord_detail" uuid="db/foreignkey2"/>
   <Views ActiveView="View-1" showLabels="true">
     <View Name="View-1">
       <Layout>
-        <![CDATA[AAAAAgAAABYAZABiAC8AdABhAGIAbABlADUANAA5QLcpaWrcAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUANQA1QLp4eHogAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMwA5QLGlpabAAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMwAxQKp4eHogAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMgAxQJ7h4ePQAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUANAAxQLLAAAEsAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMwA1QK7h4ePQAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMgA1QKPaWluYAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMAA5QHGlpabAAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMgA5QKhDw8VIAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUANQAxQLhDw8VIAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMQA3QJYPDxBwAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUANAA1QLT0tLYEAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUANAA3QLYPDxBwAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMQA5QJp4eHogAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMgA3QKYPDxBwAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMQAzQIp4eHogAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMgAzQKGlpabAAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMQAxQIGlpabAAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUANAAzQLPaWluYAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUANQAzQLleHh+0AABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMwA3QLCLS0xUAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMAA3AAAAAAAAAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMQA1QJGlpabAAABAMtLS1AAAAAAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMwAzQKytLS74AABAMtLS1AAAAAAAAAAAAAAAAQ==]]>
+        <![CDATA[AAAAAgAAABYAZABiAC8AdABhAGIAbABlADUANAA1QLT0tLdTS0tAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMgA5QKhDw8bMPDxAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUANAA3QLYPDxHQ8PFAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMQA1QJGlpafaWlpAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMQA5QJp4eHvHh4hAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMQAxQIGlpafaWlpAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMAA3AAAAAAAAAABAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMwA5QLGlpafaWlpAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMwA1QK7h4eW+Hh5AMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMgA1QKPaWlzVpaZAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMgAxQJ7h4eW+Hh5AMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMgAzQKGlpafaWlpAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUAMwA3QLCLS01ctLVAMtLS1S0tLQAAAAAAAAAAAQAAABYAZABiAC8AdABhAGIAbABlADUANQAzQLleHiFJ4eJAMtLS1S0tLQAAAAAAAAAAAQAAABIAZABiAC8AdABhAGIAbABlADFAHh4eIAAAAEBxWlpbcAAAP2BiTdLxqfwBAAAAFgBkAGIALwB0AGEAYgBsAGUANQA0ADlAtylpbE6Wl0Ay0tLVLS0tAAAAAAAAAAABAAAAFgBkAGIALwB0AGEAYgBsAGUANQA0ADFAssAAAlgAAEAy0tLVLS0tAAAAAAAAAAABAAAAFgBkAGIALwB0AGEAYgBsAGUANQA1ADFAuEPDxsw8PEAy0tLVLS0tAAAAAAAAAAABAAAAFgBkAGIALwB0AGEAYgBsAGUANQAwADlAcaWlp9paWkAy0tLVLS0tAAAAAAAAAAABAAAAFgBkAGIALwB0AGEAYgBsAGUANQAyADdApg8PEdDw8UAy0tLVLS0tAAAAAAAAAAABAAAAFgBkAGIALwB0AGEAYgBsAGUANQAxADNAew8PFA8PD0B1LS0uktLTP3BiTdLxqfwBAAAAFgBkAGIALwB0AGEAYgBsAGUANQA0ADNAs9paXNWlpkAy0tLVLS0tAAAAAAAAAAABAAAAFgBkAGIALwB0AGEAYgBsAGUANQA1ADVAunh4e8eHiEAy0tLVLS0tAAAAAAAAAAABAAAAFgBkAGIALwB0AGEAYgBsAGUANQAzADNArK0tMMLS00Ay0tLVLS0tAAAAAAAAAAABAAAAFgBkAGIALwB0AGEAYgBsAGUANQAzADFAqnh4e8eHiEAy0tLVLS0tAAAAAAAAAAABAAAAFgBkAGIALwB0AGEAYgBsAGUANQAxADdAlg8PEdDw8UAy0tLVLS0tAAAAAAAAAAAB]]>
       </Layout>
     </View>
   </Views>
