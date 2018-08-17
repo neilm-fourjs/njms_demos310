@@ -259,9 +259,9 @@ FUNCTION populate_menu(l_mname LIKE sys_menus.m_id ) RETURNS BOOLEAN
 		CASE m_menu[ m_menu.getLength() ].m_type
 			WHEN "C" LET m_menu[ m_menu.getLength() ].m_img = "quit"
 			WHEN "M" LET m_menu[ m_menu.getLength() ].m_img = "fa-angle-double-right"
-			WHEN "P" LET m_menu[ m_menu.getLength() ].m_img = "fa-gear"
-			WHEN "F" LET m_menu[ m_menu.getLength() ].m_img = "fa-gear"
-			WHEN "S" LET m_menu[ m_menu.getLength() ].m_img = "fa-gear"
+			WHEN "P" LET m_menu[ m_menu.getLength() ].m_img = "fa-cog"
+			WHEN "F" LET m_menu[ m_menu.getLength() ].m_img = "fa-cog"
+			WHEN "S" LET m_menu[ m_menu.getLength() ].m_img = "fa-cog"
 		END CASE
 	END FOREACH
 	LET m_menu[m_menu.getLength()].m_type = "C"

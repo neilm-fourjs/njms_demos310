@@ -1,9 +1,9 @@
 
-LAYOUT  (STYLE="main2" )
+LAYOUT  (STYLE="main2", IMAGE="fab-font-awesome-flag" )
 VBOX
 GRID
 {
-[quit]FGLIMAGEPATH:[a001                                   ]
+[f][quit]FGLIMAGEPATH:[a001                                   ]
 }
 END -- GRID
 HBOX ( SPLITTER )
@@ -27,8 +27,9 @@ TABLE
 END -- TABLE
 GRID
 {
-Current:
-[c:ii:img_name                ]
+[c:clab        ]
+[nlab:img_name                 ]
+[flab:font_name             :ii]
   [img                     ]
   [                        ]
   [                        ]
@@ -57,6 +58,7 @@ END -- HBOX
 END -- VBOX
 
 ATTRIBUTES
+IMAGE f : f IMAGE="fab-font-awesome-flag", STYLE="noborder";
 BUTTON quit : quit;
 a001 = FORMONLY.fglimagepath, SCROLL;
 IMAGE i01 = FORMONLY.a01,TITLE="1", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;
@@ -70,7 +72,12 @@ IMAGE i08 = FORMONLY.a08,TITLE="8", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE
 IMAGE i09 = FORMONLY.a09,TITLE="9", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;
 IMAGE i10 = FORMONLY.a10,TITLE="10", HEIGHT=48 PIXELS, WIDTH=48 PIXELS, AUTOSCALE;
 
-LABEL img_name = FORMONLY.img_name, SIZEPOLICY=FIXED, STYLE="em16";
+LABEL clab : clab, TEXT=%"Current Icon:";
+LABEL nlab : nlab, TEXT=%"Icon Name:";
+LABEL img_name = FORMONLY.img_name, SIZEPOLICY=FIXED, STYLE="em14";
+LABEL flab : flab, TEXT=%"Font File:";
+LABEL font_name = FORMONLY.font_name, SIZEPOLICY=FIXED, STYLE="em14";
+
 BUTTON c : copy, IMAGE="fa-copy";
 
 IMAGE ii = FORMONLY.img2, STYLE="noborder";

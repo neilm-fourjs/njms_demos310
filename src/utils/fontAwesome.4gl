@@ -37,6 +37,18 @@ DEFINE m_rec3 DYNAMIC ARRAY OF RECORD
 	v09 STRING,
 	v10 STRING
 	END RECORD
+DEFINE m_rec4 DYNAMIC ARRAY OF RECORD
+	f01 STRING,
+	f02 STRING,
+	f03 STRING,
+	f04 STRING,
+	f05 STRING,
+	f06 STRING,
+	f07 STRING,
+	f08 STRING,
+	f09 STRING,
+	f10 STRING
+	END RECORD
 
 	DEFINE m_img STRING
 MAIN
@@ -58,25 +70,25 @@ MAIN
 			ON ACTION copy CALL ui.Interface.frontCall("standard","cbSet",m_img, l_ret)
 
 			BEFORE FIELD a01
-				CALL dsp_img( m_rec2[ arr_curr() ].i01, m_rec3[ arr_curr() ].v01 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i01, m_rec3[ arr_curr() ].v01, m_rec4[ arr_curr() ].f01 )
 			BEFORE FIELD a02
-				CALL dsp_img( m_rec2[ arr_curr() ].i02, m_rec3[ arr_curr() ].v02 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i02, m_rec3[ arr_curr() ].v02, m_rec4[ arr_curr() ].f02 )
 			BEFORE FIELD a03
-				CALL dsp_img( m_rec2[ arr_curr() ].i03, m_rec3[ arr_curr() ].v03 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i03, m_rec3[ arr_curr() ].v03, m_rec4[ arr_curr() ].f03 )
 			BEFORE FIELD a04
-				CALL dsp_img( m_rec2[ arr_curr() ].i04, m_rec3[ arr_curr() ].v04 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i04, m_rec3[ arr_curr() ].v04, m_rec4[ arr_curr() ].f04 )
 			BEFORE FIELD a05
-				CALL dsp_img( m_rec2[ arr_curr() ].i05, m_rec3[ arr_curr() ].v05 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i05, m_rec3[ arr_curr() ].v05, m_rec4[ arr_curr() ].f05 )
 			BEFORE FIELD a06
-				CALL dsp_img( m_rec2[ arr_curr() ].i06, m_rec3[ arr_curr() ].v06 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i06, m_rec3[ arr_curr() ].v06, m_rec4[ arr_curr() ].f06 )
 			BEFORE FIELD a07
-				CALL dsp_img( m_rec2[ arr_curr() ].i07, m_rec3[ arr_curr() ].v07 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i07, m_rec3[ arr_curr() ].v07, m_rec4[ arr_curr() ].f07 )
 			BEFORE FIELD a08
-				CALL dsp_img( m_rec2[ arr_curr() ].i08, m_rec3[ arr_curr() ].v08 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i08, m_rec3[ arr_curr() ].v08, m_rec4[ arr_curr() ].f08 )
 			BEFORE FIELD a09
-				CALL dsp_img( m_rec2[ arr_curr() ].i09, m_rec3[ arr_curr() ].v09 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i09, m_rec3[ arr_curr() ].v09, m_rec4[ arr_curr() ].f09 )
 			BEFORE FIELD a10
-				CALL dsp_img( m_rec2[ arr_curr() ].i10, m_rec3[ arr_curr() ].v10 )
+				CALL dsp_img( m_rec2[ arr_curr() ].i10, m_rec3[ arr_curr() ].v10, m_rec4[ arr_curr() ].f10 )
 
 			BEFORE ROW
 				DISPLAY DIALOG.getCurrentItem() TO img_name
@@ -108,9 +120,10 @@ MAIN
 	END DIALOG
 END MAIN
 --------------------------------------------------------------------------------
-FUNCTION dsp_img( l_nam STRING, l_id STRING)
+FUNCTION dsp_img( l_nam STRING, l_id STRING,  l_font STRING)
 	LET m_img = l_nam
 	DISPLAY l_nam||" ("||l_id||")" TO img_name
+	DISPLAY l_font TO font_name
 	DISPLAY l_nam TO img
 	DISPLAY l_nam TO img2
 END FUNCTION
@@ -156,6 +169,7 @@ FUNCTION load_arr2(l_file)
 	FOR x = 1 TO m_rec.getLength() STEP 12
 		CALL m_rec2.appendElement()
 		CALL m_rec3.appendElement()
+		CALL m_rec4.appendElement()
 		LET m_rec2[ m_rec2.getLength() ].i01 = m_rec[x].img
 		LET m_rec2[ m_rec2.getLength() ].i02 = m_rec[x+1].img
 		LET m_rec2[ m_rec2.getLength() ].i03 = m_rec[x+2].img
@@ -176,6 +190,16 @@ FUNCTION load_arr2(l_file)
 		LET m_rec3[ m_rec3.getLength() ].v08 = m_rec[x+7].val
 		LET m_rec3[ m_rec3.getLength() ].v09 = m_rec[x+8].val
 		LET m_rec3[ m_rec3.getLength() ].v10 = m_rec[x+9].val
+		LET m_rec4[ m_rec4.getLength() ].f01 = m_rec[x].font
+		LET m_rec4[ m_rec4.getLength() ].f02 = m_rec[x+1].font
+		LET m_rec4[ m_rec4.getLength() ].f03 = m_rec[x+2].font
+		LET m_rec4[ m_rec4.getLength() ].f04 = m_rec[x+3].font
+		LET m_rec4[ m_rec4.getLength() ].f05 = m_rec[x+4].font
+		LET m_rec4[ m_rec4.getLength() ].f06 = m_rec[x+5].font
+		LET m_rec4[ m_rec4.getLength() ].f07 = m_rec[x+6].font
+		LET m_rec4[ m_rec4.getLength() ].f08 = m_rec[x+7].font
+		LET m_rec4[ m_rec4.getLength() ].f09 = m_rec[x+8].font
+		LET m_rec4[ m_rec4.getLength() ].f10 = m_rec[x+9].font
 	END FOR
 	CALL c.close()
 END FUNCTION

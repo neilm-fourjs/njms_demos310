@@ -8,7 +8,7 @@
 	<RESOURCE Id="res.path.njm_demo" Source="INTERNAL">$(res.path.isv)\njms_demos310</RESOURCE>
 	<EXECUTION>
 		<ENVIRONMENT_VARIABLE Id="FGLRESOURCEPATH">$(res.path.njm_demo)\etc</ENVIRONMENT_VARIABLE>
-		<ENVIRONMENT_VARIABLE Id="FGLIMAGEPATH">$(res.path.njm_demo)\pics;$(res.path.njm_demo)\etc\image2font.txt</ENVIRONMENT_VARIABLE>
+		<ENVIRONMENT_VARIABLE Id="FGLIMAGEPATH">$(res.path.njm_demo)\pics;$(res.path.njm_demo)\etc\fa5.txt</ENVIRONMENT_VARIABLE>
 		<ENVIRONMENT_VARIABLE Id="GREDIR">$(res.gre)</ENVIRONMENT_VARIABLE>
 		<ENVIRONMENT_VARIABLE Id="REPORTDIR">$(res.path.njm_demo)\etc/</ENVIRONMENT_VARIABLE>
 		<ENVIRONMENT_VARIABLE Id="FGLLDPATH">$(res.gre)/lib</ENVIRONMENT_VARIABLE>
