@@ -166,7 +166,7 @@ FUNCTION load_arr2(l_file)
 		--	DISPLAY "file:",l_file," fld1:",l_rec.fld1," fld2:",l_rec.fld2
 		END IF
 	END WHILE
-	FOR x = 1 TO m_rec.getLength() STEP 12
+	FOR x = 1 TO m_rec.getLength() STEP 10
 		CALL m_rec2.appendElement()
 		CALL m_rec3.appendElement()
 		CALL m_rec4.appendElement()
