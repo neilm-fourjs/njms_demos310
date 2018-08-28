@@ -99,17 +99,19 @@
                                     <rtl:input-variable name="r_detailline.stock_code" type="FGLString" expectedLocation="expectedHere"/>
                                     <WORDBOX name="stock_code Value" width="width(&quot;M&quot;)*8" alignment="baseline" floatingBehavior="enclosed" text="{{r_detailline.stock_code+r_detailline.pack_flag}}"/>
                                     <rtl:input-variable name="r_detailline.description" type="FGLString" expectedLocation="expectedHere"/>
-                                    <WORDBOX name="r_detailline.description Value" width="width(&quot;M&quot;)*30" alignment="center" floatingBehavior="enclosed" text="{{r_detailline.description}}"/>
+                                    <WORDBOX name="r_detailline.description Value" width="width(&quot;M&quot;)*30" alignment="none" floatingBehavior="enclosed" text="{{r_detailline.description}}"/>
                                     <rtl:input-variable name="r_detailline.price" type="FGLNumeric" expectedLocation="expectedHere"/>
                                     <DECIMALFORMATBOX name="r_detailline.price Value" width="width(&quot;000,000.00&quot;)" alignment="baseline" floatingBehavior="enclosed" textAlignment="right" format="###,###,##&amp;.&amp;&amp;" value="{{r_detailline.price}}"/>
                                     <rtl:input-variable name="r_detailline.quantity" type="FGLNumeric" expectedLocation="expectedHere"/>
-                                    <DECIMALFORMATBOX name="r_detailline.quantity Value" width="width(&quot;-0000000000&quot;)" alignment="far" floatingBehavior="enclosed" textAlignment="right" format="--------#" value="{{r_detailline.quantity}}"/>
+                                    <DECIMALFORMATBOX name="r_detailline.quantity Value" width="width(&quot;-0000000000&quot;)" alignment="none" floatingBehavior="enclosed" textAlignment="right" format="--------#" value="{{r_detailline.quantity}}"/>
                                     <rtl:input-variable name="r_detailline.disc_percent" type="FGLNumeric" expectedLocation="expectedHere"/>
                                     <DECIMALFORMATBOX name="r_detailline.disc_percent Value" width="width(&quot;000.00&quot;)" anchorX="1" floatingBehavior="enclosed" textAlignment="right" format="###,###,##&amp;.&amp;&amp;" value="{{r_detailline.disc_percent}}"/>
                                     <rtl:input-variable name="r_detailline.disc_value" type="FGLNumeric" expectedLocation="expectedHere"/>
                                     <DECIMALFORMATBOX name="r_detailline.disc_value Value" width="width(&quot;000,000.00&quot;)" anchorX="1" color="{{r_detailline.disc_value&gt;50?Color.RED:Color.BLACK}}" floatingBehavior="enclosed" textAlignment="right" format="###,###,##&amp;.&amp;&amp;" value="{{r_detailline.disc_value}}"/>
                                     <rtl:input-variable name="r_detailline.nett_value" type="FGLNumeric" expectedLocation="expectedHere"/>
                                     <DECIMALFORMATBOX name="r_detailline.total Value" width="width(&quot;000,000,000.00&quot;)" floatingBehavior="enclosed" textAlignment="right" format="###,###,##&amp;.&amp;&amp;" value="{{r_detailline.nett_value}}"/>
+                                    <rtl:input-variable name="r_detailline.img_url" type="FGLString" expectedLocation="expectedHere"/>
+                                    <IMAGEBOX name="ImageBox" x="18" y="100" width="90" length="90" anchorX="0" anchorY="0" floatingBehavior="enclosed" url="{{&quot;../pics/products/&quot;+r_detailline.img_url.trim()+&quot;.jpg&quot;}}" intendedResolution="102"/>
                                 </MINIPAGE>
                                 <rtl:input-variable name="r_detailline.pack_flag" type="FGLString" expectedLocation="expectedHere"/>
                                 <MINIPAGE name="Detail Lines-PackExpand_p" rtl:condition="r_detailline.pack_flag.matches(&quot;[p]&quot;)" width="min" length="max-200" alignment="center" fontSize="12" layoutDirection="leftToRight" swapX="false">

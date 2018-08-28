@@ -89,7 +89,7 @@ GL_MODULE_ERROR_HANDLER
 			nett_value, gross_value
 		 FROM ord_detail WHERE order_number = g_ordHead.order_number
 
-	DECLARE cur3 CURSOR FOR SELECT barcode, description
+	DECLARE cur3 CURSOR FOR SELECT barcode, description, img_url
 		 FROM stock WHERE stock_code = ?
 
 	PREPARE packPre FROM "SELECT p.*,s.description FROM pack_items p,stock s WHERE p.pack_code = ? AND s.stock_code = p.stock_code"
@@ -122,7 +122,8 @@ GL_MODULE_ERROR_HANDLER
 
 			OPEN cur3 USING  g_detailArray[ l_row ].stock_code
 			FETCH cur3 INTO  g_detailArray[ l_row ].barcode, 
-											 g_detailArray[ l_row ].description
+											 g_detailArray[ l_row ].description,
+											 g_detailArray[ l_row ].img_url
 			CLOSE cur3
 
 			IF  g_detailArray[ l_row ].price IS NULL THEN LET  g_detailArray[ l_row ].price = 0 END IF
@@ -149,7 +150,8 @@ GL_MODULE_ERROR_HANDLER
 					LET  g_detailArray[  g_detailArray.getLength() ].gross_value = 0
 					OPEN cur3 USING  g_detailArray[ g_detailArray.getLength() ].stock_code
 					FETCH cur3 INTO  g_detailArray[ g_detailArray.getLength() ].barcode, 
-													 g_detailArray[ g_detailArray.getLength() ].description
+													 g_detailArray[ g_detailArray.getLength() ].description,
+													 g_detailArray[ g_detailArray.getLength() ].img_url
 					CLOSE cur3
 				END FOREACH
 			END IF
@@ -273,7 +275,10 @@ REPORT rpt( rpt_user, r_ordHead , r_detailLine )
 			END IF
 			LET line_num = line_num + 1
 			LET rpt_timestamp = CURRENT
-			DISPLAY "DEBUG: ON EVERY ROW:",r_detailLine.stock_code," bc:",r_detailLine.barcode
+			IF NOT os.Path.exists( "../pics/products/"||(r_detailline.img_url CLIPPED)||".jpg" ) THEN
+				LET r_detailline.img_url = "noimage"
+			END IF
+			DISPLAY "DEBUG: ON EVERY ROW:",r_detailLine.stock_code," bc:",r_detailLine.barcode, " img:",r_detailLine.img_url
 			PRINT r_detailline.*
 			PRINT tax_0, tax_1, tax_2, tax_3
 			PRINT rpt_timestamp, line_num

@@ -127,12 +127,13 @@
         <File filePath="src/app/ordent.per"/>
         <File filePath="src/app/ordent2.per"/>
       </Application>
-      <Application binaryName="printInvoices" commandLineArguments="S 1 2 ordent.4rp" compilerOptions="--build-rdd" dependencies="14000,1986,-272766546,923654133" id="-1350833088" label="printInvoices">
+      <Application binaryName="printInvoices" commandLineArguments="S 1 0 ordent-5.4rp" compilerOptions="--build-rdd" dependencies="14000,1986,-272766546,923654133" id="-1350833088" label="printInvoices">
         <VirtualFolder label="Reports">
           <File filePath="etc/ordent-1.4rp"/>
           <File filePath="etc/ordent-2.4rp"/>
           <File filePath="etc/ordent-3.4rp"/>
           <File filePath="etc/ordent-4.4rp"/>
+          <File filePath="etc/ordent-5.4rp"/>
           <File filePath="etc/ordent.4rp"/>
           <File filePath="etc/picklist.4rp"/>
         </VirtualFolder>

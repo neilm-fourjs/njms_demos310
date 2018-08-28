@@ -6,6 +6,7 @@ TYPE t_detailLine
 	RECORD
 		stock_code LIKE ord_detail.stock_code,
 		barcode LIKE stock.barcode,
+		img_url LIKE stock.img_url,
 		description LIKE stock.description,
 		pack_flag LIKE stock.pack_flag,
 		price LIKE stock.price,
