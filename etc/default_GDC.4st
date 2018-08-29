@@ -71,6 +71,10 @@
 		<StyleAttribute name="backgroundColor" value="Azure" />
 	</Style>
 
+	<Style name=".Arial">
+		<StyleAttribute name="fontFamily" value=" Arial" />
+	</Style>
+
 	<Style name="*">
 		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
 		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->
