@@ -63,8 +63,6 @@ MAIN
 	DISPLAY fgl_getEnv("FGLIMAGEPATH") TO fglimagepath
 	CALL load_arr()
 
-	DISPLAY "fa-smile-o" TO img
-
 	DIALOG
 		DISPLAY ARRAY m_rec2 TO arr.* ATTRIBUTES(FOCUSONFIELD)
 			ON ACTION copy CALL ui.Interface.frontCall("standard","cbSet",m_img, l_ret)
