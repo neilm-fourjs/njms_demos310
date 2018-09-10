@@ -94,7 +94,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sql=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/fa5.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sql=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/fa5.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -107,7 +107,7 @@
       <Application binaryName="dm_stock" commandLineArguments="S 1" dependencies="14000,-1557891896" id="476951290" label="dm_stock">
         <File filePath="src/app/dm_stock.4gl"/>
       </Application>
-      <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 stock stock_code" dependencies="14000,1986,-1090563702,-1557891896" id="1873655788" label="dynMaint">
+      <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 customer customer_code" dependencies="14000,1986,-1090563702,-1557891896" id="1873655788" label="dynMaint">
         <File filePath="src/gl_dynMaint/dynMaint.4gl"/>
       </Application>
       <Library binaryName="oe_lib" dependencies="14000" id="-272766546" label="oe_lib">
@@ -379,7 +379,7 @@
         <File filePath="src/sys/login_hist.4gl"/>
         <File filePath="src/sys/login_hist.per"/>
       </Application>
-      <Application binaryName="menu" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
+      <Application binaryName="menu" commandLineArguments="S" dependencies="-1463189462,2135194580,14000" id="1554019048" label="menu">
         <File filePath="src/sys/menu.4gl"/>
         <File filePath="src/sys/menu.per"/>
         <File filePath="src/sys/new_acct.4gl"/>
@@ -450,7 +450,7 @@
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/ifx"/>
-      <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="run.sh" label="util" sourceDirectory="$(ProjectDir)/utils"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.sh" label="util" sourceDirectory="$(ProjectDir)/utils"/>
     </Package>
     <Package binaryName="njms_demos310_pgs" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810" description="NJMs Demos" label="njms_demos310_pgs" platform="Genero Application Server">
       <DynamicProperty name="packageId" value="njmsdemos"/>

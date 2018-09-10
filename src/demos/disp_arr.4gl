@@ -86,7 +86,6 @@ FUNCTION disp_arr1()
 -- Default actions to leave the statement
 			ON ACTION close EXIT DISPLAY
 			ON ACTION quit EXIT DISPLAY
-
 		END DISPLAY
 END FUNCTION
 -------------------------------------------------------------------------------

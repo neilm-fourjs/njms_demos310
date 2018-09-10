@@ -427,6 +427,29 @@ FUNCTION gl_getForm( l_nam STRING ) RETURNS ui.Form --{{{
 	RETURN l_frm
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
+#+ Check the client for it's vesion
+#+
+FUNCTION gl_chkClientVer( l_cli STRING, l_ver STRING, l_feature STRING) RETURNS BOOLEAN
+	DEFINE l_fe_major DECIMAL(4,2)
+	DEFINE l_fe_minor SMALLINT
+	DEFINE l_ck_major DECIMAL(4,2)
+	DEFINE l_ck_minor SMALLINT
+
+ -- if client doesn't match just return true
+	IF NOT l_cli.equalsIgnoreCase( gl_fe_typ ) THEN RETURN TRUE END IF
+
+	CALL gl_getVer( gl_fe_ver ) RETURNING l_fe_major, l_fe_minor
+	CALL gl_getVer( l_ver ) RETURNING l_ck_major, l_ck_minor
+
+	IF l_fe_major < l_ck_major 
+	OR l_fe_minor < l_ck_minor THEN
+ -- client matched by version is too old
+		CALL gl_winMessage("Error",SFMT("Your Client version doesn't support feature '%1'!\nNeed min version of %2",l_feature,l_ver),"exclamation")
+		RETURN FALSE
+	END IF
+	RETURN TRUE
+END FUNCTION 
+--------------------------------------------------------------------------------
 #+ Set gl_userName
 #+
 FUNCTION gl_userName() --{{{

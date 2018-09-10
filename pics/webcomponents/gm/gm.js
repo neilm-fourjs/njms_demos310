@@ -74,4 +74,3 @@ onICHostReady = function(version) {
 		//gICAPI.SetFocus();
 	}
 }
-

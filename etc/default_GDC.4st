@@ -78,7 +78,7 @@
 	<Style name="*">
 		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
 		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->
-		<StyleAttribute name="fontSize" value="1.2em" />
+		<StyleAttribute name="fontSize" value="1em" />
 	</Style>
 	<Style name="Label">
 		<StyleAttribute name="textColor" value="darkblue" />
