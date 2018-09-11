@@ -36,27 +36,27 @@ FUNCTION testSession(l_url STRING)
 
 	LET l_aLog = l_app.getApplicationListener().getLogger()
 	LET l_appName = l_app.getApplicationName()
-	CALL l_sLog.messageFromBdl("Main l_application name:", l_appName)
+	CALL l_sLog.messageFromBdl("Main Application name", l_appName)
 	IF l_appName != "menu" THEN
-		CALL l_sLog.errorFromBdl("Incorrect l_application name. Expecting [demo]")
+		CALL l_sLog.errorFromBdl("Incorrect Application name. Expecting [demo]")
 		EXIT PROGRAM 1
 	END IF
 
-	DISPLAY "Sending Login & Password ..."
+	CALL l_sLog.messageFromBdl( "Sending Login & Password ..." )
 	CALL l_app.enqueueSetValue("l_login", "test@test.com")
 	CALL l_app.enqueueSetValue("l_pass", "12test")
-	DISPLAY "Accepting Login form ..."
+	CALL l_sLog.messageFromBdl( "Accepting Login form ..." )
 	CALL l_app.enqueueAction("accept")
-
 	CALL l_app.synchronize(10) -- 10 seconds timeout - Wait until this l_application interface queue is empty
 	
+	-- Add more tests - run a program from the menu and get that application.
+
 	SLEEP 2
-	DISPLAY "Sending Logout ..."
+	CALL l_sLog.messageFromBdl( "Sending Logout ..." )
 	CALL l_app.enqueueAction("logout")
 	CALL l_app.synchronize(10)
-	-- ...
 
-	DISPLAY "Checking to see if l_application ended ..."
+	CALL l_sLog.messageFromBdl( "Checking to see if l_application ended ..." )
 	IF l_app.isRunning() THEN
 		CALL l_sLog.messageFromBdl("app is still running!")
 		-- Try cancel instead!
@@ -68,13 +68,12 @@ FUNCTION testSession(l_url STRING)
 		CALL l_sLog.messageFromBdl("app successfully ended!")
 	END IF
 
-
 	IF l_session.getSessionListener().computeResult("Tests") THEN
-		LET l_msg = SFMT("DemoTests successful on %1", l_url)
+		LET l_msg = SFMT("Tests successful on %1", l_url)
 		CALL l_sLog.messageFromBdl(l_msg)
 		LET l_success = TRUE
 	ELSE
-		LET l_msg = SFMT("DemoTests not successful on %1", l_url)
+		LET l_msg = SFMT("Tests not successful on %1", l_url)
 		CALL l_sLog.messageFromBdl(l_msg)
 		LET l_success = FALSE
 	END IF
