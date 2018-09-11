@@ -228,6 +228,7 @@ FUNCTION get_albums(l_path STRING)
 			IF l_path IS NULL THEN EXIT WHILE END IF
 			IF l_path = "." OR l_path = ".." THEN CONTINUE WHILE END IF
 			IF l_path = "Audacity" THEN CONTINUE WHILE END IF
+			IF l_path = "mpd" THEN CONTINUE WHILE END IF
 			CALL gl_lib_aui.gl_winInfo(2,"Getting Music Info, please wait ...\nDirectory: "||l_path,"")
 			IF os.path.isDirectory( os.path.join(l_dir,l_path) ) THEN
 				LET m_songs[ m_songno ].artist = l_path

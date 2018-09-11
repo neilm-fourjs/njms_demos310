@@ -125,7 +125,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	LET gl_cli_res = "?"
 	LET gl_cli_dir = "?"
 	IF gl_fe_typ = "GBC" THEN LET gl_cli_os = "WWW" END IF
-	IF m_mdi != "M" AND m_mdi != "C" AND gl_fe_typ != "GBC" THEN
+	IF m_mdi != "M" AND m_mdi != "C" AND gl_fe_typ != "GBC" AND gl_fe_typ != "GGC" THEN
 		DISPLAY "Getting feinfo ..."
 		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
 		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )

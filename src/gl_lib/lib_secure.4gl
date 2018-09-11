@@ -417,8 +417,8 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION glsec_saveSession(l_id STRING, l_user STRING)
 	DEFINE l_val STRING
+	IF ui.interface.getFrontEndName() = "GGC" THEN RETURN END IF
 	IF NOT gl_chkClientVer("GDC","3.10.18","localeStorage") THEN RETURN END IF
---	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN END IF
 	CALL gl_encrypt.gl_encryptInit("../etc/publickey.crt","../etc/private.key")
 	LET l_val =  gl_encrypt.gl_encrypt(CURRENT YEAR TO MINUTE||"|"||l_user)
 	IF l_val IS NOT NULL THEN
@@ -431,8 +431,8 @@ FUNCTION glsec_getSession(l_id STRING, l_age INTEGER) RETURNS STRING
 	DEFINE l_val STRING
 	DEFINE l_ts DATETIME YEAR TO MINUTE
 	DEFINE x SMALLINT
+	IF ui.interface.getFrontEndName() = "GGC" THEN RETURN NULL END IF
 	IF NOT gl_chkClientVer("GDC","3.10.18","localeStorage") THEN RETURN NULL END IF
-	--IF ui.interface.getFrontEndName() != "GBC" THEN RETURN NULL END IF
 	CALL gl_encrypt.gl_encryptInit("../etc/publickey.crt","../etc/private.key")
 	CALL ui.Interface.frontCall("localStorage", "getItem", l_id,l_val)
 	CALL gl_lib.gl_logIt(SFMT("Get Session id=%1 val=%2",l_id,l_val))
@@ -451,8 +451,9 @@ FUNCTION glsec_getSession(l_id STRING, l_age INTEGER) RETURNS STRING
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION glsec_removeSession(l_id STRING)
+
+	IF ui.interface.getFrontEndName() = "GGC" THEN RETURN END IF
 	IF NOT gl_chkClientVer("GDC","3.10.18","localeStorage") THEN RETURN END IF
---	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN END IF
 
 	CALL ui.Interface.frontCall("localStorage", "removeItem", [l_id], [])
 

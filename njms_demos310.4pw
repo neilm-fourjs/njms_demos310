@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="30a09" version="3.2">
+<Project defaultApplication="-1028916705" gstVersion="30a09" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -496,7 +496,12 @@
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="run.bat" label="util" sourceDirectory="$(ProjectDir)/utils"/>
     </Package>
   </Group>
-  <Group label="Tests" language="Genero">
+  <Group label="Test GGC" language="Genero" targetDirectory="$(ProjectDir)/ggc">
+    <Application binaryName="ggc_1" id="-1028916705" label="ggc_1">
+      <File filePath="ggc/ggc_1.4gl"/>
+    </Application>
+  </Group>
+  <Group label="Tests Programs" language="Genero">
     <Application binaryName="genStock" id="248692011" label="genStock">
       <File filePath="test_app/genStock.4gl"/>
     </Application>
