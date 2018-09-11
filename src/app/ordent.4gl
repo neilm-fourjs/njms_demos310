@@ -454,10 +454,12 @@ FUNCTION enquire()
 		DISPLAY ARRAY detailArray_tree TO details.*
 			BEFORE DISPLAY
 				LET f = DIALOG.getForm()
+{ removed because causes issues with GGC
 			ON IDLE 2
 				IF benchmark THEN
 					EXIT DISPLAY
 				END IF
+}
 {
     	ON ACTION qa_dialog_ready
 				DISPLAY "QA Play"

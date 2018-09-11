@@ -2,13 +2,15 @@
 export BASE=$(PWD)
 export GGC=$(FGLDIR)/testing_utilities/ggc
 
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export LD_LIBRARY_PATH=$(JAVA_HOME)/jre/lib/amd64/server
 export CLASSPATH=$(GGC)/ggc.jar
 
 export FGLRESOURCEPATH=../etc
 export FGLIMAGEPATH=../pics
 export FGLLDPATH=../bin:$(GGC)/lib
 
-all: test1.42m
+all: run
 
 test1.log:
 	cd ../bin && fglrun --start-guilog=$(PWD)/$@ ../bin/menu.42r	
@@ -18,3 +20,6 @@ test1.4gl: test1.log
 
 test1.42m: test1.4gl
 	fglcomp -I $(GGC)/lib $^
+
+run: test1.42m
+	cd ../bin && fglrun $(BASE)/test1.42m
