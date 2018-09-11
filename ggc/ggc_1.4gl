@@ -11,71 +11,72 @@ MAIN
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION testSession(l_url STRING)
-	DEFINE s            Session
-	DEFINE app          Application
-	DEFINE childApp     Application
-	DEFINE sLog         Log
-	DEFINE aLog         Log
+	DEFINE l_session     Session
+	DEFINE l_app        Application
+--	DEFINE childApp   Application
+	DEFINE l_sLog         Log
+	DEFINE l_aLog         Log
 	DEFINE l_msg				STRING
 	DEFINE l_appName		STRING
 	DEFINE l_success		BOOLEAN
 
-	LET l_msg = SFMT("Running DemoTests on %1 ...", l_url)
+	LET l_msg = SFMT("Running Tests on %1 ...", l_url)
 
-	-- Run main application and make some basic introspection -----------------
+	-- Run main l_application and make some basic introspection -----------------
 
-	LET s = Session.create(l_url)
-	LET sLog = s.getSessionListener().getLogger()
-	CALL sLog.messageFromBdl(l_msg)
+	LET l_session = Session.create(l_url)
+	LET l_sLog = l_session.getSessionListener().getLogger()
+	CALL l_sLog.messageFromBdl(l_msg)
 
-	LET app = s.getNextApplication(10)
-	IF app IS NULL THEN
-		CALL sLog.errorFromBdl("Main Runner not spawned")
+	LET l_app = l_session.getNextApplication(10)
+	IF l_app IS NULL THEN
+		CALL l_sLog.errorFromBdl("Main Runner not spawned")
 		EXIT PROGRAM 1
 	END IF
 
-	LET aLog = app.getApplicationListener().getLogger()
-	LET l_appName = app.getApplicationName()
-	CALL sLog.messageFromBdl("Main application name:", l_appName)
+	LET l_aLog = l_app.getApplicationListener().getLogger()
+	LET l_appName = l_app.getApplicationName()
+	CALL l_sLog.messageFromBdl("Main l_application name:", l_appName)
 	IF l_appName != "menu" THEN
-		CALL sLog.errorFromBdl("Incorrect application name. Expecting [demo]")
+		CALL l_sLog.errorFromBdl("Incorrect l_application name. Expecting [demo]")
 		EXIT PROGRAM 1
 	END IF
 
 	DISPLAY "Sending Login & Password ..."
-	CALL app.enqueueSetValue("l_login", "test@test.com")
-	CALL app.enqueueSetValue("l_pass", "12test")
+	CALL l_app.enqueueSetValue("l_login", "test@test.com")
+	CALL l_app.enqueueSetValue("l_pass", "12test")
 	DISPLAY "Accepting Login form ..."
-	CALL app.enqueueAction("accept")
+	CALL l_app.enqueueAction("accept")
 
-	CALL app.synchronize(10)
+	CALL l_app.synchronize(10) -- 10 seconds timeout - Wait until this l_application interface queue is empty
 	
 	SLEEP 2
 	DISPLAY "Sending Logout ..."
-	CALL app.enqueueAction("logout")
-	CALL app.synchronize(10)
+	CALL l_app.enqueueAction("logout")
+	CALL l_app.synchronize(10)
 	-- ...
 
-	DISPLAY "Checking to see if application ended ..."
-	IF app.isRunning() THEN
-		CALL sLog.messageFromBdl("app is still running!")
+	DISPLAY "Checking to see if l_application ended ..."
+	IF l_app.isRunning() THEN
+		CALL l_sLog.messageFromBdl("app is still running!")
 		-- Try cancel instead!
-		CALL app.enqueueAction("cancel")
-		IF app.isRunning() THEN
-			CALL sLog.messageFromBdl("app is still running!")
+		CALL l_app.enqueueAction("cancel")
+		IF l_app.isRunning() THEN
+			CALL l_sLog.messageFromBdl("app is still running!")
 		END IF
 	ELSE
-		CALL sLog.messageFromBdl("app successfully ended!")
+		CALL l_sLog.messageFromBdl("app successfully ended!")
 	END IF
 
 
-	IF s.getSessionListener().computeResult("DemoTests") THEN
+	IF l_session.getSessionListener().computeResult("Tests") THEN
 		LET l_msg = SFMT("DemoTests successful on %1", l_url)
-		CALL sLog.messageFromBdl(l_msg)
+		CALL l_sLog.messageFromBdl(l_msg)
 		LET l_success = TRUE
 	ELSE
 		LET l_msg = SFMT("DemoTests not successful on %1", l_url)
-		CALL sLog.messageFromBdl(l_msg)
+		CALL l_sLog.messageFromBdl(l_msg)
 		LET l_success = FALSE
 	END IF
+
 END FUNCTION
