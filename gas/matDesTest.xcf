@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<APPLICATION Parent="defaultwa" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<APPLICATION Parent="defaultgdc"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://www.4js.com/ns/gas/3.10/cfextwa.xsd">
 	<DESCRIPTION> 
 		<SHORT>This is a test program</SHORT> 

@@ -451,7 +451,7 @@ FUNCTION glsec_getSession(l_id STRING, l_age INTEGER) RETURNS STRING
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION glsec_removeSession(l_id STRING)
-	IF NOT gl_chkClientVer("GDC","3.10.18","localeStorage") THEN RETURN NULL END IF
+	IF NOT gl_chkClientVer("GDC","3.10.18","localeStorage") THEN RETURN END IF
 --	IF ui.interface.getFrontEndName() != "GBC" THEN RETURN END IF
 
 	CALL ui.Interface.frontCall("localStorage", "removeItem", [l_id], [])
