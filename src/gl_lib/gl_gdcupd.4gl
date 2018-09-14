@@ -118,7 +118,7 @@ PRIVATE FUNCTION useGDCUpdateWS(l_url STRING)
 	DEFINE l_req com.HttpRequest
 	DEFINE l_resp com.HttpResponse
 	DEFINE l_stat SMALLINT
--- DISPLAY "URL:",l_url
+	DISPLAY "useGDCUpdateWS URL:",l_url
 -- Do Rest call to find out if we have a new GDC Update
 	TRY
 		LET l_req = com.HttpRequest.Create(l_url)

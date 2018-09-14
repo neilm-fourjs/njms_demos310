@@ -30,16 +30,14 @@ DEFINE m_menu DYNAMIC ARRAY OF RECORD
 DEFINE m_menus DYNAMIC ARRAY OF VARCHAR(6)
 DEFINE m_curMenu SMALLINT
 DEFINE m_args STRING
-DEFINE m_mdi CHAR(1)
 MAIN
 	CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,FALSE)
-	LET m_mdi = gl_lib.m_mdi
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
 
 	CLOSE WINDOW SCREEN
 
-	IF m_mdi = "M" THEN LET m_mdi = "C" END IF -- if MDI container set so child programs are children
+	IF gl_lib.m_mdi = "M" THEN LET gl_lib.m_mdi = "C" END IF -- if MDI container set so child programs are children
 
 	LET m_curMenu = 1
 	LET m_menus[m_curMenu] = "main"
@@ -78,7 +76,7 @@ FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 
 	SELECT user_key INTO m_user_id FROM sys_users WHERE email = m_user
 
-	LET m_args = m_mdi," ", m_user_id
+	LET m_args = gl_lib.m_mdi," ", m_user_id
 
 	RETURN TRUE
 END FUNCTION

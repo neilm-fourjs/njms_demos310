@@ -3,12 +3,14 @@ export BASE=$(PWD)
 export GGC=$(FGLDIR)/testing_utilities/ggc
 
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-export LD_LIBRARY_PATH=$(JAVA_HOME)/jre/lib/amd64/server
+export LD_LIBRARY_PATH=$(JAVA_HOME)/jre/lib/amd64/server:$(INFORMIXDIR)/lib:$(INFORMIXDIR)/lib/esql
 export CLASSPATH=$(GGC)/ggc.jar
 
+export FGLIMAGEPATH=$(BASE)/pics:$(FGLDIR)/lib/image2font.txt
 export FGLRESOURCEPATH=../etc
-export FGLIMAGEPATH=../pics
 export FGLLDPATH=../bin:$(GGC)/lib
+export MUSICDIR=$(BASE)/Music
+
 
 all: run
 
@@ -22,4 +24,4 @@ test1.42m: test1.4gl
 	fglcomp -I $(GGC)/lib $^
 
 run: test1.42m
-	cd ../bin && fglrun $(BASE)/test1.42m
+	cd ../bin && fglrun $(BASE)/test1.42m S
