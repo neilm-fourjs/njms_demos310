@@ -1,33 +1,31 @@
 {
   "theme-font-family"      : "'\"Century Gothic\",\"Droid Sans\", sans-serif'",
 
-  "gbc-font-size-ratio"    : "1",
-  "gbc-margin-ratio"       : "0.6",
-  "gbc-field-height-ratio" : "0.7",
-  "gbc-radiobutton-size"   : "14px",
-  "gbc-checkbox-size"      : "14px",
+  "theme-font-size-ratio"    : "1",
+  "theme-margin-ratio"       : "0.6",
+  "theme-field-height-ratio" : "0.7",
+  "theme-radiobutton-size"   : "14px",
+  "theme-checkbox-size"      : "14px",
 
-  "gbc-header-color"                     : "#260f00",
-  "gbc-primary-medium-color"             : "#ff6b0b",
+  "theme-header-color"                     : "#260f00",
+  "theme-primary-emphasis-background-color": "#ff6b0b",
 
-  "gbc-primary-background-color"         : "$mt-black",
-  "gbc-primary-color"                    : "#ff6b0b",
-  "gbc-primary-light-color"              : "#ff6b0b",
+  "theme-secondary-background-color"       : "$mt-black",
+  "theme-primary-background-color"         : "#ff6b0b",
+  "theme-primary-faded-background-color"   : "#ff6b0b",
 
-  "gbc-secondary-background-color"       : "#260f00",
-  "gbc-secondary-text-color"             : "$mt-white",
-  "gbc-secondary-color"                  : "#260f00",
+  "theme-secondary-alternative-background-color": "#260f00",
+  "theme-primary-color"                    : "$mt-white",
 
-  "gbc-field-disabled-background-color"  : "#260f00",
-  "gbc-field-disabled-background"        : "rgba(0,0,0,0.04)",
-  "gbc-field-background-color"           : "#361f10",
-  "gbc-disabled-color"                   : "$mt-black",
+  "theme-field-disabled-background-color"  : "#260f00",
+  "theme-field-background-color"           : "#361f10",
+  "theme-disabled-background-color"        : "$mt-black",
 
-  "gbc-separator-color"                  : "#260f00",
-  "gbc-message-color"                    : "#ff6b0b",
-  "gbc-error-color"                      : "$mt-red-800",
+  "theme-separator-color"                  : "#260f00",
+  "theme-message-background-color"         : "#ff6b0b",
+  "theme-error-background-color"           : "$mt-red-800",
 
-  "gbc-sidebar-always-visible-min-width" : "999999px",
-  "gbc-sidebar-default-width"            : "30px",
-  "gbc-animation-duration"               : "0.7s"
+  "theme-sidebar-always-visible-min-width" : "999999px",
+  "theme-sidebar-default-width"            : "30px",
+  "theme-animation-duration"               : "0.7s"
 }
