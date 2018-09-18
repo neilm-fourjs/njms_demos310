@@ -18,15 +18,15 @@ CONSTANT MAXCOLWIDTH=30
 #+ @code LET key = gl_lookup3( tabnam, cols, colts, wher, ordby )
 #+
 #+ @param tabnam db table name
-#+ @param cols  columns names ( comma seperated )
+#+ @param cols	columns names ( comma seperated )
 #+ @param colts columns titles ( comma seperated )
 #+					can be NULL to use column names
 #+					can be _ to have a hidden column - ie 1st col if it's a key
-#+ @param wher  The WHERE clause, 1=1 means all, or use result of construct
+#+ @param wher	The WHERE clause, 1=1 means all, or use result of construct
 #+ @param ordby The ORDER BY clause
 FUNCTION gl_lookup3( tabnam, cols, colts, wher, ordby ) --{{{
 	DEFINE tabnam, cols, colts, wher, ordby STRING
-	DEFINE frm, grid, tabl, tabc, edit, curr  om.DomNode
+	DEFINE frm, grid, tabl, tabc, edit, curr	om.DomNode
 	DEFINE hb, sp, titl om.DomNode
 	DEFINE tot_recs, x, i INTEGER
 	DEFINE tok base.StringTokenizer
@@ -43,9 +43,9 @@ FUNCTION gl_lookup3( tabnam, cols, colts, wher, ordby ) --{{{
 
 	GL_MODULE_ERROR_HANDLER
 	GL_DBGMSG(2,"gl_lookup3: table(s)="||tabnam)
-	GL_DBGMSG(2,"gl_lookup3: cols    ="||cols)
-	GL_DBGMSG(2,"gl_lookup3: titles  ="||colts)
-	GL_DBGMSG(2,"gl_lookup3: where   ="||wher)
+	GL_DBGMSG(2,"gl_lookup3: cols		="||cols)
+	GL_DBGMSG(2,"gl_lookup3: titles	="||colts)
+	GL_DBGMSG(2,"gl_lookup3: where	 ="||wher)
 	GL_DBGMSG(2,"gl_lookup3: orderby ="||ordby)
 	GL_DBGMSG(2,"gl_lookup3: Declaring Count Cursor...")
 -- Check to make sure there are records.
@@ -136,11 +136,11 @@ FUNCTION gl_lookup3( tabnam, cols, colts, wher, ordby ) --{{{
 -- Create centered buttons.
 	LET hb = grid.createChild('HBox')
 	CALL hb.setAttribute("posY","3")
-  LET curr = hb.createChild('Label')
-  CALL curr.setAttribute("text","Row:")
-  LET curr = hb.createChild('Label')
-  CALL curr.setAttribute("name","cur_row")
-  CALL curr.setAttribute("sizePolicy","dynamic")
+	LET curr = hb.createChild('Label')
+	CALL curr.setAttribute("text","Row:")
+	LET curr = hb.createChild('Label')
+	CALL curr.setAttribute("name","cur_row")
+	CALL curr.setAttribute("sizePolicy","dynamic")
 	LET sp = hb.createChild('SpacerItem')
 	LET titl = hb.createChild('Button')
 	CALL titl.setAttribute("name","firstrow")
@@ -165,7 +165,7 @@ FUNCTION gl_lookup3( tabnam, cols, colts, wher, ordby ) --{{{
 	LET sp = hb.createChild('SpacerItem')
 	LET titl = hb.createChild('Label')
 	CALL titl.setAttribute("text",tot_recs USING "###,###,##&"||" Rows")
-  CALL titl.setAttribute("sizePolicy","dynamic")
+	CALL titl.setAttribute("sizePolicy","dynamic")
 
 -- Setup the dialog
 	LET int_flag = FALSE
