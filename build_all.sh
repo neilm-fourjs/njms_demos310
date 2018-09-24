@@ -1,5 +1,9 @@
 
-GBCPROJDIR=/opt/fourjs/gbc-current-project
+export GBCPROJDIR=/opt/fourjs/gbc-current
+if [ ! -d $GBCPROJDIR ]; then
+	echo "WARNING: GBCPROJDIR = $GBCPROJDIR - not found!"
+	read a
+fi
 
 echo "Updating etc/app_info.txt ..."
 cat etc/app_name.txt > etc/app_info.txt
