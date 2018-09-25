@@ -6,9 +6,10 @@ IMPORT os
 IMPORT FGL lib_secure
 IMPORT FGL gl_lib
 
-&include "genero_lib.inc"
 &include "schema.inc"
+&include "genero_lib.inc"
 &include "app.inc"
+
 TYPE f_new_account FUNCTION() RETURNS STRING
 CONSTANT EMAILPROG = "sendemail.sh" --"fglrun sendemail.42r"
 CONSTANT C_SESSION_KEY = "NJMDEMOSESSION"
@@ -82,8 +83,8 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 		ON ACTION forgotten CALL forgotten(l_login)
 
 		ON ACTION testlogin
-			LET l_login = "test@test.com"
-			LET l_pass = "12test"
+			LET l_login = C_DEF_USER_EMAIL
+			LET l_pass = C_DEF_USER_PASSWD
 			IF validate_login( l_login, l_pass ) THEN
 				EXIT INPUT
 			END IF

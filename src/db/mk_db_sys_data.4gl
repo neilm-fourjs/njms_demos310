@@ -3,8 +3,8 @@ IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL lib_secure
 &include "schema.inc"
+&include "app.inc"
 
-DEFINE m_dbtyp CHAR(3)
 DEFINE m_mkey, m_ukey, m_rkey INTEGER
 --------------------------------------------------------------------------------
 FUNCTION insert_system_data()
@@ -106,12 +106,13 @@ END FUNCTION
 FUNCTION mk_demo_account()
 	DEFINE l_hash_type, l_login_pass, l_salt, l_pass_hash, l_email VARCHAR(128)
 	DEFINE l_dte DATE
-	CALL mkdb_progress( "Creating test account." )
-	LET l_email = "test@test.com"
+
+	CALL mkdb_progress( SFMT("Creating test account: %1 / %2", C_DEF_USER_EMAIL,C_DEF_USER_PASSWD))
+	LET l_email = C_DEF_USER_EMAIL
 	SELECT * FROM sys_users WHERE email = l_email
 	IF STATUS = 0 THEN RETURN END IF
 
-	LET l_login_pass = "12test"
+	LET l_login_pass = C_DEF_USER_PASSWD
 	LET l_hash_type = lib_secure.glsec_getHashType()
 	LET l_salt = lib_secure.glsec_genSalt(l_hash_type)
 	LET l_pass_hash = lib_secure.glsec_genPasswordHash( l_login_pass, l_salt, l_hash_type )
@@ -139,7 +140,7 @@ FUNCTION mk_demo_account()
 				VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",	l_hash_type, "not stored", l_salt, l_pass_hash, l_dte)
 		END IF
 -- NOTE: we don't store the clear text password
-		CALL mkdb_progress( "Test Account Inserted: "||l_email||" / "||l_login_pass||" with "||l_hash_type||" hash." )
+		CALL mkdb_progress( SFMT("Test Account Inserted: %1 / %2 with %3 hash.",l_email,l_login_pass,l_hash_type ) )
 	CATCH
 		CALL mkdb_progress( "Insert test account failed!\n"||STATUS||":"||SQLERRMESSAGE )
 		EXIT PROGRAM
