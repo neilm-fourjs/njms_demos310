@@ -1,1 +1,33 @@
-theme.scss.json.teal
+{
+
+  "theme-font-family"      : "'\"Century Gothic\",\"Droid Sans\", sans-serif'",
+
+  "theme-font-size-ratio"    : "0.8",
+  "theme-margin-ratio"       : "0.6",
+  "theme-field-height-ratio" : "0.7",
+  "theme-radiobutton-size"   : "14px",
+  "theme-checkbox-size"      : "14px",
+  "theme-sidebar-always-visible-min-width" : "999999px",
+  "theme-sidebar-default-width"            : "30px",
+  "theme-animation-duration"               : "0.7s",
+
+  "theme-header-color"                     : "$mt-teal-900",
+  "theme-primary-emphasis-background-color": "$mt-teal-800",
+
+  "theme-secondary-background-color"       : "$mt-grey-50",
+  "theme-primary-background-color"         : "$mt-teal-500",
+  "theme-primary-faded-background-color"   : "$mt-white",
+
+  "theme-secondary-alternative-background-color": "$mt-teal-50",
+  "theme-primary-color"                         : "$mt-white",
+  "gbc-secondary-color"                         : "$mt-teal-600",
+
+  "theme-field-disabled-background-color"  : "rgba(0,0,0,0.04)",
+  "gbc-field-disabled-background"          : "rgba(0,0,0,0.04)",
+  "theme-field-background-color"           : "$mt-white",
+  "theme-disabled-background-color"        : "$mt-teal-400",
+
+  "theme-separator-color"                  : "$mt-teal-400",
+  "theme-message-background-color"         : "$mt-teal-800",
+  "theme-error-background-color"           : "$mt-teal-800"
+}
