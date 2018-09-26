@@ -36,6 +36,9 @@
 	<Style name=".center">
 		<StyleAttribute name="position" value="center" />
 	</Style>
+	<Style name=".left">
+		<StyleAttribute name="position" value="left" />
+	</Style>
 	<Style name=".noborder">
 		<StyleAttribute name="border" value="none" />
 	</Style>

@@ -20,7 +20,8 @@ FUNCTION ifx_create_system_tables()
 		login_pass  VARCHAR(16), -- not actually used.
 		salt        VARCHAR(64), -- for Genero 3.10 using bcrypt we don't need this
 		pass_hash   VARCHAR(128) NOT NULL,
-		pass_expire DATE
+		pass_expire DATE,
+		gbc_theme   VARCHAR(40)
 	);
 
 	CREATE TABLE sys_user_roles (

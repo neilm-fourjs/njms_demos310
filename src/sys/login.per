@@ -15,6 +15,8 @@ GRID (STYLE="center")
 ["  "][f001                             ]
 ["  "][l002                    ]
 ["  "][f002                    ]
+["  "][l005                    ]
+["  "][f005                    ]
 [""]
 [:        :accept:forgotten:newacc:about:        :]
 <                                                 >
@@ -45,13 +47,16 @@ GROUP grp1 : grp1, GRIDCHILDRENINPARENT,STYLE="login_g";
 
 LABEL titl : titl,TEXT=%"Welcome",JUSTIFY=CENTER,STYLE="heading";
 
-LABEL l001 : lemail,TEXT=%"Email:",COMMENT=%"Your Email address", STYLE="bold";
-LABEL l002 : lpassw,TEXT=%"Password:", STYLE="bold";
+LABEL l001 : lemail,TEXT=%"Email:",COMMENT=%"Your Email address", STYLE="bold left";
+LABEL l002 : lpassw,TEXT=%"Password:", STYLE="bold left";
+LABEL l005 : ltheme,TEXT=%"Theme:", STYLE="bold left";
 
 f001 = FORMONLY.l_login, NOT NULL,COMMENT=%"Your Email address", DOWNSHIFT,
 	PLACEHOLDER=%"Email Address", REQUIRED;
 
 f002 = FORMONLY.l_pass, INVISIBLE, REQUIRED, NOT NULL;
+
+COMBOBOX f005 = FORMONLY.l_theme, NOT NULL, INITIALIZER=cb_gbc_theme;
 
 GROUP grp2 : grp2, GRIDCHILDRENINPARENT,TEXT=%"Password Change:",HIDDEN;
 

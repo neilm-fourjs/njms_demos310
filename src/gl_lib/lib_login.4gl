@@ -3,6 +3,7 @@
 #+
 
 IMPORT os
+IMPORT util
 IMPORT FGL lib_secure
 IMPORT FGL gl_lib
 
@@ -18,6 +19,11 @@ PUBLIC DEFINE m_logo_image STRING
 PUBLIC DEFINE m_new_acc_func f_new_account
 DEFINE m_login_audit_key INTEGER
 DEFINE m_login_stat CHAR(1)
+DEFINE m_themes DYNAMIC ARRAY OF RECORD
+	name STRING,
+	title STRING,
+	conditions DYNAMIC ARRAY OF STRING
+END RECORD
 --------------------------------------------------------------------------------
 #+ Login function - One day when this program grows up it will have single signon 
 #+ then hackers only have one password to crack :)
@@ -27,7 +33,7 @@ DEFINE m_login_stat CHAR(1)
 #+ @param l_allow_new - Boolean - Enable the 'Create New Account' option.
 #+ @return login email address or NULL or 'NEW' for a new account.
 PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
-	DEFINE l_login, l_pass STRING
+	DEFINE l_login, l_pass, l_theme, l_cur_theme, l_old_theme STRING
 	DEFINE l_allow_new BOOLEAN
 	DEFINE f ui.Form
 
@@ -47,11 +53,13 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 		CALL gl_lib.gl_showElement("logo_grid")
 		DISPLAY BY NAME m_logo_image
 	END IF
-
+	IF ui.Interface.getFrontEndName() = "GBC" THEN
+		CALL ui.Interface.frontCall("theme","getCurrentTheme", [], [l_cur_theme])
+		LET l_theme = l_cur_theme
+	END IF
 	LET l_login = fgl_getenv("OPENID_email")
-
 	CALL  gl_lib.gl_logIt("before input for login")
-	INPUT BY NAME l_login, l_pass ATTRIBUTES(UNBUFFERED, WITHOUT DEFAULTS)
+	INPUT BY NAME l_login, l_pass, l_theme ATTRIBUTES(UNBUFFERED, WITHOUT DEFAULTS)
 		BEFORE INPUT
 			LET f = DIALOG.getForm()
 			IF NOT l_allow_new THEN
@@ -82,6 +90,9 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 
 		ON ACTION forgotten CALL forgotten(l_login)
 
+		ON CHANGE l_theme
+			CALL ui.Interface.frontCall("theme","setTheme", [l_theme], [])
+
 		ON ACTION testlogin
 			LET l_login = C_DEF_USER_EMAIL
 			LET l_pass = C_DEF_USER_PASSWD
@@ -95,6 +106,16 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 
 	IF l_login IS NOT NULL AND l_login != "Cancelled" THEN
 		CALL lib_secure.glsec_saveSession(C_SESSION_KEY, l_login)
+	END IF
+
+	IF ui.Interface.getFrontEndName() = "GBC" THEN
+		SELECT gbc_theme INTO l_old_theme FROM sys_users WHERE email = l_login
+		IF l_old_theme IS NOT NULL AND l_cur_theme != l_old_theme THEN
+			CALL ui.Interface.frontCall("theme","setTheme", [l_old_theme.trim()], [])
+		END IF
+		IF l_old_theme IS NULL OR l_old_theme != l_theme THEN
+			UPDATE sys_users SET gbc_theme = l_theme WHERE email = l_login
+		END IF
 	END IF
 
 	CALL  gl_lib.gl_logIt("after input for login:"||l_login)
@@ -332,4 +353,21 @@ PRIVATE FUNCTION audit_login( l_email LIKE sys_users.email, l_stat CHAR(1) )
 	LET l_audit_rec.stat = l_stat
 	INSERT INTO sys_login_hist VALUES l_audit_rec.*
 	LET m_login_audit_key = SQLCA.SQLERRD[2]
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION cb_gbc_theme(l_cb ui.Combobox)
+	DEFINE l_result STRING
+	DEFINE x SMALLINT
+
+	IF ui.Interface.getFrontEndName() != "GBC" THEN
+		CALL ui.Window.getCurrent().getForm().setElementHidden("ltheme",TRUE)
+		CALL ui.Window.getCurrent().getForm().setFieldHidden("formonly.l_theme",TRUE)
+		RETURN
+	END IF
+	CALL ui.Interface.frontCall("theme", "listThemes", [], [l_result])
+	--DISPLAY "GBC Themes:", l_result
+	CALL util.JSON.parse(l_result,m_themes)
+	FOR x = 1 TO m_themes.getLength()
+		CALL l_cb.addItem(m_themes[x].name, m_themes[x].title)
+	END FOR
 END FUNCTION

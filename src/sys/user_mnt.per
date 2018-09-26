@@ -38,7 +38,8 @@ GRID
 [pw        |f011                ]
 [st        |f012                                ]
 [ph        |f013                                ]
-[pe        |f014        ] 
+[pe        |f014        ]
+[te        |f015                                ]
 }
 END -- GRID
 END -- VBOX
@@ -89,6 +90,7 @@ LABEL pw : pw,TEXT=%"Password:", JUSTIFY=RIGHT;
 LABEL st : st,TEXT=%"Salt:", JUSTIFY=RIGHT, HIDDEN;
 LABEL ph : ph,TEXT=%"Password Hash:", JUSTIFY=RIGHT, HIDDEN;
 LABEL pe : pe,TEXT=%"Password Expire:", JUSTIFY=RIGHT;
+LABEL te : te,TEXT=%"GBC Theme:", JUSTIFY=RIGHT;
 
 f001 = sys_users.user_key;
 f002 = sys_users.salutation;
@@ -105,6 +107,7 @@ f011 = sys_users.login_pass, VERIFY,INVISIBLE, NOT NULL;
 f012 = sys_users.salt, NOENTRY, HIDDEN;
 f013 = sys_users.pass_hash, NOENTRY, HIDDEN;
 DATEEDIT f014 = sys_users.pass_expire;
+f015 = sys_users.gbc_theme;
 
 PHANTOM sys_user_roles.user_key;
 PHANTOM sys_user_roles.role_key;
