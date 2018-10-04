@@ -65,3 +65,8 @@ FUNCTION new_acct() RETURNS STRING
 	LET int_flag = FALSE
 	RETURN l_email
 END FUNCTION
+FUNCTION pop_combo(l_cb ui.Combobox)
+	CALL l_cb.addItem(0,"Admin")
+	CALL l_cb.addItem(1,"User")
+	CALL l_cb.addItem(2,"Special")
+END FUNCTION

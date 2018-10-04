@@ -11,10 +11,27 @@ IMPORT FGL gl_lib
 &include "genero_lib.inc"
 &include "app.inc"
 
+CONSTANT C_OPENIDLOGIN = "https://generodemo.hopto.org/g/ua/r/OpenIdLogin"
+CONSTANT C_OPENID = "#OpenId#"
+TYPE t_oidc RECORD
+		email STRING,
+		family STRING,
+		given STRING,
+		idp_issuer STRING,
+		idp_token_endpoint STRING,
+		name STRING,
+		picture STRING,
+		profile STRING,
+		sub STRING,
+		token_expires_in INTEGER,
+		userinfo_endpoint STRING
+	END RECORD
+
 TYPE f_new_account FUNCTION() RETURNS STRING
 CONSTANT EMAILPROG = "sendemail.sh" --"fglrun sendemail.42r"
 CONSTANT C_SESSION_KEY = "NJMDEMOSESSION"
 CONSTANT C_SESSION_MINS = 20 -- how long betweeen logins.
+
 PUBLIC DEFINE m_logo_image STRING
 PUBLIC DEFINE m_new_acc_func f_new_account
 DEFINE m_login_audit_key INTEGER
@@ -82,6 +99,15 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 				END IF
 			ELSE
 				LET l_login = "Cancelled"
+			END IF
+
+		ON ACTION openid
+			CALL openid(C_OPENIDLOGIN) RETURNING l_login
+			IF NOT validate_login(l_login,C_OPENID) THEN
+				ERROR %"Invalid Login ID!"
+				NEXT FIELD l_login
+			ELSE
+				EXIT INPUT
 			END IF
 
 		ON ACTION acct_new
@@ -154,8 +180,13 @@ PRIVATE FUNCTION validate_login(
 	SELECT * INTO l_acc.* FROM sys_users WHERE email = l_login
 	IF STATUS = NOTFOUND THEN
 		CALL gl_logIt("No account for:"||l_login)
-	CALL audit_login(l_login,"A")
+		CALL audit_login(l_login,"A")
 		RETURN FALSE
+	END IF
+
+	IF l_pass = C_OPENID THEN
+		CALL audit_login(l_login,"I")
+		RETURN TRUE
 	END IF
 
 -- is password correct?
@@ -308,6 +339,51 @@ PRIVATE FUNCTION passchg(l_login LIKE sys_users.email) RETURNS BOOLEAN
 	CALL gl_lib.gl_warnPopup(%"Your password has be updated, please don't forget it.\nWe cannot retrieve this password, only reset it.\n")
 
 	RETURN TRUE
+END FUNCTION
+--------------------------------------------------------------------------------
+-- Try and use an OpenID Login
+PRIVATE FUNCTION openid(l_url STRING) RETURNS STRING
+	DEFINE l_ret INTEGER
+	DEFINE l_store STRING
+	DEFINE l_oidc t_oidc
+	DEFINE l_key_list STRING
+	DEFINE l_key_array DYNAMIC ARRAY OF STRING
+	DEFINE x SMALLINT
+
+	CALL ui.Interface.frontCall("localStorage", "removeItem", ["openid"], [])
+
+	IF ui.Interface.getFrontEndName() = "GDC" THEN
+		LET l_url = "../bin/gdc -u "||l_url
+		CALL ui.Interface.frontCall("standard","execute",[l_url, TRUE],[l_ret])
+	ELSE
+		CALL ui.Interface.frontCall("standard","launchURL",[l_url],[])
+	END IF
+
+	-- loop looking for openId in storage
+	FOR x = 1 TO 10
+		SLEEP 2
+		CALL ui.Interface.frontCall("localStorage", "keys", [], [l_key_list] )
+		CALL util.JSON.parse( l_key_list, l_key_array )
+		--DISPLAY "Searching keys:", l_key_list
+		IF l_key_array.search(NULL,"openid") > 0 THEN
+			--DISPLAY "Found 'openid'"
+			EXIT FOR
+		END IF
+		DISPLAY SFMT("Waiting for openId %1 of 10 ... ",x) TO l_login
+		CALL ui.Interface.refresh()
+	END FOR
+
+	CALL ui.Interface.frontCall("localStorage", "getItem", ["openid"], [l_store])
+
+	--DISPLAY "Store:",l_store
+	IF l_store IS NULL THEN
+		ERROR "Login Invalid!"
+		RETURN NULL
+	END IF
+
+	CALL util.JSON.parse( l_store, l_oidc )
+
+	RETURN l_oidc.email
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Check to see if we have already logged in recently.

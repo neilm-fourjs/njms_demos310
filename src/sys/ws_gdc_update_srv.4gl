@@ -60,7 +60,7 @@ MAIN
 					CALL gl_lib_restful.gl_setError("Unknown request:\n"||m_reqInfo.path||"\n"||m_reqInfo.method)
 					LET gl_lib_restful.m_err.code = -3
 					LET gl_lib_restful.m_err.desc = SFMT(%"Method '%' not supported",gl_lib_restful.m_reqInfo.method)
-					LET l_str = util.JSON.stringify(m_err)
+					LET l_str = util.JSON.stringify(gl_lib_restful.m_err)
 		  END CASE
 			-- send back the response.
 			CALL l_req.setResponseHeader("Content-Type","application/json")

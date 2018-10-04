@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="ANSI_X3.4-1968"?>
 
 <StyleList>
+
+	<Style name="*">
+		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
+		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->
+		<StyleAttribute name="fontSize" value="1em" />
+	</Style>
+
+	<Style name="Group::title">
+		<StyleAttribute name="fontSize" value="1.2em" />
+		<StyleAttribute name="fontWeight" value="bold" />
+		<StyleAttribute name="textColor" value="blue" />
+	</Style>
+
 	<Style name=".hidden">
 		<StyleAttribute name="textColor" value="window" />
 		<StyleAttribute name="backgroundColor" value="window" />

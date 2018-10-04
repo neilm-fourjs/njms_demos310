@@ -11,7 +11,7 @@ END -- Toolbar
 LAYOUT ( TEXT="Your Details", WINDOWSTYLE="main2", IMAGE="fa-user" )
 GRID
 {
-[user_key   |r1|f001        ]  [r                                  ]
+[user_key  |r1|f001        ]  [r                                  ]
 [email     |r6|f007                                               ]
 [salutation|r2|f003        ]  
 [forenames |r3|f004                                               ]
@@ -29,6 +29,7 @@ GRID
 [                                                                 ]
 [                                                                 ]
 [passexp   |pe|p002             ]
+[gbctheme  |bc|f010                                  ]
 }
 END -- GRID
 END -- LAYOUT
@@ -50,6 +51,7 @@ LABEL ra : ra, TEXT="",STYLE="required";
 LABEL rd : rd, TEXT="",STYLE="required";
 LABEL rp : rp, TEXT="*",STYLE="required";
 LABEL pe : pe, TEXT="*",STYLE="required";
+LABEL bc : bc, TEXT="",STYLE="required";
 
 LABEL user_key    : lc, TEXT=%"Account Id:",JUSTIFY=RIGHT;
 LABEL email			 : em, TEXT=%"Email:",JUSTIFY=RIGHT;
@@ -63,6 +65,7 @@ LABEL active		 : ac, TEXT=%"Active:",JUSTIFY=RIGHT;
 LABEL forcepwch  : fp, TEXT=%"Force Pass Change:",JUSTIFY=RIGHT;
 LABEL passwd     : pw, TEXT=%"Password:", JUSTIFY=RIGHT;
 LABEL passexp    : pe, TEXT=%"Password Expires:",JUSTIFY=RIGHT;
+LABEL gbctheme   : bc, TEXT=%"GBC Theme:",JUSTIFY=RIGHT;
 
 f001 = sys_users.user_key, DEFAULT=0;
 f007 = sys_users.email, NOT NULL, REQUIRED, TABINDEX=1, DOWNSHIFT;
@@ -81,6 +84,8 @@ BUTTON generate:generate, TEXT="Re-generate", IMAGE="fa-cog", HIDDEN;
 --EDIT p001 = sys_users.login_pass, NOENTRY, FONTPITCH=FIXED, NOT NULL, TABINDEX=8, STYLE="em12";
 
 DATEEDIT p002 = sys_users.pass_expire, NOT NULL, TABINDEX=9;
+
+COMBOBOX f010 = sys_users.gbc_theme, INITIALIZER=cb_gbc_theme;
 
 PHANTOM sys_users.salt;
 PHANTOM sys_users.pass_hash;

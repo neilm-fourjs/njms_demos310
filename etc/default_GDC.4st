@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="ANSI_X3.4-1968"?>
 
 <StyleList>
+
+	<Style name="*">
+		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
+		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->
+		<StyleAttribute name="fontSize" value="1em" />
+	</Style>
+
 	<Style name=".grad1">
 		<StyleAttribute name="backgroundColor"         value="#F2F2F9" />
 		<StyleAttribute name="backgroundGradientType"  value="linear|top|bottom" />
@@ -10,6 +17,12 @@
 		<StyleAttribute name="backgroundColor"         value="#F2F2F9" />
 		<StyleAttribute name="backgroundGradientType"  value="linear|bottom|top" />
 		<StyleAttribute name="backgroundGradientColor" value="#B7B7CC" />
+	</Style>
+
+	<Style name="Group::title">
+		<StyleAttribute name="fontSize" value="1.2em" />
+		<StyleAttribute name="fontWeight" value="bold" />
+		<StyleAttribute name="textColor" value="blue" />
 	</Style>
 
 	<Style name=".hidden">
@@ -75,11 +88,6 @@
 		<StyleAttribute name="fontFamily" value=" Arial" />
 	</Style>
 
-	<Style name="*">
-		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
-		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->
-		<StyleAttribute name="fontSize" value="1em" />
-	</Style>
 	<Style name="Label">
 		<StyleAttribute name="textColor" value="darkblue" />
 		<StyleAttribute name="fontWeight" value="bold" />
