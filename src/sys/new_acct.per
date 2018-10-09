@@ -90,7 +90,7 @@ DATEEDIT p002 = sys_users.pass_expire, NOT NULL, TABINDEX=9;
 
 COMBOBOX f010 = sys_users.gbc_theme, INITIALIZER=cb_gbc_theme, TABINDEX=10;
 f011 = sys_users.photo_uri, SCROLL, TABINDEX=11;
-IMAGE photo = FORMONLY.l_photo, STYLE="noborder";
+IMAGE photo = FORMONLY.l_photo, AUTOSCALE, STYLE="noborder";
 
 PHANTOM sys_users.salt;
 PHANTOM sys_users.pass_hash;
