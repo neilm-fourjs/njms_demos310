@@ -25,11 +25,11 @@ END -- TABLE
 GRID
 {
 [uk        |f001 ]
-[sl        |f002                      ]
-[fn        |f003                      ]
-[sn        |f004                      ]
-[ps        |f005                      ]
-[em        |f006                      ]
+[sl        |f002                      ][photo ]
+[fn        |f003                      ][      ]
+[sn        |f004                      ][      ]
+[ps        |f005                      ][      ]
+[em        |f006                      ][      ]
 [cn        |f007                      ]
 [ut        |f008        ]
 [ac        |a ]
@@ -40,6 +40,7 @@ GRID
 [ph        |f013                                ]
 [pe        |f014        ]
 [te        |f015                                ]
+[pu        |f016                                ]
 }
 END -- GRID
 END -- VBOX
@@ -91,6 +92,7 @@ LABEL st : st,TEXT=%"Salt:", JUSTIFY=RIGHT, HIDDEN;
 LABEL ph : ph,TEXT=%"Password Hash:", JUSTIFY=RIGHT, HIDDEN;
 LABEL pe : pe,TEXT=%"Password Expire:", JUSTIFY=RIGHT;
 LABEL te : te,TEXT=%"GBC Theme:", JUSTIFY=RIGHT;
+LABEL pu : pu,TEXT=%"Photo URI:", JUSTIFY=RIGHT;
 
 f001 = sys_users.user_key;
 f002 = sys_users.salutation;
@@ -108,6 +110,8 @@ f012 = sys_users.salt, NOENTRY, HIDDEN;
 f013 = sys_users.pass_hash, NOENTRY, HIDDEN;
 DATEEDIT f014 = sys_users.pass_expire;
 f015 = sys_users.gbc_theme;
+f016 = sys_users.photo_uri, SCROLL;
+IMAGE photo = FORMONLY.l_photo, STRETCH=BOTH, STYLE="noborder";
 
 PHANTOM sys_user_roles.user_key;
 PHANTOM sys_user_roles.role_key;

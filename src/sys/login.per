@@ -12,20 +12,22 @@ GRID (STYLE="center")
 [: :titl                                      : :]
 [""]
 ["  "][l001                    ]
-["  "][f001                             ]
+["  "][f001                                    ]
 ["  "][l002                    ]
 ["  "][f002                    ]
-["  "][l005                    ]
-["  "][f005                    ]
+["  "][l003]
+["  "][openid                  ]
+["  "][l004                    ]
+["  "][f004                    ]
 [""]
-[:    :accept:openid:forgotten:newacc:about:     :]
+[:        :accept:forgotten:newacc:about:       :]
 <                                                 >
 [""]
 <G grp2                                           >
-["  "][l003                    ]
-["  "][f003                    ]
-["  "][l004                    ]
-["  "][f004                    ]
+["  "][l005                    ]
+["  "][f005                    ]
+["  "][l006                    ]
+["  "][f006                    ]
 [l_rules                                         ]
 [                                                ]
 [                                                ]
@@ -48,26 +50,28 @@ GROUP grp1 : grp1, GRIDCHILDRENINPARENT,STYLE="login_g";
 LABEL titl : titl,TEXT=%"Welcome",JUSTIFY=CENTER,STYLE="heading";
 
 LABEL l001 : lemail,TEXT=%"Email:",COMMENT=%"Your Email address", STYLE="bold left";
-LABEL l002 : lpassw,TEXT=%"Password:", STYLE="bold left";
-LABEL l005 : ltheme,TEXT=%"Theme:", STYLE="bold left";
-
 f001 = FORMONLY.l_login, NOT NULL,COMMENT=%"Your Email address", DOWNSHIFT,
 	PLACEHOLDER=%"Email Address", REQUIRED;
 
+LABEL l002 : lpassw,TEXT=%"Password:", STYLE="bold left";
 f002 = FORMONLY.l_pass, INVISIBLE, REQUIRED, NOT NULL;
 
-COMBOBOX f005 = FORMONLY.l_theme, NOT NULL, INITIALIZER=cb_gbc_theme;
+LABEL l003 : lor,TEXT=%"Or Use:", STYLE="bold left";
+BUTTON openid : openid, TEXT=%"GoogleId", IMAGE="fab-google";
+
+LABEL l004 : ltheme,TEXT=%"Theme:", STYLE="bold left";
+COMBOBOX f004 = FORMONLY.l_theme, NOT NULL, INITIALIZER=cb_gbc_theme;
 
 GROUP grp2 : grp2, GRIDCHILDRENINPARENT,TEXT=%"Password Change:",HIDDEN;
 
-LABEL l003 : lpassw1,TEXT=%"New Password:", STYLE="bold";
-LABEL l004 : lpassw2,TEXT=%"Confirm Password:", STYLE="bold";
-f003 = FORMONLY.l_pass1, INVISIBLE, REQUIRED, NOT NULL;
-f004 = FORMONLY.l_pass2, INVISIBLE, REQUIRED, NOT NULL;
+LABEL l005 : lpassw1,TEXT=%"New Password:", STYLE="bold";
+f005 = FORMONLY.l_pass1, INVISIBLE, REQUIRED, NOT NULL;
+LABEL l006 : lpassw2,TEXT=%"Confirm Password:", STYLE="bold";
+f006 = FORMONLY.l_pass2, INVISIBLE, REQUIRED, NOT NULL;
 TEXTEDIT l_rules = FORMONLY.l_rules, SCROLLBARS=NONE,STRETCH=BOTH,STYLE="small";
 
 BUTTON accept : accept, TEXT=%"Login",IMAGE="fa-user";
 BUTTON newacc : acct_new, TEXT=%"New Account", IMAGE="fa-user-plus";
-BUTTON openid : openid, TEXT=%"Login with GoogleId", IMAGE="fab-google";
+
 BUTTON forgotten : forgotten, TEXT=%"Reset Password?", IMAGE="fa-question-circle";
 BUTTON about : about, TEXT=%"About?", IMAGE="fa-info-circle";

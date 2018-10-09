@@ -6,20 +6,25 @@ IMPORT FGL lib_secure
 &include "schema.inc"
 --------------------------------------------------------------------------------
 #+ Create a new account.
-FUNCTION new_acct() RETURNS STRING
+FUNCTION new_acct(l_email STRING, l_family STRING, l_given STRING, l_photo STRING) RETURNS STRING
 	DEFINE l_acc RECORD LIKE sys_users.*
-	DEFINE l_email, l_rules STRING
+	DEFINE l_rules STRING
 	LET l_acc.user_key = 0
 	LET l_acc.acct_type = 1
 	LET l_acc.active = TRUE
 	LET l_acc.forcepwchg = "N"
 	LET l_acc.pass_expire = TODAY + 6 UNITS MONTH
+	LET l_acc.email = l_email
+	LET l_acc.surname = l_family
+	LET l_acc.forenames = l_given
+	LET l_acc.photo_uri = l_photo
 
 	OPEN WINDOW new_acct WITH FORM "new_acct"
 
 	LET l_acc.login_pass = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 	LET l_rules = lib_secure.glsec_passwordRules( LENGTH(l_acc.login_pass) )
 	DISPLAY BY NAME l_rules
+	DISPLAY BY NAME l_photo
 
 	LET l_acc.login_pass = NULL
 	INPUT BY NAME l_acc.* ATTRIBUTES(WITHOUT DEFAULTS, FIELD ORDER FORM, UNBUFFERED)
@@ -41,6 +46,9 @@ FUNCTION new_acct() RETURNS STRING
 				ERROR l_rules
 				NEXT FIELD login_pass
 			END IF
+		AFTER FIELD photo_uri
+			DISPLAY l_acc.photo_uri TO l_photo
+
 		BEFORE INPUT
 			CALL DIALOG.setFieldActive("sys_users.user_key",FALSE)
 			CALL DIALOG.setFieldActive("sys_users.forcepwchg",FALSE)
@@ -65,6 +73,7 @@ FUNCTION new_acct() RETURNS STRING
 	LET int_flag = FALSE
 	RETURN l_email
 END FUNCTION
+--------------------------------------------------------------------------------
 FUNCTION pop_combo(l_cb ui.Combobox)
 	CALL l_cb.addItem(0,"Admin")
 	CALL l_cb.addItem(1,"User")

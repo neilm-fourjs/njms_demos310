@@ -13,12 +13,12 @@ GRID
 {
 [user_key  |r1|f001        ]  [r                                  ]
 [email     |r6|f007                                               ]
-[salutation|r2|f003        ]  
-[forenames |r3|f004                                               ]
-[surname   |r4|f005                              ]
-[position  |r5|f006                                               ]
-[comment   |r7|f008                                               ]
-              [                                                   ]
+[salutation|r2|f003        ]                         [photo       ]
+[forenames |r3|f004                                  |            ]
+[surname   |r4|f005                              ]   [            ]
+[position  |r5|f006                                  |            ]
+[comment   |r7|f008                                  |            ]
+              [                                      |            ]
 [user_type |r8|f009        ]
 [active    |ra|a]
 [forcepwch |rd|b]
@@ -30,6 +30,7 @@ GRID
 [                                                                 ]
 [passexp   |pe|p002             ]
 [gbctheme  |bc|f010                                  ]
+[photo_uri |ph|f011                                               ]
 }
 END -- GRID
 END -- LAYOUT
@@ -52,6 +53,7 @@ LABEL rd : rd, TEXT="",STYLE="required";
 LABEL rp : rp, TEXT="*",STYLE="required";
 LABEL pe : pe, TEXT="*",STYLE="required";
 LABEL bc : bc, TEXT="",STYLE="required";
+LABEL ph : ph, TEXT="",STYLE="required";
 
 LABEL user_key    : lc, TEXT=%"Account Id:",JUSTIFY=RIGHT;
 LABEL email			 : em, TEXT=%"Email:",JUSTIFY=RIGHT;
@@ -66,6 +68,7 @@ LABEL forcepwch  : fp, TEXT=%"Force Pass Change:",JUSTIFY=RIGHT;
 LABEL passwd     : pw, TEXT=%"Password:", JUSTIFY=RIGHT;
 LABEL passexp    : pe, TEXT=%"Password Expires:",JUSTIFY=RIGHT;
 LABEL gbctheme   : bc, TEXT=%"GBC Theme:",JUSTIFY=RIGHT;
+LABEL photo_uri  : ph, TEXT=%"Photo URI:",JUSTIFY=RIGHT;
 
 f001 = sys_users.user_key, DEFAULT=0;
 f007 = sys_users.email, NOT NULL, REQUIRED, TABINDEX=1, DOWNSHIFT;
@@ -85,7 +88,9 @@ BUTTON generate:generate, TEXT="Re-generate", IMAGE="fa-cog", HIDDEN;
 
 DATEEDIT p002 = sys_users.pass_expire, NOT NULL, TABINDEX=9;
 
-COMBOBOX f010 = sys_users.gbc_theme, INITIALIZER=cb_gbc_theme;
+COMBOBOX f010 = sys_users.gbc_theme, INITIALIZER=cb_gbc_theme, TABINDEX=10;
+f011 = sys_users.photo_uri, SCROLL, TABINDEX=11;
+IMAGE photo = FORMONLY.l_photo, STYLE="noborder";
 
 PHANTOM sys_users.salt;
 PHANTOM sys_users.pass_hash;

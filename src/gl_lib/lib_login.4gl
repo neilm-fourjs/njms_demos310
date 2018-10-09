@@ -1,6 +1,7 @@
 
 #+ This module is designed to present a login window and allow a user to login
 #+
+#+ OPENIDLOGIN_URL can be used to override the default value from OpenIdLogin.inc
 
 IMPORT os
 IMPORT util
@@ -10,30 +11,17 @@ IMPORT FGL gl_lib
 &include "schema.inc"
 &include "genero_lib.inc"
 &include "app.inc"
+&include "OpenIdLogin.inc"
 
-CONSTANT C_OPENIDLOGIN = "https://generodemo.hopto.org/g/ua/r/OpenIdLogin"
-CONSTANT C_OPENID = "#OpenId#"
-TYPE t_oidc RECORD
-		email STRING,
-		family STRING,
-		given STRING,
-		idp_issuer STRING,
-		idp_token_endpoint STRING,
-		name STRING,
-		picture STRING,
-		profile STRING,
-		sub STRING,
-		token_expires_in INTEGER,
-		userinfo_endpoint STRING
-	END RECORD
+-- Callback function for creating a new account.
+TYPE f_new_account FUNCTION(l_email STRING, l_family STRING, l_given STRING, l_photo STRING) RETURNS STRING
+PUBLIC DEFINE m_new_acc_func f_new_account
 
-TYPE f_new_account FUNCTION() RETURNS STRING
 CONSTANT EMAILPROG = "sendemail.sh" --"fglrun sendemail.42r"
 CONSTANT C_SESSION_KEY = "NJMDEMOSESSION"
 CONSTANT C_SESSION_MINS = 20 -- how long betweeen logins.
 
 PUBLIC DEFINE m_logo_image STRING
-PUBLIC DEFINE m_new_acc_func f_new_account
 DEFINE m_login_audit_key INTEGER
 DEFINE m_login_stat CHAR(1)
 DEFINE m_themes DYNAMIC ARRAY OF RECORD
@@ -102,7 +90,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 			END IF
 
 		ON ACTION openid
-			CALL openid(C_OPENIDLOGIN) RETURNING l_login
+			CALL openid() RETURNING l_login
 			IF NOT validate_login(l_login,C_OPENID) THEN
 				ERROR %"Invalid Login ID!"
 				NEXT FIELD l_login
@@ -111,7 +99,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 			END IF
 
 		ON ACTION acct_new
-			LET l_login = m_new_acc_func() -- create a new account
+			LET l_login = m_new_acc_func(NULL,NULL,NULL,NULL) -- create a new account
 			IF l_login IS NOT NULL THEN EXIT INPUT END IF
 
 		ON ACTION forgotten CALL forgotten(l_login)
@@ -342,13 +330,17 @@ PRIVATE FUNCTION passchg(l_login LIKE sys_users.email) RETURNS BOOLEAN
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Try and use an OpenID Login
-PRIVATE FUNCTION openid(l_url STRING) RETURNS STRING
+PRIVATE FUNCTION openId() RETURNS STRING
+	DEFINE l_url STRING
 	DEFINE l_ret INTEGER
 	DEFINE l_store STRING
 	DEFINE l_oidc t_oidc
 	DEFINE l_key_list STRING
 	DEFINE l_key_array DYNAMIC ARRAY OF STRING
 	DEFINE x SMALLINT
+
+	LET l_url = fgl_getEnv("OPENIDLOGIN_URL")
+	IF l_url.getLength() < 2 THEN LET l_url = C_OPENIDLOGIN END IF
 
 	CALL ui.Interface.frontCall("localStorage", "removeItem", ["openid"], [])
 
@@ -369,7 +361,7 @@ PRIVATE FUNCTION openid(l_url STRING) RETURNS STRING
 			--DISPLAY "Found 'openid'"
 			EXIT FOR
 		END IF
-		DISPLAY SFMT("Waiting for openId %1 of 10 ... ",x) TO l_login
+		DISPLAY SFMT("Waiting for OAuth OpenId %1 of 10 ... ",x) TO l_login
 		CALL ui.Interface.refresh()
 	END FOR
 
@@ -381,7 +373,18 @@ PRIVATE FUNCTION openid(l_url STRING) RETURNS STRING
 		RETURN NULL
 	END IF
 
-	CALL util.JSON.parse( l_store, l_oidc )
+	TRY
+		CALL util.JSON.parse( l_store, l_oidc )
+	CATCH
+		CALL gl_lib.gl_winMessage("OpenID Error",SFMT("Failed to Parse JSON!\n%1",l_store),"exclamation")
+		DISPLAY "OpenID JSON:",l_store
+		RETURN NULL
+	END TRY
+
+	SELECT * FROM sys_users WHERE email = l_oidc.email
+	IF STATUS = NOTFOUND THEN
+		LET l_oidc.email = m_new_acc_func(l_oidc.email,l_oidc.family,l_oidc.given, l_oidc.picture)
+	END IF
 
 	RETURN l_oidc.email
 END FUNCTION
@@ -394,6 +397,7 @@ PRIVATE FUNCTION checkForSession()
 
 	IF l_id = "expired" THEN
 		CALL gl_winMessage(%"Login",%"Your Session has expired.","information")
+		CALL lib_secure.glsec_removeSession(C_SESSION_KEY)
 		RETURN NULL
 	END IF
 

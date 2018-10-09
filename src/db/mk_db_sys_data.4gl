@@ -134,12 +134,13 @@ FUNCTION mk_demo_account()
 						salt       ,
 						pass_hash  ,
 						pass_expire,
-						gbc_theme)
+						gbc_theme,
+						photo_uri)
 				VALUES("Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",	
-								l_hash_type, "not stored", l_salt, l_pass_hash, l_dte, NULL)
+								l_hash_type, "not stored", l_salt, l_pass_hash, l_dte, NULL, NULL)
 		ELSE
 			INSERT INTO sys_users 
-				VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",	l_hash_type, "not stored", l_salt, l_pass_hash, l_dte, NULL)
+				VALUES(1,"Mr","Test","Testing","Tester",l_email,"A test account",0,1,"N",	l_hash_type, "not stored", l_salt, l_pass_hash, l_dte, NULL, NULL)
 		END IF
 -- NOTE: we don't store the clear text password
 		CALL mkdb_progress( SFMT("Test Account Inserted: %1 / %2 with %3 hash.",l_email,l_login_pass,l_hash_type ) )

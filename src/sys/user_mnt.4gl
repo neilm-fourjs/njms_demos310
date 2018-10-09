@@ -79,6 +79,7 @@ MAIN
 				MESSAGE "DA User:",DIALOG.getCurrentRow("u_arr")," of ",m_fullname.getLength()," ",m_user[ DIALOG.getCurrentRow("u_arr") ].surname
 				LET m_user_rec.* = m_user[ DIALOG.getCurrentRow("u_arr") ].*
 				LET m_user_key = m_user[ DIALOG.getCurrentRow("u_arr") ].user_key
+				DISPLAY m_user_rec.photo_uri TO l_photo
 				CALL m_uroles.clear()
 				FOREACH ur_cur USING m_user_key INTO m_uroles[m_uroles.getLength()+1].*
 				END FOREACH
@@ -156,6 +157,8 @@ MAIN
 				LET m_user_rec.* = m_user[ 1 ].*
 				CALL DIALOG.setCurrentRow("u_arr",1)
 				NEXT FIELD u_arr.fullname
+			AFTER FIELD photo_uri
+				DISPLAY m_user_rec.photo_uri TO l_photo
 			AFTER INPUT
 				CALL DIALOG.setActionActive("dialogtouched",TRUE)
 		END INPUT

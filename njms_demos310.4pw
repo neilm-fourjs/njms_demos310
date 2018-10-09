@@ -93,7 +93,7 @@
       <File filePath="gbc/gbc-njm/theme.scss.json"/>
     </Library>
   </Group>
-  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/fa5.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../etc/fa5.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -369,7 +369,7 @@
         <File filePath="etc/container.4tb"/>
         <File filePath="src/sys/container.per"/>
       </Application>
-      <Library binaryName="lib_login" dependencies="1986,-1463189462,14000,-1090563702" id="2135194580" label="lib_login">
+      <Library binaryName="lib_login" dependencies="1986,-1463189462,14000,-1090563702,-1690651403" id="2135194580" label="lib_login">
         <File filePath="src/gl_lib/lib_login.4gl"/>
         <File filePath="src/gl_lib/lib_secure.4gl"/>
         <File filePath="src/sys/login.per"/>
@@ -387,6 +387,13 @@
       <Application binaryName="menu_mnt" commandLineArguments="S 1" dependencies="14000,-1090563702,1835393312,1986" id="1001967872" label="menu_mnt">
         <File filePath="src/sys/menu_mnt.4gl"/>
         <File filePath="src/sys/menu_mnt.per"/>
+      </Application>
+      <Application binaryName="OpenIdLogin" id="-1690651403" label="OpenIdLogin" targetDirectory="$(ProjectDir)/binOpenIdLogin">
+        <File filePath="src/OpenIdLogin/OpenIdLogin.4gl"/>
+        <File filePath="src/OpenIdLogin/OpenIdLogin.4st"/>
+        <File filePath="src/OpenIdLogin/OpenIdLogin.inc"/>
+        <File filePath="src/OpenIdLogin/OpenIdLogin.per"/>
+        <File filePath="src/OpenIdLogin/OpenIdLogin.xcf"/>
       </Application>
       <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,14000" id="-1334009856" label="user_mnt">
         <File filePath="src/sys/user_mnt.4gl"/>
@@ -493,6 +500,14 @@
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/snc"/>
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="run.bat" label="util" sourceDirectory="$(ProjectDir)/utils"/>
+    </Package>
+    <Package binaryName="OpenIdLogin" label="OpenIdLogin" platform="Genero Application Server">
+      <DynamicProperty name="packageId" value="OpenIdLogin"/>
+      <DynamicProperty name="packageLabel" value="OpenIdLogin"/>
+      <Directory label="bin" sourceDirectory="$(ProjectDir)/binOpenIdLogin"/>
+      <Directory includedFiles="*.4st" label="etc" sourceDirectory="$(ProjectDir)/src/OpenIdLogin"/>
+      <Directory includedFiles="*.xcf" label="gas" sourceDirectory="$(ProjectDir)/src/OpenIdLogin"/>
+      <Directory includedFiles="homer-doh_Login.png" label="img" sourceDirectory="$(ProjectDir)/pics"/>
     </Package>
   </Group>
   <Group label="Test GGC" language="Genero" targetDirectory="$(ProjectDir)/ggc">
