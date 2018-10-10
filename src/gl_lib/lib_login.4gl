@@ -342,8 +342,6 @@ PRIVATE FUNCTION openId() RETURNS STRING
 	LET l_url = fgl_getEnv("OPENIDLOGIN_URL")
 	IF l_url.getLength() < 2 THEN LET l_url = C_OPENIDLOGIN END IF
 
-	CALL ui.Interface.frontCall("localStorage", "removeItem", ["openid"], [])
-
 	IF ui.Interface.getFrontEndName() = "GDC" THEN
 		LET l_url = "../bin/gdc -u "||l_url
 		CALL ui.Interface.frontCall("standard","execute",[l_url, TRUE],[l_ret])
@@ -351,18 +349,35 @@ PRIVATE FUNCTION openId() RETURNS STRING
 		CALL ui.Interface.frontCall("standard","launchURL",[l_url],[])
 	END IF
 
+-- Remove the previous openid login info
+	TRY
+		CALL ui.Interface.frontCall("localStorage", "removeItem", ["openid"], [])
+	CATCH
+-- Ignore the error if it doesn't exist
+	END TRY
+
+	IF ui.Interface.getFrontEndName() = "GBC" THEN
+		IF gl_lib.gl_winQuestion("OpenID Login",
+				SFMT("A new window/tab should be open for login via Google.\n\n * Check your Popup Blocker! *\n\nURL:%1",l_url),
+				"Yes","Yes|No","question") = "No" THEN
+			RETURN NULL
+		END IF
+	END IF
+
 	-- loop looking for openId in storage
 	FOR x = 1 TO 10
+		DISPLAY SFMT("Waiting for OAuth OpenId %1 of 10 ... ",x) TO l_login
+		CALL ui.Interface.refresh()
 		SLEEP 2
 		CALL ui.Interface.frontCall("localStorage", "keys", [], [l_key_list] )
+		IF l_key_list IS NULL THEN CONTINUE FOR END IF
 		CALL util.JSON.parse( l_key_list, l_key_array )
 		--DISPLAY "Searching keys:", l_key_list
 		IF l_key_array.search(NULL,"openid") > 0 THEN
 			--DISPLAY "Found 'openid'"
 			EXIT FOR
 		END IF
-		DISPLAY SFMT("Waiting for OAuth OpenId %1 of 10 ... ",x) TO l_login
-		CALL ui.Interface.refresh()
+
 	END FOR
 
 	CALL ui.Interface.frontCall("localStorage", "getItem", ["openid"], [l_store])
