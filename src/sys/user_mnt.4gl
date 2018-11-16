@@ -26,6 +26,7 @@ DEFINE m_save, m_saveUser, m_saveRoles BOOLEAN
 DEFINE m_user_key, m_this_user_key LIKE sys_users.user_key
 MAIN
 	DEFINE dnd ui.DragDrop
+	DEFINE l_rules STRING
 
 	LET gl_lib.gl_topMenu = "dynmaint"
 	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
@@ -85,7 +86,10 @@ MAIN
 				END FOREACH
 				CALL  m_uroles.deleteElement(m_uroles.getLength())
 				IF m_user_rec.user_key IS NULL THEN
+					CALL DIALOG.setFieldActive("login_pass",TRUE)
 					NEXT FIELD salutation
+				ELSE
+					CALL DIALOG.setFieldActive("login_pass",FALSE)
 				END IF
 			ON DRAG_START(dnd)
 				LET m_drag_source = "users"
@@ -135,20 +139,40 @@ MAIN
 				CALL DIALOG.setactionActive("save",FALSE)
 				IF m_user_rec.user_key IS NULL THEN
 					LET m_user_rec.active = TRUE
+					LET m_user_rec.login_pass = "rubbish" -- an invalid password
 					LET m_user_rec.forcepwchg = "N"
 					LET m_user_rec.hash_type = lib_secure.glsec_getHashType()
 					LET m_user_rec.salt = lib_secure.glsec_genSalt(m_user_rec.hash_type) -- NOTE: for Genero 3.10 we don't need to store this
 					LET m_user_rec.pass_expire = (TODAY + 6 UNITS MONTH)
+					CALL DIALOG.setFieldActive("login_pass",TRUE)
+				ELSE
+					LET m_user_rec.login_pass = NULL
+					CALL DIALOG.setFieldActive("login_pass",FALSE)
 				END IF
+
 				LEt m_saveUser = FALSE
 				MESSAGE "IN User:",DIALOG.getCurrentRow("u_arr")," of ",m_fullname.getLength()," ",m_user[ DIALOG.getCurrentRow("u_arr") ].surname
 				CALL checkSave()
+
+			AFTER FIELD login_pass
+				LET l_rules = lib_secure.glsec_isPasswordLegal(m_user_rec.login_pass CLIPPED)
+				IF l_rules != "Okay" THEN
+					ERROR l_rules
+				END IF
+
 			ON ACTION save
 				IF DIALOG.validate("sys_users.*") < 0 THEN
 					CONTINUE DIALOG
 				ELSE
-					LET m_user_rec.pass_hash = lib_secure.glsec_genPasswordHash(m_user_rec.login_pass ,m_user_rec.salt,m_user_rec.hash_type)
-					LET m_user_rec.login_pass = "PasswordEncrypted!" -- we don't store their clear text password!
+					IF m_user_rec.login_pass IS NOT NULL THEN
+						LET l_rules = lib_secure.glsec_isPasswordLegal(m_user_rec.login_pass CLIPPED)
+						IF l_rules != "Okay" THEN
+							ERROR l_rules
+							NEXT FIELD login_pass
+						END IF
+						LET m_user_rec.pass_hash = lib_secure.glsec_genPasswordHash(m_user_rec.login_pass ,m_user_rec.salt,m_user_rec.hash_type)
+						LET m_user_rec.login_pass = "PasswordEncrypted!" -- we don't store their clear text password!
+					END IF
 					CALL checkSave()
 					CALL setSave_user(FALSE)
 				END IF

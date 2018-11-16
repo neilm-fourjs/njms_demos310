@@ -1,4 +1,6 @@
 
+--https://www.amcharts.com/
+--https://plot.ly/javascript/
 IMPORT util
 IMPORT os
 IMPORT FGL gl_lib

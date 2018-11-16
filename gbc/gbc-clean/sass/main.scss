@@ -1,0 +1,16 @@
+
+BODY {
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	margin: 0px 0px 0px 0px;
+}
+
+.gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next .vanished { 
+	width: 1px; 
+}
+
+.gbc_ApplicationHostMenuBookmarkWidget {
+	display: none !important;
+}

@@ -10,6 +10,7 @@ IMPORT util
 IMPORT FGL gl_lib
 IMPORT FGL gl_lib_aui
 IMPORT FGL gl_lookup3
+IMPORT FGL gl_db
 IMPORT FGL widgets_charts
 IMPORT FGL widgets_clock
 
@@ -310,7 +311,7 @@ MAIN
 
 			ON ACTION gl_lookup
 				IF NOT db_opened THEN
-					CALL gldb_connect( m_dbname )
+					CALL gl_db.gldb_connect( m_dbname )
 					MESSAGE "DB Open:",m_dbname
 					LET db_opened = TRUE
 				END IF
@@ -859,8 +860,7 @@ FUNCTION lookup1(d_i)
 END FUNCTION
 --------------------------------------------------------------------------------
 -- Initialize the combobox, dynamically coded when form opened
-FUNCTION init_combo( cb )
-	DEFINE cb ui.ComboBox
+FUNCTION init_combo( l_cb ui.ComboBox )
 		
 	GL_DBGMSG(2,"init_combo: start")
 	CALL set_combo("?")

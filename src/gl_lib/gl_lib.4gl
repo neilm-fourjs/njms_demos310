@@ -442,7 +442,7 @@ FUNCTION gl_chkClientVer( l_cli STRING, l_ver STRING, l_feature STRING) RETURNS 
 	CALL gl_getVer( l_ver ) RETURNING l_ck_major, l_ck_minor
 
 	IF l_fe_major < l_ck_major 
-	OR l_fe_minor < l_ck_minor THEN
+	OR (l_fe_major = l_ck_major AND l_fe_minor < l_ck_minor ) THEN
  -- client matched by version is too old
 		CALL gl_winMessage("Error",SFMT("Your Client version doesn't support feature '%1'!\nNeed min version of %2",l_feature,l_ver),"exclamation")
 		RETURN FALSE

@@ -2,6 +2,13 @@
 
 <StyleList>
 
+  <Style name="Folder.accordion">
+		<StyleAttribute name="position"  value="accordion" />
+  </Style>
+  <Style name="Table.listview">
+		<StyleAttribute name="tableType"  value="listView" />
+  </Style>
+
 	<Style name="*">
 		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
 		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->

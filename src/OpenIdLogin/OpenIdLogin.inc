@@ -14,4 +14,3 @@ TYPE t_oidc RECORD
 		token_expires_in INTEGER,
 		userinfo_endpoint STRING
 	END RECORD
-

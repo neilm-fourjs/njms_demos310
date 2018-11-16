@@ -1,0 +1,36 @@
+
+LAYOUT
+GRID
+{
+[cm         |cy  ]
+[cal             ]
+[                ]
+[                ]
+[                ]
+[                ]
+[                ]
+[                ]
+[                ]
+[                ]
+}
+END -- GRID
+END -- LAYOUT
+
+ATTRIBUTES
+
+COMBOBOX cm=FORMONLY.curr_month, NOT NULL,
+   STYLE="bigfont", HIDDEN,
+   INITIALIZER=cmb_init_month;
+
+SPINEDIT cy=FORMONLY.curr_year, NOT NULL,
+   STYLE="bigfont", HIDDEN;
+
+WEBCOMPONENT cal=FORMONLY.calendar, TABINDEX=0,
+   COMPONENTTYPE="fglsvgcanvas_cal",
+   PROPERTIES=(selection="calendar_selection"),
+   SIZEPOLICY=FIXED,
+   STRETCH=BOTH,
+   SCROLLBARS=NONE
+;
+
+END

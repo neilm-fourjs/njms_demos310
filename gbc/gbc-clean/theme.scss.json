@@ -1,0 +1,6 @@
+{
+	"theme-primary-background-color": "$palette-primary-700",
+  "theme-primary-emphasis-background-color": "$palette-primary-500",
+  "theme-primary-faded-background-color": "$palette-primary-100",
+  "theme-secondary-color": "$palette-text-secondary-100"
+}

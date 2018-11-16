@@ -9,6 +9,7 @@ CONSTANT C_VER="3.1"
 CONSTANT PRGDESC = "Material Design Test"
 CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_IMG = "smiley"
 
 CONSTANT PG_MAX=10000
 
@@ -31,6 +32,11 @@ MAIN
 		col2 SMALLINT,
 		img STRING
 	END RECORD
+	DEFINE l_listview DYNAMIC ARRAY OF RECORD
+		col1 STRING,
+		col2 STRING,
+		img STRING
+	END RECORD
 	DEFINE x SMALLINT
 
 	CALL gl_lib.gl_setInfo(C_VER, NULL, C_PRGICON, NULL, PRGDESC, PRGAUTH)
@@ -47,10 +53,13 @@ MAIN
 
 	--RUN "env | sort > env.txt"
 
-	FOR X = 1 TO 5
+	FOR X = 1 TO 15
 		LET l_arr[x].col1 = "Row "||x
 		LET l_arr[x].col2 = x
-		LET l_arr[x].img = "fa-smile-o"
+		LET l_arr[x].img = C_IMG
+		LET l_listView[x].col1 = "This is row "||x
+		LET l_listView[x].col2 = "this is a like an information line"
+		LET l_listView[x].img = C_IMG
 	END FOR
 	LET l_rec.fld1 = "Active"
 	LET l_rec.fld2 = TODAY
@@ -68,6 +77,8 @@ MAIN
 		INPUT BY NAME l_rec.* ATTRIBUTES( WITHOUT DEFAULTS )
 		END INPUT
 		DISPLAY ARRAY l_arr TO arr.*
+		END DISPLAY
+		DISPLAY ARRAY l_listView TO listview.*
 		END DISPLAY
 		ON ACTION msg MESSAGE "Hello Message"
 		ON ACTION err ERROR "Error Message"

@@ -91,11 +91,13 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 
 		ON ACTION openid
 			CALL openid() RETURNING l_login
-			IF NOT validate_login(l_login,C_OPENID) THEN
-				ERROR %"Invalid Login ID!"
-				NEXT FIELD l_login
-			ELSE
-				EXIT INPUT
+			IF l_login IS NOT NULL THEN
+				IF NOT validate_login(l_login,C_OPENID) THEN
+					ERROR %"Invalid Login ID!"
+					NEXT FIELD l_login
+				ELSE
+					EXIT INPUT
+				END IF
 			END IF
 
 		ON ACTION acct_new
@@ -337,7 +339,7 @@ PRIVATE FUNCTION openId() RETURNS STRING
 	DEFINE l_oidc t_oidc
 	DEFINE l_key_list STRING
 	DEFINE l_key_array DYNAMIC ARRAY OF STRING
-	DEFINE x SMALLINT
+	DEFINE l_loop, x SMALLINT
 
 	LET l_url = fgl_getEnv("OPENIDLOGIN_URL")
 	IF l_url.getLength() < 2 THEN LET l_url = C_OPENIDLOGIN END IF
@@ -355,20 +357,29 @@ PRIVATE FUNCTION openId() RETURNS STRING
 	CATCH
 -- Ignore the error if it doesn't exist
 	END TRY
-
+	LET l_loop = 10
 	IF ui.Interface.getFrontEndName() = "GBC" THEN
-		IF gl_lib.gl_winQuestion("OpenID Login",
-				SFMT("A new window/tab should be open for login via Google.\n\n * Check your Popup Blocker! *\n\nURL:%1",l_url),
-				"Yes","Yes|No","question") = "No" THEN
-			RETURN NULL
-		END IF
+		MENU "OpenID Login"
+			ATTRIBUTE(STYLE="dialog",
+					COMMENT=SFMT("A new window/tab should be open for login via Google.\n\n * Check your Popup Blocker! *\n\nURL:%1",l_url),
+					IMAGE="question")
+			ON ACTION yes
+				EXIT MENU
+			ON ACTION no
+				RETURN NULL
+		{	ON IDLE 2
+				CALL ui.Interface.frontCall("localStorage", "keys", [], [l_key_list] )
+				IF l_key_list IS NULL THEN CONTINUE MENU END IF
+				IF l_key_array.search(NULL,"openid") = 0 THEN DISPLAY "no openid" CONTINUE MENU END IF
+				LET l_loop = 0 }
+		END MENU
 	END IF
-
+	DISPLAY "l_loop:",l_loop
 	-- loop looking for openId in storage
-	FOR x = 1 TO 10
+	FOR x = 1 TO l_loop
 		DISPLAY SFMT("Waiting for OAuth OpenId %1 of 10 ... ",x) TO l_login
 		CALL ui.Interface.refresh()
-		SLEEP 2
+
 		CALL ui.Interface.frontCall("localStorage", "keys", [], [l_key_list] )
 		IF l_key_list IS NULL THEN CONTINUE FOR END IF
 		CALL util.JSON.parse( l_key_list, l_key_array )
@@ -377,7 +388,7 @@ PRIVATE FUNCTION openId() RETURNS STRING
 			--DISPLAY "Found 'openid'"
 			EXIT FOR
 		END IF
-
+		SLEEP 2
 	END FOR
 
 	CALL ui.Interface.frontCall("localStorage", "getItem", ["openid"], [l_store])

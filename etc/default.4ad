@@ -52,4 +52,9 @@ Property of Four Js*
 
 	<ActionDefault name="testlogin" text="Test Login" image="fa-key" contextMenu="yes" acceleratorName="f12" />
 
+	<ActionDefault name="calendar_selection" text="eh!" defaultView="no" contextMenu="no" />
+	<ActionDefault name="prevmonth" text="eh!" defaultView="no" contextMenu="no" />
+	<ActionDefault name="nextmonth" text="eh!" defaultView="no" contextMenu="no" />
+	<ActionDefault name="wc_debug" text="WC Debug" image="fa-bug" defaultView="yes" contextMenu="no" />
+
 </ActionDefaultList>

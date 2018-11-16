@@ -86,6 +86,41 @@ GRID
 END -- GRID
 VBOX
 
+HBOX
+
+FOLDER (STYLE="accordion")
+PAGE f2p1 (TEXT="Some Text", IMAGE="fa-smile-o")
+GRID
+{
+This folder is using the 'accordion' style
+The table in the tab below is using 'listview' style
+}
+END -- GRID
+END -- PAGE
+PAGE f2p2 (TEXT="ListView", IMAGE="fa-smile-o")
+TABLE (STYLE="listview")
+{
+[t201                   |t202                ]
+[t201                   |t202                ]
+[t201                   |t202                ]
+[t201                   |t202                ]
+[t201                   |t202                ]
+[t201                   |t202                ]
+[t201                   |t202                ]
+}
+END -- TABLE
+END -- PAGE
+PAGE f2p3 (TEXT="A Group", IMAGE="fa-smile-o")
+GRID
+{
+<G "A Group"                               >
+ Some static text
+<                                          >
+}
+END -- GRID
+END -- PAGE
+END -- FOLDER
+
 FOLDER
 PAGE p1 (TEXT="Page1", IMAGE="fa-smile-o")
 GRID
@@ -111,6 +146,9 @@ page 2 is almost empty
 END -- GRID
 END -- PAGE
 END -- FOLDER
+
+END -- HBOX
+
 GRID
 {
 [logo                         ]
@@ -144,6 +182,7 @@ CHECKBOX a = FORMONLY.okay, VALUECHECKED=1, VALUEUNCHECKED=0, TEXT=%"Ok?";
 IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder center";
 IMAGE logo2 : logo2, IMAGE="logo_light", SIZEPOLICY=INITIAL,STYLE="noborder center";
 
+-- normal table
 a001 = FORMONLY.col1, TITLE="Title1", IMAGECOLUMN=img;
 a002 = FORMONLY.col2, TITLE="Fld2";
 PHANTOM FORMONLY.img;
@@ -154,5 +193,11 @@ BUTTON but1 : quit;
 BUTTON msg : msg;
 BUTTON err: err;
 
+-- list view table
+t201 = FORMONLY.lvcol1, SCROLL, IMAGECOLUMN=lvimg;
+t202 = FORMONLY.lvcol2, SCROLL;
+PHANTOM FORMONLY.lvimg;
+
 INSTRUCTIONS
 SCREEN RECORD arr ( FORMONLY.col1 THRU FORMONLY.img )
+SCREEN RECORD listview ( FORMONLY.lvcol1 THRU FORMONLY.lvimg )

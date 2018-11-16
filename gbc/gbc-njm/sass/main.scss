@@ -89,3 +89,7 @@ body {
 .gbc_ImageWidget.stretch:not(.gbc_fixedSvg) {
 	overflow: visible;
 }
+
+.gbc_ApplicationHostMenuBookmarkWidget {
+	display: none !important;
+}

@@ -105,9 +105,9 @@ COMBOBOX f008 = sys_users.acct_type, ITEMS=((1,"User"),(2,"Admin")),DEFAULT=1,NO
 CHECKBOX a = sys_users.active, VALUECHECKED=1,VALUEUNCHECKED=0,NOT NULL;
 CHECKBOX f = sys_users.forcepwchg, VALUECHECKED="Y",VALUEUNCHECKED="N",NOT NULL;
 f010 = sys_users.hash_type, NOENTRY;
-f011 = sys_users.login_pass, VERIFY,INVISIBLE, NOT NULL;
+f011 = sys_users.login_pass, VERIFY,INVISIBLE;
 f012 = sys_users.salt, NOENTRY, HIDDEN;
-f013 = sys_users.pass_hash, NOENTRY, HIDDEN;
+f013 = sys_users.pass_hash, NOENTRY, HIDDEN, SCROLL;
 DATEEDIT f014 = sys_users.pass_expire;
 f015 = sys_users.gbc_theme;
 f016 = sys_users.photo_uri, SCROLL;

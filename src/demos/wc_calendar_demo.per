@@ -1,0 +1,16 @@
+
+LAYOUT ( TEXT="WC Calendar Demo" )
+VBOX
+GRID
+{
+Date Selected:[d          ]
+[""]
+}
+END -- GRID
+
+FORM "wc_calendar"
+
+END -- VBOX
+
+ATTRIBUTES
+DATEEDIT d = FORMONLY.m_selected_date TYPE DATE;

@@ -1,0 +1,292 @@
+<!--
+ FOURJS_START_COPYRIGHT(P,2017)
+ Property of Four Js*
+ (c) Copyright Four Js 2017, 2018. All Rights Reserved.
+ * Trademark of Four Js Development Tools Europe Ltd
+	 in the United States and elsewhere
+ FOURJS_END_COPYRIGHT
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html" charset="utf-8" />
+<meta name='viewport' content='initial-scale=1.0, maximum-scale=1.0' />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+
+html,body {
+	width:100%;
+	height:100%;
+	padding:0;
+	margin:0;
+	border:0;
+	overflow:hidden;
+	background-color: inherit;
+}
+
+#svg_container {
+	margin:0 auto;
+	width:100%;
+	height:100%;
+}
+
+.root_svg {
+	margin:0 auto;
+	width: 100%;
+	height: 100%;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+</style>
+
+<script language="JavaScript">
+
+var wc_props = {};
+var has_focus=false;
+var clicked=false;
+var value = {};
+var mouse_over_fired = false;
+var mouse_over_timer = null;
+
+onICHostReady = function(version) {
+
+	if ( version != "1.0" ) {
+		alert('Invalid API version');
+	}
+
+	gICAPI.onProperty = function(properties) {
+		try {
+			wc_props = JSON.parse(properties);
+		} catch (err){
+			console.error("onProperty(): Invalid JSON string");
+			return;
+		}
+		if (!wc_props.hasOwnProperty("mouse_event_focus")) {
+			wc_props.mouse_event_focus = true;
+		} else {
+			wc_props.mouse_event_focus = (parseInt(wc_props.mouse_event_focus,10)===1);
+		}
+		if (!wc_props.hasOwnProperty("mouse_event_timeout")) {
+			wc_props.mouse_event_timeout = 500;
+		} else {
+			wc_props.mouse_event_timeout = parseInt(wc_props.mouse_event_timeout,10);
+		}
+		if (wc_props.hasOwnProperty("year")) {
+			var yr = document.getElementById("disp_year");
+			yr.value = wc_props.year;
+		}
+		if (wc_props.hasOwnProperty("month")) {
+			var mn = document.getElementById("disp_month");
+			mn.value = wc_props.month;
+			mn.options[0].value = 1;
+			mn.options[0].text = wc_props.month01;
+			mn.options[1].value = 2;
+			mn.options[1].text = wc_props.month02;
+			mn.options[2].value = 3;
+			mn.options[2].text = wc_props.month03;
+			mn.options[3].value = 4;
+			mn.options[3].text = wc_props.month04;
+			mn.options[4].value = 5;
+			mn.options[4].text = wc_props.month05;
+			mn.options[5].value = 6;
+			mn.options[5].text = wc_props.month06;
+			mn.options[6].value = 7;
+			mn.options[6].text = wc_props.month07;
+			mn.options[7].value = 8;
+			mn.options[7].text = wc_props.month08;
+			mn.options[8].value = 9;
+			mn.options[8].text = wc_props.month09;
+			mn.options[9].value = 10;
+			mn.options[9].text = wc_props.month10;
+			mn.options[10].value = 11;
+			mn.options[10].text = wc_props.month11;
+			mn.options[11].value = 12;
+			mn.options[11].text = wc_props.month12;
+		}
+	}
+
+	gICAPI.onFocus = function(polarity) {
+		if ( polarity && clicked ) {
+			//alert('onFocus');
+			clicked = false;
+			gICAPI.SetData(JSON.stringify(value));
+			gICAPI.Action(wc_props.selection);
+		}
+		has_focus = polarity;
+	}
+
+}
+
+function drawSVG(svg_content)
+{
+	var ce = document.getElementById("svg_container");
+	ce.innerHTML = svg_content;
+}
+
+function getItemInfo()
+{
+	return JSON.stringify(value);
+}
+
+function setProps()
+{
+	var yr = document.getElementById("disp_year");
+	var mn = document.getElementById("disp_month");
+	value.id = "sel_"+yr.value+"-"+mn.value;
+//	alert("Value:"+JSON.stringify(value));
+	if (has_focus) {
+		gICAPI.SetData(JSON.stringify(value));
+		gICAPI.Action(wc_props.selection);
+	} else {
+		clicked = true;
+		gICAPI.SetFocus();
+	}
+}
+
+function send_action(l_action)
+{
+	if (wc_props.mouse_over) {
+		mo_clear_timer();
+	}
+	wc_props.selection = l_action;
+	if (has_focus) {
+		gICAPI.SetData(JSON.stringify(value));
+		gICAPI.Action(wc_props.selection);
+	} else {
+		clicked = true;
+		gICAPI.SetFocus();
+	}
+}
+
+function getBBox(id) {
+	try {
+		var n = document.getElementById(id);
+		var b = n.getBBox();
+		var r = {};
+		r.x = b.x;
+		r.y = b.y;
+		r.width = b.width;
+		r.height = b.height;
+		return r;
+	}
+	catch (err) {
+		return null;
+	}
+}
+
+function set_object_value(id, att, val)
+{
+	try {
+		var n = document.getElementById(id);
+		n.setAttribute( att, val );
+	}
+	catch (err) {
+		alert("set_object_value failed!");
+	}
+}
+
+function set_value_object(id, src, act)
+{
+	value = {};
+	value.id = id;
+	value.source = src;
+	value.action = act;
+}
+
+function set_value_object_action(item_id, action_name) {
+	set_value_object(item_id, "action", action_name);
+}
+
+elem_clicked = function() {
+	if (wc_props.mouse_over) {
+		mo_clear_timer();
+	}
+	if (wc_props.selection) {
+		var t = arguments[0];
+		set_value_object_action(t.getAttribute("id"), wc_props.selection);
+		if (has_focus) {
+			gICAPI.SetData(JSON.stringify(value));
+			gICAPI.Action(wc_props.selection);
+		} else {
+			clicked = true;
+			gICAPI.SetFocus();
+		}
+	}
+}
+
+function mo_clear_timer() {
+	if (mouse_over_timer !== null) {
+		clearTimeout(mouse_over_timer);
+		mouse_over_timer = null;
+	}
+}
+
+function mm_trigger_action(action_name, item_id) {
+	mo_clear_timer();
+	set_value_object_action(item_id, action_name);
+	gICAPI.SetData(JSON.stringify(value));
+	gICAPI.Action(action_name);
+	if (action_name === wc_props.mouse_over) {
+		mouse_over_fired = true;
+	}
+}
+
+elem_mouse_over = function(element) {
+	if (wc_props.mouse_over
+		&& (!wc_props.mouse_event_focus || has_focus) ) {
+		var t = arguments[0];
+		if (wc_props.mouse_event_timeout > 0) {
+			mo_clear_timer();
+			mouse_over_timer = setTimeout(mm_trigger_action, wc_props.mouse_event_timeout,
+											wc_props.mouse_over, t.getAttribute("id"));
+		} else {
+			mm_trigger_action(wc_props.mouse_over, t.getAttribute("id"));
+		}
+	}
+}
+
+elem_mouse_out = function(element) {
+	if (wc_props.mouse_over) {
+		if (mouse_over_timer !== null) {
+			mo_clear_timer();
+		} else if (wc_props.mouse_out && mouse_over_fired) {
+			var t = arguments[0];
+			mm_trigger_action(wc_props.mouse_out, t.getAttribute("id"));
+		}
+		mouse_over_fired = false;
+	}
+}
+
+</script>
+</head>
+
+<body>
+
+<div align="center">
+<button onclick="send_action('prevmonth')"><i class="fa fa-arrow-circle-left" style="font-size:1.5em;"></i></button>
+<select id="disp_month" name="month" style="font-size:1.5em;" onchange="setProps()">
+	<option value="1">Jan</option>
+	<option value="2">Feb</option>
+	<option value="3">Mar</option>
+	<option value="4">Apr</option>
+	<option value="5">May</option>
+	<option value="6">Jun</option>
+	<option value="7">Jul</option>
+	<option value="8">Aug</option>
+	<option value="9">Sep</option>
+	<option value="10">Oct</option>
+	<option value="11">Nov</option>
+	<option value="12">Dec</option>
+</select>
+<input id="disp_year" type="number" min="1900" max="3000" step="1" value ="1900" style="font-size:1.5em;" onchange="setProps()"/>
+<button onclick="send_action('nextmonth')"><i class="fa fa-arrow-circle-right" style="font-size:1.5em;"></i></button>
+</div>
+
+<div id="svg_container"></div>
+
+</body>
+
+</html>
