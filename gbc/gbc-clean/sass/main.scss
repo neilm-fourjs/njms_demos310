@@ -7,10 +7,17 @@ BODY {
 	margin: 0px 0px 0px 0px;
 }
 
+// get rid of ugle empty folder nav butons
+.vanished { 
+	width: 1px; 
+}
+
+// get rid of ugle empty toolbar nav butons
 .gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next .vanished { 
 	width: 1px; 
 }
 
+// get rid of bookmarks option
 .gbc_ApplicationHostMenuBookmarkWidget {
 	display: none !important;
 }

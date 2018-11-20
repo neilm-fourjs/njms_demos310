@@ -59,7 +59,7 @@ TOOLBAR
 	ITEM pg50
 END -- TB
 
-LAYOUT ( STYLE="centered", TEXT="Material Design Test" ) -- gbc_footer" )
+LAYOUT ( STYLE="main2", TEXT="Material Design Test" ) -- gbc_footer" )
 VBOX ( STYLE="formborder" )
 HBOX ( SPLITTER )
 GRID
@@ -86,7 +86,7 @@ GRID
 END -- GRID
 VBOX
 
-HBOX
+HBOX ( SPLITTER )
 
 FOLDER (STYLE="accordion")
 PAGE f2p1 (TEXT="Some Text", IMAGE="fa-smile-o")
@@ -94,6 +94,12 @@ GRID
 {
 This folder is using the 'accordion' style
 The table in the tab below is using 'listview' style
+IMAGEPATH:
+[ip                                          ]
+[                                            ]
+Style File:
+[sf                                          ]
+[                                            ]
 }
 END -- GRID
 END -- PAGE
@@ -192,6 +198,9 @@ PROGRESSBAR pg = FORMONLY.pg, VALUEMAX=10000;
 BUTTON but1 : quit;
 BUTTON msg : msg;
 BUTTON err: err;
+
+TEXTEDIT ip = FORMONLY.imgpath,STRETCH=X;
+TEXTEDIT sf = FORMONLY.stylefile,STRETCH=X;
 
 -- list view table
 t201 = FORMONLY.lvcol1, SCROLL, IMAGECOLUMN=lvimg;

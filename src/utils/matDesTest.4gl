@@ -11,7 +11,7 @@ CONSTANT PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGICON = "njm_demo_icon"
 CONSTANT C_IMG = "smiley"
 
-CONSTANT PG_MAX=10000
+CONSTANT PG_MAX=1000
 
 DEFINE m_forms DYNAMIC ARRAY OF STRING
 
@@ -50,7 +50,7 @@ MAIN
 --	END IF
 
 	CALL ui.Interface.setText( gl_lib.gl_progdesc )
-
+	CALL ui.Interface.loadStyles("matDesTest")
 	--RUN "env | sort > env.txt"
 
 	FOR X = 1 TO 15
@@ -72,6 +72,9 @@ MAIN
 
 	OPEN FORM f FROM "matDesTest"
 	DISPLAY FORM f
+
+	DISPLAY fgl_getEnv("FGLIMAGEPATH") TO imgpath
+	DISPLAY getAUIAttrVal("StyleList","fileName") TO stylefile
 
 	DIALOG ATTRIBUTE(UNBUFFERED)
 		INPUT BY NAME l_rec.* ATTRIBUTES( WITHOUT DEFAULTS )
@@ -191,4 +194,14 @@ FUNCTION win()
 		ON ACTION cancel EXIT MENU
 	END MENU
 	CLOSE WINDOW win
+END FUNCTION
+--------------------------------------------------------------------------------
+-- A value of aui node
+FUNCTION getAUIAttrVal( l_nodeName STRING, l_attName STRING ) RETURNS STRING
+	DEFINE l_ret STRING
+	DEFINE l_nl om.NodeList
+	LET l_nl = ui.Interface.getRootNode().selectByTagName(l_nodeName)
+	IF l_nl.getLength() = 0 THEN RETURN NULL END IF
+	LET l_ret = l_nl.item(1).getAttribute(l_attName)
+	RETURN l_ret
 END FUNCTION

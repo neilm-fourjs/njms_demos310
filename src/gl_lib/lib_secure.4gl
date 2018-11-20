@@ -433,6 +433,10 @@ FUNCTION glsec_getSession(l_id STRING, l_age INTEGER) RETURNS STRING
 	DEFINE x SMALLINT
 	IF ui.interface.getFrontEndName() = "GGC" THEN RETURN NULL END IF
 	IF NOT gl_chkClientVer("GDC","3.10.18","localeStorage") THEN RETURN NULL END IF
+	IF NOT os.Path.readable( "../etc/private.key" ) THEN
+		CALL gl_winMessage("Warning","Private key file can not be read!\nAuto login not available.","information")
+		RETURN NULL
+	END IF
 	CALL gl_encrypt.gl_encryptInit("../etc/publickey.crt","../etc/private.key")
 	CALL ui.Interface.frontCall("localStorage", "getItem", l_id,l_val)
 	CALL gl_lib.gl_logIt(SFMT("Get Session id=%1 val=%2",l_id,l_val))

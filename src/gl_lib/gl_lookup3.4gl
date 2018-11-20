@@ -227,6 +227,9 @@ FUNCTION gl_lookup3( tabnam STRING, cols STRING, colts STRING, wher STRING, ordb
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Get the size for the table column from the type passed
+#+
+#+ @param l_type String type of field
+#+ @returns smallint size of field
 FUNCTION gl_lookup_getSize(l_type STRING) RETURNS SMALLINT
 	DEFINE l_size SMALLINT
 	DEFINE x,y SMALLINT

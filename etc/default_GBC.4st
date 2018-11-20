@@ -67,9 +67,6 @@
 		<StyleAttribute name="headerHidden" value="yes" />
 		<StyleAttribute name="highlightCurrentRow" value="no" />
 	</Style>
-  <Style name="Table.listview">
-    <StyleAttribute name="tableType" value="listView" />
-  </Style>
 	<Style name="Table.disparr">
 		<StyleAttribute name="summaryLineAlwaysAtBottom" value="no" />
 	</Style>
