@@ -6,23 +6,8 @@ body {
 	background: black;
 }
 
-.gbc_UserInterfaceWidget > .gbc_barsContainer {
-	color: $gbc-secondary-text-color;
-	fill: $gbc-secondary-text-color;
-}
-
-.mt-field {
-	color: $gbc-primary-medium-color;
-	border: $gbc-secondary-color;
-}
-
-.gbc_DropDownContainerWidget:not(.hidden) {
-  color: $gbc-primary-medium-color;
-  fill: $gbc-primary-medium-color;
-}
-
-[__ComboBoxWidget].zmdi-menu-down {
-	color: $gbc-primary-color;
+.mt-tab-titles {
+	fill: $gbc-CommandLinkWidget-ttf-color;
 }
 
 .vanished {
@@ -31,16 +16,6 @@ body {
 
 .gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next .vanished { 
 	width: 1px; 
-}
-
-.gbc_UserInterfaceWidget { 
-	background: inherit;
-	background-color: inherit;
-}
-
-.gbc_WindowWidget {
-	background: inherit;
-	background-color: inherit;
 }
 
 .gbc_style_heading {

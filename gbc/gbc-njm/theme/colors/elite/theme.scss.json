@@ -1,31 +1,48 @@
 {
-  "theme-font-family"      : "'\"Century Gothic\",\"Droid Sans\", sans-serif'",
+	"theme-font-family"      : "'\"Century Gothic\",\"Droid Sans\", sans-serif'",
 
-  "theme-font-size-ratio"    : "1",
-  "theme-margin-ratio"       : "0.6",
-  "theme-field-height-ratio" : "0.7",
-  "theme-radiobutton-size"   : "14px",
-  "theme-checkbox-size"      : "14px",
+	"theme-font-size-ratio": "0.8",
+	"theme-margin-ratio": "0.6",
+	"theme-field-height-ratio": "0.7",
+	"theme-radiobutton-size": "14px",
+	"theme-checkbox-size": "14px",
+	"theme-sidebar-always-visible-min-width": "999999px",
+	"theme-sidebar-default-width": "200px",
+	"theme-animation-duration": "0.7s",
 
-  "theme-header-color"                     : "#260f00",
-  "theme-primary-emphasis-background-color": "#ff6b0b",
+	"palette-primary": "#ff6b0b",
+	"palette-secondary": "#ff6b0b",
+	"palette-text-primary": "$mt-white",
+	"palette-text-secondary": "$mt-black",
 
-  "theme-secondary-background-color"       : "$mt-black",
-  "theme-primary-background-color"         : "#ff6b0b",
-  "theme-primary-faded-background-color"   : "#ff6b0b",
+	"theme-header-color"                     : "#260f00",
+	"theme-primary-emphasis-background-color": "#ff6b0b",
 
-  "theme-secondary-alternative-background-color": "#260f00",
-  "theme-primary-color"                    : "$mt-white",
+	"theme-secondary-background-color"       : "$mt-black",
+	"theme-primary-background-color"         : "#ff6b0b",
+	"theme-primary-faded-background-color"   : "#ff6b0b",
 
-  "theme-field-disabled-background-color"  : "#260f00",
-  "theme-field-background-color"           : "#361f10",
-  "theme-disabled-background-color"        : "$mt-black",
+	"theme-secondary-alternative-background-color": "#260f00",
+	"theme-secondary-faded-color"            : "$palette-primary-300",
+	"theme-primary-color"                    : "$mt-white",
 
-  "theme-separator-color"                  : "#260f00",
-  "theme-message-background-color"         : "#ff6b0b",
-  "theme-error-background-color"           : "$mt-red-800",
+	"theme-field-disabled-background-color"  : "#260f00",
+	"theme-field-background-color"           : "#361f10",
+	"theme-disabled-background-color"        : "$mt-black",
 
-  "theme-sidebar-always-visible-min-width" : "999999px",
-  "theme-sidebar-default-width"            : "30px",
-  "theme-animation-duration"               : "0.7s"
+	"theme-separator-color"                  : "#260f00",
+	"theme-message-background-color"         : "#ff6b0b",
+	"theme-error-background-color"           : "$mt-red-800",
+
+	"mt-button-primary-color": "$palette-text-primary",
+	"mt-button-primary-background-color": "$theme-primary-emphasis-background-color",
+	"mt-button-primary-emphasis-background-color": "$theme-secondary-faded-color",
+
+	"gbc-CommandLinkWidget-ttf-color": "$palette-text-primary",
+
+	"gbc-ButtonWidget-color": "$gbc-CommandLinkWidget-ttf-color",
+	"gbc-ButtonWidget-focus-background-color": "$theme-secondary-faded-color",
+	"gbc-TopMenuWidget-hover-color": "$theme-secondary-faded-color",
+	"gbc-ToolBarWidget-hover-color": "$theme-secondary-faded-color"
+
 }

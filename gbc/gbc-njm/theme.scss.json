@@ -1,32 +1,34 @@
 {
-  "theme-font-family"      : "'\"Century Gothic\",\"Droid Sans\", sans-serif'",
+	"theme-font-family": "'\"Century Gothic\",\"Droid Sans\", sans-serif'",
 
-  "theme-font-size-ratio"    : "0.8",
-  "theme-margin-ratio"       : "0.6",
-  "theme-field-height-ratio" : "0.7",
-  "theme-radiobutton-size"   : "14px",
-  "theme-checkbox-size"      : "14px",
-  "theme-sidebar-always-visible-min-width" : "999999px",
-  "theme-sidebar-default-width"            : "200px",
-  "theme-animation-duration"               : "0.7s",
+	"theme-font-size-ratio": "0.8",
+	"theme-margin-ratio": "0.6",
+	"theme-field-height-ratio": "0.7",
+	"theme-radiobutton-size": "14px",
+	"theme-checkbox-size": "14px",
+	"theme-sidebar-always-visible-min-width": "999999px",
+	"theme-sidebar-default-width": "200px",
+	"theme-animation-duration": "0.7s",
 
-  "theme-header-color"                     : "$mt-indigo-200",
-  "theme-primary-emphasis-background-color": "$mt-indigo-900",
+	"palette-primary": "$mt-indigo",
+	"palette-secondary": "$mt-indigo",
+	"palette-text-primary": "$mt-white",
+	"palette-text-secondary": "$mt-black",
 
-  "theme-secondary-background-color"       : "$mt-indigo-100",
-  "theme-primary-background-color"         : "$mt-indigo-600",
-  "theme-primary-faded-background-color"   : "$mt-indigo-900",    
+	"theme-primary-background-color": "$palette-primary-700",
+	"theme-primary-emphasis-background-color": "$palette-primary-900",
+	"theme-primary-faded-background-color": "$palette-primary-100",
+	"theme-secondary-faded-color": "$palette-primary-300",
 
-  "gbc-WindowWidget-header-color"        	 : "#7780b3",
+  "mt-button-primary-color": "$theme-primary-emphasis-background-color",
+  "mt-button-primary-background-color": "$theme-primary-faded-background-color",
+	"mt-button-primary-emphasis-background-color": "$theme-secondary-faded-color",
 
-  "theme-secondary-alternative-background-color": "$mt-indigo-50",
-  "theme-primary-color"                    : "$mt-white",
+	"gbc-CommandLinkWidget-ttf-color": "$theme-primary-emphasis-background-color",
 
-  "theme-field-disabled-background-color"  : "$mt-grey-100",
-  "theme-field-background-color"           : "$mt-white",
-  "theme-disabled-background-color"        : "$mt-grey-300",
+	"gbc-ButtonWidget-color": "$gbc-CommandLinkWidget-ttf-color",
+	"gbc-ButtonWidget-focus-background-color": "$theme-secondary-faded-color",
+	"gbc-TopMenuWidget-hover-color": "$theme-secondary-faded-color",
+	"gbc-ToolBarWidget-hover-color": "$theme-secondary-faded-color"
 
-  "theme-separator-color"                  : "$mt-white",
-  "theme-message-background-color"         : "$mt-grey-800",
-  "theme-error-background-color"           : "$mt-red-800"
 }
