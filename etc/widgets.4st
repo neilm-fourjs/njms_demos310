@@ -105,12 +105,8 @@
 
   <Style name='Table'>
 		<StyleAttribute name="headerAlignment" value="auto"/>
-    <StyleAttribute name="showGrid" value="0"/>
-    <StyleAttribute name="backgroundColor" value="white"/>
-    <StyleAttribute name="highlightCurrentRow" value="1"/>
     <StyleAttribute name="highlightColor" value="darkRed"/>
     <StyleAttribute name="highlightTextColor"  value="white"/>
-		<StyleAttribute name="fontFamily" value="Calibri" />
 		<StyleAttribute name="fontSize" value="11pt"/>
   </Style>
 

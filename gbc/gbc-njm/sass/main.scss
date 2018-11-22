@@ -14,8 +14,12 @@ body {
 	width: 1px; 
 }
 
-.gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next .vanished { 
-	width: 1px; 
+// get rid of ugly empty toolbar nav butons
+.gbc_ToolBarWidget .mt-tab-previous, .gbc_ToolBarWidget .mt-tab-next {
+  width: 20px;
+  &.vanished {
+    width: 1px;
+  }
 }
 
 .gbc_style_heading {

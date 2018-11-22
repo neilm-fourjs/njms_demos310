@@ -116,7 +116,20 @@ TABLE (STYLE="listview")
 }
 END -- TABLE
 END -- PAGE
-PAGE f2p3 (TEXT="A Group", IMAGE="fa-smile-o")
+PAGE f2p3 (TEXT="Table 2", IMAGE="fa-smile-o")
+TABLE (STYLE="table2")
+{
+[t301                   |t302                ]
+[t301                   |t302                ]
+[t301                   |t302                ]
+[t301                   |t302                ]
+[t301                   |t302                ]
+[t301                   |t302                ]
+[t301                   |t302                ]
+}
+END -- TABLE
+END -- PAGE
+PAGE f2p4 (TEXT="A Group", IMAGE="fa-smile-o")
 GRID
 {
 <G "A Group"                               >
@@ -207,6 +220,12 @@ t201 = FORMONLY.lvcol1, SCROLL, IMAGECOLUMN=lvimg;
 t202 = FORMONLY.lvcol2, SCROLL;
 PHANTOM FORMONLY.lvimg;
 
+-- arr2 table
+t301 = FORMONLY.a2col1, SCROLL, IMAGECOLUMN=a2img, TITLE="Column 1";
+t302 = FORMONLY.a2col2, SCROLL, TITLE="Column 2";
+PHANTOM FORMONLY.a2img;
+
 INSTRUCTIONS
 SCREEN RECORD arr ( FORMONLY.col1 THRU FORMONLY.img )
 SCREEN RECORD listview ( FORMONLY.lvcol1 THRU FORMONLY.lvimg )
+SCREEN RECORD arr2 ( FORMONLY.a2col1 THRU FORMONLY.a2img )

@@ -83,6 +83,8 @@ MAIN
 		END DISPLAY
 		DISPLAY ARRAY l_listView TO listview.*
 		END DISPLAY
+		DISPLAY ARRAY l_listView TO arr2.*
+		END DISPLAY
 		ON ACTION msg MESSAGE "Hello Message"
 		ON ACTION err ERROR "Error Message"
 		ON ACTION win CALL win()
