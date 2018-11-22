@@ -30,6 +30,6 @@
 	<UA_OUTPUT>
 		<PROXY>$(res.uaproxy.cmd)</PROXY>
 		<PUBLIC_IMAGEPATH>$(res.public.resources)</PUBLIC_IMAGEPATH>
-		<GWC-JS>gbc-njm-current</GWC-JS>
+		<GBC>gbc-njm-current</GBC>
 	</UA_OUTPUT>
 </APPLICATION>

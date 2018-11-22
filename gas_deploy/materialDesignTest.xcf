@@ -29,6 +29,6 @@
 	<UA_OUTPUT>
 		<PROXY>$(res.uaproxy.cmd)</PROXY>
 		<PUBLIC_IMAGEPATH>$(res.public.resources)</PUBLIC_IMAGEPATH>
-		<GWC-JS>gbc-clean</GWC-JS>
+		<GBC>gbc-clean-current</GBC>
 	</UA_OUTPUT>
 </APPLICATION>

@@ -26,6 +26,6 @@
 	<UA_OUTPUT>
 		<PROXY>$(res.uaproxy.cmd)</PROXY>
 		<PUBLIC_IMAGEPATH>$(res.public.resources)</PUBLIC_IMAGEPATH>
-		<GWC-JS>gbc-teal-current</GWC-JS>
+		<GBC>gbc-teal-current</GBC>
 	</UA_OUTPUT>
 </APPLICATION>
