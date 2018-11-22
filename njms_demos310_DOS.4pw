@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="30a09" version="3.2">
+<Project defaultApplication="1554019048" gstVersion="30a0a" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -8,8 +8,8 @@
       <DynamicProperty description="Navigation bar background color (Android 5.0 and later)" initialValue="#5E35B1" isDefaultInherited="false" isHidden="false" label="Navigation bar background color" name="gma-navigationBarBackground-color" readOnly="false" type="COLOR"/>
       <DynamicProperty description="Primary color (Android 5.0 and later)" initialValue="#5E35B1" isDefaultInherited="false" isHidden="false" label="Primary color" name="gma-primary-color" readOnly="false" type="COLOR"/>
       <DynamicProperty description="Primary dark color (Android 5.0 and later)" initialValue="#5E35B1" isDefaultInherited="false" isHidden="false" label="Primary dark color" name="gma-primary-dark-color" readOnly="false" type="COLOR"/>
-      <DynamicProperty description="Primary text color (Android 5.0 and later)" initialValue="#80000000" isDefaultInherited="false" isHidden="false" label="Primary text color" name="gma-primaryText-color" readOnly="false" type="COLOR"/>
-      <DynamicProperty description="Window backround color (Android 5.0 and later)" initialValue="#ffffffff" isDefaultInherited="false" isHidden="false" label="Window background color" name="gma-windowBackground-color" readOnly="false" type="COLOR"/>
+      <DynamicProperty description="Primary text color (Android 5.0 and later)" initialValue="#000000" isDefaultInherited="false" isHidden="false" label="Primary text color" name="gma-primaryText-color" readOnly="false" type="COLOR"/>
+      <DynamicProperty description="Window backround color (Android 5.0 and later)" initialValue="#ffffff" isDefaultInherited="false" isHidden="false" label="Window background color" name="gma-windowBackground-color" readOnly="false" type="COLOR"/>
       <DynamicProperty description="Cordova plugins" editorInfo="isDynamic:true;title:Cordova;description:Cordova plugins;icon:checkbox_checked" initialValue="" isDefaultInherited="false" isHidden="false" label="Cordova Plugins" name="gmi-cordova" readOnly="false" type="MULTIPLEBOOLEAN"/>
       <DynamicProperty description="High-DPI Icon (72x72 px) path" editorInfo="filters:*.png;openDirDialog:true;replaceDocPath:$(ProjectDir)" initialValue="" isDefaultInherited="false" isHidden="false" label="Icon-hdpi (72x72 px)" name="icon-hdpi" readOnly="false" type="FILE"/>
       <DynamicProperty description="Low-DPI Icon (36x36 px) path" editorInfo="filters:*.png;openDirDialog:true;replaceDocPath:$(ProjectDir)" initialValue="" isDefaultInherited="false" isHidden="false" label="Icon-ldpi (36x36 px)" name="icon-ldpi" readOnly="false" type="FILE"/>
@@ -94,7 +94,7 @@
       <File filePath="gbc/gbc-njm/theme_notes.txt"/>
     </Library>
   </Group>
-  <Group environment="value:LANG=.fglutf8,value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sql=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics;../pics/fa5.txt" label="njms_demos310" language="Genero">
+  <Group environment="value:LANG=.fglutf8,value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics;../pics/fa5.txt" label="njms_demos310" language="Genero">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -343,6 +343,7 @@
         <File filePath="src/gl_lib/genero_lib.inc"/>
         <File filePath="src/gl_lib/gl_db.4gl"/>
         <File filePath="src/gl_lib/gl_db.inc"/>
+        <File filePath="src/gl_lib/gl_encrypt.4gl"/>
         <File filePath="src/gl_lib/gl_gdcupd.4gl"/>
         <File filePath="src/gl_lib/gl_lib.4gl"/>
         <File filePath="src/gl_lib/gl_lib_aui.4gl"/>
@@ -368,7 +369,7 @@
         <File filePath="etc/container.4tb"/>
         <File filePath="src/sys/container.per"/>
       </Application>
-      <Library binaryName="lib_login" dependencies="1986,-1463189462,14000" id="2135194580" label="lib_login">
+      <Library binaryName="lib_login" dependencies="1986,-1463189462,14000,-1090563702,664242588" id="2135194580" label="lib_login">
         <File filePath="src/gl_lib/lib_login.4gl"/>
         <File filePath="src/gl_lib/lib_secure.4gl"/>
         <File filePath="src/sys/login.per"/>
@@ -382,6 +383,12 @@
       <Application binaryName="menu_mnt" commandLineArguments="S 1" dependencies="14000,-1090563702,1835393312,1986" id="1001967872" label="menu_mnt">
         <File filePath="src/sys/menu_mnt.4gl"/>
         <File filePath="src/sys/menu_mnt.per"/>
+      </Application>
+      <Application binaryName="OpenIdLogin" id="664242588" label="OpenIdLogin">
+        <File filePath="src/OpenIdLogin/OpenIdLogin.4gl"/>
+        <File filePath="src/OpenIdLogin/OpenIdLogin.4st"/>
+        <File filePath="src/OpenIdLogin/OpenIdLogin.inc"/>
+        <File filePath="src/OpenIdLogin/OpenIdLogin.per"/>
       </Application>
       <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,14000" id="-1334009856" label="user_mnt">
         <File filePath="src/sys/user_mnt.4gl"/>
