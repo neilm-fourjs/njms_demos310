@@ -26,9 +26,11 @@ The Application Framework:
 
 
 When deployed as via the gas the application urls will be:
-* http://<server>/<gas-alias>/ua/r/<xcf>
+```
+http://<server>/<gas-alias>/ua/r/<xcf>
 or
-* http://<server>:6394/ua/r/<xcf>
+http://<server>:6394/ua/r/<xcf>
+```
 
 The xcf files are:
 * njmdemo - Main demo with login using default GBC
@@ -50,18 +52,22 @@ Databases:
 
 
 For PostgreSQL
-        sudo -u postgres createuser <appuser>
-        sudo -u postgres createdb njm_demo310
-        sudo -u postgres psql
-        psql (9.6.7)
-        Type "help" for help.
+```
+sudo -u postgres createuser <appuser>
+sudo -u postgres createdb njm_demo310
+sudo -u postgres psql
+psql (9.6.7)
+Type "help" for help.
 
-        postgres=# grant all privileges on database njm_demo310 to <appuser>;
-        GRANT
-        postgres=# \q
+postgres=# grant all privileges on database njm_demo310 to <appuser>;
+GRANT
+postgres=# \q
+```
 
 
 For MariaDB added a user of 'dbuser' to connect to the database.
+```
 MariaDB [(none)]> CREATE USER 'dbuser'@'%';
 MariaDB [(none)]> GRANT ALL PRIVILEGES ON *.* TO 'dbuser'@'%';
+```
 
