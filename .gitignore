@@ -26,6 +26,7 @@
 *.out
 *.tmp
 *.err
+*.bak
 
 # Packages
 *.tgz
@@ -35,10 +36,11 @@
 *.info
 *.apk
 *.gar
+*.zip
 
 # Other
 .directory
+bin
 distbin
 build
 *.build
-bin/aui_stock_dynamic.xml
