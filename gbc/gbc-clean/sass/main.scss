@@ -24,3 +24,12 @@ BODY {
 .gbc_ApplicationHostMenuBookmarkWidget {
 	display: none !important;
 }
+
+.gbc_style_center {
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	background-position: center !important;
+}
+

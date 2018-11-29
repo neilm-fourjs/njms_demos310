@@ -1,7 +1,7 @@
 
 &include "schema.inc"
 
-LAYOUT ( TEXT="Menu Screen", STYLE="main2 grad2" )
+LAYOUT ( TEXT="Menu Screen", STYLE="main2 grad2", MINWIDTH=50, MINHEIGHT=16  )
 HBOX
 GRID hpadding2
 {
@@ -56,7 +56,7 @@ IMAGE hsp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
 
 LABEL titl = FORMONLY.l_titl,STYLE="heading",JUSTIFY=CENTER;
 
-TABLE menu : menu, STYLE="menu oneclick";
+TABLE menu : menu, STYLE="menu oneclick",WANTFIXEDPAGESIZE ;
 PHANTOM sys_menus.menu_key;
 PHANTOM sys_menus.m_id;
 PHANTOM sys_menus.m_pid;
@@ -78,7 +78,7 @@ BUTTON logout : logout, TEXT="Quit + Logout", IMAGE="fa-power-off";
 BUTTON about : about, TEXT="About", IMAGE="help";
 
 IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
-IMAGE logo = FORMONLY.logo, SIZEPOLICY=INITIAL,STRETCH=NONE, STYLE="noborder center";
+IMAGE logo = FORMONLY.logo, AUTOSCALE, SIZEPOLICY=INITIAL,STRETCH=NONE, STYLE="noborder center";
 IMAGE sp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
 
 INSTRUCTIONS

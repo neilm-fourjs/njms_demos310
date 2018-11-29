@@ -499,15 +499,9 @@
     <Library binaryName="xcf_files_deploy" id="1211226226" label="xcf_files_deploy">
       <File filePath="gas_deploy/materialDesignTest.xcf"/>
       <File filePath="gas_deploy/njmdemo.xcf"/>
-      <File filePath="gas_deploy/njmdemo_d.xcf"/>
-      <File filePath="gas_deploy/njmdemo_t.xcf"/>
       <File filePath="gas_deploy/njmdemodb.xcf"/>
       <File filePath="gas_deploy/njmweb.xcf"/>
       <File filePath="gas_deploy/njmweb2.xcf"/>
-      <File filePath="gas_deploy/njmweb2_d.xcf"/>
-      <File filePath="gas_deploy/njmweb2_t.xcf"/>
-      <File filePath="gas_deploy/njmweb_d.xcf"/>
-      <File filePath="gas_deploy/njmweb_t.xcf"/>
     </Library>
     <Library binaryName="xcf_files_deploy_ws" id="-850398834" label="xcf_files_deploy_ws">
       <File filePath="gas_deploy_ws/gdc_update_srv.xcf"/>

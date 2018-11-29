@@ -180,28 +180,18 @@
       </Library>
       <Library binaryName="xcf_files_deploy" id="1211226226" label="xcf_files_deploy">
         <File filePath="gas_deploy/njmdemo.xcf"/>
-        <File filePath="gas_deploy/njmdemo_d.xcf"/>
-        <File filePath="gas_deploy/njmdemo_t.xcf"/>
         <File filePath="gas_deploy/njmdemodb.xcf"/>
         <File filePath="gas_deploy/njmweb.xcf"/>
         <File filePath="gas_deploy/njmweb2.xcf"/>
-        <File filePath="gas_deploy/njmweb2_d.xcf"/>
-        <File filePath="gas_deploy/njmweb2_t.xcf"/>
-        <File filePath="gas_deploy/njmweb_d.xcf"/>
-        <File filePath="gas_deploy/njmweb_t.xcf"/>
       </Library>
       <Library binaryName="xcf_files_deploy_ws" id="-850398834" label="xcf_files_deploy_ws">
         <File filePath="gas_deploy_ws/gdc_update_srv.xcf"/>
       </Library>
       <Library binaryName="xcf_files" id="1211289508" label="xcf_files_local">
         <File filePath="gas/demo310.xcf"/>
-        <File filePath="gas/demo310_d.xcf"/>
         <File filePath="gas/matDesTest.xcf"/>
-        <File filePath="gas/matDesTest_d.xcf"/>
         <File filePath="gas/weboe.xcf"/>
-        <File filePath="gas/Weboe_d.xcf"/>
         <File filePath="gas/weboe2.xcf"/>
-        <File filePath="gas/Weboe2_d.xcf"/>
       </Library>
     </Group>
     <Group label="Database" language="Genero">
