@@ -7,6 +7,7 @@ CONSTANT C_VER="3.1"
 CONSTANT C_PRGDESC = "WC Richtext Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 
+CONSTANT C_DEF = '<p>This is a test<br/>Of <strong><u>RICHTEXT !!</u></strong><br/><strong style="color:#0066cc"><u>Something Blue</u></strong><br/></p>'
 MAIN
 	DEFINE l_rec RECORD
 		fileName STRING,
@@ -23,12 +24,15 @@ MAIN
 
 	LET l_rec.fileName = "text.html"
 
+	LET l_rec.richtext = C_DEF
+	LET l_rec.info = "Default Text"
+
 	OPTIONS INPUT WRAP, FIELD ORDER FORM
 
 	OPEN FORM f1 FROM "wc_richtext"
 	DISPLAY FORM f1
 
-	INPUT BY NAME l_rec.* ATTRIBUTES(UNBUFFERED, WITHOUT DEFAULTS, ACCEPT=FALSE)
+	INPUT BY NAME l_rec.* ATTRIBUTES(UNBUFFERED, WITHOUT DEFAULTS, ACCEPT=FALSE, CANCEL=FALSE)
 
 		ON ACTION myCopy 
 			DISPLAY "Copy"
@@ -51,6 +55,11 @@ MAIN
 				LET l_rec.info = CURRENT HOUR TO SECOND,%":No text!"
 				DISPLAY l_rec.info
 			END IF
+
+		ON ACTION deftext
+			LET l_rec.richtext = C_DEF
+			LET l_rec.info = "Default Text"
+			DISPLAY l_rec.info
 
 		ON ACTION savetext
 			IF saveText(l_rec.fileName, l_rec.richtext) THEN
@@ -76,13 +85,17 @@ MAIN
 			END IF
 			DISPLAY " l_rec.richtext contains ", l_rec.richtext
 
+		ON ACTION set_focus_to_fn ATTRIBUTES(TEXT=%"Focus to FileName")
+			NEXT FIELD filename
+
+		ON ACTION set_focus_to_test ATTRIBUTES(TEXT=%"Focus to Test")
+			NEXT FIELD fld2
+
 		ON ACTION set_focus_to_wc ATTRIBUTES(TEXT=%"Focus to RichText")
 			NEXT FIELD richtext
-
-		ON ACTION set_focus_to_info ATTRIBUTES(TEXT=%"Focus to info")
-			NEXT FIELD info
-
 		GL_ABOUT
+		ON ACTION close EXIT PROGRAM
+		ON ACTION quit EXIT PROGRAM
 	END INPUT
 
 END MAIN
