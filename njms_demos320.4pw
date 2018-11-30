@@ -473,7 +473,7 @@
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/pgs"/>
-      <Directory destinationDirectory="$(ProjectDir)/bin/utils" includedFiles="run.sh" label="util" sourceDirectory="$(ProjectDir)/utils"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/utils" includedFiles="*.sh" label="util" sourceDirectory="$(ProjectDir)/utils"/>
     </Package>
     <Package binaryName="njms_demos320_sqt" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810,1211226226,-850398834,654551740,-1557891896,1022451972,1848127715,528729868,985734158,62326091,1486280688,248425532,476951290,-1964806629,-1757926610,1320948536,1852932452,-1384381362,789344678,1103957492,-20198048,1211711094,1197855432,-531765990,381716529,-1222789264,-1722719568,-580790058,-132093204" description="NJMs Demos" label="njms_demos320_sqt" platform="Genero Application Server">
       <DynamicProperty name="packageId" value="njmsdemos"/>
@@ -484,7 +484,7 @@
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/sqt"/>
-      <Directory destinationDirectory="$(ProjectDir)/bin/utils" includedFiles="run.sh" label="util" sourceDirectory="$(ProjectDir)/utils"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/utils" includedFiles="*.sh" label="util" sourceDirectory="$(ProjectDir)/utils"/>
     </Package>
     <Package binaryName="njms_demos320_mdb" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810,1211226226,-850398834,654551740,-1557891896,1022451972,1848127715,528729868,985734158,62326091,-1746016620,1486280688,248425532,476951290,-1964806629,-1757926610,1320948536,1852932452,-1384381362,789344678,1811942608,1103957492,-20198048,1211711094,1197855432,-1690651403,-531765990,381716529,-1722719568,-580790058,-132093204" description="NJMs Demos" label="njms_demos320_mdb" platform="Genero Application Server">
       <DynamicProperty name="packageId" value="njmsdemos"/>
@@ -495,7 +495,7 @@
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/mdb"/>
-      <Directory destinationDirectory="$(ProjectDir)/bin/utils" includedFiles="run.sh" label="util" sourceDirectory="$(ProjectDir)/utils"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/utils" includedFiles="*.sh" label="util" sourceDirectory="$(ProjectDir)/utils"/>
     </Package>
     <Package binaryName="njms_demos320_snc" dependencies="-559263813,1773362531,-1090563702,-1954675472,-183914303,-1350833088,-400184264,1835393312,923654133,1663756762,14000,1521876251,1873655788,-217822240,726830537,-272766546,1986,-1334009856,-1273407208,2103145373,1001967872,-2121135278,2135194580,1554019048,-2014604027,252530810,1211226226,-850398834,654551740,-1557891896,1022451972,1848127715,528729868,985734158,62326091,-1746016620,1486280688,248425532,476951290,-1964806629,-1757926610,-132093204,1320948536,1852932452,-1384381362,789344678,1103957492,-20198048,1211711094,1518416784,1197855432,-531765990,381716529,-1722719568,-580790058" description="NJMs Demos" label="njms_demos320_snc" platform="Genero Application Server">
       <DynamicProperty name="packageId" value="njmsdemos"/>
@@ -506,7 +506,7 @@
       <Directory destinationDirectory="$(ProjectDir)/bin" includedFiles="*.xcf" label="gas" recursive="false" sourceDirectory="$(ProjectDir)/gas_deploy"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/pics" label="pics" sourceDirectory="$(ProjectDir)/pics"/>
       <Directory destinationDirectory="$(ProjectDir)/bin/etc" label="profile" recursive="false" sourceDirectory="$(ProjectDir)/etc/snc"/>
-      <Directory destinationDirectory="$(ProjectDir)/bin/utils" includedFiles="run.bat" label="util" sourceDirectory="$(ProjectDir)/utils"/>
+      <Directory destinationDirectory="$(ProjectDir)/bin/utils" includedFiles="*.bat" label="util" sourceDirectory="$(ProjectDir)/utils"/>
     </Package>
     <Package binaryName="OpenIdLogin" label="OpenIdLogin" platform="Genero Application Server">
       <DynamicProperty name="packageId" value="OpenIdLogin"/>
