@@ -109,4 +109,5 @@ FUNCTION getImagePath()
 		LET l_path = l_st.nextToken()
 		IF os.path.isDirectory( l_path ) THEN RETURN l_path END IF
 	END WHILE
+	RETURN "."
 END FUNCTION

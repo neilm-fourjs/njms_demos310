@@ -7,7 +7,7 @@ CONSTANT C_VER="3.1"
 CONSTANT C_PRGDESC = "WC Richtext Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 
-CONSTANT C_DEF = '<p>This is a test<br/>Of <strong><u>RICHTEXT !!</u></strong><br/><strong style="color:#0066cc"><u>Something Blue</u></strong><br/></p>'
+CONSTANT C_DEF = '<p>This is a test 2<br/>Of <strong><u>RICHTEXT !!</u></strong><br/><strong style="color:#0066cc"><u>Something Blue</u></strong><br/></p>'
 MAIN
 	DEFINE l_rec RECORD
 		fileName STRING,
@@ -21,6 +21,10 @@ MAIN
 	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	LET gl_lib.gl_noToolBar = FALSE
+
+	LET l_tmp = "env | sort" -- > /tmp/env."||fgl_getPID()
+	DISPLAY "RUN: "||l_tmp
+	RUN l_tmp
 
 	LET l_rec.fileName = "text.html"
 

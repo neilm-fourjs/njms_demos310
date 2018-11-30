@@ -1,5 +1,6 @@
 
 IMPORT os
+IMPORT FGL gl_lib_aui
 
 &include "genero_lib.inc"
 
@@ -70,74 +71,74 @@ FUNCTION gl_about(l_ver STRING) --{{{
 	CALL g.setAttribute("style","about")
 
 	IF gl_app_build IS NOT NULL THEN
-		CALL gl_addLabel(g, 0,y,LSTR("Application"),"right","black")
-		CALL gl_addLabel(g,10,y,gl_app_name||" - "||gl_app_build,NULL,NULL) LET y = y + 1
+		CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Application"),"right","black")
+		CALL gl_lib_aui.gl_addLabel(g,10,y,gl_app_name||" - "||gl_app_build,NULL,NULL) LET y = y + 1
 	END IF
 
-	CALL gl_addLabel(g, 0,y,LSTR("Program")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_progname||" - "||l_ver,NULL,"black") LET y = y + 1
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Program")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_progname||" - "||l_ver,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("Description")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_progdesc,NULL,"black") LET y = y + 1
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Description")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_progdesc,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("Author")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_progauth,NULL,"black") LET y = y + 1
-
-	LET w = g.createChild("HLine")
-	CALL w.setAttribute("posY",y) LET y = y + 1
-	CALL w.setAttribute("posX",0)
-	CALL w.setAttribute("gridWidth",25)
-
-	CALL gl_addLabel(g, 0,y,LSTR("Genero Runtime")||":","right","black")
-	CALL gl_addLabel(g,10,y,gver,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Server OS")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_os,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Server Name")||":","right","black")
-	CALL gl_addLabel(g,10,y,servername,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("OS User")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_userName,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Server Time:")||":","right","black")
-	CALL gl_addLabel(g,10,y,TODAY||" "||TIME,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Database Name")||":","right","black")
-	CALL gl_addLabel(g,10,y,fgl_getEnv("DBNAME"),NULL,NULL) LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Database Type")||":","right","black")
-	CALL gl_addLabel(g,10,y,UPSHIFT( fgl_db_driver_type() ),NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("DBDATE")||":","right","black")
-	CALL gl_addLabel(g,10,y,fgl_getEnv("DBDATE"),NULL,"black") LET y = y + 1
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Author")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_progauth,NULL,"black") LET y = y + 1
 
 	LET w = g.createChild("HLine")
 	CALL w.setAttribute("posY",y) LET y = y + 1
 	CALL w.setAttribute("posX",0)
 	CALL w.setAttribute("gridWidth",25)
 
-	CALL gl_addLabel(g, 0,y,LSTR("Client OS")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_cli_os||" / "||gl_cli_osver,NULL,"black") LET y = y + 1
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Genero Runtime")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gver,NULL,"black") LET y = y + 1
 
-	CALL gl_addLabel(g, 0,y,LSTR("Clint OS User")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_cli_un,NULL,"black") LET y = y + 1
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Server OS")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_os,NULL,"black") LET y = y + 1
+
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Server Name")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,servername,NULL,"black") LET y = y + 1
+
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("OS User")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_userName,NULL,"black") LET y = y + 1
+
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Server Time:")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,TODAY||" "||TIME,NULL,"black") LET y = y + 1
+
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Database Name")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,fgl_getEnv("DBNAME"),NULL,NULL) LET y = y + 1
+
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Database Type")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,UPSHIFT( fgl_db_driver_type() ),NULL,"black") LET y = y + 1
+
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("DBDATE")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,fgl_getEnv("DBDATE"),NULL,"black") LET y = y + 1
+
+	LET w = g.createChild("HLine")
+	CALL w.setAttribute("posY",y) LET y = y + 1
+	CALL w.setAttribute("posX",0)
+	CALL w.setAttribute("gridWidth",25)
+
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Client OS")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_cli_os||" / "||gl_cli_osver,NULL,"black") LET y = y + 1
+
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Clint OS User")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_cli_un,NULL,"black") LET y = y + 1
 
 	IF m_user_agent.getLength() > 1 THEN
-		CALL gl_addLabel(g, 0,y,LSTR("User Agent")||":","right","black")
-		CALL gl_addLabel(g,10,y,m_user_agent,NULL,"black") LET y = y + 1
+		CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("User Agent")||":","right","black")
+		CALL gl_lib_aui.gl_addLabel(g,10,y,m_user_agent,NULL,"black") LET y = y + 1
 	END IF
 
-	CALL gl_addLabel(g, 0,y,LSTR("FrontEnd Version")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_fe_typ||" "||gl_fe_ver,NULL,"black") LET y = y + 1
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("FrontEnd Version")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_fe_typ||" "||gl_fe_ver,NULL,"black") LET y = y + 1
 
 	IF gl_cli_dir.getLength() > 1 THEN
-		CALL gl_addLabel(g, 0,y,LSTR("Client Directory")||":","right","black")
-		CALL gl_addLabel(g,10,y,gl_cli_dir,NULL,"black") LET y = y + 1
+		CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Client Directory")||":","right","black")
+		CALL gl_lib_aui.gl_addLabel(g,10,y,gl_cli_dir,NULL,"black") LET y = y + 1
 	END IF
 
-	CALL gl_addLabel(g, 0,y,LSTR("Client Resolution")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_cli_res,NULL,"black") LET y = y + 1
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Client Resolution")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_cli_res,NULL,"black") LET y = y + 1
 
 	LET g = g.createChild("HBox")
 	CALL g.setAttribute("posY",y)
@@ -179,12 +180,11 @@ FUNCTION gl_about(l_ver STRING) --{{{
 	MENU "Options"
 		ON ACTION close	EXIT MENU
 		ON ACTION closeabout	EXIT MENU
-		ON ACTION showenv CALL gl_showEnv()
-		ON ACTION showreadme CALL gl_showReadMe()
+		ON ACTION showenv CALL gl_lib_aui.gl_showEnv()
+		ON ACTION showreadme CALL gl_lib_aui.gl_showReadMe()
+		ON ACTION showlicence CALL gl_lib_aui.gl_showlicence()
 		ON ACTION copyabout 
 			CALL ui.interface.frontCall("standard","cbset",info,y )
-		ON ACTION showlicence
-			CALL gl_showlicence()
 	END MENU
 	CLOSE WINDOW about
 
