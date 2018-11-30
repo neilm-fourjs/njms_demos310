@@ -1,11 +1,14 @@
 -- A Simple demo program with a login and menu system.
 IMPORT os
 IMPORT FGL gl_lib
+IMPORT FGL gl_about
+IMPORT FGL gl_splash
 IMPORT FGL gl_db
 IMPORT FGL gl_gdcupd
 IMPORT FGL lib_login
 IMPORT FGL new_acct
 
+&include "genero_lib.inc"
 &include "schema.inc"
 &include "app.inc"
 
@@ -33,7 +36,7 @@ DEFINE m_args STRING
 MAIN
 	CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,FALSE)
-	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+	CALL ui.Interface.setText( gl_progdesc )
 
 	CLOSE WINDOW SCREEN
 
@@ -51,16 +54,16 @@ END MAIN
 -- Connect to the database to do the login process.
 FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 
-	IF gl_lib.gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
-		LET gl_lib.gl_splash = C_SPLASH
-		CALL gl_lib.gl_splash( 0 ) -- open splash
+	IF gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
+		LET gl_splash = C_SPLASH
+		CALL gl_splash( 0 ) -- open splash
 	END IF
 
 	CALL gl_db.gldb_connect( NULL )
 
-	IF gl_lib.gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
+	IF gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
 		SLEEP 2
-		CALL gl_lib.gl_splash( -1 ) -- close splash
+		CALL gl_splash( -1 ) -- close splash
 	END IF
 
 	LET lib_login.m_logo_image = C_SPLASH
@@ -99,7 +102,7 @@ FUNCTION do_menu()
 --	DISPLAY FORM menu
 
 	DISPLAY C_SPLASH TO logo
-	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+	CALL ui.Interface.setText( gl_progdesc )
 
 	IF NOT populate_menu(m_menus[m_curMenu]) THEN -- should not happen!
 		CALL gl_lib.gl_exitProgram(0,"'main' menu not found!")
@@ -131,8 +134,7 @@ FUNCTION do_menu()
 					CALL DIALOG.setActionActive("back",FALSE)
 				END IF
 
-			ON ACTION about
-				CALL gl_lib.gl_about( C_VER )
+			GL_ABOUT
 
 			ON ACTION logout
 				CALL lib_login.logout( )

@@ -262,7 +262,7 @@ FUNCTION dynDiag()
 
 			WHEN "ON ACTION viewb" CALL oeweb_lib.viewb()
 			WHEN "ON ACTION gotoco" CALL gotoco()
-			WHEN "ON ACTION about" CALL gl_lib.gl_about( C_VER )
+			WHEN "ON ACTION about" CALL gl_about( C_VER )
 		END CASE
 	END WHILE
 	IF int_flag THEN LET int_flag = FALSE END IF

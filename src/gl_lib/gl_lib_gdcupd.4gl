@@ -121,24 +121,3 @@ FUNCTION gl_setReply(l_stat INT, l_txt STRING, l_msg STRING)
 	LET m_ret.reply = l_msg
 	DISPLAY base.application.getProgramName(),":Set Reply:",l_stat,":",l_txt,":",l_msg
 END FUNCTION
---------------------------------------------------------------------------------
--- Break the GDC Version string into major and minor
-FUNCTION gl_getVer( l_str STRING ) RETURNS (DECIMAL, INT)
-	DEFINE l_major DECIMAL(4,2)
-	DEFINE l_minor SMALLINT
-	DEFINE l_st base.StringTokenizer
-	LET l_minor = l_str.getIndexOf("-",1)
-	IF l_minor > 0 THEN LET l_str = l_str.subString(1,l_minor-1) END IF
-	LET l_st = base.StringTokenizer.create(l_str,".")
-	--DISPLAY "Tok:",l_st.countTokens()
-	IF l_st.countTokens() != 3 THEN
-		RETURN 0,0
-	END IF
-	LET l_minor = l_st.nextToken()
-	LET l_major = l_minor
-	LET l_minor = l_st.nextToken()
-	LET l_major = l_major + (l_minor / 100)
-	LET l_minor = l_st.nextToken()
-	--DISPLAY "Maj:",l_major," Min:",l_minor
-	RETURN l_major, l_minor
-END FUNCTION

@@ -1,10 +1,10 @@
 
 IMPORT util
 IMPORT FGL gl_lib
-&include "genero_lib.inc"
-
 IMPORT FGL glm_sql
 IMPORT FGL glm_mkForm
+
+&include "genero_lib.inc"
 &include "dynMaint.inc"
 
 DEFINE m_dialog ui.Dialog

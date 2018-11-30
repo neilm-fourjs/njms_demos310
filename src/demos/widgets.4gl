@@ -8,6 +8,8 @@
 
 IMPORT util
 IMPORT FGL gl_lib
+IMPORT FGL gl_about
+IMPORT FGL gl_splash
 IMPORT FGL gl_lib_aui
 IMPORT FGL gl_lookup3
 IMPORT FGL gl_db
@@ -114,7 +116,7 @@ MAIN
 	END IF
 	GL_DBGMSG(2,"done - fix_path.")
 
-	IF gl_lib.gl_fe_typ != "GBC" THEN
+	IF gl_fe_typ != "GBC" THEN
 		GL_DBGMSG(4,"doing splash.")
 		CALL gl_splash( 4 )
 		GL_DBGMSG(4,"done splash.")
@@ -125,7 +127,7 @@ MAIN
 	GL_DBGMSG(4,"before - open window.")
 	OPEN WINDOW widgets WITH FORM "widgets"
 	GL_DBGMSG(4,"after - open window.")
-	CALL ui.interface.setImage( gl_lib.gl_progIcon )
+	CALL ui.interface.setImage( gl_progIcon )
 	CALL hide_item("Page","arrays",1)
 	CALL hide_item("Page","canvas",1)
 	CALL hide_item("Page","colours",1)
@@ -305,7 +307,7 @@ MAIN
 				CALL ui.interface.frontCall("standard","launchURL","http://www.4js.com/",[tmp])
 
 			ON ACTION splash
-				CALL gl_lib.gl_splash( gl_lib.gl_progIcon )
+				CALL gl_splash( gl_progIcon )
 
 			GL_ABOUT
 

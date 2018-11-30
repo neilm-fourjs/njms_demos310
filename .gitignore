@@ -41,6 +41,8 @@
 # Other
 .directory
 bin
+bin310
+bin320
 distbin
 build
 *.build

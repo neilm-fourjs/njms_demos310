@@ -103,31 +103,38 @@ Style File:
 }
 END -- GRID
 END -- PAGE
-PAGE f2p2 (TEXT="ListView", IMAGE="smiley")
-TABLE (STYLE="listview")
+PAGE f2p2 (TEXT="ListView", IMAGE="smiley", ACTION=arr2)
+GRID
 {
-[t201                   |t202                ]
-[t201                   |t202                ]
-[t201                   |t202                ]
-[t201                   |t202                ]
-[t201                   |t202                ]
-[t201                   |t202                ]
-[t201                   |t202                ]
+<T tab2                                        >
+ [t201                   |t202                ]
+ [t201                   |t202                ]
+ [t201                   |t202                ]
+ [t201                   |t202                ]
+ [t201                   |t202                ]
+ [t201                   |t202                ]
+ [t201                   |t202                ]
+<                                              >
+ [tab2info                                    ]
 }
-END -- TABLE
+END -- GRID
+
 END -- PAGE
-PAGE f2p3 (TEXT="Table 2", IMAGE="smiley")
-TABLE (STYLE="table2")
+PAGE f2p3 (TEXT="Table 2", IMAGE="smiley", ACTION=arr3)
+GRID
 {
-[t301                   |t302                ]
-[t301                   |t302                ]
-[t301                   |t302                ]
-[t301                   |t302                ]
-[t301                   |t302                ]
-[t301                   |t302                ]
-[t301                   |t302                ]
+<T tab3                                        >
+ [t301                   |t302                ]
+ [t301                   |t302                ]
+ [t301                   |t302                ]
+ [t301                   |t302                ]
+ [t301                   |t302                ]
+ [t301                   |t302                ]
+ [t301                   |t302                ]
+<                                              >
+ [tab3info                                    ]
 }
-END -- TABLE
+END -- GRID
 END -- PAGE
 PAGE f2p4 (TEXT="A Group", IMAGE="smiley")
 GRID
@@ -219,16 +226,20 @@ TEXTEDIT ip = FORMONLY.imgpath,STRETCH=X;
 TEXTEDIT sf = FORMONLY.stylefile,STRETCH=X;
 
 -- list view table
+TABLE tab2 : tab2, STYLE="listview";
 t201 = FORMONLY.lvcol1, SCROLL, IMAGECOLUMN=lvimg;
 t202 = FORMONLY.lvcol2, SCROLL;
 PHANTOM FORMONLY.lvimg;
+LABEL tab2info = FORMONLY.tab2info, STYLE="center";
 
 -- arr2 table
-t301 = FORMONLY.a2col1, SCROLL, IMAGECOLUMN=a2img, TITLE="Column 1";
-t302 = FORMONLY.a2col2, SCROLL, TITLE="Column 2";
-PHANTOM FORMONLY.a2img;
+TABLE tab3 : tab3, STYLE="table3";
+t301 = FORMONLY.a3col1, SCROLL, IMAGECOLUMN=a3img, TITLE="Column 1";
+t302 = FORMONLY.a3col2, SCROLL, TITLE="Column 2";
+PHANTOM FORMONLY.a3img;
+LABEL tab3info = FORMONLY.tab3info, STYLE="center";
 
 INSTRUCTIONS
-SCREEN RECORD arr ( FORMONLY.col1 THRU FORMONLY.img )
-SCREEN RECORD listview ( FORMONLY.lvcol1 THRU FORMONLY.lvimg )
-SCREEN RECORD arr2 ( FORMONLY.a2col1 THRU FORMONLY.a2img )
+SCREEN RECORD arr1 ( FORMONLY.col1 THRU FORMONLY.img )
+SCREEN RECORD arr2 ( FORMONLY.lvcol1 THRU FORMONLY.lvimg )
+SCREEN RECORD arr3 ( FORMONLY.a3col1 THRU FORMONLY.a3img )

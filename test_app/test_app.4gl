@@ -29,7 +29,7 @@ MAIN
 			CALL gl_winInfo(3,"","")
 		ON ACTION local_keys
 			CALL get_localstorage_keys()
-		ON ACTION about CALL gl_lib.gl_about( "1.0" )
+		ON ACTION about CALL gl_about( "1.0" )
 		ON ACTION exit EXIT MENU
 		ON ACTION close EXIT MENU
 	END MENU

@@ -52,7 +52,7 @@ GL_MODULE_ERROR_HANDLER
 	OPEN FORM ordent FROM "ordent"
 	OPEN FORM ordent2 FROM "ordent2"
 	DISPLAY FORM ordent2
-	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+	CALL ui.Interface.setText( gl_progdesc )
 	DISPLAY SFMT(%"Welcome %1",m_fullname) TO welcome
 	--CALL setTitle()
 

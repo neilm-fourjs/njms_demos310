@@ -6,7 +6,7 @@
 	<Style name="Table.listview">
 		<StyleAttribute name="tableType"	value="listView" />
 	</Style>
-	<Style name="Table.table2:odd">
+	<Style name="Table.table3:odd">
 		<StyleAttribute name="backgroundColor"	value="#F2F2F9" />
 	</Style>
 	<Style name=".noborder">

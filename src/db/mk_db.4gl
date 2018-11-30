@@ -21,7 +21,14 @@ MAIN
 
 	LET gl_db.m_cre_db = TRUE
 	CALL gl_db.gldb_connect(NULL)
-	CALL mkdb_progress( "Connected to db okay" )
+	CALL mkdb_progress( SFMT(%"Connected to %1 db '%2' okay",gl_db.m_dbtyp,gl_db.m_dbnam) )
+
+	IF gl_winQuestion("Confirm",
+		"This will delete and recreate all the database tables!\n\nAre you sure you want to do this?",
+		"No","Yes|No","question") != "Yes" THEN
+		EXIT PROGRAM
+	END IF
+
 	CALL mkdb_progress( SFMT("typ:%1 nam:%2 des:%3 src:%4 drv:%5 dir:%6 con:%7",
 							gl_db.m_dbtyp,
 							gl_db.m_dbnam,

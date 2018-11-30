@@ -516,7 +516,7 @@ FUNCTION glGRW_prnOutputRadio(l_f ui.Form)
 	LET l_n = l_n.getFirstChild()
 	IF l_n IS NULL THEN DISPLAY "Failed to find RadioGroup!" RETURN END IF
 	CALL gl_lib_aui.gl_additem(l_n,"PDF",%"PDF")
-	IF gl_lib.gl_fe_typ = "GBC" THEN
+	IF gl_fe_typ = "GBC" THEN
 		CALL gl_lib_aui.gl_additem(l_n,"Browser",%"Browser")
 	ELSE
 		CALL gl_lib_aui.gl_additem(l_n,"SVG",%"SVG")

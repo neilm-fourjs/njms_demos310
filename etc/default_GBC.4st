@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="ANSI_X3.4-1968"?>
 
 <StyleList>
+	<Style name="Form">
+		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
+		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->
+		<StyleAttribute name="fontSize" value="1em" />
+	</Style>
 
   <Style name="Folder.accordion">
 		<StyleAttribute name="position"  value="accordion" />
@@ -9,10 +14,8 @@
 		<StyleAttribute name="tableType"  value="listView" />
   </Style>
 
-	<Style name="*">
-		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
-		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->
-		<StyleAttribute name="fontSize" value="1em" />
+	<Style name=".comic">
+		<StyleAttribute name="fontFamily" value="Comic Sans MS" />
 	</Style>
 
 	<Style name="Group::title">

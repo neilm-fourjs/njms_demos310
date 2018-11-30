@@ -1,0 +1,42 @@
+
+LAYOUT (TEXT="List View Demo")
+HBOX
+TABLE (STYLE="listview")
+{
+[a001              ][a002              ]
+}
+END -- TABLE
+GRID ( STYLE="comic em12" )
+{
+[lnam][f001                        ]
+[lhou][f002                        ]
+[lbio][f003                        ]
+      [                            ]
+      [                            ]
+      [                            ]
+      [himg     ][img     ]
+      [         ][        ]
+      [         ][        ]
+      [         ][        ]
+}
+END -- GRID
+END -- HBOX
+
+ATTRIBUTES
+a001 = FORMONLY.a_name, IMAGECOLUMN=a_img;
+a002 = FORMONLY.a_details;
+PHANTOM FORMONLY.a_img;
+
+LABEL lnam : lnam, TEXT=%"Name:";
+LABEL lhou : lhou, TEXT=%"House:";
+LABEL lbio : lbio, TEXT=%"Bio:";
+
+PHANTOM FORMONLY.cont_id;
+f001 = FORMONLY.cont_name;
+f002 = FORMONLY.house;
+TEXTEDIT f003 = FORMONLY.bio;
+IMAGE img = FORMONLY.img, STYLE="noborder", AUTOSCALE;
+IMAGE himg = FORMONLY.himg, STYLE="noborder", AUTOSCALE;
+
+INSTRUCTIONS
+SCREEN RECORD arr ( FORMONLY.a_name THRU FORMONLY.a_img )

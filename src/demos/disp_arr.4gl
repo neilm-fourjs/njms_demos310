@@ -29,7 +29,7 @@ MAIN
 
 	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
-	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+	CALL ui.Interface.setText( gl_progdesc )
 
 	OPEN FORM f FROM "disp_arr"
 	DISPLAY FORM f

@@ -6,6 +6,7 @@ IMPORT FGL gl_gdcupd
 IMPORT FGL lib_login
 IMPORT FGL new_acct
 
+&include "genero_lib.inc"
 &include "schema.inc"
 &include "app.inc"
 
@@ -19,7 +20,7 @@ MAIN
 	CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, NULL, PRGDESC, PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,FALSE)
 	LET m_mdi = gl_lib.m_mdi
-	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+	CALL ui.Interface.setText( gl_progdesc )
 
 	OPEN FORM login_hist FROM "login_hist"
 	DISPLAY FORM login_hist

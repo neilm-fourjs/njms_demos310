@@ -1,0 +1,43 @@
+
+ACTION DEFAULTS
+	ACTION cancel (TEXT=%"Exit", IMAGE="fa-power-off")
+
+	ACTION mycopy (TEXT=%"My Copy", IMAGE="fa-copy")
+	ACTION mypaste (TEXT=%"My Paste", IMAGE="fa-paste")
+
+	ACTION clear (TEXT=%"Clear", IMAGE="fa-eraser")
+	ACTION savetext (TEXT=%"Save Text", IMAGE="fa-save")
+	ACTION loadText (TEXT=%"Load Text", IMAGE="fa-file-text-o")
+END -- AD
+
+LAYOUT (TEXT=%"WC Richtext Demo",MINWIDTH=80,MINHEIGHT=20)
+GRID
+{
+[l001:f001          |a1       ]
+[rt                           ]
+[                             ]
+[                             ]
+[                             ]
+[info                         ]
+}
+END
+END
+ATTRIBUTES
+LABEL l001 : filename,TEXT=%"File Name:", JUSTIFY=RIGHT;
+f001 = FORMONLY.fileName;
+a1=FORMONLY.fld2, SCROLL;
+
+WEBCOMPONENT rt = FORMONLY.richtext,
+COMPONENTTYPE = "fglrichtext",
+PROPERTIES = (
+toolbar = "bold|italic|underline|fontsizeselect|undo|redo|color|image|emoji",
+spellcheck = "browser",
+autoflush = "autosave",
+autoflush_interval = 30
+),
+  SIZEPOLICY = FIXED,
+  SCROLLBARS = NONE,
+  STRETCH = BOTH;
+
+EDIT info = FORMONLY.info, SCROLL;
+END

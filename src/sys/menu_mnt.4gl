@@ -45,8 +45,8 @@ DEFINE m_save BOOLEAN
 DEFINE m_user_key INTEGER
 MAIN
 	DEFINE dnd ui.DragDrop
-	LET gl_lib.gl_toolbar = "dynmaint"
-	LET gl_lib.gl_topMenu = "dynmaint"
+	LET gl_toolbar = "dynmaint"
+	LET gl_topMenu = "dynmaint"
 	LET gl_lib.gl_noToolBar = FALSE
 	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
@@ -413,7 +413,7 @@ REPORT trad_rpt(l_row,l_rec)
 
   FORMAT
 		FIRST PAGE HEADER
-			LET l_rpt_user = gl_lib.gl_userName
+			LET l_rpt_user = gl_userName
 			LET l_print_date = TODAY
 			LET l_head2 = "Printed:",l_print_date, " By:", l_rpt_user.trim()
 			LET x = 132 - LENGTH( l_head2 )

@@ -49,7 +49,7 @@ MAIN
 		CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
 --	END IF
 
-	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+	CALL ui.Interface.setText( gl_progdesc )
 	CALL ui.Interface.loadStyles("matDesTest")
 	--RUN "env | sort > env.txt"
 
@@ -79,15 +79,21 @@ MAIN
 	DIALOG ATTRIBUTE(UNBUFFERED)
 		INPUT BY NAME l_rec.* ATTRIBUTES( WITHOUT DEFAULTS )
 		END INPUT
-		DISPLAY ARRAY l_arr TO arr.*
-		END DISPLAY
-		DISPLAY ARRAY l_listView TO listview.*
+		DISPLAY ARRAY l_arr TO arr1.*
 		END DISPLAY
 		DISPLAY ARRAY l_listView TO arr2.*
+			BEFORE ROW
+				DISPLAY SFMT("On row %1 of %2",DIALOG.getCurrentRow("arr2"),l_listView.getLength()) TO tab2info
+		END DISPLAY
+		DISPLAY ARRAY l_listView TO arr3.*
+			BEFORE ROW
+				DISPLAY SFMT("On row %1 of %2",DIALOG.getCurrentRow("arr3"),l_listView.getLength()) TO tab3info
 		END DISPLAY
 		ON ACTION msg MESSAGE "Hello Message"
 		ON ACTION err ERROR "Error Message"
 		ON ACTION win CALL win()
+		ON ACTION arr2 CALL DIALOG.nextField("lvcol1")
+		ON ACTION arr3 CALL DIALOG.nextField("a3col1")
 		ON ACTION wintitle CALL fgl_setTitle("My Window Title")
 		ON ACTION dyntext CALL gbc_replaceHTML("dyntext","Dynamic Text:"||CURRENT)
 		ON ACTION darklogo CALL gbc_replaceHTML("logocell","<img src='./resources/img/logo_dark.png'/>")

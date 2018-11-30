@@ -28,7 +28,7 @@ MAIN
 	DEFINE dnd ui.DragDrop
 	DEFINE l_rules STRING
 
-	LET gl_lib.gl_topMenu = "dynmaint"
+	LET gl_topMenu = "dynmaint"
 	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	WHENEVER ANY ERROR CALL gl_error

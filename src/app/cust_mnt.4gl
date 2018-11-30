@@ -45,8 +45,8 @@ DEFINE m_user_key LIKE sys_users.user_key
 DEFINE m_allowedActions CHAR(6) --Y/N for Find / List / Update / Insert / Delete / Sample
                               -- NNYNNN = Only update allowed.
 MAIN
-	LET gl_lib.gl_toolbar = "dynmaint"
-	LET gl_lib.gl_topMenu = "dynmaint"
+	LET gl_toolbar = "dynmaint"
+	LET gl_topMenu = "dynmaint"
 	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
 	WHENEVER ANY ERROR CALL gl_error
@@ -58,7 +58,7 @@ MAIN
 
 	OPEN FORM frm FROM "cust_mnt"
 	DISPLAY FORM frm
-	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+	CALL ui.Interface.setText( gl_progdesc )
 
 	TRY
 		DECLARE fetch_row CURSOR FOR SELECT * FROM TABNAME, TABNAME2
@@ -457,7 +457,7 @@ REPORT trad_rpt(l_row, l_rec, l_rec2)
 
   FORMAT
 		FIRST PAGE HEADER
-			LET l_rpt_user = gl_lib.gl_userName
+			LET l_rpt_user = gl_userName
 			LET l_print_date = TODAY
 			LET l_head2 = SFMT( %"Printed: %! By:%2",l_print_date, l_rpt_user.trim())
 			LET x = 132 - LENGTH( l_head2 )

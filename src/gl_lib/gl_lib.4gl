@@ -23,25 +23,6 @@ IMPORT util
 
 &include "genero_lib.inc"
 
-PUBLIC DEFINE gl_dbgLev SMALLINT  -- debug level: 0=None, 1=General, 2=All
-PUBLIC DEFINE gl_version STRING
-PUBLIC DEFINE gl_progIcon STRING
-PUBLIC DEFINE gl_progName STRING -- base.application.getProgramName
-PUBLIC DEFINE gl_progDesc STRING
-PUBLIC DEFINE gl_progAuth STRING
-PUBLIC DEFINE gl_splash STRING
-PUBLIC DEFINE gl_toolbar,  gl_topmenu STRING
-PUBLIC DEFINE gl_os STRING
-PUBLIC DEFINE gl_cli_os STRING
-PUBLIC DEFINE gl_cli_osver STRING
-PUBLIC DEFINE gl_cli_un STRING
-PUBLIC DEFINE gl_cli_res STRING
-PUBLIC DEFINE gl_cli_dir STRING
-PUBLIC DEFINE gl_fe_typ STRING
-PUBLIC DEFINE gl_fe_ver STRING
-PUBLIC DEFINE gl_userName STRING
-PUBLIC DEFINE gl_app_build STRING -- Applcation Build 
-PUBLIC DEFINE gl_app_name STRING -- Applcation Name
 PUBLIC DEFINE gl_noToolBar BOOLEAN
 
 PUBLIC DEFINE m_logDir STRING
@@ -50,7 +31,6 @@ PUBLIC DEFINE m_logDate BOOLEAN
 PUBLIC DEFINE m_mdi CHAR(1)
 
 DEFINE m_key STRING
-DEFINE m_user_agent STRING
 --------------------------------------------------------------------------------
 #+ Initialize Function
 #+
@@ -297,7 +277,7 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	IF l_tag IS NULL THEN LET l_tag = "(null)" END IF
 	GL_DBGMSG(0, "gl_formInit: tag='"||l_tag||"'")
 	IF l_styl IS NULL THEN -- check to see if the window had the style set.
-		LET l_fn = gl_getWinNode(NULL)
+		LET l_fn = l_fn.getParent()
 		LET l_styl = l_fn.getAttribute("style")
 		LET l_fn = l_fm.getNode()
 	END IF
@@ -373,7 +353,7 @@ FUNCTION gl_titleWin( l_titl STRING ) --{{{
 		RETURN
 	END IF
 
-	LET n = gl_getFormNode( NULL )
+	LET n = l_win.getForm().getNode()
 	IF l_titl IS NULL OR l_titl = " " THEN
 		IF n IS NOT NULL THEN
 			LET l_titl = n.getAttribute("text")
@@ -449,6 +429,27 @@ FUNCTION gl_chkClientVer( l_cli STRING, l_ver STRING, l_feature STRING) RETURNS 
 	END IF
 	RETURN TRUE
 END FUNCTION 
+--------------------------------------------------------------------------------
+-- Break the Version string into major and minor
+FUNCTION gl_getVer( l_str STRING ) RETURNS (DECIMAL, INT)
+	DEFINE l_major DECIMAL(4,2)
+	DEFINE l_minor SMALLINT
+	DEFINE l_st base.StringTokenizer
+	LET l_minor = l_str.getIndexOf("-",1)
+	IF l_minor > 0 THEN LET l_str = l_str.subString(1,l_minor-1) END IF
+	LET l_st = base.StringTokenizer.create(l_str,".")
+	--DISPLAY "Tok:",l_st.countTokens()
+	IF l_st.countTokens() != 3 THEN
+		RETURN 0,0
+	END IF
+	LET l_minor = l_st.nextToken()
+	LET l_major = l_minor
+	LET l_minor = l_st.nextToken()
+	LET l_major = l_major + (l_minor / 100)
+	LET l_minor = l_st.nextToken()
+	--DISPLAY "Maj:",l_major," Min:",l_minor
+	RETURN l_major, l_minor
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Set gl_userName
 #+
@@ -876,229 +877,4 @@ FUNCTION gl_getCallingModuleName() RETURNS STRING --{{{
 	--DISPLAY "Fil:",l_fil," Mod:",l_mod," Line:",l_lin
 	LET l_fil = NVL(l_fil,"FILE?")||"."||NVL(l_mod,"MOD?")||":"||NVL(l_lin,"LINE?")
 	RETURN l_fil
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Splash screen
-#+
-#+ @param l_dur > 0 for sleep then close, 0=just open window, -1=close window
-#+ @return Nothing.
-FUNCTION gl_splash(l_dur SMALLINT) --{{{
-	DEFINE f,g,n om.DomNode
-
-	IF gl_fe_typ = "GBC" THEN RETURN END IF
-
-	IF l_dur = -1 THEN
-		CLOSE WINDOW splash
-		RETURN
-	END IF
-
-	OPEN WINDOW splash AT 1,1 WITH 1 ROWS,1 COLUMNS ATTRIBUTE(STYLE="default noborder dialog2 bg_white")
-	LET f = gl_genForm("splash")
-	LET g = f.createChild("Grid")
-	LET n = g.createChild("Image")
-	CALL n.setAttribute("name","logo" )
-	CALL n.setAttribute("style","noborder" )
-	CALL n.setAttribute("width","36" )
-	CALL n.setAttribute("height","8" )
-	CALL n.setAttribute("image",gl_splash )
-	CALL n.setAttribute("posY","0" )
-	CALL n.setAttribute("posX","0" )
-	CALL n.setAttribute("gridWidth","40" )
-	CALL n.setAttribute("gridHeight","8")
-	CALL n.setAttribute("height","200px" )
-	CALL n.setAttribute("width", "570px" )
-	CALL n.setAttribute("stretch","both" )
-	CALL n.setAttribute("autoScale","1" )
-	CALL ui.interface.refresh()
-
-	IF l_dur > 0 THEN
-		SLEEP l_dur
-		CLOSE WINDOW splash
-	END IF
-
-END FUNCTION --}}}
---------------------------------------------------------------------------------
-#+ Dynamic About Window
-#+
-#+ @param l_ver a version string
-#+ @return Nothing.
-FUNCTION gl_about(l_ver STRING) --{{{
-	DEFINE f,n,g,w om.DomNode
-	DEFINE nl om.nodeList
-	DEFINE gver, servername, info, txt STRING
-	DEFINE y SMALLINT
-
-	IF os.Path.pathSeparator() = ";" THEN -- Windows
-		LET servername = fgl_getEnv("COMPUTERNAME")
-	ELSE -- Unix / Linux / Mac / Android
-		LET servername = fgl_getEnv("HOSTNAME")
-	END IF
-	LET gver = "build ",fgl_getVersion()
-
-	IF gl_cli_os = "?" THEN
-		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
-		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )
-		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
-		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
-	END IF
-
-	IF gl_app_name IS NULL THEN CALL gl_setAppInfo( NULL, NULL ) END IF
-
-	OPEN WINDOW about AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE="naked")
-	LET n = gl_getWinNode(NULL)
-	CALL n.setAttribute("text",gl_progdesc)
-	LET f = gl_genForm("about")
-	LET n = f.createChild("VBox")
-	CALL n.setAttribute("posY","0" )
-	CALL n.setAttribute("posX","0" )
-
-	IF gl_splash IS NOT NULL AND gl_splash != " " THEN
-		LET g = n.createChild("HBox")
-		CALL g.setAttribute("posY",y)
-		CALL g.setAttribute("gridWidth",36)
-		LET w = g.createChild("SpacerItem")
-
-		LET w = g.createChild("Image")
-		CALL w.setAttribute("posY","0" )
-		CALL w.setAttribute("posX","0" )
-		CALL w.setAttribute("name","logo" )
-		CALL w.setAttribute("style","noborder")
-		CALL w.setAttribute("stretch","both" )
-		CALL w.setAttribute("autoScale","1" )
-		CALL w.setAttribute("gridWidth","12" )
-		CALL w.setAttribute("image",gl_splash )
-		CALL w.setAttribute("height","100px" )
-		CALL w.setAttribute("width", "290px" )
-
-		LET w = g.createChild("SpacerItem")
-		LET y = 10
-	ELSE
-		LET y = 1
-	END IF
-
-	LET g = n.createChild("Group")
-	CALL g.setAttribute("text","About")
-	CALL g.setAttribute("posY","10" )
-	CALL g.setAttribute("posX","0" )
-	CALL g.setAttribute("style","about")
-
-	IF gl_app_build IS NOT NULL THEN
-		CALL gl_addLabel(g, 0,y,LSTR("Application"),"right","black")
-		CALL gl_addLabel(g,10,y,gl_app_name||" - "||gl_app_build,NULL,NULL) LET y = y + 1
-	END IF
-
-	CALL gl_addLabel(g, 0,y,LSTR("Program")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_progname||" - "||l_ver,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Description")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_progdesc,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Author")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_progauth,NULL,"black") LET y = y + 1
-
-	LET w = g.createChild("HLine")
-	CALL w.setAttribute("posY",y) LET y = y + 1
-	CALL w.setAttribute("posX",0)
-	CALL w.setAttribute("gridWidth",25)
-
-	CALL gl_addLabel(g, 0,y,LSTR("Genero Runtime")||":","right","black")
-	CALL gl_addLabel(g,10,y,gver,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Server OS")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_os,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Server Name")||":","right","black")
-	CALL gl_addLabel(g,10,y,servername,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("OS User")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_userName,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Server Time:")||":","right","black")
-	CALL gl_addLabel(g,10,y,TODAY||" "||TIME,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Database Name")||":","right","black")
-	CALL gl_addLabel(g,10,y,fgl_getEnv("DBNAME"),NULL,NULL) LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Database Type")||":","right","black")
-	CALL gl_addLabel(g,10,y,UPSHIFT( fgl_db_driver_type() ),NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("DBDATE")||":","right","black")
-	CALL gl_addLabel(g,10,y,fgl_getEnv("DBDATE"),NULL,"black") LET y = y + 1
-
-	LET w = g.createChild("HLine")
-	CALL w.setAttribute("posY",y) LET y = y + 1
-	CALL w.setAttribute("posX",0)
-	CALL w.setAttribute("gridWidth",25)
-
-	CALL gl_addLabel(g, 0,y,LSTR("Client OS")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_cli_os||" / "||gl_cli_osver,NULL,"black") LET y = y + 1
-
-	CALL gl_addLabel(g, 0,y,LSTR("Clint OS User")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_cli_un,NULL,"black") LET y = y + 1
-
-	IF m_user_agent.getLength() > 1 THEN
-		CALL gl_addLabel(g, 0,y,LSTR("User Agent")||":","right","black")
-		CALL gl_addLabel(g,10,y,m_user_agent,NULL,"black") LET y = y + 1
-	END IF
-
-	CALL gl_addLabel(g, 0,y,LSTR("FrontEnd Version")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_fe_typ||" "||gl_fe_ver,NULL,"black") LET y = y + 1
-
-	IF gl_cli_dir.getLength() > 1 THEN
-		CALL gl_addLabel(g, 0,y,LSTR("Client Directory")||":","right","black")
-		CALL gl_addLabel(g,10,y,gl_cli_dir,NULL,"black") LET y = y + 1
-	END IF
-
-	CALL gl_addLabel(g, 0,y,LSTR("Client Resolution")||":","right","black")
-	CALL gl_addLabel(g,10,y,gl_cli_res,NULL,"black") LET y = y + 1
-
-	LET g = g.createChild("HBox")
-	CALL g.setAttribute("posY",y)
-	CALL g.setAttribute("gridWidth",40)
-	LET w = g.createChild("SpacerItem")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","Copy to Clipboard")
-	CALL w.setAttribute("name","copyabout")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","Show Env")
-	CALL w.setAttribute("name","showenv")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","Show License")
-	CALL w.setAttribute("name","showlicence")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","ReadMe")
-	CALL w.setAttribute("name","showreadme")
-	LET w = g.createChild("Button")
-	CALL w.setAttribute("posY",y)
-	CALL w.setAttribute("text","Close")
-	CALL w.setAttribute("name","closeabout")
-	LET w = g.createChild("SpacerItem")
-
-	LET nl = f.selectByTagName("Label")
-	FOR y = 1 TO nl.getLength()
-		LET w = nl.item( y )
-		LET txt = w.getAttribute("text")
-		IF txt IS NULL THEN LET txt = "(null)" END IF
-		LET info = info.append( txt )
-		IF NOT y MOD 2 THEN
-			LET info = info.append( "\n" )
-		END IF
-	END FOR
-
-	MENU "Options"
-		ON ACTION close	EXIT MENU
-		ON ACTION closeabout	EXIT MENU
-		ON ACTION showenv CALL gl_showEnv()
-		ON ACTION showreadme CALL gl_showReadMe()
-		ON ACTION copyabout 
-			CALL ui.interface.frontCall("standard","cbset",info,y )
-		ON ACTION showlicence
-			CALL gl_showlicence()
-	END MENU
-	CLOSE WINDOW about
-
 END FUNCTION --}}}

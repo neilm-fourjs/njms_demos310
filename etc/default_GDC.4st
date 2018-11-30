@@ -2,10 +2,14 @@
 
 <StyleList>
 
-	<Style name="*">
+	<Style name="Window">
 		<StyleAttribute name="fontFamily" value="Century Gothic, Arial" />
 		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->
 		<StyleAttribute name="fontSize" value="1em" />
+	</Style>
+
+	<Style name=".comic">
+		<StyleAttribute name="fontFamily" value="Comic Sans MS" />
 	</Style>
 
 	<Style name=".grad1">

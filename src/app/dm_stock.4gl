@@ -6,11 +6,11 @@
 IMPORT util
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
-&include "genero_lib.inc"
-
 IMPORT FGL glm_mkForm
 IMPORT FGL glm_sql
 IMPORT FGL glm_ui
+
+&include "genero_lib.inc"
 &include "dynMaint.inc"
 
 SCHEMA njm_demo310
@@ -26,8 +26,8 @@ DEFINE m_allowedActions CHAR(6)
 MAIN
 	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
-	LET gl_lib.gl_toolBar = "dynmaint"
-	LET gl_lib.gl_topMenu = "dynmaint"
+	LET gl_toolBar = "dynmaint"
+	LET gl_topMenu = "dynmaint"
 
 	CALL init_args()
 
@@ -46,8 +46,8 @@ MAIN
 
 -- create Form
 	CALL glm_mkForm.init_form(m_dbname, m_tab, glm_sql.m_key_fld, 20, glm_sql.m_fields,"centered") -- 10 fields by folder page
-	CALL gl_lib.gl_titleWin( gl_lib.gl_progdesc )
-	CALL ui.Interface.setText( gl_lib.gl_progdesc )
+	CALL gl_lib.gl_titleWin( gl_progdesc )
+	CALL ui.Interface.setText( gl_progdesc )
 
 -- start UI
 	LET glm_ui.m_before_inp_func = FUNCTION my_before_inp
