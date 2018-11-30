@@ -224,7 +224,7 @@ FUNCTION gl_setInfo(l_version STRING,
 										l_progauth STRING) --{{{
 	IF l_progName IS NULL THEN LET l_progname = base.Application.getProgramName() END IF
 	LET gl_version = l_version
-	LET gl_splash = l_splash
+	LET gl_splashImage = l_splash
 	LET gl_progicon = l_progicon
 	LET gl_progname = l_progname
 	LET gl_progdesc = l_progdesc

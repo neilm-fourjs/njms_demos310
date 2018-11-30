@@ -116,11 +116,7 @@ MAIN
 	END IF
 	GL_DBGMSG(2,"done - fix_path.")
 
-	IF gl_fe_typ != "GBC" THEN
-		GL_DBGMSG(4,"doing splash.")
-		CALL gl_splash( 4 )
-		GL_DBGMSG(4,"done splash.")
-	END IF
+	CALL gl_splash.gl_splash( 4 )
 
 --	CALL ui.Interface.loadStartMenu("widgets")	
 
@@ -307,7 +303,7 @@ MAIN
 				CALL ui.interface.frontCall("standard","launchURL","http://www.4js.com/",[tmp])
 
 			ON ACTION splash
-				CALL gl_splash( gl_progIcon )
+				CALL gl_splash.gl_splash( 4 )
 
 			GL_ABOUT
 

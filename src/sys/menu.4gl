@@ -55,7 +55,7 @@ END MAIN
 FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 
 	IF gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
-		LET gl_splash = C_SPLASH
+		LET gl_splashImage = C_SPLASH
 		CALL gl_splash( 0 ) -- open splash
 	END IF
 

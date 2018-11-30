@@ -40,7 +40,7 @@ FUNCTION gl_about(l_ver STRING) --{{{
 	CALL n.setAttribute("posY","0" )
 	CALL n.setAttribute("posX","0" )
 
-	IF gl_splash IS NOT NULL AND gl_splash != " " THEN
+	IF gl_splashImage IS NOT NULL AND gl_splashImage != " " THEN
 		LET g = n.createChild("HBox")
 		CALL g.setAttribute("posY",y)
 		CALL g.setAttribute("gridWidth",36)
@@ -54,7 +54,7 @@ FUNCTION gl_about(l_ver STRING) --{{{
 		CALL w.setAttribute("stretch","both" )
 		CALL w.setAttribute("autoScale","1" )
 		CALL w.setAttribute("gridWidth","12" )
-		CALL w.setAttribute("image",gl_splash )
+		CALL w.setAttribute("image",gl_splashImage )
 		CALL w.setAttribute("height","100px" )
 		CALL w.setAttribute("width", "290px" )
 

@@ -12,7 +12,7 @@ GLOBALS
 	DEFINE gl_progName STRING -- base.application.getProgramName
 	DEFINE gl_progDesc STRING
 	DEFINE gl_progAuth STRING
-	DEFINE gl_splash STRING
+	DEFINE gl_splashImage STRING
 	DEFINE gl_toolbar,  gl_topmenu STRING
 	DEFINE gl_os STRING
 	DEFINE gl_userName STRING
