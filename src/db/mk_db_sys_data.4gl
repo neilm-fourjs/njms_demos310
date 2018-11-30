@@ -101,8 +101,8 @@ FUNCTION insert_system_data()
 	CALL addMenu("util","main","F","Material Design Test", "materialDesignTest.42r","")
 	CALL addMenu("util","main","F","FontAwesome", "fontAwesome.42r","")
 	CALL addMenu("util","main","P","FontAwesome Default", "../utils/fontAwesome.sh","")
-	CALL addMenu("util","main","F","GRE Test 4RP", "gre_test4rp.42r","")
-	CALL addMenu("util","main","F","Reset Database", "mk_db.42r","")
+	CALL addMenu("util","main","S","GRE Test 4RP", "gre_test4rp.42r","")
+	CALL addMenu("util","main","S","Reset Database", "mk_db.42r","")
 	CALL mkdb_progress( "Done." )
 
 END FUNCTION

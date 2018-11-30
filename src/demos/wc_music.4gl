@@ -2,6 +2,7 @@
 IMPORT util
 IMPORT os
 IMPORT FGL gl_lib
+IMPORT FGL gl_lib_aui
 
 &include "genero_lib.inc"	
 CONSTANT C_VER="3.1"
