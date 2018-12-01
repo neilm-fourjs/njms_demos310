@@ -2,6 +2,7 @@
 export PACKVER=current
 export GBCPROJECT=build/gbc-$(PACKVER)
 export DISTBIN=$(PROJBASE)/distbin
+export CWD=$(PWD)
 
 ifeq (,$(wildcard $(PWD)/custom.json))
 	export NOCFG="missing $(PWD)/custom.json"

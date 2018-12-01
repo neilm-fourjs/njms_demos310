@@ -17,22 +17,22 @@ $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME):
 	ln -s $(PWD) $@
 
 # Create a symbolic link to our custom themes files
-$(GBCBASE)/build/gbc-$(PACKVER)/$(THEME1): $(PWD)/$(THEME1)/theme.scss.json
+$(GBCBASE)/build/gbc-$(PACKVER)/$(THEME1):
 	ln -s $(PWD)/$(THEME1) $@
 
-$(GBCBASE)/build/gbc-$(PACKVER)/$(THEME2): $(PWD)/$(THEME2)/theme.scss.json
+$(GBCBASE)/build/gbc-$(PACKVER)/$(THEME2):
 	ln -s $(PWD)/$(THEME2) $@
 
-$(GBCBASE)/build/gbc-$(PACKVER)/$(THEME3): $(PWD)/$(THEME3)/theme.scss.json
+$(GBCBASE)/build/gbc-$(PACKVER)/$(THEME3):
 	ln -s $(PWD)/$(THEME3) $@
 
 # Build our custom gbc
 $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME): $(GBCBASE)/build/gbc-$(PACKVER) $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME)
-	cd $^ && grunt $(CFG) --customization=customization/$(CUSTOMNAME) | tee $(PWD)/$(CUSTOMNAME).build
+	cd $^ && grunt $(CFG) --customization=customization/$(CUSTOMNAME) 
 
 # Package our custom gbc
 $(TARGET): $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME)
-	cd $(GBCBASE)/build/gbc-$(PACKVER)/dist/customization/$(CUSTOMNAME) && zip -r $@ *
+	cd $(GBCBASE)/build/gbc-$(PACKVER)/dist/customization/$(CUSTOMNAME) && zip -r $@ * > $(CWD)/$(CUSTOMNAME).lst
 
 
 dev:

@@ -1,0 +1,23 @@
+{
+  "palette-primary": "$mt-blue-grey",
+  "palette-text-primary": "$mt-white",
+
+  "theme-primary-color": "$mt-cyan",
+  "theme-primary-background-color": "magenta",
+  "theme-primary-emphasis-background-color": "$palette-primary-300",
+  "theme-primary-faded-background-color": "$palette-primary-800",
+
+  "palette-secondary": "$mt-teal",
+  "palette-text-secondary": "$mt-black",
+
+  "theme-secondary-color": "blue",
+  "theme-secondary-background-color": "yellow",
+	"theme-secondary-alternative-background-color": "green",
+
+  "theme-header-color": "red",
+  "theme-separator-color": "$palette-secondary-800",
+
+  "theme-field-background-color": "pink",
+
+  "theme-sidebar-always-visible-min-width" : "999999px"
+}

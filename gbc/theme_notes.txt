@@ -1,25 +1,24 @@
 
-gbc-header-color                    : Table Heading / TopMenu / ToolBar - background color 
+Low numbers = light 
+High numbers = dark
 
-gbc-primary-medium-color            : MainControlBar / Table Current Row - background color & Current Field Underline color & text color on end page
+palette-primary                          : Blue 50 100 200 300 400 500 600 700 800 900 A100 A200 A400 A700
+palette-text-primary                     : White ( shades of : 100 87 54 26 12 0 )
 
-gbc-primary-background-color        : Window primary background color
-gbc-primary-color                   : Button background color & Text on header / footer & Current FolderPage underline color & ProgBar Color
-gbc-primary-light-color             : Header / Footer backgound color & Field(not current) underline & progBar background color
+theme-primary-color                      : palette-text-primary-100 ( White ) : Header FG / Button FG
+theme-primary-background-color           : palette-primary-700 ( darkish blue ) : Button BG
+theme-primary-emphasis-background-color  : palette-primary-500 : Header BG
+theme-primary-faded-background-color     : palette-primary-100 : Table Row Highlight BG
 
-gbc-secondary-background-color      : Folder Page(including current tab) / Group / drop-down menu / SessionEnd main group - background color
-gbc-secondary-color                 : Checkbox border colour
+palette-secondary                        : Grey 50 100 200 300 400 500 600 700 800 900 A100 A200 A400 A700
+palette-text-secondary                   : Black ( shades of : 100 87 54 26 12 0 ) 100=black 0=white : gbc-TableWidget-unfocused-currentRow-color
 
-gbc-field-background-color          : Widget background color active fields and Table background
-gbc-field-disabled-background       : Widget disabled background input array only ?
-gbc-disabled-color                  : Disabled text color for Table Column heading and inactive checkbox border
+theme-secondary-color                    : palette-text-secondary-100 Black : Main FG
+theme-secondary-faded-color              : palette-text-secondary-54 Grey : inactive button BG / TopMenu Dropdown current BG / DateEdit-daysOff-color
+theme-secondary-background-color         : palette-secondary-50 Almost White : Main background page
+theme-secondary-alternative-background-color : mt-white : Model Window BG / Folder BG / Group BG
 
-gbc-separator-color                 : Toolbar separator color
-gbc-message-color                   : Message background color
-gbc-error-color                     : Error message background color
-
---------------------------------------------------------------------------------
-Not Documented:
-gbc-field-disabled-background-color : Disabled table item in input mode
-gbc-secondary-text-color            : TableWidget-currentRow-text-color / ButtonWidget Image Color / PagedScrollGridNavigation items
-
+theme-header-color                       : palette-secondary-100 : TopMenu BG / ToolBar BG / Table Header BG / Page Heading Accordian BG
+theme-separator-color                    : palette-secondary-400
+theme-message-background-color           : palette-secondary-800
+theme-field-background-color	           : mt-white

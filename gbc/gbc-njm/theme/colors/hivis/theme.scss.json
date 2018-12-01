@@ -1,29 +1,17 @@
 {
-  "theme-font-size-ratio"    : "0.8",
-  "theme-margin-ratio"       : "0.6",
-  "theme-field-height-ratio" : "0.7",
-  "theme-radiobutton-size"   : "14px",
-  "theme-checkbox-size"      : "14px",
-
-  "theme-header-color"                     : "$mt-red-800",
-  "theme-primary-emphasis-background-color": "$mt-purple-400",
-
-  "theme-secondary-background-color"       : "$mt-cyan-300",
-  "theme-primary-background-color"         : "$mt-indigo-700",
-  "theme-primary-faded-background-color"   : "$mt-yellow-500",    
-
-  "theme-secondary-alternative-background-color": "$mt-green-100",
-  "theme-primary-color"                    : "$mt-green-600",
-
-  "theme-field-disabled-background-color"  : "$mt-grey-100",
-  "theme-field-background-color"           : "$mt-white",
-  "theme-disabled-background-color"        : "$mt-grey-300",
-
-  "theme-separator-color"                  : "$mt-white",
-  "theme-message-background-color"         : "$mt-grey-800",
-  "theme-error-background-color"           : "$mt-red-800",
-
   "theme-sidebar-always-visible-min-width" : "999999px",
-  "theme-sidebar-default-width"            : "30px",
-  "theme-animation-duration"               : "0.7s"
+
+  "palette-primary": "$mt-blue-grey",
+  "palette-secondary": "$mt-green",
+  "palette-text-secondary": "$mt-white",
+
+  "theme-primary-color": "red",
+  "theme-primary-background-color": "blue",
+  "theme-primary-emphasis-background-color": "$palette-primary-300",
+  "theme-primary-faded-background-color": "$palette-primary-800",
+
+  "theme-secondary-color": "pink",
+  "theme-secondary-background-color": "yellow",
+	"theme-secondary-alternative-background-color": "green"
+
 }
