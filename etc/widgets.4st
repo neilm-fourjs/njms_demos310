@@ -150,6 +150,13 @@
      <StyleAttribute name="ringMenuPosition" value="none" />
      <StyleAttribute name="startMenuPosition" value="tree" />
   </Style>
+	<Style name="Window.centered">
+		<StyleAttribute name="windowType" value="normal" />
+		<StyleAttribute name="actionPanelPosition" value="none" />
+		<StyleAttribute name="ringMenuPosition" value="none" />
+		<StyleAttribute name="sizable" value="no" />
+		<StyleAttribute name="position" value="center" />
+	</Style>
   <Style name="Window.dialog">
      <StyleAttribute name="windowType" value="modal" />
      <StyleAttribute name="sizable" value="no" />

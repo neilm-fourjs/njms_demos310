@@ -89,13 +89,13 @@ MAIN
 			END IF
 			DISPLAY " l_rec.richtext contains ", l_rec.richtext
 
-		ON ACTION set_focus_to_fn ATTRIBUTES(TEXT=%"Focus to FileName")
+		ON ACTION set_focus_to_fn
 			NEXT FIELD filename
 
-		ON ACTION set_focus_to_test ATTRIBUTES(TEXT=%"Focus to Test")
+		ON ACTION set_focus_to_test
 			NEXT FIELD fld2
 
-		ON ACTION set_focus_to_wc ATTRIBUTES(TEXT=%"Focus to RichText")
+		ON ACTION set_focus_to_wc
 			NEXT FIELD richtext
 		GL_ABOUT
 		ON ACTION close EXIT PROGRAM
