@@ -289,7 +289,7 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	END IF
 	
 	IF l_styl != "splash" 
-	AND l_styl != "dialog" 	AND l_styl != "dialog2" 	AND l_styl != "dialog3" 
+	AND l_styl != "dialog" AND l_styl != "dialog2" AND l_styl != "dialog3" AND l_styl != "dialog4"
 	AND l_styl != "menu"
 	AND l_styl != "lookup" AND l_styl != "naked" AND l_styl != "about"  AND l_styl != "viewer"
 	AND l_styl != "wizard" THEN

@@ -33,3 +33,9 @@ BODY {
 	background-position: center !important;
 }
 
+
+.gbc_style_formborder {
+	margin: 10px;
+	box-shadow: 4px 4px 6px $theme-primary-emphasis-background-color;
+	border-radius: 2.4px;
+}

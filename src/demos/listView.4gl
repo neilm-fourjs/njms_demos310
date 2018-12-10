@@ -60,7 +60,6 @@ FUNCTION load_contacts()
 	CALL add_contact("Jon Snow","Bastard and brooding")
 	CALL add_contact("Margaery Tyrell","")
 	CALL add_contact("Theon Greyjoy","")
-
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION add_contact(l_name STRING, l_bio STRING)
