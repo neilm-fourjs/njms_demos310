@@ -1,5 +1,6 @@
 IMPORT util
 IMPORT FGL wc_fglsvgcalendar
+IMPORT FGL gl_calendar
 
 PUBLIC DEFINE rec record
   curr_month smallint,
@@ -27,7 +28,7 @@ FUNCTION init(l_date DATE, l_setDateCallBack t_cb_set_date, l_lang CHAR(2)) -- S
 
   IF l_date IS NULL THEN LET l_date = TODAY END IF
 
-	LET m_lang = NVL(l_lang,"EN")
+	LET m_lang = UPSHIFT( NVL(l_lang,"EN") )
   LET cb_sdate = l_setDateCallBack
 	LET wc_fglsvgcalendar.m_isHoliday = FUNCTION isHoliday -- call back for holiday tests
   CALL wc_fglsvgcalendar.initialize()
@@ -50,7 +51,7 @@ END FUNCTION
 #+ The calendar subdialog input.
 DIALOG calendar()
 
-	INPUT BY NAME rec.* ATTRIBUTES(WITHOUT DEFAULTS)
+	INPUT BY NAME rec.* ATTRIBUTES(WITHOUT DEFAULTS, NAME="sd_calendar")
 		ON CHANGE curr_year 
 			CALL wc_fglsvgcalendar.display(cid, rec.curr_year, rec.curr_month)
 
@@ -69,7 +70,7 @@ DIALOG calendar()
 		ON ACTION prevmonth
 			DISPLAY "PrevMonth Current - Year: ", rec.curr_year, " Month:",rec.curr_month
 			IF rec.curr_month = 1 THEN
-				LET rec.curr_year = rec.curr_year-1
+				LET rec.curr_year = rec.curr_year - 1
 				LET rec.curr_month = 12
 			ELSE
 				LET rec.curr_month = rec.curr_month - 1
@@ -79,7 +80,7 @@ DIALOG calendar()
 		ON ACTION nextmonth
 			DISPLAY "NextMonth Current - Year: ", rec.curr_year, " Month:",rec.curr_month
 			IF rec.curr_month = 12 THEN
-				LET rec.curr_year = rec.curr_year+1
+				LET rec.curr_year = rec.curr_year + 1
 				LET rec.curr_month = 1
 			ELSE
 				LET rec.curr_month = rec.curr_month + 1
@@ -88,7 +89,7 @@ DIALOG calendar()
 
 		ON ACTION calendar_selection
 			LET selected_date = wc_fglsvgcalendar.getSelectedDateFromValue(cid, rec.calendar)
-			DISPLAY "SELECTED_DATE=",selected_date
+			MESSAGE "Selected: ",selected_date
 			IF selected_date != curdate THEN
 				CALL wc_fglsvgcalendar.removeSelectedDate(cid, curdate)
 				LET rec.curr_month = MONTH(selected_date)
@@ -111,17 +112,30 @@ FUNCTION finish()
 	CALL wc_fglsvgcalendar.finalize()
 END FUNCTION  
 --------------------------------------------------------------------------------
-PRIVATE FUNCTION set_type(c_id SMALLINT, type SMALLINT)
-	CALL wc_fglsvgcalendar.setViewType(c_id, type)
+PRIVATE FUNCTION set_type(c_id SMALLINT, l_type SMALLINT)
+	CALL wc_fglsvgcalendar.setViewType(c_id, l_type)
 	CASE m_lang
 		WHEN "IS"
-			IF  type = FGLCALENDAR_TYPE_DEFAULT THEN
-				CALL wc_fglsvgcalendar.setDayNames(cid, "Mán|Þri|Mið|Fim|Fös|Lau|Sun")
+			IF  l_type = FGLCALENDAR_TYPE_DEFAULT THEN
+				CALL wc_fglsvgcalendar.setDayNames(cid, C_DAYS3_IS)
 			ELSE
-				CALL wc_fglsvgcalendar.setDayNames(cid, "M|Þ|M|F|F|L|S")
+				CALL wc_fglsvgcalendar.setDayNames(cid, C_DAYS1_IS)
 			END IF
-			CALL wc_fglsvgcalendar.setMonthNames(cid, "Janúar|Febrúar|Mars|Apríl|Maí|Júní|Júlí|Agúst|September|Október|Nóvember|Desember")
-
+			CALL wc_fglsvgcalendar.setMonthNames(cid, C_MONTHS_IS)
+		WHEN "ES"
+			IF  l_type = FGLCALENDAR_TYPE_DEFAULT THEN
+				CALL wc_fglsvgcalendar.setDayNames(cid, C_DAYS3_ES)
+			ELSE
+				CALL wc_fglsvgcalendar.setDayNames(cid, C_DAYS1_ES)
+			END IF
+			CALL wc_fglsvgcalendar.setMonthNames(cid, C_MONTHS_ES)
+		WHEN "PT"
+			IF  l_type = FGLCALENDAR_TYPE_DEFAULT THEN
+				CALL wc_fglsvgcalendar.setDayNames(cid, C_DAYS3_PT)
+			ELSE
+				CALL wc_fglsvgcalendar.setDayNames(cid, C_DAYS1_PT)
+			END IF
+			CALL wc_fglsvgcalendar.setMonthNames(cid, C_MONTHS_PT)
 	END CASE
 END FUNCTION
 --------------------------------------------------------------------------------

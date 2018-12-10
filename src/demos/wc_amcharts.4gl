@@ -1,9 +1,10 @@
 
 --https://www.amcharts.com/
---https://plot.ly/javascript/
 IMPORT util
 IMPORT os
 IMPORT FGL gl_lib
+IMPORT FGL gl_calendar
+
 &include "genero_lib.inc"	
 CONSTANT C_VER="3.1"
 
@@ -55,40 +56,40 @@ MAIN
 		ON ACTION quit EXIT DIALOG
 		ON ACTION act1
 			DISPLAY "Data:",l_data
-			CALL setGraphTitle( "title", month_name(1) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(1) )
 			LET l_data = getData(1)
 		ON ACTION act2
-			CALL setGraphTitle( "title", month_name(2) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(2) )
 			LET l_data = getData(2)
 		ON ACTION act3
-			CALL setGraphTitle( "title", month_name(3) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(3) )
 			LET l_data = getData(3)
 		ON ACTION act4
-			CALL setGraphTitle( "title", month_name(4) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(4) )
 			LET l_data = getData(4)
 		ON ACTION act5
-			CALL setGraphTitle( "title", month_name(5) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(5) )
 			LET l_data = getData(5)
 		ON ACTION act6
-			CALL setGraphTitle( "title", month_name(6) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(6) )
 			LET l_data = getData(6)
 		ON ACTION act7
-			CALL setGraphTitle( "title", month_name(7) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(7) )
 			LET l_data = getData(7)
 		ON ACTION act8
-			CALL setGraphTitle( "title", month_name(8) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(8) )
 			LET l_data = getData(8)
 		ON ACTION act9
-			CALL setGraphTitle( "title", month_name(9) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(9) )
 			LET l_data = getData(9)
 		ON ACTION act10
-			CALL setGraphTitle( "title", month_name(10) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(10) )
 			LET l_data = getData(10)
 		ON ACTION act11
-			CALL setGraphTitle( "title", month_name(11) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(11) )
 			LET l_data = getData(11)
 		ON ACTION act12
-			CALL setGraphTitle( "title", month_name(12) )
+			CALL setGraphTitle( "title", gl_calendar.month_fullName_int(12) )
 			LET l_data = getData(12)
 	END DIALOG
 	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
@@ -114,7 +115,7 @@ FUNCTION genRndData()
 	CALL m_data.clear()
 	FOR x = 1 TO 12
 		LET m_data[x].labs = x
-		LET m_data[x].labs = month_name(x)
+		LET m_data[x].labs = gl_calendar.month_fullName_int(x)
 		LET m_data[x].vals = 0
 		LET m_data2[x].labs = m_data[x].labs
 		FOR y = 1 TO days_in_month( x )
@@ -124,39 +125,6 @@ FUNCTION genRndData()
 		LET m_data2[x].vals = m_data[x].vals
 	END FOR
 
-END FUNCTION
---------------------------------------------------------------------------------
-FUNCTION days_in_month( x )
-	DEFINE x SMALLINT
-	CASE x
-		WHEN 2 LET x = 29
-		WHEN 4 LET x = 30
-		WHEN 6 LET x = 30
-		WHEN 9 LET x = 30
-		WHEN 11 LET x = 30
-		OTHERWISE LET x = 31
-	END CASE
-	RETURN x
-END FUNCTION
---------------------------------------------------------------------------------
-FUNCTION month_name(x)
-	DEFINE x SMALLINT
-
-	CASE x
-		WHEN 1 RETURN "January"
-		WHEN 2 RETURN "Febuary"
-		WHEN 3 RETURN "March"
-		WHEN 4 RETURN "April"
-		WHEN 5 RETURN "May"
-		WHEN 6 RETURN "June"
-		WHEN 7 RETURN "July"
-		WHEN 8 RETURN "August"
-		WHEN 9 RETURN "September"
-		WHEN 10 RETURN "October"
-		WHEN 11 RETURN "November"
-		WHEN 12 RETURN "December"
-	END CASE
-	RETURN "???"
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION getColor(x)

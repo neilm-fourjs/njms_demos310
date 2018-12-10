@@ -1,9 +1,9 @@
 
-LAYOUT ( TEXT="WC Calendar Demo", STYLE="main2" )
+LAYOUT ( TEXT="WC Calendar Demo" )
 VBOX
 GRID
 {
-[back]Date Selected:[d          ]
+Date Selected:[d          ] Lang:[lang           ]
 [""]
 }
 END -- GRID
@@ -11,7 +11,8 @@ END -- GRID
 FORM "wc_calendar"
 
 END -- VBOX
+END -- LAYOUT
 
 ATTRIBUTES
-BUTTON back : close, TEXT=%"Back", IMAGE="fa-chevron-circle-left";
 DATEEDIT d = FORMONLY.m_selected_date TYPE DATE;
+lang = FORMONLY.lang;

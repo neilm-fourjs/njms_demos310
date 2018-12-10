@@ -1,0 +1,58 @@
+
+ACTION DEFAULTS
+	ACTION newdata (TEXT="New Data", IMAGE="smiley")
+	ACTION quit (TEXT="Quit", IMAGE="quit")
+	ACTION about (TEXT="About", IMAGE="help")
+	ACTION back (DEFAULTVIEW=NO)
+	ACTION act1 (DEFAULTVIEW=NO)
+	ACTION act2 (DEFAULTVIEW=NO)
+	ACTION act3 (DEFAULTVIEW=NO)
+	ACTION act4 (DEFAULTVIEW=NO)
+	ACTION act5 (DEFAULTVIEW=NO)
+	ACTION act6 (DEFAULTVIEW=NO)
+	ACTION act7 (DEFAULTVIEW=NO)
+	ACTION act8 (DEFAULTVIEW=NO)
+	ACTION act9 (DEFAULTVIEW=NO)
+	ACTION act10 (DEFAULTVIEW=NO)
+	ACTION act11 (DEFAULTVIEW=NO)
+	ACTION act12 (DEFAULTVIEW=NO)
+END --
+
+LAYOUT ( TEXT="D3 Charts Demo", STYLE="main2", MINWIDTH=140, MINHEIGHT=40)
+HBOX ( SPLITTER )
+GRID
+{
+[quit:     :newdata:      :about]
+<T tab                           >
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+[f001                ][f002     ]
+<                                >
+[logo                           ]
+}
+END -- TABLE
+FORM "wc_d3charts"
+END -- HBOX
+
+ATTRIBUTES
+
+f001 = FORMONLY.labels,TITLE="Labels";
+f002 = FORMONLY.values,TITLE="Values";
+
+IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder";
+
+BUTTON quit : quit;
+BUTTON about : about;
+BUTTON newdata : newdata;
+
+INSTRUCTIONS
+SCREEN RECORD arr ( FORMONLY.labels THRU FORMONLY.values )

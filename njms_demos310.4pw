@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="30a0a" version="3.2">
+<Project defaultApplication="-1072068994" gstVersion="30a0a" version="3.2">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -293,12 +293,19 @@
       <Library binaryName="wc_calendar" id="789344678" label="wc_calendar">
         <File filePath="src/demos/wc_calendar.4gl"/>
         <File filePath="src/demos/wc_calendar.per"/>
-        <File filePath="src/demos/wc_calendar_lib.4gl"/>
         <File filePath="src/demos/wc_fglsvgcalendar.4gl"/>
       </Library>
       <Application binaryName="wc_calendar_demo" dependencies="789344678,-400184264,14000" id="1022451972" label="wc_calendar_demo">
         <File filePath="src/demos/wc_calendar_demo.4gl"/>
         <File filePath="src/demos/wc_calendar_demo.per"/>
+      </Application>
+      <Library binaryName="wc_d3charts" id="2068081444" label="wc_d3charts">
+        <File filePath="src/demos/wc_d3charts.4gl"/>
+        <File filePath="src/demos/wc_d3charts.per"/>
+      </Library>
+      <Application binaryName="wc_d3charts_demo" dependencies="14000,-400184264,2068081444" id="-1072068994" label="wc_d3charts_demo">
+        <File filePath="src/demos/wc_d3charts_demo.4gl"/>
+        <File filePath="src/demos/wc_d3charts_demo.per"/>
       </Application>
       <Application binaryName="wc_googleMaps" dependencies="14000" id="-2121135278" label="wc_googleMaps">
         <VirtualFolder label="wc">
@@ -343,6 +350,7 @@
       <Library binaryName="gl_lib" dependencies="1986" id="14000" label="gl_lib">
         <File filePath="src/gl_lib/genero_lib.inc"/>
         <File filePath="src/gl_lib/gl_about.4gl"/>
+        <File filePath="src/gl_lib/gl_calendar.4gl"/>
         <File filePath="src/gl_lib/gl_db.4gl"/>
         <File filePath="src/gl_lib/gl_db.inc"/>
         <File filePath="src/gl_lib/gl_encrypt.4gl"/>
