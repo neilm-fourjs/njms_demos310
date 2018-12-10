@@ -6,6 +6,10 @@ ACTION DEFAULTS
 	ACTION clear (TEXT=%"Clear", IMAGE="fa-eraser")
 	ACTION savetext (TEXT=%"Save Text", IMAGE="fa-save")
 	ACTION loadText (TEXT=%"Load Text", IMAGE="fa-file-text-o")
+
+	ACTION set_focus_to_fn (TEXT=%"Focus FileName", IMAGE="fa-mouse-pointer")
+	ACTION set_focus_to_test (TEXT=%"Focus Test", IMAGE="fa-mouse-pointer")
+	ACTION set_focus_to_wc (TEXT=%"Focus RichText", IMAGE="fa-mouse-pointer")
 END -- AD
 
 TOOLBAR
@@ -16,20 +20,28 @@ TOOLBAR
 	ITEM clear
 	ITEM savetext
 	ITEM loadtext
+	ITEM set_focus_to_fn
+	ITEM set_focus_to_test
+	ITEM set_focus_to_wc
 	ITEM about
 END -- TB
 
-LAYOUT (TEXT=%"WC Richtext Demo",MINWIDTH=80,MINHEIGHT=20)
+LAYOUT (TEXT=%"WC Richtext Demo",MINWIDTH=80,MINHEIGHT=20, STYLE="main2")
 GRID
 {
-[l001:f001          : :l002:a1       ]
-[rt                                  ]
-[                                    ]
-[                                    ]
-[                                    ]
-[                                    ]
-[                                    ]
-[info                                ]
+[l001:f001          :    :l002:a1       ]
+[rt                                     ]
+[                                       ]
+[                                       ]
+[                                       ]
+[                                       ]
+[                                       ]
+[                                       ]
+[                                       ]
+[                                       ]
+[                                       ]
+[                                       ]
+[info                                   ]
 }
 END
 END

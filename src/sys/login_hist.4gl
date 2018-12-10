@@ -18,7 +18,7 @@ CONSTANT PRGAUTH = "Neil J.Martin"
 
 MAIN
 	CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, NULL, PRGDESC, PRGAUTH)
-	CALL gl_lib.gl_init(ARG_VAL(1),NULL,FALSE)
+	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	LET m_mdi = gl_lib.m_mdi
 	CALL ui.Interface.setText( gl_progdesc )
 

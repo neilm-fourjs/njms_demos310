@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ManagedForm databaseName="njm_demo310" fileVersion="30a00" gstVersion="30a09" name="ManagedForm" uid="{28a6dfc8-0000-4000-a8ee-e81b63978086}">
-  <AGSettings/>
+<ManagedForm databaseName="njm_demo310" fileVersion="30a00" gstVersion="30a0a" name="ManagedForm" uid="{28a6dfc8-0000-4000-a8ee-e81b63978086}">
+  <AGSettings>
+    <DynamicProperties version="2"/>
+  </AGSettings>
   <Record additionalTables="" joinLeft="" joinOperator="" joinRight="" name="cust_rec" order="" uid="{14601740-0000-4000-b9dd-460e90268dd6}" where="">
     <RecordField colName="customer_code" fieldIdRef="1" fieldType="TABLE_COLUMN" name="customer.customer_code" sqlTabName="customer" sqlType="VARCHAR" table_alias_name="" uid="{cbe842ca-0000-4000-b77f-d791933640a4}"/>
     <RecordField colName="customer_name" fieldIdRef="2" fieldType="TABLE_COLUMN" name="customer.customer_name" sqlTabName="customer" sqlType="VARCHAR" table_alias_name="" uid="{a90fdc29-0000-4000-a80e-253023f080b4}"/>
@@ -34,7 +36,7 @@
     <RecordField colName="email" fieldIdRef="26" fieldType="TABLE_COLUMN" name="customer.email" sqlTabName="customer" sqlType="VARCHAR" table_alias_name="" uid="{b8face50-0000-4000-8c63-c5d5f46081b2}"/>
     <RecordField colName="web_passwd" fieldIdRef="27" fieldType="TABLE_COLUMN" name="customer.web_passwd" sqlTabName="customer" sqlType="CHAR" table_alias_name="" uid="{510ba956-0000-4000-ad15-c679e838d29c}"/>
   </Record>
-  <Form gridHeight="25" gridWidth="84" name="cust_mnt" style="" text="Customer Maintenance" windowStyle="centered">
+  <Form gridHeight="25" gridWidth="84" name="cust_mnt" style="" text="Customer Maintenance" windowStyle="main2">
     <VBox gridHeight="19" gridWidth="84" name="vbox1" posX="0" posY="0" style="formborder">
       <Grid gridHeight="17" gridWidth="84" name="Grid1" posX="0" posY="1">
         <Label gridHeight="1" gridWidth="7" justify="right" name="Label1" posX="2" posY="1" text="Code:"/>
@@ -89,6 +91,6 @@
     </VBox>
   </Form>
   <DiagramLayout>
-    <![CDATA[AAAAAgAAAEwAewAxADQANgAwADEANwA0ADAALQAwADAAMAAwAC0ANAAwADAAMAAtAGIAOQBkAGQALQA0ADYAMABlADkAMAAyADYAOABkAGQANgB9wHwwAB/qKBhAMAAAEh2bBT9wYk3S8an8AQAAAEwAewBjAGMAMABhAGQAZgA5AGYALQAwADAAMAAwAC0ANAAwADAAMAAtAGIAOAAxADcALQA2ADUANQAyADIANAA4AGQAZgBiADcAOAB9wGygAA1Fz0JALAAAfmG+CD+CbpeNT988AQAAAEwAewBiAGYAYgBiADkAMwA0AGMALQAwADAAMAAwAC0ANAAwADAAMAAtADkAZAAyAGUALQBhAGQAYwAxADAANwBmADYAMABlADYAYgB9wFWAAAKwAABAOAAAAwAAAD+EeuFHrhR8AQ==]]>
+    <![CDATA[AAAAAgAAAEwAewBjAGMAMABhAGQAZgA5AGYALQAwADAAMAAwAC0ANAAwADAAMAAtAGIAOAAxADcALQA2ADUANQAyADIANAA4AGQAZgBiADcAOAB9wGygAA1Fz0JALAAAfmG+CD+CbpeNT988AQAAAEwAewAxADQANgAwADEANwA0ADAALQAwADAAMAAwAC0ANAAwADAAMAAtAGIAOQBkAGQALQA0ADYAMABlADkAMAAyADYAOABkAGQANgB9wHwwAB/qKBhAMAAAEh2bBT9wYk3S8an8AQAAAEwAewBiAGYAYgBiADkAMwA0AGMALQAwADAAMAAwAC0ANAAwADAAMAAtADkAZAAyAGUALQBhAGQAYwAxADAANwBmADYAMABlADYAYgB9wFWAAAKwAABAOAAAAwAAAD+EeuFHrhR8AQ==]]>
   </DiagramLayout>
 </ManagedForm>

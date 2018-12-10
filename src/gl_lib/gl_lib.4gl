@@ -264,7 +264,7 @@ END FUNCTION --}}}
 #+ @param fm Form object to be initialized.
 FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	DEFINE l_fn om.DomNode
-	DEFINE l_nam, l_styl, l_tag STRING
+	DEFINE l_nam, l_styl, l_winstyl, l_winnam, l_tag STRING
 	DEFINE l_nl om.nodeList
 
 	GL_DBGMSG(1, "gl_formInit: start")
@@ -274,18 +274,32 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	LET l_nam = l_fn.getAttribute("name")
 	LET l_styl = l_fn.getAttribute("style")
 	LET l_tag = l_fn.getAttribute("tag")
-	IF l_tag IS NULL THEN LET l_tag = "(null)" END IF
-	GL_DBGMSG(0, "gl_formInit: tag='"||l_tag||"'")
-	IF l_styl IS NULL THEN -- check to see if the window had the style set.
-		LET l_fn = l_fn.getParent()
-		LET l_styl = l_fn.getAttribute("style")
-		LET l_fn = l_fm.getNode()
+
+-- get the window style.	
+	LET l_winstyl = l_fn.getAttribute("windowStyle")
+	LET l_winnam = l_fn.getParent().getAttribute("name")
+	GL_DBGMSG(1, SFMT("gl_formInit: form='%1' tag='%2' style='%3' window='%4' windowStyle='%5'",l_nam,l_tag,NVL(l_styl,"NULL"),l_winnam,NVL(l_winstyl,"NULL")))
+
+	IF l_styl IS NULL OR l_styl != l_winstyl THEN
+		LET l_styl = l_winstyl
 	END IF
+
 	IF l_styl IS NULL THEN
-		GL_DBGMSG(1, "gl_formInit: form='"||l_nam||"' style=NULL")
 		LET l_styl = "NULL"
 	ELSE
-		GL_DBGMSG(1, "gl_formInit: form='"||l_nam||"' style='"||l_styl||"'")
+		IF gl_fe_typ = "GBC" THEN
+			IF fgl_getEnv("WINDOWCENTER") = "TRUE" THEN
+				IF l_styl = "main2" THEN LET l_styl = "centered" END IF
+			END IF
+			IF fgl_getEnv("WINDOWCENTER") = "FALSE" THEN
+				IF l_styl = "centered" THEN LET l_styl = "main2" END IF
+			END IF
+			IF fgl_getEnv("WINDOWCENTER") = "FALSE" OR fgl_getEnv("WINDOWCENTER") = "TRUE" THEN
+				CALL l_fn.setAttribute("style",l_styl)
+				CALL l_fn.setAttribute("windowStyle",l_styl)
+				GL_DBGMSG(1, SFMT("gl_formInit: WINDOWCENTER=%1 new style='%2'",fgl_getEnv("WINDOWCENTER"),l_styl))
+			END IF
+		END IF
 	END IF
 	
 	IF l_styl != "splash" 
