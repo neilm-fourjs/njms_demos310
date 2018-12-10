@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta charset="utf-8">
+		<title>D3Charts examples</title>
+		<link rel="stylesheet" href="style.css" type="text/css">
+
+		<script src="https://d3js.org/d3.v3.min.js"></script>
+
+		<script type="text/javascript">
+			var chart;
+			var myProps
+// This function is called by the Genero Client Container
+// so the web component can initialize itself and initialize
+// the gICAPI handlers
+			onICHostReady = function(version) {
+
+				if ( version != 1.0 ) {
+					alert('Invalid API version');
+					return;
+				}
+
+				gICAPI.onFocus = function( polarity ) {
+				}
+
+				gICAPI.onProperty = function(props) {
+					myProps = eval("(" + props + ")");
+				}
+
+				gICAPI.onData = function( data ) {
+					chartData = eval("(" + data + ")");
+					//document.getElementById("data2").innerHTML=data;
+					doChart();
+				}
+			}
+
+			function handleClick(event)
+			{
+					//alert(event.item.category + ": " + event.item.values.value + " p:" + event.item.description );
+					gICAPI.SetData( event.item.category );
+					gICAPI.Action( event.item.description );
+			}
+
+			function doChart() {
+				var data = chartData;
+
+				var x = d3.scale.linear()
+						.domain([0, d3.max(data)])
+						.range([0, 420]);
+
+				d3.select(".chart")
+					.selectAll("div")
+						.data(data)
+					.enter().append("div")
+						.style("width", function(d) { return x(d) + "px"; })
+						.text(function(d) { return d; });
+			}
+		</script>
+	</head>
+
+	<body class="grad">
+		<h1>D3Chart Demo</h1>
+		<div class="chart" style="width: 800px;	height: 600px;"></div>
+		<!--div id="data2"></div-->
+	</body>
+
+</html>

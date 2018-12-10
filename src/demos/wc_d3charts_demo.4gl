@@ -59,12 +59,12 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION getData(l_month)
 	DEFINE l_month, l_max SMALLINT
-	DEFINE jo util.JSONObject
-	DEFINE ja util.JSONArray
+	DEFINE l_jo util.JSONObject
+	DEFINE l_ja util.JSONArray
 	DEFINE x SMALLINT
 	DEFINE l_val INTEGER
-	LET jo = util.JSONObject.create()
-	LET ja = util.JSONArray.create()
+	LET l_jo = util.JSONObject.create()
+	LET l_ja = util.JSONArray.create()
 
 	IF l_month = 0 THEN 
 		LET l_max = m_data.getLength()
@@ -73,19 +73,24 @@ FUNCTION getData(l_month)
 	END IF
 
 	FOR x = 1 TO l_max
-		LET jo = util.JSONObject.create()
+--		LET jo = util.JSONObject.create()
 		IF l_month = 0 THEN
-			CALL jo.put( "action", "act"||x )
 			LET l_val = m_data[x].vals
+{
+			CALL jo.put( "action", "act"||x )
 			CALL jo.put( "label", NVL( m_data[x].labs.subString(1,3), x) )
+}
 		ELSE
-			CALL jo.put( "action", "back" )
 			LET l_val = m_data[l_month].days[x]
+{
+			CALL jo.put( "action", "back" )
 			CALL jo.put( "label",x )
+}
 		END IF
-
-		CALL ja.put( x, jo )
+		CALL l_ja.put(x, l_val)
+--		CALL l_ja.put( x, l_jo )
 	END FOR
-	DISPLAY "JSONData:",ja.toString()
-	RETURN ja.toString()
+
+	DISPLAY "JSONData:",l_ja.toString()
+	RETURN l_ja.toString()
 END FUNCTION
