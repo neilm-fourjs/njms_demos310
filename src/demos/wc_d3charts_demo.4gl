@@ -73,22 +73,17 @@ FUNCTION getData(l_month)
 	END IF
 
 	FOR x = 1 TO l_max
---		LET jo = util.JSONObject.create()
+		LET l_jo = util.JSONObject.create()
 		IF l_month = 0 THEN
 			LET l_val = m_data[x].vals
-{
-			CALL jo.put( "action", "act"||x )
-			CALL jo.put( "label", NVL( m_data[x].labs.subString(1,3), x) )
-}
+			CALL l_jo.put( "name",  NVL( m_data[x].labs.subString(1,3), x) )
+			CALL l_jo.put( "value", l_val )
 		ELSE
 			LET l_val = m_data[l_month].days[x]
-{
-			CALL jo.put( "action", "back" )
-			CALL jo.put( "label",x )
-}
+			CALL l_jo.put( "name", x )
+			CALL l_jo.put( "value",l_val )
 		END IF
-		CALL l_ja.put(x, l_val)
---		CALL l_ja.put( x, l_jo )
+		CALL l_ja.put( x, l_jo )
 	END FOR
 
 	DISPLAY "JSONData:",l_ja.toString()

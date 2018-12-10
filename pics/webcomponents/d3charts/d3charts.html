@@ -7,7 +7,7 @@
 		<title>D3Charts examples</title>
 		<link rel="stylesheet" href="style.css" type="text/css">
 
-		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script src="https://d3js.org/d3.v5.min.js"></script>
 
 		<script type="text/javascript">
 			var chart;
@@ -45,24 +45,53 @@
 
 			function doChart() {
 				var data = chartData;
+				var height = 500;
+				var barWidth = 40;
+				var width = ( barWidth * data.length );
 
-				var x = d3.scale.linear()
-						.domain([0, d3.max(data)])
-						.range([0, 420]);
+				margin = ({top: 20, right: 0, bottom: 30, left: 40})
 
-				d3.select(".chart")
-					.selectAll("div")
-						.data(data)
-					.enter().append("div")
-						.style("width", function(d) { return x(d) + "px"; })
-						.text(function(d) { return d; });
+				x = d3.scaleBand()
+					.domain(data.map(d => d.name))
+					.range([margin.left, width - margin.right])
+					.padding(0.1)
+				y = d3.scaleLinear()
+					.domain([0, d3.max(data, d => d.value)]).nice()
+					.range([height - margin.bottom, margin.top])
+				xAxis = g => g
+					.attr("transform", `translate(0,${height - margin.bottom})`)
+					.call(d3.axisBottom(x)
+							.tickSizeOuter(0))
+				yAxis = g => g
+					.attr("transform", `translate(${margin.left},0)`)
+					.call(d3.axisLeft(y))
+					.call(g => g.select(".domain").remove())
+
+				var svg = d3.select(".chart")
+											.attr("height", height)
+											.attr("width", barWidth * data.length);
+
+				svg.append("g")
+						.attr("fill", "steelblue")
+					.selectAll("rect").data(data).enter().append("rect")
+						.attr("x", d => x(d.name))
+						.attr("y", d => y(d.value))
+						.attr("height", d => y(0) - y(d.value))
+						.attr("width", x.bandwidth());
+				
+				svg.append("g")
+						.call(xAxis);
+				
+				svg.append("g")
+						.call(yAxis);
 			}
+
 		</script>
 	</head>
 
 	<body class="grad">
 		<h1>D3Chart Demo</h1>
-		<div class="chart" style="width: 800px;	height: 600px;"></div>
+		<svg class="chart" style="width: 800px;	height: 600px;"></svg>
 		<!--div id="data2"></div-->
 	</body>
 
