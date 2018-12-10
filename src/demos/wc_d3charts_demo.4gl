@@ -32,6 +32,19 @@ MAIN
 		DISPLAY ARRAY m_data2 TO arr.*
 		END DISPLAY
 
+		ON ACTION item1 LET l_data = getData( 1 )
+		ON ACTION item2 LET l_data = getData( 2 )
+		ON ACTION item3 LET l_data = getData( 3 )
+		ON ACTION item4 LET l_data = getData( 4 )
+		ON ACTION item5 LET l_data = getData( 5 )
+		ON ACTION item6 LET l_data = getData( 6 )
+		ON ACTION item7 LET l_data = getData( 7 )
+		ON ACTION item8 LET l_data = getData( 8 )
+		ON ACTION item9 LET l_data = getData( 9 )
+		ON ACTION item10 LET l_data = getData( 10 )
+		ON ACTION item11 LET l_data = getData( 11 )
+		ON ACTION item12 LET l_data = getData( 12 )
+
 		ON ACTION close EXIT DIALOG
 		GL_ABOUT
 		ON ACTION quit EXIT DIALOG

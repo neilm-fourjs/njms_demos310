@@ -46,8 +46,8 @@
 			function doChart() {
 				var data = chartData;
 				var height = 500;
-				var barWidth = 40;
-				var width = ( barWidth * data.length );
+				var barWidth = 700 /  data.length;
+				var width = 800;
 
 				margin = ({top: 20, right: 0, bottom: 30, left: 40})
 
@@ -70,15 +70,18 @@
 				var svg = d3.select(".chart")
 											.attr("height", height)
 											.attr("width", barWidth * data.length);
+				svg.selectAll("*").remove()
 
 				svg.append("g")
-						.attr("fill", "steelblue")
 					.selectAll("rect").data(data).enter().append("rect")
 						.attr("x", d => x(d.name))
 						.attr("y", d => y(d.value))
 						.attr("height", d => y(0) - y(d.value))
-						.attr("width", x.bandwidth());
-				
+						.attr("width", x.bandwidth())
+     				.on("click", function(d, i) {
+							gICAPI.Action( "item"+(i+1) );
+						} );
+
 				svg.append("g")
 						.call(xAxis);
 				
@@ -92,7 +95,6 @@
 	<body class="grad">
 		<h1>D3Chart Demo</h1>
 		<svg class="chart" style="width: 800px;	height: 600px;"></svg>
-		<!--div id="data2"></div-->
 	</body>
 
 </html>
