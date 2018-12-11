@@ -12,6 +12,8 @@
 		<script type="text/javascript">
 			var chart;
 			var myProps
+			var has_focus=false;
+			var clicked=false;
 // This function is called by the Genero Client Container
 // so the web component can initialize itself and initialize
 // the gICAPI handlers
@@ -23,6 +25,11 @@
 				}
 
 				gICAPI.onFocus = function( polarity ) {
+					if ( polarity && clicked ) {
+						//alert('onFocus');
+						clicked = false;
+					}
+					has_focus = polarity;
 				}
 
 				gICAPI.onProperty = function(props) {
@@ -32,15 +39,10 @@
 				gICAPI.onData = function( data ) {
 					chartData = eval("(" + data + ")");
 					//document.getElementById("data2").innerHTML=data;
+					clicked = true;
+					gICAPI.SetFocus();
 					doChart();
 				}
-			}
-
-			function handleClick(event)
-			{
-					//alert(event.item.category + ": " + event.item.values.value + " p:" + event.item.description );
-					gICAPI.SetData( event.item.category );
-					gICAPI.Action( event.item.description );
 			}
 
 			function doChart() {

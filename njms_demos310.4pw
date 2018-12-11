@@ -291,6 +291,9 @@
         <File filePath="src/demos/wc_amcharts.per"/>
       </Application>
       <Library binaryName="wc_calendar" id="789344678" label="wc_calendar">
+        <VirtualFolder label="wc">
+          <File filePath="pics/webcomponents/fglsvgcanvas_cal/fglsvgcanvas_cal.html"/>
+        </VirtualFolder>
         <File filePath="src/demos/wc_calendar.4gl"/>
         <File filePath="src/demos/wc_calendar.per"/>
         <File filePath="src/demos/wc_fglsvgcalendar.4gl"/>

@@ -44,7 +44,8 @@ MAIN
 		END INPUT
 		DISPLAY ARRAY m_data2 TO arr.*
 		END DISPLAY
-		ON ACTION back 
+		ON ACTION back
+			DISPLAY "BACK"
 			CALL setGraphTitle( "title", "Sales" )
 			LET l_data = getData(0)
 		ON ACTION newData 
