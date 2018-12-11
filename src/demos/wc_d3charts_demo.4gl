@@ -15,6 +15,7 @@ DEFINE m_data2 DYNAMIC ARRAY OF RECORD
 		labs STRING,
 		vals INTEGER
 	END RECORD
+DEFINE m_monthView BOOLEAN
 MAIN
 	DEFINE l_data STRING
 
@@ -32,25 +33,40 @@ MAIN
 		DISPLAY ARRAY m_data2 TO arr.*
 		END DISPLAY
 
-		ON ACTION item1 LET l_data = getData( 1 )
-		ON ACTION item2 LET l_data = getData( 2 )
-		ON ACTION item3 LET l_data = getData( 3 )
-		ON ACTION item4 LET l_data = getData( 4 )
-		ON ACTION item5 LET l_data = getData( 5 )
-		ON ACTION item6 LET l_data = getData( 6 )
-		ON ACTION item7 LET l_data = getData( 7 )
-		ON ACTION item8 LET l_data = getData( 8 )
-		ON ACTION item9 LET l_data = getData( 9 )
-		ON ACTION item10 LET l_data = getData( 10 )
-		ON ACTION item11 LET l_data = getData( 11 )
-		ON ACTION item12 LET l_data = getData( 12 )
+-- Handle clicking on the month / first 12 bars!
+		ON ACTION item1 LET l_data = clicked( 1 )
+		ON ACTION item2 LET l_data = clicked( 2 )
+		ON ACTION item3 LET l_data = clicked( 3 )
+		ON ACTION item4 LET l_data = clicked( 4 )
+		ON ACTION item5 LET l_data = clicked( 5 )
+		ON ACTION item6 LET l_data = clicked( 6 )
+		ON ACTION item7 LET l_data = clicked( 7 )
+		ON ACTION item8 LET l_data = clicked( 8 )
+		ON ACTION item9 LET l_data = clicked( 9 )
+		ON ACTION item10 LET l_data = clicked( 10 )
+		ON ACTION item11 LET l_data = clicked( 11 )
+		ON ACTION item12 LET l_data = clicked( 12 )
 
-		ON ACTION close EXIT DIALOG
+		ON ACTION newData 
+			CALL genRndData()
+			LET l_data = getData(0)
+ 
 		GL_ABOUT
 		ON ACTION quit EXIT DIALOG
+		ON ACTION close EXIT DIALOG
 	END DIALOG
 	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
+--------------------------------------------------------------------------------
+FUNCTION clicked(x SMALLINT) RETURNS STRING
+	DEFINE l_data STRING
+	LET m_monthView = NOT m_monthView
+	IF m_monthView THEN
+		LET x = 0
+	END IF
+	LET l_data = getData( x )
+	RETURN l_data
+END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION genRndData()
 	DEFINE x,y SMALLINT

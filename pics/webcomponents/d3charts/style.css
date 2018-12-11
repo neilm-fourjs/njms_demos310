@@ -9,6 +9,15 @@ body {
 	width: 100%;
 }
 
+.container {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+	margin-bottom: auto;
+	width: 700px;
+	height: 550px;
+}
+
 .chart div {
 	font: 10px sans-serif;
 	background-color: steelblue;
@@ -21,6 +30,11 @@ body {
 .chart rect {
 	fill: steelblue;
 }
+
+.bar:hover {
+  fill: blue ;
+}
+
 
 .chart text {
 	fill: black;

@@ -2,24 +2,18 @@
 LAYOUT
 GRID
 {
-[wc                                                     ]
-[                                                       ]
-[                                                       ]
-[                                                       ]
-[                                                       ]
-[                                                       ]
-[                                                       ]
-[                                                       ]
-[                                                       ]
-[                                                       ]
-[                                                       ]
-[                                                       ]
+[wc                ]
+[                  ]
+[                  ]
+[                  ]
 }
 END -- GRID
 
 ATTRIBUTES
 WEBCOMPONENT wc = FORMONLY.l_data,
-	STRETCH=BOTH, 
+	HEIGHT=550 PIXELS,
+	WIDTH=800 PIXELS,
+	STRETCH=NONE,
 	SCROLLBARS=NONE,
 	PROPERTIES=(title="Sales"),
 	COMPONENTTYPE="d3charts";

@@ -45,9 +45,9 @@
 
 			function doChart() {
 				var data = chartData;
-				var height = 500;
-				var barWidth = 700 /  data.length;
-				var width = 800;
+				var height = 480;
+				var barWidth = ( 600 /  data.length );
+				var width = 700;
 
 				margin = ({top: 20, right: 0, bottom: 30, left: 40})
 
@@ -69,11 +69,11 @@
 
 				var svg = d3.select(".chart")
 											.attr("height", height)
-											.attr("width", barWidth * data.length);
+											.attr("width", width);
 				svg.selectAll("*").remove()
-
 				svg.append("g")
 					.selectAll("rect").data(data).enter().append("rect")
+						.attr("class", "bar")
 						.attr("x", d => x(d.name))
 						.attr("y", d => y(d.value))
 						.attr("height", d => y(0) - y(d.value))
@@ -93,8 +93,10 @@
 	</head>
 
 	<body class="grad">
-		<h1>D3Chart Demo</h1>
-		<svg class="chart" style="width: 800px;	height: 600px;"></svg>
+		<div class="container">
+			<h1>D3Chart Demo</h1>
+			<svg class="chart"></svg>
+		</div>
 	</body>
 
 </html>
