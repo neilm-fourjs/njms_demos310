@@ -305,6 +305,7 @@
       <Library binaryName="wc_d3charts" id="2068081444" label="wc_d3charts">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/d3charts/d3charts.html"/>
+          <File filePath="pics/webcomponents/d3charts/d3charts.js"/>
           <File filePath="pics/webcomponents/d3charts/style.css"/>
         </VirtualFolder>
         <File filePath="src/demos/wc_d3charts.4gl"/>

@@ -18,16 +18,7 @@ body {
 	height: 550px;
 }
 
-.chart div {
-	font: 10px sans-serif;
-	background-color: steelblue;
-	text-align: right;
-	padding: 3px;
-	margin: 1px;
-	color: white;
-}
-
-.chart rect {
+.chart rect1 {
 	fill: steelblue;
 }
 
@@ -35,13 +26,11 @@ body {
   fill: blue ;
 }
 
-
 .chart text {
 	fill: black;
 	font: 12px sans-serif;
 	text-anchor: center;
 }
-
 
 .grad {
 	background-repeat:no-repeat;

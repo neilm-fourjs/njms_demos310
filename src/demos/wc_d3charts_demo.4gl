@@ -19,12 +19,12 @@ MAIN
 	LET gl_lib.gl_noToolBar = TRUE
 
 	CALL genRndData()
-	LET m_monthView = TRUE
 
 -- Pass the d3charts library my click handler function.
 	LET wc_d3charts.m_d3_clicked = FUNCTION clicked
-	CALL wc_d3charts.wc_d3_init()
-	CALL setData(0)
+	CALL wc_d3charts.wc_d3_init(700,500,"My Sales")
+	LET wc_d3charts.m_y_label = "Total Sales"
+	CALL setData( 0 ) --MONTH( CURRENT ) )
 
 	OPEN FORM f FROM "wc_d3charts_demo"
 	DISPLAY FORM f
@@ -61,15 +61,23 @@ END FUNCTION
 FUNCTION setData(l_month SMALLINT)
 	DEFINE x SMALLINT
 	CALL m_graph_data.clear()
+
 	IF l_month > 0 THEN
+		LET m_monthView = FALSE
+		LET wc_d3charts.m_x_label = "Days"
+		LET wc_d3charts.m_title = "Sales for ", gl_calendar.month_fullName_int( l_month )
 		FOR x = 1 TO days_in_month( l_month )
 			LET m_graph_data[x].labs = x
 			LET m_graph_data[x].vals = m_data[l_month].days[x]
+			LET m_graph_data[x].action_name = "back"
 		END FOR
 	ELSE
+		LET m_monthView = TRUE
+		LET wc_d3charts.m_x_label = "Months"
 		FOR x = 1 TO 12
 			LET m_graph_data[x].labs = gl_calendar.month_fullName_int(x)
 			LET m_graph_data[x].vals = m_data[x].vals
+			LET m_graph_data[x].action_name = "item"||x
 		END FOR
 	END IF
 
@@ -85,7 +93,7 @@ FUNCTION genRndData()
 		LET m_data[x].labs = gl_calendar.month_fullName_int(x)
 		LET m_data[x].vals = 0
 		FOR y = 1 TO days_in_month( x )
-			LET m_data[x].days[y] = util.math.rand(50)
+			LET m_data[x].days[y] = 5 + util.math.rand(50)
 			LET m_data[x].vals = m_data[x].vals + m_data[x].days[y]
 		END FOR
 	END FOR

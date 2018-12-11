@@ -24,18 +24,18 @@ GRID
 {
 [quit:     :newdata:      :about]
 <T tab                           >
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
-[f001                ][f002     ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
+[f001        |f002     |f003    ]
 <                                >
 [logo                           ]
 }
@@ -45,8 +45,9 @@ END -- HBOX
 
 ATTRIBUTES
 
-f001 = FORMONLY.labels,TITLE="Labels";
-f002 = FORMONLY.values,TITLE="Values";
+f001 = FORMONLY.labels,TITLE="Label";
+f002 = FORMONLY.values,TITLE="Value";
+f003 = FORMONLY.actions,TITLE="Action";
 
 IMAGE logo : logo, IMAGE="logo_dark", SIZEPOLICY=INITIAL,STYLE="noborder";
 
@@ -55,4 +56,4 @@ BUTTON about : about;
 BUTTON newdata : newdata;
 
 INSTRUCTIONS
-SCREEN RECORD arr ( FORMONLY.labels THRU FORMONLY.values )
+SCREEN RECORD arr ( FORMONLY.labels THRU FORMONLY.actions )
