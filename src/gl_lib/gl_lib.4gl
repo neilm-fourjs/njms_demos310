@@ -288,7 +288,7 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	IF l_styl IS NULL THEN
 		LET l_styl = "NULL"
 	ELSE
-		IF gl_fe_typ = "GBC" THEN
+--		IF gl_fe_typ = "GBC" THEN -- can't test this because of universal rendering
 			IF fgl_getEnv("WINDOWCENTER") = "TRUE" THEN
 				IF l_styl = "main2" THEN LET l_styl = "centered" END IF
 			END IF
@@ -300,7 +300,7 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 				CALL l_fn.setAttribute("windowStyle",l_styl)
 				GL_DBGMSG(1, SFMT("gl_formInit: WINDOWCENTER=%1 new style='%2'",fgl_getEnv("WINDOWCENTER"),l_styl))
 			END IF
-		END IF
+--		END IF
 	END IF
 	
 	IF l_styl != "splash" 
