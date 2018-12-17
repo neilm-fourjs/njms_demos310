@@ -14,9 +14,14 @@ DEFINE m_data DYNAMIC ARRAY OF RECORD
 DEFINE m_graph_data DYNAMIC ARRAY OF wc_d3charts.t_d3_rec
 DEFINE m_monthView BOOLEAN
 MAIN
+	DEFINE l_debug BOOLEAN
 
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	LET gl_lib.gl_noToolBar = TRUE
+
+-- Is the WC debug feature enabled?
+	CALL ui.Interface.frontCall("standard","getenv",["QTWEBENGINE_REMOTE_DEBUGGING"],l_debug)
+	DISPLAY "DEBUG:",l_debug
 
 	CALL genRndData()
 
@@ -35,11 +40,15 @@ MAIN
 
 		DISPLAY ARRAY m_graph_data TO arr.*
 		END DISPLAY
-
+		BEFORE DIALOG
+			IF NOT l_debug THEN
+				CALL DIALOG.setActionActive("wc_debug",FALSE)
+			END IF
 		ON ACTION newData 
 			CALL genRndData()
 			CALL setData(0)
- 
+ 		ON ACTION wc_debug
+			CALL ui.Interface.frontCall("standard","launchURL","http://localhost:"||l_debug, [])
 		GL_ABOUT
 		ON ACTION quit EXIT DIALOG
 		ON ACTION close EXIT DIALOG

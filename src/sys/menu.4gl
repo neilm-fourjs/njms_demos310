@@ -84,7 +84,7 @@ FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 	RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION quit()
+FUNCTION quit() RETURNS BOOLEAN
 	IF ARG_VAL(1) = "MDI" THEN
 		IF ui.Interface.getChildCount() > 0 THEN
 			CALL gl_lib.gl_warnPopup(%"Must close child windows first!")

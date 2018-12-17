@@ -445,7 +445,7 @@ FUNCTION gl_chkClientVer( l_cli STRING, l_ver STRING, l_feature STRING) RETURNS 
 END FUNCTION 
 --------------------------------------------------------------------------------
 -- Break the Version string into major and minor
-FUNCTION gl_getVer( l_str STRING ) RETURNS (DECIMAL, INT)
+FUNCTION gl_getVer( l_str STRING ) RETURNS (DECIMAL(4,2), INT)
 	DEFINE l_major DECIMAL(4,2)
 	DEFINE l_minor SMALLINT
 	DEFINE l_st base.StringTokenizer
@@ -838,7 +838,7 @@ FUNCTION gl_getLogDir() RETURNS STRING
 END FUNCTION
 --------------------------------------------------------------------------------
 -- get / set m_logName 
--- NOTE: doesn't include the extension so you can use it for .log and .err
+-- NOTE: doesn't include the extension so you can use it for .log and .err etc.
 FUNCTION gl_getLogName() RETURNS STRING
 	DEFINE l_user STRING
 	IF m_logName IS NULL THEN
@@ -861,6 +861,7 @@ END FUNCTION
 --------------------------------------------------------------------------------
 #+ Gets sourcefile.module:line from a stacktrace.
 #+
+#+ @return sourcefile.module:line
 FUNCTION gl_getCallingModuleName() RETURNS STRING --{{{
 	DEFINE l_fil,l_mod,l_lin STRING
 	DEFINE x,y SMALLINT
