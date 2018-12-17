@@ -16,6 +16,7 @@
 #+	FJS_STYLE2: Additional Style file to merge with current.
 #+	FJS_GL_NOINIT: Don't use Form Initializer
 #+	FJS_PICS: Add this path to images used for splash etc. Will default to FGLIMAGEPATH
+#+	WINDOWCENTER: TRUE/FALSE = in form initializer change 'main2' to 'centered' - used for nicer GBC layout.
 #+
 
 IMPORT os

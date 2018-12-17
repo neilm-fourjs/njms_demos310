@@ -29,6 +29,7 @@ CONSTANT C_FIELDS_PER_PAGE = 10
 DEFINE m_dbname STRING
 DEFINE m_allowedActions CHAR(6)
 MAIN
+	DEFINE l_style STRING
 	CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),"default",TRUE)
 	LET gl_toolBar = "dynmaint"
@@ -46,7 +47,9 @@ MAIN
 	CALL glm_sql.glm_mkSQL("*","1=2") -- not fetching any data.
 
 -- create Form
-	CALL glm_mkForm.init_form(m_dbname, m_tab, glm_sql.m_key_fld, C_FIELDS_PER_PAGE, glm_sql.m_fields,"centered") -- 10 fields by folder page
+	LET l_style = "main2"
+	IF fgl_getEnv("WINDOWCENTER") = "TRUE" THEN LET l_style = "centered" END IF
+	CALL glm_mkForm.init_form(m_dbname, m_tab, glm_sql.m_key_fld, C_FIELDS_PER_PAGE, glm_sql.m_fields,l_style) -- 10 fields by folder page
 	CALL gl_lib.gl_titleWin(NULL)
 	CALL ui.Interface.setText( gl_progdesc )
 
