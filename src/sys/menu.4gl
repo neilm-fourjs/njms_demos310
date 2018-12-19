@@ -51,7 +51,7 @@ MAIN
 	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
--- Connect to the database to do the login process.
+-- Connect to the database to do the login process
 FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 
 	IF gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
@@ -277,7 +277,7 @@ FUNCTION populate_menu(l_mname LIKE sys_menus.m_id ) RETURNS BOOLEAN
 
 END FUNCTION
 --------------------------------------------------------------------------------
--- split program and args to two variables.
+-- split program and args to two variables
 FUNCTION progArgs( l_prog STRING ) RETURNS (STRING,STRING)
   DEFINE l_args STRING
   DEFINE y SMALLINT

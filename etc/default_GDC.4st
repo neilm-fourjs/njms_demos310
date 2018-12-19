@@ -113,7 +113,9 @@
 
 	<Style name="Window">
 		<StyleAttribute name="windowType" value="normal" />
-		<!--StyleAttribute name="defaultTTFColor" value="darkblue" /-->
+	</Style>
+	<Style name="Window.blue">
+		<StyleAttribute name="defaultTTFColor" value="darkblue" />
 	</Style>
 	<Style name="Window.main">
 		<StyleAttribute name="windowType" value="normal" />

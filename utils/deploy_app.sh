@@ -1,11 +1,17 @@
 #!/bin/bash
 # needs to run using: sudo -u gpaas ./deploy_app.sh <appname>
 
+VER=${2:-310}
+
 # Set the GAS environment
-. /opt/fourjs/gas310/envas
+. /opt/fourjs/gas$VER/envas
 
 # Define the command using our custom XCF
-CMD="gasadmin gar -f /opt/fourjs/gas310/etc/isv_as310.xcf"
+if [ -e $FGLASDIR/etc/isv_as$VER.xcf ]; then
+	CMD="gasadmin gar -f $FGLASDIR/etc/isv_as$VER.xcf"
+else
+	CMD="gasadmin gar"
+fi
 
 echo -e "\n attempt to disable previous version of app ..."
 echo "$CMD --disable-archive $1"

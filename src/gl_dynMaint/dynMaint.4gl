@@ -48,7 +48,7 @@ MAIN
 
 -- create Form
 	LET l_style = "centered"
-	IF fgl_getEnv("WINDOWCENTER") = "FALSE" THEN LET l_style = "main2" END IF
+	IF  NOT gl_lib.m_windowCenter THEN LET l_style = "main2" END IF
 	CALL glm_mkForm.init_form(m_dbname, m_tab, glm_sql.m_key_fld, C_FIELDS_PER_PAGE, glm_sql.m_fields,l_style) -- 10 fields by folder page
 	CALL gl_lib.gl_titleWin(NULL)
 	CALL ui.Interface.setText( gl_progdesc )

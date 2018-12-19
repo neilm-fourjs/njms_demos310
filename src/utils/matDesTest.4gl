@@ -46,11 +46,10 @@ MAIN
 		CALL ui.Interface.setType("child")
 		CALL ui.Interface.setContainer("mycontain")
 	ELSE}
-		CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
+		CALL gl_lib.gl_init( ARG_VAL(1) ,"matDesTest",TRUE)
 --	END IF
 
 	CALL ui.Interface.setText( gl_progdesc )
-	CALL ui.Interface.loadStyles("matDesTest")
 	--RUN "env | sort > env.txt"
 
 	FOR X = 1 TO 15
