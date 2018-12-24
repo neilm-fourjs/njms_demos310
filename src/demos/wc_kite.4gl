@@ -9,6 +9,8 @@ IMPORT os
 IMPORT FGL gl_lib
 &include "genero_lib.inc"
 CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "WC Kite Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT WC_KITE_PATH = "../pics/webcomponents/kite"
 
 DEFINE m_kites DYNAMIC ARRAY OF STRING
@@ -25,7 +27,7 @@ DEFINE info STRING
 
 MAIN
 	DEFINE wc_data, panel, colour STRING
-
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,"wc_kite",TRUE)
 	LET gl_lib.gl_noToolBar = TRUE
 

@@ -105,7 +105,7 @@ MAIN
 
 	OPTIONS ON CLOSE APPLICATION CALL tidyup
 
-	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, C_PRGDESC, C_PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,"ipodtree",TRUE)
 	CALL ui.Interface.setText( gl_progdesc )
 

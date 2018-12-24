@@ -30,19 +30,20 @@ PUBLIC DEFINE m_logDir STRING
 PUBLIC DEFINE m_logName STRING
 PUBLIC DEFINE m_logDate BOOLEAN
 PUBLIC DEFINE m_mdi CHAR(1)
-
-DEFINE m_key STRING
+PUBLIC DEFINE m_windowCenter BOOLEAN
+PUBLIC DEFINE m_universal_rendering BOOLEAN
+DEFINE m_key, m_4stname STRING
 --------------------------------------------------------------------------------
 #+ Initialize Function
 #+
 #+ @param l_mdi_sdi Char(1):	"S"-Sdi "M"-mdi Container "C"-mdi Child
 #+ @param l_key 		String:		name for .4ad/.4st/.4tb - default="default"
 #+ @param l_use_fi 	Smallint:	TRUE/FALSE Set Form Initializer to gl_forminit.
-#+ @return Nothing.
+#+ @return Nothing
 FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	DEFINE l_desc, l_container STRING
 
-	LET gl_progName = base.Application.getProgramName()
+	LET gl_progName = NVL(gl_progName,base.Application.getProgramName())
 	CALL startLog( os.path.join( gl_getLogDir(),gl_progName||".log"))
 
 	GL_MODULE_ERROR_HANDLER
@@ -51,7 +52,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 
 	LET gl_dbgLev = fgl_getEnv("FJS_GL_DBGLEV") -- 0=None, 1=General, 2=All
 	IF gl_dbgLev IS NULL THEN LET gl_dbgLev = 0 END IF
-	GL_DBGMSG(1, "gl_init: Debug Level:"||gl_dbgLev)
+	GL_DBGMSG(1, SFMT("gl_init: Started - Program:%1 Debug Level:%2",gl_progName, gl_dbgLev))
 
 	LET l_desc = base.application.getResourceEntry("fglrun.localization.file.1.name")
 	IF l_desc IS NULL THEN
@@ -69,13 +70,14 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 			LET gl_os = gl_os.append(" - "||gl_getLinuxVer() )
 		END IF
 	END IF
-	GL_DBGMSG(1, "gl_init: OS:"||gl_os)
-	GL_DBGMSG(1, "gl_init: FGLDIR="||fgl_getEnv("FGLSDIR"))
-	GL_DBGMSG(1, "gl_init: FGLSERVER="||fgl_getEnv("FGLSERVER"))
-	GL_DBGMSG(1, "gl_init: FGLPROFILE="||fgl_getEnv("FGLPROFILE"))
-	GL_DBGMSG(1, "gl_init: DBPATH="||fgl_getEnv("DBPATH"))
-	GL_DBGMSG(1, "gl_init: DBDATE="||fgl_getEnv("DBDATE"))
-	GL_DBGMSG(1, "gl_init: FGLIMAGEPATH="||fgl_getEnv("FGLIMAGEPATH"))
+	GL_DBGMSG(1, SFMT("gl_init: OS:%1",gl_os))
+	GL_DBGMSG(1, SFMT("gl_init: LANG=%1",fgl_getEnv("LANG")))
+	GL_DBGMSG(1, SFMT("gl_init: FGLDIR=%1",fgl_getEnv("FGLDIR")))
+	GL_DBGMSG(1, SFMT("gl_init: FGLSERVER=%1",fgl_getEnv("FGLSERVER")))
+	GL_DBGMSG(1, SFMT("gl_init: FGLPROFILE=%1",fgl_getEnv("FGLPROFILE")))
+	GL_DBGMSG(1, SFMT("gl_init: DBPATH=%1",fgl_getEnv("DBPATH")))
+	GL_DBGMSG(1, SFMT("gl_init: DBDATE=%1",fgl_getEnv("DBDATE")))
+	GL_DBGMSG(1, SFMT("gl_init: FGLIMAGEPATH=%1",fgl_getEnv("FGLIMAGEPATH")))
 
 	IF l_key IS NULL THEN LET l_key = "default" END IF
 	LET m_key = l_key
@@ -85,11 +87,18 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	LET l_key = fgl_getEnv("FJS_STYLE")
 	IF l_key.getLength() < 2 THEN LET l_key = m_key END IF -- Style name taken from l_key
 
--- Added for web client.
-	IF fgl_getEnv("FJS_GL_NOINIT") = 1 THEN
-		GL_DBGMSG(1, "gl_init: FJS_GL_NOINIT is set.")
-		LET l_use_fi = FALSE
+	LET m_windowCenter = IIF( fgl_getEnv("WINDOWCENTER") = "FALSE", FALSE, TRUE)
+
+	LET m_universal_rendering = FALSE
+	LET gl_fe_typ = UPSHIFT(ui.interface.getFrontEndName())
+	LET gl_fe_ver = ui.interface.getFrontEndVersion()
+	IF gl_fe_Ver MATCHES("3.2*") THEN
+		IF fgl_getResource("gui.rendering") = "universal" 
+		OR LENGTH(fgl_getEnv("FGLGBCDIR")) > 1 THEN
+			LET m_universal_rendering = TRUE
+		END IF
 	END IF
+	GL_DBGMSG(1, SFMT("gl_init: FE:%1 Version:%2 Universal:%3",gl_fe_typ,gl_fe_ver,IIF(m_universal_rendering,"TRUE","FALSE")))
 
 	IF l_use_fi THEN
 		GL_DBGMSG(1, "gl_init: Form Initializer 'gl_forminit'.")
@@ -98,27 +107,25 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 		GL_DBGMSG(1, "gl_init: No Form Initializer.")
 	END IF
 
-	LET gl_fe_typ = UPSHIFT(ui.interface.getFrontEndName())
-	LET gl_fe_ver = ui.interface.getFrontEndVersion()
-	GL_DBGMSG(1, "gl_init: FE:"||gl_fe_typ||" version:"||gl_fe_ver)
 	LET gl_cli_os = "?"
 	LET gl_cli_osver = "?"
 	LET gl_cli_res = "?"
 	LET gl_cli_dir = "?"
 	IF gl_fe_typ = "GBC" THEN LET gl_cli_os = "WWW" END IF
 	IF m_mdi != "M" AND m_mdi != "C" AND gl_fe_typ != "GBC" AND gl_fe_typ != "GGC" THEN
-		DISPLAY "Getting feinfo ..."
+		GL_DBGMSG(1,"Getting feinfo ...")
 		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
 		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )
 		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
 		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
+		GL_DBGMSG(1,SFMT("feinfo ostype=%1 osversion=%2 screenresolution=%3", gl_cli_os, gl_cli_osver, gl_cli_res))
 	END IF
-
+	LET m_4stname = m_key||"_"||IIF(m_universal_rendering,"GBC", gl_fe_typ)
 	TRY
-		CALL ui.interface.loadStyles( m_key||"_"||gl_fe_typ )
-		GL_DBGMSG(1, "gl_init: Styles '"||m_key||"_"||gl_fe_typ||"' loaded.")
+		CALL ui.interface.loadStyles( m_4stname )
+		GL_DBGMSG(1, "gl_init: Styles '"||m_4stname||"' loaded.")
 	CATCH
-		GL_DBGMSG(1, "gl_init: Styles '"||m_key||"_"||gl_fe_typ||"' FAILED to load!")
+		GL_DBGMSG(1, "gl_init: Styles '"||m_4stname||"' FAILED to load!")
 		TRY
 			CALL ui.interface.loadStyles( m_key )
 			GL_DBGMSG(1, "gl_init: Styles '"||m_key||"' loaded.")
@@ -133,7 +140,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 		CALL ui.interface.loadActionDefaults( l_key )
 		GL_DBGMSG(1, "gl_init: Action Defaults '"||l_key.trim()||"' loaded.")
 	CATCH
-		GL_DBGMSG(0, "gl_init: Action Defaults '"||l_key.trim()||"' FAILED to load!")
+		GL_DBGMSG(0, "gl_init: Action Defaults '"||l_key.trim()||"' load failed, trying to load 'default.4ad'")
 		CALL ui.interface.loadActionDefaults( "default" )
 	END TRY
 
@@ -184,6 +191,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	CALL gl_userName() -- Breaks MDI!!!
 	CALL startLog( os.path.join( gl_getLogDir(),gl_progName||"."||gl_userName||".log"))
 
+	GL_DBGMSG(2, SFMT("gl_init: ui.Interface.setText('%1') ",gl_progName))
 	CALL ui.Interface.setText( gl_progName )
 
 END FUNCTION --}}}
@@ -262,16 +270,15 @@ END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Form Initializer. Call automatically set setDefaultinitializer is used.
 #+
-#+ @param fm Form object to be initialized.
+#+ @param fm Form object to be initialized
 FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	DEFINE l_fn om.DomNode
-	DEFINE l_nam, l_styl, l_winstyl, l_winnam, l_tag STRING
+	DEFINE l_nam, l_styl, l_winstyl, l_newstyl, l_winnam, l_tag STRING
 	DEFINE l_nl om.nodeList
 
 	GL_DBGMSG(1, "gl_formInit: start")
 
 	LET l_fn = l_fm.getNode()
-
 	LET l_nam = l_fn.getAttribute("name")
 	LET l_styl = l_fn.getAttribute("style")
 	LET l_tag = l_fn.getAttribute("tag")
@@ -279,28 +286,26 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 -- get the window style.	
 	LET l_winstyl = l_fn.getAttribute("windowStyle")
 	LET l_winnam = l_fn.getParent().getAttribute("name")
-	GL_DBGMSG(1, SFMT("gl_formInit: form='%1' tag='%2' style='%3' window='%4' windowStyle='%5'",l_nam,l_tag,NVL(l_styl,"NULL"),l_winnam,NVL(l_winstyl,"NULL")))
+	GL_DBGMSG(1, SFMT("gl_formInit: form='%1' tag='%2' style='%3' window='%4' windowStyle='%5' center=%6",l_nam,l_tag,NVL(l_styl,"NULL"),l_winnam,NVL(l_winstyl,"NULL"),IIF(m_windowCenter,"TRUE","FALSE")))
 
 	IF l_styl IS NULL OR l_styl != l_winstyl THEN
 		LET l_styl = l_winstyl
 	END IF
+	LET l_newstyl = l_styl
+	IF l_styl IS NULL THEN LET l_styl = "NULL"	END IF
 
-	IF l_styl IS NULL THEN
-		LET l_styl = "NULL"
-	ELSE
---		IF gl_fe_typ = "GBC" THEN -- can't test this because of universal rendering
-			IF fgl_getEnv("WINDOWCENTER") = "TRUE" THEN
-				IF l_styl = "main2" THEN LET l_styl = "centered" END IF
-			END IF
-			IF fgl_getEnv("WINDOWCENTER") = "FALSE" THEN
-				IF l_styl = "centered" THEN LET l_styl = "main2" END IF
-			END IF
-			IF fgl_getEnv("WINDOWCENTER") = "FALSE" OR fgl_getEnv("WINDOWCENTER") = "TRUE" THEN
-				CALL l_fn.setAttribute("style",l_styl)
-				CALL l_fn.setAttribute("windowStyle",l_styl)
-				GL_DBGMSG(1, SFMT("gl_formInit: WINDOWCENTER=%1 new style='%2'",fgl_getEnv("WINDOWCENTER"),l_styl))
-			END IF
---		END IF
+	IF gl_fe_typ = "GBC" OR m_universal_rendering THEN
+		IF m_windowCenter THEN
+			IF l_styl = "main2" OR l_styl = "NULL" THEN LET l_newstyl = "centered" END IF
+		END IF
+		IF NOT m_windowCenter THEN
+			IF l_styl = "centered" OR l_styl = "NULL" THEN LET l_newstyl = "main2" END IF
+		END IF
+		IF l_newstyl != l_styl THEN
+			CALL l_fn.setAttribute("style",l_newstyl)
+			CALL l_fn.setAttribute("windowStyle",l_newstyl)
+			GL_DBGMSG(1, SFMT("gl_formInit: new style='%1'",l_newstyl))
+		END IF
 	END IF
 	
 	IF l_styl != "splash" 

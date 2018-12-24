@@ -8,8 +8,8 @@ IMPORT FGL gl_about
 &include "genero_lib.inc"
 
 CONSTANT C_VER="3.1"
-CONSTANT PRGDESC = "List View Demo"
-CONSTANT PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGDESC = "List View Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGICON = "njm_demo_icon"
 
 CONSTANT C_IMGPATH = "got"
@@ -32,7 +32,7 @@ DEFINE m_conts DYNAMIC ARRAY OF t_contact
 DEFINE m_contList DYNAMIC ARRAY OF t_contactList
 
 MAIN
-	CALL gl_lib.gl_setInfo(C_VER, NULL, C_PRGICON, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, NULL, C_PRGICON, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
 
 	CALL load_contacts()

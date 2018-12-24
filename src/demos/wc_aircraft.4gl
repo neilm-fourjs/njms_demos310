@@ -1,6 +1,8 @@
 IMPORT os
 IMPORT FGL gl_lib
-
+CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "WC Aircraft Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT c_wc_images="../pics/webcomponents/aircraft/"
 DEFINE l_breadcrumbs DYNAMIC ARRAY OF STRING
 DEFINE m_bc SMALLINT
@@ -19,7 +21,7 @@ DEFINE m_dnd ui.DragDrop
 MAIN
 	DEFINE l_wc, l_data STRING
 	DEFINE l_f ui.Form
-
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	LET gl_lib.gl_noToolBar = TRUE
 

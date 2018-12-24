@@ -3,13 +3,16 @@ IMPORT util
 IMPORT FGL gl_lib
 &include "genero_lib.inc"
 CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "WC GoogleMaps Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
+
 MAIN
 	DEFINE wc_gm, in_data STRING
 	DEFINE l_latlng_rec RECORD
 			lat FLOAT,
 			lng FLOAT
 		END RECORD
-
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
 	LET gl_lib.gl_noToolBar = TRUE
 	OPEN FORM f FROM "wc_gm"

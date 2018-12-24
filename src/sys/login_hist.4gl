@@ -10,14 +10,14 @@ IMPORT FGL new_acct
 &include "schema.inc"
 &include "app.inc"
 
-CONSTANT C_TITLE="NJM's Demos"
+CONSTANT C_TITLE="Login History"
 CONSTANT C_SPLASH="logo_dark"
 CONSTANT C_ICON="njm_demo_icon"
-CONSTANT PRGDESC = "NJM's Demos Login History"
-CONSTANT PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGDESC = "NJM's Demos Login History"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 MAIN
-	CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, C_TITLE, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	LET m_mdi = gl_lib.m_mdi
 	CALL ui.Interface.setText( gl_progdesc )

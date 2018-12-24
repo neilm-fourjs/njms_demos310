@@ -6,6 +6,8 @@ IMPORT FGL wc_d3charts
 
 &include "genero_lib.inc"	
 CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "WC Charts Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 DEFINE m_data DYNAMIC ARRAY OF RECORD
 		labs STRING,
 		vals INTEGER,
@@ -15,7 +17,7 @@ DEFINE m_graph_data DYNAMIC ARRAY OF wc_d3charts.t_d3_rec
 DEFINE m_monthView BOOLEAN
 MAIN
 	DEFINE l_debug BOOLEAN
-
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	LET gl_lib.gl_noToolBar = TRUE
 

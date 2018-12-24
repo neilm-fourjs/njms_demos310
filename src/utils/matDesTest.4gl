@@ -6,8 +6,8 @@ IMPORT os
 IMPORT FGL gl_lib
 &include "genero_lib.inc"
 CONSTANT C_VER="3.1"
-CONSTANT PRGDESC = "Material Design Test"
-CONSTANT PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGDESC = "Material Design Test"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGICON = "njm_demo_icon"
 CONSTANT C_IMG = "smiley"
 
@@ -39,7 +39,7 @@ MAIN
 	END RECORD
 	DEFINE x SMALLINT
 
-	CALL gl_lib.gl_setInfo(C_VER, NULL, C_PRGICON, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, NULL, C_PRGICON, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 
 {	IF ARG_VAL(1) = "C" THEN
 		CALL ui.Interface.loadStyles("default_"||UPSHIFT(ui.interface.getFrontEndName()))

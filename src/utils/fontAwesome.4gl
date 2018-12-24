@@ -4,8 +4,8 @@ IMPORT FGL gl_lib
 IMPORT FGL gl_about
 &include "genero_lib.inc"
 CONSTANT C_VER="3.1"
-CONSTANT PRGDESC = "Font Awesome Reference"
-CONSTANT PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGDESC = "FontAwesome Viewer"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 TYPE t_rec RECORD
 		img STRING,
@@ -55,7 +55,7 @@ DEFINE m_rec4 DYNAMIC ARRAY OF RECORD -- Fontname
 MAIN
 	DEFINE l_ret SMALLINT
 	DEFINE l_filter STRING
-	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, PRGDESC, PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,NULL,TRUE)
 	CALL ui.Interface.setText( gl_progdesc )
 

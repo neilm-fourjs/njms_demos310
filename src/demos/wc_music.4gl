@@ -30,7 +30,7 @@ END RECORD
 DEFINE m_songno SMALLINT
 MAIN
 	DEFINE l_data STRING
-	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, NULL, C_PRGDESC, C_PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init(ARG_VAL(1),NULL,TRUE)
 	LET gl_lib.gl_noToolBar = FALSE
 	LET m_base = fgl_getEnv("MUSICDIR")

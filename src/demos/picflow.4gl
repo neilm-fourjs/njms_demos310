@@ -3,6 +3,8 @@ IMPORT os
 IMPORT FGL gl_lib
 &include "genero_lib.inc"	
 CONSTANT C_VER="3.1"
+CONSTANT C_PRGDESC = "picFlow Demo"
+CONSTANT C_PRGAUTH = "Neil J.Martin"
 
 DEFINE max_images SMALLINT
 
@@ -24,6 +26,7 @@ MAIN
 	DEFINE frm ui.Form
 	DEFINE n om.domNode
 
+	CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_lib.gl_init( ARG_VAL(1) ,"picflow",TRUE)
 	LET gl_lib.gl_noToolBar = TRUE
 

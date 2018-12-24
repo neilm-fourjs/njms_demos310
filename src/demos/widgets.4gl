@@ -18,7 +18,7 @@ IMPORT FGL widgets_clock
 
 &include "genero_lib.inc"
 CONSTANT C_VER = "3.10"
-CONSTANT C_PRGDESC = "Genero Widgets Demo"
+CONSTANT C_PRGDESC = "Widgets Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGSPLASH = "widgetsdemo"
 CONSTANT C_PRGICON = "widgetsdemo_icon"
@@ -97,7 +97,7 @@ MAIN
 	DEFINE stat SMALLINT
 	DEFINE f ui.Form
 
-	CALL gl_lib.gl_setInfo(C_VER, C_PRGSPLASH, C_PRGICON, NULL, C_PRGDESC, C_PRGAUTH)
+	CALL gl_lib.gl_setInfo(C_VER, C_PRGSPLASH, C_PRGICON, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
 	CALL gl_init(ARG_VAL(1),"widgets",TRUE)
 
 	GL_DBGMSG(2,"init_genero, done.")

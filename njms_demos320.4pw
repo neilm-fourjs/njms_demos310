@@ -442,9 +442,10 @@
       </Application>
       <Application binaryName="materialDesignTest" dependencies="14000,-400184264,528729868" id="1848127715" label="materialDesignTest">
         <File filePath="src/utils/matDesTest.4gl"/>
-        <File filePath="etc/matDesTest.4st"/>
         <File filePath="src/utils/matDesTest.per"/>
         <File filePath="src/utils/matDesTest_forms.per"/>
+        <File filePath="etc/matDesTest_GBC.4st"/>
+        <File filePath="etc/matDesTest_GDC.4st"/>
         <File filePath="src/utils/matDesTest_modal.per"/>
       </Application>
     </Group>
