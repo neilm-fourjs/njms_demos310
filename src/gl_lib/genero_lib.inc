@@ -5,6 +5,7 @@
 
 &define GL_ABOUT ON ACTION about CALL gl_about( gl_version )
 
+CONSTANT C_DEF_SCR_WIDTH = 1280
 GLOBALS
 	DEFINE gl_dbgLev SMALLINT  -- debug level: 0=None, 1=General, 2=All
 	DEFINE gl_version STRING
@@ -23,6 +24,8 @@ GLOBALS
 	DEFINE gl_cli_un STRING
 	DEFINE gl_cli_res STRING
 	DEFINE gl_cli_dir STRING
+	DEFINE gl_win_res STRING
 	DEFINE gl_fe_typ STRING
 	DEFINE gl_fe_ver STRING
+	DEFINE gl_scr_width SMALLINT
 END GLOBALS

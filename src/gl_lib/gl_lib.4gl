@@ -32,6 +32,7 @@ PUBLIC DEFINE m_logDate BOOLEAN
 PUBLIC DEFINE m_mdi CHAR(1)
 PUBLIC DEFINE m_windowCenter BOOLEAN
 PUBLIC DEFINE m_universal_rendering BOOLEAN
+
 DEFINE m_key, m_4stname STRING
 --------------------------------------------------------------------------------
 #+ Initialize Function
@@ -112,14 +113,16 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	LET gl_cli_res = "?"
 	LET gl_cli_dir = "?"
 	IF gl_fe_typ = "GBC" THEN LET gl_cli_os = "WWW" END IF
-	IF m_mdi != "M" AND m_mdi != "C" AND gl_fe_typ != "GBC" AND gl_fe_typ != "GGC" THEN
+	IF m_mdi != "M" AND m_mdi != "C" AND gl_fe_typ != "GGC" THEN
 		GL_DBGMSG(1,"Getting feinfo ...")
 		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
 		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )
 		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
+		CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
 		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
-		GL_DBGMSG(1,SFMT("feinfo ostype=%1 osversion=%2 screenresolution=%3", gl_cli_os, gl_cli_osver, gl_cli_res))
+		GL_DBGMSG(1,SFMT("feinfo ostype=%1 osversion=%2 screenRes=%3 windowRes=%4", gl_cli_os, gl_cli_osver, gl_cli_res, gl_win_res))
 	END IF
+
 	LET m_4stname = m_key||"_"||IIF(m_universal_rendering,"GBC", gl_fe_typ)
 	TRY
 		CALL ui.interface.loadStyles( m_4stname )
@@ -294,7 +297,10 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	LET l_newstyl = l_styl
 	IF l_styl IS NULL THEN LET l_styl = "NULL"	END IF
 
-	IF gl_fe_typ = "GBC" OR m_universal_rendering THEN
+	CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
+	LET gl_scr_width = gl_getWidth( gl_win_res )
+
+	IF ( gl_fe_typ = "GBC" OR m_universal_rendering ) AND gl_scr_width > C_DEF_SCR_WIDTH THEN
 		IF m_windowCenter THEN
 			IF l_styl = "main2" OR l_styl = "NULL" THEN LET l_newstyl = "centered" END IF
 		END IF
@@ -733,6 +739,20 @@ FUNCTION gl_strToDate(l_str STRING) RETURNS DATE --{{{
 	IF l_date IS NOT NULL THEN RETURN l_date END IF
 	LET l_date = util.Date.parse(l_str,"dd/mm/yyyy")
 	RETURN l_date
+END FUNCTION --}}}
+--------------------------------------------------------------------------------
+#+ Get screen width from the resolution, eg 1980x1080
+#+
+#+ @param l_res A string containing 
+#+ @returns SMALLINT
+FUNCTION gl_getWidth( l_res STRING ) RETURNS SMALLINT -- {{{
+	DEFINE x SMALLINT
+	LET x = l_res.getIndexOf("x",1)
+	IF x > 0 THEN
+		RETURN l_res.subString(1,x-1)
+	ELSE
+		RETURN C_DEF_SCR_WIDTH -- default ?
+	END IF
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Return the result from the uname commend on Unix / Linux / Mac.

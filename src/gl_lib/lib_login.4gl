@@ -58,7 +58,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 		CALL gl_lib.gl_showElement("logo_grid")
 		DISPLAY BY NAME m_logo_image
 	END IF
-	IF ui.Interface.getFrontEndName() = "GBC" THEN
+	IF gl_fe_typ = "GBC" OR m_universal_rendering THEN
 		CALL ui.Interface.frontCall("theme","getCurrentTheme", [], [l_cur_theme])
 		LET l_theme = l_cur_theme
 	END IF
@@ -79,6 +79,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 				LET l_pass = "12test"
 				ACCEPT INPUT
 			END IF
+
 		AFTER INPUT
 			IF NOT int_flag THEN
 				IF NOT validate_login(l_login,l_pass) THEN
@@ -124,7 +125,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING ) RETURNS STRING
 		CALL lib_secure.glsec_saveSession(C_SESSION_KEY, l_login)
 	END IF
 
-	IF ui.Interface.getFrontEndName() = "GBC" THEN
+	IF gl_fe_typ = "GBC" OR m_universal_rendering THEN
 		SELECT gbc_theme INTO l_old_theme FROM sys_users WHERE email = l_login
 		IF l_old_theme IS NOT NULL AND l_cur_theme != l_old_theme THEN
 			CALL ui.Interface.frontCall("theme","setTheme", [l_old_theme.trim()], [])
@@ -358,7 +359,7 @@ PRIVATE FUNCTION openId() RETURNS STRING
 -- Ignore the error if it doesn't exist
 	END TRY
 	LET l_loop = 10
-	IF ui.Interface.getFrontEndName() = "GBC" THEN
+	IF gl_fe_typ = "GBC" THEN
 		MENU "OpenID Login"
 			ATTRIBUTE(STYLE="dialog",
 					COMMENT=SFMT("A new window/tab should be open for login via Google.\n\n * Check your Popup Blocker! *\n\nURL:%1",l_url),
@@ -465,7 +466,7 @@ FUNCTION cb_gbc_theme(l_cb ui.Combobox)
 	DEFINE l_result STRING
 	DEFINE x SMALLINT
 
-	IF ui.Interface.getFrontEndName() != "GBC" THEN
+	IF gl_fe_typ != "GBC" AND NOT m_universal_rendering THEN 
 		CALL ui.Window.getCurrent().getForm().setElementHidden("ltheme",TRUE)
 		CALL ui.Window.getCurrent().getForm().setFieldHidden("formonly.l_theme",TRUE)
 		RETURN

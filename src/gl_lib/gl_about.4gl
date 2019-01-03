@@ -29,6 +29,8 @@ FUNCTION gl_about(l_ver STRING) --{{{
 		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
 		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
 	END IF
+	CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
+	LET gl_scr_width = gl_getWidth( gl_win_res )
 
 	IF gl_app_name IS NULL THEN CALL gl_setAppInfo( NULL, NULL ) END IF
 
@@ -137,8 +139,10 @@ FUNCTION gl_about(l_ver STRING) --{{{
 		CALL gl_lib_aui.gl_addLabel(g,10,y,gl_cli_dir,NULL,"black") LET y = y + 1
 	END IF
 
-	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Client Resolution")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Screen Resolution")||":","right","black")
 	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_cli_res,NULL,"black") LET y = y + 1
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Window Resolution")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,SFMT("%1 (%2)",gl_win_res,gl_scr_width),NULL,"black") LET y = y + 1
 
 	LET g = g.createChild("HBox")
 	CALL g.setAttribute("posY",y)
