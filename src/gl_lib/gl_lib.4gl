@@ -297,28 +297,30 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	LET l_newstyl = l_styl
 	IF l_styl IS NULL THEN LET l_styl = "NULL"	END IF
 
-	CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
-	LET gl_scr_width = gl_getWidth( gl_win_res )
-
-	IF ( gl_fe_typ = "GBC" OR m_universal_rendering ) AND gl_scr_width > C_DEF_SCR_WIDTH THEN
-		IF m_windowCenter THEN
-			IF l_styl = "main2" OR l_styl = "NULL" THEN LET l_newstyl = "centered" END IF
-		END IF
-		IF NOT m_windowCenter THEN
-			IF l_styl = "centered" OR l_styl = "NULL" THEN LET l_newstyl = "main2" END IF
-		END IF
-		IF l_newstyl != l_styl THEN
-			CALL l_fn.setAttribute("style",l_newstyl)
-			CALL l_fn.setAttribute("windowStyle",l_newstyl)
-			GL_DBGMSG(1, SFMT("gl_formInit: new style='%1'",l_newstyl))
-		END IF
-	END IF
-	
-	IF l_styl != "splash" 
+	IF l_styl != "splash" AND l_styl != "menu"
 	AND l_styl != "dialog" AND l_styl != "dialog2" AND l_styl != "dialog3" AND l_styl != "dialog4"
-	AND l_styl != "menu"
 	AND l_styl != "lookup" AND l_styl != "naked" AND l_styl != "about"  AND l_styl != "viewer"
 	AND l_styl != "wizard" THEN
+
+		IF ( gl_fe_typ = "GBC" OR m_universal_rendering ) THEN	
+			CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
+			LET gl_scr_width = gl_getWidth( gl_win_res )
+			GL_DBGMSG(1,SFMT("Window Width: %1",gl_scr_width) )
+			IF gl_scr_width > C_DEF_SCR_WIDTH THEN
+				IF m_windowCenter THEN
+					IF l_styl = "main2" OR l_styl = "NULL" THEN LET l_newstyl = "centered" END IF
+				END IF
+				IF NOT m_windowCenter THEN
+					IF l_styl = "centered" OR l_styl = "NULL" THEN LET l_newstyl = "main2" END IF
+				END IF
+				IF l_newstyl != l_styl THEN
+					CALL l_fn.setAttribute("style",l_newstyl)
+					CALL l_fn.setAttribute("windowStyle",l_newstyl)
+					GL_DBGMSG(1, SFMT("gl_formInit: new style='%1'",l_newstyl))
+				END IF
+			END IF
+		END IF
+
 		LET l_nl = l_fn.selectByTagName("ToolBar")
 		IF NOT gl_noToolBar AND l_nl.getlength() < 1 THEN
 			GL_DBGMSG(1, "gl_formInit: loading Toolbar '"||gl_toolbar||"'")
@@ -540,12 +542,18 @@ END FUNCTION --}}}
 #+ @return none
 FUNCTION gl_winMessage(l_title STRING, l_message STRING, l_icon STRING) --{{{
 	DEFINE l_win ui.window
-	
+	IF l_title IS NULL THEN LET l_title = "No Title!" END IF
+	IF l_message IS NULL THEN
+		LET l_message = "Message was NULL!!\n"||base.Application.getStackTrace()
+	END IF
+
 	LET l_win = ui.window.getcurrent()
 	IF l_win IS NULL THEN -- Needs a current window or dialog doesn't work!!
 		OPEN WINDOW dummy AT 1,1 WITH 1 ROWS, 1 COLUMNS
 	END IF
 	IF l_icon = "exclamation" THEN ERROR "" END IF -- Beep
+
+	GL_DBGMSG(2, "gl_winMessage: "||NVL(l_message,"gl_winMessage passed NULL!"))
 	MENU l_title ATTRIBUTES(STYLE="dialog",COMMENT=l_message, IMAGE=l_icon)
 		COMMAND "Okay" EXIT MENU
 	END MENU
@@ -623,7 +631,7 @@ END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Default error handler
 #+
-#+ @return Nothing.
+#+ @return Nothing
 FUNCTION gl_error() --{{{
   DEFINE l_err,l_mod STRING
   DEFINE l_stat INTEGER
@@ -637,19 +645,23 @@ FUNCTION gl_error() --{{{
   LET l_mod = l_mod.subString(x,y)
   IF y < 1 THEN LET y = l_mod.getLength() END IF
   LET l_mod = l_mod.subString(x,y)
-  IF l_mod IS NULL THEN LET l_mod = "(null)" END IF
+  IF l_mod IS NULL THEN
+		GL_DBGMSG(0,"failed to get module from stackTrace!\n"||base.Application.getStackTrace())
+		LET l_mod = "(null module)"
+	END IF
 
-  LET l_err = SQLERRMESSAGE
+  LET l_err = SQLERRMESSAGE||"\n"
   IF l_err IS NULL THEN LET l_err = ERR_GET(l_stat) END IF
   IF l_err IS NULL THEN LET l_err = "Unknown!" END IF
-  LET l_err = l_stat||":"||l_err||"\n"||l_mod
+  LET l_err = l_stat||":"||l_err||l_mod
 --  CALL gl_logIt("Error:"||l_err)
-  CALL gl_errPopup(l_err)
+	IF l_stat != -6300 THEN CALL gl_errPopup(l_err) END IF
+
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Simple error message
 #+
-#+ @return Nothing.
+#+ @return Nothing
 FUNCTION gl_warnPopup(l_msg STRING) --{{{
   CALL gl_winMessage(%"Warning!",l_msg,"exclamation")
 END FUNCTION --}}}

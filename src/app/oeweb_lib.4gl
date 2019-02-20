@@ -3,7 +3,6 @@ IMPORT FGL gl_lib
 IMPORT FGL oe_lib
 &include "app.inc"
 &include "ordent.inc"
-
 DEFINE m_pay RECORD LIKE ord_payment.*
 
 PUBLIC DEFINE m_stock_cats DYNAMIC ARRAY OF RECORD

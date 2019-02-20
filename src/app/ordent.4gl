@@ -61,7 +61,9 @@ GL_MODULE_ERROR_HANDLER
 	ELSE
 		MENU
 			ON ACTION new
+				DISPLAY FORM ordent
 				CALL new()
+				DISPLAY FORM ordent2
 			ON ACTION update -- NOT DONE YET!
 				CALL enquire()
 			ON ACTION find
@@ -84,13 +86,12 @@ GL_MODULE_ERROR_HANDLER
 	CALL gl_lib.gl_exitProgram(0,%"Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
-#+ Create a new order.
+#+ Create a new order
 FUNCTION new()
 	DEFINE l_row SMALLINT
 	DEFINE l_prevQty LIKE ord_detail.quantity
 
 	CALL initVariables()
-	DISPLAY FORM ordent
 	CLEAR FORM
 	MESSAGE %"Enter Header details."
 	INPUT BY NAME g_ordHead.customer_code, g_ordHead.order_ref, g_ordhead.req_del_date
@@ -327,7 +328,7 @@ FUNCTION initVariables()
 	LET g_ordHead.username = fgl_getEnv("LOGNAME")
 	IF g_ordHead.username IS NULL THEN LET g_ordHead.username = fgl_getEnv("USERNAME") END IF
 	CALL g_detailArray.clear()
-	CALL detailArray_tree.clear()
+	CALL m_detailArray_tree.clear()
 
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -352,7 +353,6 @@ FUNCTION enquire()
 
 	LET benchmark = FALSE
 	WHILE TRUE
-		DISPLAY FORM ordent2
 		CLEAR FORM
 		CALL initVariables()
 		LET int_flag = FALSE
@@ -391,67 +391,67 @@ FUNCTION enquire()
 		CALL dispHead()
 
 		FOREACH ordCur INTO
-				detailArray_tree[ detailArray_tree.getLength() + 1 ].stock_code,
-				detailArray_tree[ detailArray_tree.getLength() ].pack_flag,
-				detailArray_tree[ detailArray_tree.getLength() ].price,
-				detailArray_tree[ detailArray_tree.getLength() ].quantity,
-				detailArray_tree[ detailArray_tree.getLength() ].disc_percent,
-				detailArray_tree[ detailArray_tree.getLength() ].disc_value,
-				detailArray_tree[ detailArray_tree.getLength() ].tax_code,
-				detailArray_tree[ detailArray_tree.getLength() ].tax_rate,
-				detailArray_tree[ detailArray_tree.getLength() ].tax_value,
-				detailArray_tree[ detailArray_tree.getLength() ].nett_value,
-				detailArray_tree[ detailArray_tree.getLength() ].gross_value
-			LET detailArray_tree[ detailArray_tree.getLength() ].id = detailArray_tree.getLength()
-			LET detailArray_tree[ detailArray_tree.getLength() ].parentid = 0
+				m_detailArray_tree[ m_detailArray_tree.getLength() + 1 ].stock_code,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].pack_flag,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].price,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].quantity,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].disc_percent,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].disc_value,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].tax_code,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].tax_rate,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].tax_value,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].nett_value,
+				m_detailArray_tree[ m_detailArray_tree.getLength() ].gross_value
+			LET m_detailArray_tree[ m_detailArray_tree.getLength() ].id = m_detailArray_tree.getLength()
+			LET m_detailArray_tree[ m_detailArray_tree.getLength() ].parentid = 0
 
 			SELECT description, stock_cat
-				INTO detailArray_tree[ detailArray_tree.getLength() ].description,
+				INTO m_detailArray_tree[ m_detailArray_tree.getLength() ].description,
 						l_stock_cat
-				FROM stock WHERE stock_code = detailArray_tree[ detailArray_tree.getLength() ].stock_code
+				FROM stock WHERE stock_code = m_detailArray_tree[ m_detailArray_tree.getLength() ].stock_code
 {			CASE l_stock_cat
 				WHEN "ARMY"
-					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-bomb"
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].img = "fa-bomb"
 				WHEN "FRUIT"
-					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-apply"
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].img = "fa-apply"
 				WHEN "GAMES"
-					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-dribbble"
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].img = "fa-dribbble"
 				WHEN "SUPPLIES"
-					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-pencil"
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].img = "fa-pencil"
 				OTHERWISE}
 					DISPLAY "Cat:",l_stock_cat
-					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-square"
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].img = "fa-square"
 			--END CASE
-			IF detailArray_tree[ detailArray_tree.getLength() ].pack_flag = "P" THEN
-				LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-th"
-				LET l_pack_id = detailArray_tree.getLength()
-				LET l_pack_qty = detailArray_tree[ detailArray_tree.getLength() ].quantity
-				FOREACH packCur USING detailArray_tree[ detailArray_tree.getLength() ].stock_code
+			IF m_detailArray_tree[ m_detailArray_tree.getLength() ].pack_flag = "P" THEN
+				LET m_detailArray_tree[ m_detailArray_tree.getLength() ].img = "fa-th"
+				LET l_pack_id = m_detailArray_tree.getLength()
+				LET l_pack_qty = m_detailArray_tree[ m_detailArray_tree.getLength() ].quantity
+				FOREACH packCur USING m_detailArray_tree[ m_detailArray_tree.getLength() ].stock_code
 					INTO l_packcode,l_pack.*
-					LET detailArray_tree[ detailArray_tree.getLength() + 1 ].stock_code = l_pack.stock_code
-					LET detailArray_tree[ detailArray_tree.getLength() ].img = "fa-genderless"
-					LET detailArray_tree[ detailArray_tree.getLength() ].description = l_pack.description
-					LET detailArray_tree[ detailArray_tree.getLength() ].quantity = l_pack.qty * l_pack_qty
-					LET detailArray_tree[ detailArray_tree.getLength() ].price = 0
-					LET detailArray_tree[ detailArray_tree.getLength() ].disc_percent = 0
-					LET detailArray_tree[ detailArray_tree.getLength() ].disc_value = 0
-					LET detailArray_tree[ detailArray_tree.getLength() ].tax_code = l_pack.tax_code
-					LET detailArray_tree[ detailArray_tree.getLength() ].tax_rate = 0
-					LET detailArray_tree[ detailArray_tree.getLength() ].tax_value = 0
-					LET detailArray_tree[ detailArray_tree.getLength() ].nett_value = 0
-					LET detailArray_tree[ detailArray_tree.getLength() ].gross_value = 0
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() + 1 ].stock_code = l_pack.stock_code
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].img = "fa-genderless"
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].description = l_pack.description
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].quantity = l_pack.qty * l_pack_qty
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].price = 0
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].disc_percent = 0
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].disc_value = 0
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].tax_code = l_pack.tax_code
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].tax_rate = 0
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].tax_value = 0
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].nett_value = 0
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].gross_value = 0
 
-					LET detailArray_tree[ detailArray_tree.getLength() ].id = detailArray_tree.getLength()
-					LET detailArray_tree[ detailArray_tree.getLength() ].parentid = l_pack_id
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].id = m_detailArray_tree.getLength()
+					LET m_detailArray_tree[ m_detailArray_tree.getLength() ].parentid = l_pack_id
 				END FOREACH
-				--CALL detailArray_tree.deleteElement( detailArray_tree.getLength()  ) -- remove empty read.
+				--CALL m_detailArray_tree.deleteElement( m_detailArray_tree.getLength()  ) -- remove empty read.
 			END IF
 
 		END FOREACH
-		CALL detailArray_tree.deleteElement( detailArray_tree.getLength()  ) -- remove empty read.
+		CALL m_detailArray_tree.deleteElement( m_detailArray_tree.getLength()  ) -- remove empty read.
 
-		MESSAGE detailArray_tree.getLength()," Details Lines"
-		DISPLAY ARRAY detailArray_tree TO details.*
+		MESSAGE m_detailArray_tree.getLength()," Details Lines"
+		DISPLAY ARRAY m_detailArray_tree TO details.*
 			BEFORE DISPLAY
 				LET f = DIALOG.getForm()
 { removed because causes issues with GGC

@@ -6,6 +6,7 @@ IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL lib_secure
 
+&include "schema.inc"
 &include "genero_lib.inc"
 &include "app.inc"
 CONSTANT C_PRGDESC = "User Maintenance Demo"
