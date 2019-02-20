@@ -30,11 +30,12 @@
 	</Style>
 
 	<Style name=".hidden">
-		<StyleAttribute name="textColor" value="window" />
-		<StyleAttribute name="backgroundColor" value="window" />
 		<StyleAttribute name="border" value="none" />
-		<StyleAttribute name="fontSize" value="2pt" />
+		<StyleAttribute name="fontSize" value="1pt" />
+		<StyleAttribute name="highlightCurrentRow" value="no" />
+		<StyleAttribute name="highlightCurrentCell" value="no"/>
 	</Style>
+
 	<Style name=".heading">
 		<StyleAttribute name="fontSize" value="1.6em" />
 		<StyleAttribute name="fontWeight" value="bold" />
@@ -74,6 +75,7 @@
 	<Style name="Table.menu">
 		<StyleAttribute name="headerHidden" value="yes" />
 		<StyleAttribute name="highlightCurrentRow" value="no" />
+		<StyleAttribute name="highlightCurrentCell" value="no"/>
 	</Style>
   <Style name="Table.listview">
     <StyleAttribute name="tableType" value="listView" />

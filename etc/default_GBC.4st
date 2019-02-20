@@ -69,6 +69,7 @@
 	<Style name="Table.menu">
 		<StyleAttribute name="headerHidden" value="yes" />
 		<StyleAttribute name="highlightCurrentRow" value="no" />
+		<StyleAttribute name="highlightCurrentCell" value="no"/>
 	</Style>
 	<Style name="Table.disparr">
 		<StyleAttribute name="summaryLineAlwaysAtBottom" value="no" />

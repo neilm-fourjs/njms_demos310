@@ -1,7 +1,7 @@
 
 &include "schema.inc"
 
-LAYOUT ( TEXT="Menu Screen", STYLE="centered grad2", MINWIDTH=50, MINHEIGHT=16  )
+LAYOUT ( TEXT="NJM's Menu", STYLE="centered grad2", MINWIDTH=50, MINHEIGHT=16  )
 HBOX
 GRID hpadding2
 {
@@ -14,24 +14,24 @@ GRID (STYLE="menu grad1")
 {
  [titl                             ]
 <T menu                             >
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
- [desc                             ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
+ [a|desc                           ]
 <                                   >
 }
 END -- GRID
 GRID (STYLE="menu grad1")
 {
- [: :lb:f001                  :d  :]
+ [: :lb:f001                  :   :]
  [:  :back :close:logout:about:   :]
  [sp1:logo                     :sp2]
      [                         ]
@@ -51,8 +51,6 @@ sys_menus
 ATTRIBUTES
 IMAGE hsp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
 IMAGE hsp2 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
---IMAGE vsp1 : spacer, IMAGE="fa-fw", STRETCH=Y, STYLE="noborder";
---IMAGE vsp2 : spacer, IMAGE="fa-fw", STRETCH=Y, STYLE="noborder";
 
 LABEL titl = FORMONLY.l_titl,STYLE="heading",JUSTIFY=CENTER;
 
@@ -60,16 +58,14 @@ TABLE menu : menu, STYLE="menu oneclick",WANTFIXEDPAGESIZE ;
 PHANTOM sys_menus.menu_key;
 PHANTOM sys_menus.m_id;
 PHANTOM sys_menus.m_pid;
-PHANTOM sys_menus.m_type;
+a = sys_menus.m_type, STYLE="hidden",INVISIBLE;
 desc = sys_menus.m_text,STYLE="menuopts em14",IMAGECOLUMN=m_img;
 PHANTOM sys_menus.m_item;
 PHANTOM sys_menus.m_passw;
 PHANTOM FORMONLY.m_img;
 
 LABEL lb : lb, TEXT=%"User:",STYLE="small";
-LABEL f001 = FORMONLY.m_user, SIZEPOLICY=DYNAMIC,STYLE="small";
-
-d = FORMONLY.l_dummy, STYLE="hidden",INVISIBLE,SAMPLE=".";
+LABEL f001 = FORMONLY.l_user, SIZEPOLICY=DYNAMIC,STYLE="small";
 
 --BUTTON accept : accept, TEXT=%"Select", IMAGE="fa-arrow-circle-right";
 BUTTON back : back, TEXT=%"Back", IMAGE="fa-arrow-circle-left";

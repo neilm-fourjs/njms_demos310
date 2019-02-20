@@ -93,20 +93,20 @@
       <File filePath="gbc/gbc-njm/theme.scss.json"/>
     </Library>
   </Group>
-  <Group environment="value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" label="njms_demos310" language="Genero" targetDirectory="$(ProjectDir)/bin310">
+  <Group environment="value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" label="njms_demos310" language="Genero" targetDirectory="$(ProjectDir)/bin310">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
         <File filePath="src/app/app_lib.4gl"/>
       </Library>
-      <Application binaryName="cust_mnt" commandLineArguments="S 1" dependencies="-400184264,1986,14000,-1090563702" id="-1273407208" label="cust_mnt">
+      <Application binaryName="cust_mnt" commandLineArguments="S 1" dependencies="-400184264,1986,-1090563702,14000" id="-1273407208" label="cust_mnt">
         <File filePath="src/app/cust_mnt.4fd"/>
         <File filePath="src/app/cust_mnt.4gl"/>
       </Application>
-      <Application binaryName="dm_stock" commandLineArguments="S 1" dependencies="14000,-1557891896" id="476951290" label="dm_stock">
+      <Application binaryName="dm_stock" commandLineArguments="S 1" dependencies="-1557891896,14000" id="476951290" label="dm_stock">
         <File filePath="src/app/dm_stock.4gl"/>
       </Application>
-      <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 customer customer_code" dependencies="14000,1986,-1090563702,-1557891896" id="1873655788" label="dynMaint">
+      <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 customer customer_code" dependencies="1986,-1090563702,-1557891896,14000" id="1873655788" label="dynMaint">
         <File filePath="src/gl_dynMaint/dynMaint.4gl"/>
       </Application>
       <Library binaryName="oe_lib" dependencies="14000" id="-272766546" label="oe_lib">
@@ -121,12 +121,12 @@
         <File filePath="src/app/webOE_det.per"/>
         <File filePath="src/app/webOE_signin.per"/>
       </Library>
-      <Application binaryName="orderEntry" commandLineArguments="S 1" dependencies="1835393312,-1090563702,14000,1986,-272766546" id="1773362531" label="orderEntry">
+      <Application binaryName="orderEntry" commandLineArguments="S 1" dependencies="-1090563702,1986,-272766546,14000" id="1773362531" label="orderEntry">
         <File filePath="src/app/ordent.4gl"/>
         <File filePath="src/app/ordent.per"/>
         <File filePath="src/app/ordent2.per"/>
       </Application>
-      <Application binaryName="printInvoices" commandLineArguments="S 1 0 ordent-5.4rp" compilerOptions="--build-rdd" dependencies="14000,1986,-272766546,923654133" id="-1350833088" label="printInvoices">
+      <Application binaryName="printInvoices" commandLineArguments="S 1 0 ordent-5.4rp" compilerOptions="--build-rdd" dependencies="1986,-272766546,-1090563702,923654133,14000" id="-1350833088" label="printInvoices">
         <VirtualFolder label="Reports">
           <File filePath="etc/ordent-1.4rp"/>
           <File filePath="etc/ordent-2.4rp"/>
@@ -138,7 +138,7 @@
         </VirtualFolder>
         <File filePath="src/app/printInvoices.4gl"/>
       </Application>
-      <Application binaryName="webOE" dependencies="-272766546,14000,-1090563702,-400184264,1986" id="-559263813" label="webOE">
+      <Application binaryName="webOE" dependencies="-272766546,-1090563702,-400184264,1986,14000" id="-559263813" label="webOE">
         <VirtualFolder label="etc">
           <File filePath="etc/weboe.4ad"/>
           <File filePath="etc/weboe.4st"/>
@@ -146,7 +146,7 @@
         <File filePath="src/app/webOE.4gl"/>
         <File filePath="src/app/webOE.per"/>
       </Application>
-      <Application binaryName="webOE2" dependencies="-272766546,14000,-1090563702,1986" id="2103145373" label="webOE2">
+      <Application binaryName="webOE2" dependencies="-272766546,-1090563702,1986,14000" id="2103145373" label="webOE2">
         <VirtualFolder label="etc">
           <File filePath="etc/weboe2.4ad"/>
           <File filePath="etc/weboe2.4st"/>
@@ -190,7 +190,7 @@
         <File filePath="etc/njm_demo310.4db"/>
         <File filePath="src/schema.inc"/>
       </Library>
-      <Application binaryName="mk_db" commandLineArguments="ALL" dependencies="1986,-1463189462,14000,726830537,-1090563702" id="1521876251" label="mk_db">
+      <Application binaryName="mk_db" commandLineArguments="ALL" dependencies="1986,-1090563702,2135194580,726830537,14000" id="1521876251" label="mk_db">
         <File filePath="src/db/mk_db.4gl"/>
         <File filePath="src/db/mk_db.per"/>
         <File filePath="src/db/mk_db_sys_data.4gl"/>
@@ -290,7 +290,7 @@
         <File filePath="src/demos/wc_amcharts.4gl"/>
         <File filePath="src/demos/wc_amcharts.per"/>
       </Application>
-      <Library binaryName="wc_calendar" id="789344678" label="wc_calendar">
+      <Library binaryName="wc_calendar" dependencies="14000" id="789344678" label="wc_calendar">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/fglsvgcanvas_cal/fglsvgcanvas_cal.html"/>
         </VirtualFolder>
@@ -298,7 +298,7 @@
         <File filePath="src/demos/wc_calendar.per"/>
         <File filePath="src/demos/wc_fglsvgcalendar.4gl"/>
       </Library>
-      <Application binaryName="wc_calendar_demo" dependencies="789344678,-400184264,14000" id="1022451972" label="wc_calendar_demo">
+      <Application binaryName="wc_calendar_demo" dependencies="-400184264,789344678,14000" id="1022451972" label="wc_calendar_demo">
         <File filePath="src/demos/wc_calendar_demo.4gl"/>
         <File filePath="src/demos/wc_calendar_demo.per"/>
       </Application>
@@ -311,7 +311,7 @@
         <File filePath="src/demos/wc_d3charts.4gl"/>
         <File filePath="src/demos/wc_d3charts.per"/>
       </Library>
-      <Application binaryName="wc_d3charts_demo" dependencies="14000,-400184264,2068081444" id="-1072068994" label="wc_d3charts_demo">
+      <Application binaryName="wc_d3charts_demo" dependencies="-400184264,14000,2068081444" id="-1072068994" label="wc_d3charts_demo">
         <File filePath="src/demos/wc_d3charts_demo.4gl"/>
         <File filePath="src/demos/wc_d3charts_demo.per"/>
       </Application>
@@ -333,7 +333,7 @@
         <File filePath="etc/wc_kite.4st"/>
         <File filePath="src/demos/wc_kite.per"/>
       </Application>
-      <Application binaryName="wc_music" dependencies="-1090563702" id="1103957492" label="wc_music">
+      <Application binaryName="wc_music" dependencies="-1090563702,14000" id="1103957492" label="wc_music">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/music/main.js"/>
           <File filePath="pics/webcomponents/music/music.css"/>
@@ -369,7 +369,7 @@
         <File filePath="src/gl_lib/gl_lookup3.4gl"/>
         <File filePath="src/gl_lib/gl_splash.4gl"/>
       </Library>
-      <Library binaryName="gl_rpt" dependencies="14000,-400184264" externalDependencies="libgre.42x" id="923654133" label="gl_rpt">
+      <Library binaryName="gl_rpt" dependencies="-400184264,14000" externalDependencies="libgre.42x" id="923654133" label="gl_rpt">
         <File filePath="src/gl_rpt/gl_grw.4gl"/>
         <File filePath="src/gl_rpt/gl_grwCfg.per"/>
       </Library>
@@ -388,7 +388,7 @@
         <File filePath="etc/container.4tb"/>
         <File filePath="src/sys/container.per"/>
       </Application>
-      <Library binaryName="lib_login" dependencies="1986,-1463189462,14000,-1090563702,-1690651403" id="2135194580" label="lib_login">
+      <Library binaryName="lib_login" dependencies="1986,-1090563702,-1690651403,14000" id="2135194580" label="lib_login">
         <File filePath="src/gl_lib/lib_login.4gl"/>
         <File filePath="src/gl_lib/lib_secure.4gl"/>
         <File filePath="src/sys/login.per"/>
@@ -397,13 +397,14 @@
         <File filePath="src/sys/login_hist.4gl"/>
         <File filePath="src/sys/login_hist.per"/>
       </Application>
-      <Application binaryName="menu" commandLineArguments="S" dependencies="-1463189462,2135194580,14000,-1090563702" id="1554019048" label="menu">
+      <Application binaryName="menu" commandLineArguments="S" dependencies="-1090563702,2135194580,14000" id="1554019048" label="menu">
         <File filePath="src/sys/menu.4gl"/>
         <File filePath="src/sys/menu.per"/>
+        <File filePath="src/sys/menuLib.4gl"/>
         <File filePath="src/sys/new_acct.4gl"/>
         <File filePath="src/sys/new_acct.per"/>
       </Application>
-      <Application binaryName="menu_mnt" commandLineArguments="S 1" dependencies="14000,-1090563702,1835393312,1986" id="1001967872" label="menu_mnt">
+      <Application binaryName="menu_mnt" commandLineArguments="S 1" dependencies="-1090563702,1986,14000" id="1001967872" label="menu_mnt">
         <File filePath="src/sys/menu_mnt.4gl"/>
         <File filePath="src/sys/menu_mnt.per"/>
       </Application>
@@ -414,7 +415,7 @@
         <File filePath="src/OpenIdLogin/OpenIdLogin.per"/>
         <File filePath="src/OpenIdLogin/OpenIdLogin.xcf"/>
       </Application>
-      <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,14000" id="-1334009856" label="user_mnt">
+      <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1986,-1090563702,2135194580,14000" id="-1334009856" label="user_mnt">
         <File filePath="src/sys/user_mnt.4gl"/>
         <File filePath="src/sys/user_mnt.per"/>
       </Application>
@@ -439,7 +440,7 @@
       <Application binaryName="icon_2_image2font" id="381716529" label="icon_2_image2font">
         <File filePath="src/utils/icons_2_image2font.4gl"/>
       </Application>
-      <Application binaryName="materialDesignTest" dependencies="14000,-400184264,528729868" id="1848127715" label="materialDesignTest">
+      <Application binaryName="materialDesignTest" dependencies="-400184264,528729868,14000" id="1848127715" label="materialDesignTest">
         <File filePath="src/utils/matDesTest.4gl"/>
         <File filePath="etc/matDesTest.4st"/>
         <File filePath="src/utils/matDesTest.per"/>
@@ -451,7 +452,7 @@
       <Application binaryName="restful_srv" dependencies="654551740" id="-20198048" label="restful_srv">
         <File filePath="src/demos/restful_srv.4gl"/>
       </Application>
-      <Application binaryName="ws_gdc_update_srv" dependencies="654551740,14000,-850398834" id="-580790058" label="ws_gdc_update_srv">
+      <Application binaryName="ws_gdc_update_srv" dependencies="654551740,-850398834,14000" id="-580790058" label="ws_gdc_update_srv">
         <File filePath="src/sys/ws_gdc_update_srv.4gl"/>
       </Application>
     </Group>
