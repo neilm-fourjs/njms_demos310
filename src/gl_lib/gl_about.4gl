@@ -14,6 +14,7 @@ FUNCTION gl_about(l_ver STRING) --{{{
 	DEFINE f,n,g,w om.DomNode
 	DEFINE nl om.nodeList
 	DEFINE gver, servername, info, txt STRING
+	DEFINE l_fe_typ, l_fe_ver STRING
 	DEFINE y SMALLINT
 
 	IF os.Path.pathSeparator() = ";" THEN -- Windows
@@ -27,8 +28,11 @@ FUNCTION gl_about(l_ver STRING) --{{{
 		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
 		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )
 		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
-		CALL ui.interface.frontCall("standard","feinfo",[ "fepath" ], [ gl_cli_dir ])
+		CALL ui.interface.frontCall("standard","feinfo",[ "fePath" ], [ gl_cli_dir ])
 	END IF
+	CALL ui.interface.frontCall("standard","feinfo",[ "feName" ], [ l_fe_typ ])
+	CALL ui.interface.frontCall("standard","feinfo",[ "feVersion" ], [ l_fe_ver ])
+	IF l_fe_ver IS NULL THEN LET l_fe_ver = "unknown" END IF
 	CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
 	LET gl_scr_width = gl_getWidth( gl_win_res )
 
@@ -133,6 +137,9 @@ FUNCTION gl_about(l_ver STRING) --{{{
 
 	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("FrontEnd Version")||":","right","black")
 	CALL gl_lib_aui.gl_addLabel(g,10,y,gl_fe_typ||" "||gl_fe_ver,NULL,"black") LET y = y + 1
+
+	CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("FrontEnd Version-FEinfo")||":","right","black")
+	CALL gl_lib_aui.gl_addLabel(g,10,y,l_fe_typ||" "||l_fe_ver,NULL,"black") LET y = y + 1
 
 	IF gl_cli_dir.getLength() > 1 THEN
 		CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Client Directory")||":","right","black")

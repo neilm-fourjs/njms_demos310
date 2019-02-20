@@ -95,7 +95,8 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	LET gl_fe_ver = ui.interface.getFrontEndVersion()
 	IF gl_fe_Ver MATCHES("3.2*") THEN
 		IF fgl_getResource("gui.rendering") = "universal" 
-		OR LENGTH(fgl_getEnv("FGLGBCDIR")) > 1 THEN
+		--OR LENGTH(fgl_getEnv("FGLGBCDIR")) > 1 
+		THEN
 			LET m_universal_rendering = TRUE
 		END IF
 	END IF
@@ -302,7 +303,7 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	AND l_styl != "lookup" AND l_styl != "naked" AND l_styl != "about"  AND l_styl != "viewer"
 	AND l_styl != "wizard" THEN
 
-		IF ( gl_fe_typ = "GBC" OR m_universal_rendering ) THEN	
+		IF ( gl_fe_typ = "GBC" OR m_universal_rendering ) AND m_windowCenter THEN	
 			CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
 			LET gl_scr_width = gl_getWidth( gl_win_res )
 			GL_DBGMSG(1,SFMT("Window Width: %1",gl_scr_width) )
@@ -310,9 +311,9 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 				IF m_windowCenter THEN
 					IF l_styl = "main2" OR l_styl = "NULL" THEN LET l_newstyl = "centered" END IF
 				END IF
-				IF NOT m_windowCenter THEN
+				{IF NOT m_windowCenter THEN
 					IF l_styl = "centered" OR l_styl = "NULL" THEN LET l_newstyl = "main2" END IF
-				END IF
+				END IF}
 				IF l_newstyl != l_styl THEN
 					CALL l_fn.setAttribute("style",l_newstyl)
 					CALL l_fn.setAttribute("windowStyle",l_newstyl)

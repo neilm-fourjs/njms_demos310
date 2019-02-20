@@ -25,10 +25,8 @@
 	</Style>
 
 	<Style name=".hidden">
-		<StyleAttribute name="textColor" value="window" />
-		<StyleAttribute name="backgroundColor" value="window" />
 		<StyleAttribute name="border" value="none" />
-		<StyleAttribute name="fontSize" value="2pt" />
+		<StyleAttribute name="fontSize" value="1pt" />
 	</Style>
 	<Style name=".heading">
 		<StyleAttribute name="fontSize" value="1.6em" />

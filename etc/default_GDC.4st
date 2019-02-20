@@ -32,8 +32,6 @@
 	<Style name=".hidden">
 		<StyleAttribute name="border" value="none" />
 		<StyleAttribute name="fontSize" value="1pt" />
-		<StyleAttribute name="highlightCurrentRow" value="no" />
-		<StyleAttribute name="highlightCurrentCell" value="no"/>
 	</Style>
 
 	<Style name=".heading">
