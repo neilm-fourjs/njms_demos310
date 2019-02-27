@@ -42,7 +42,7 @@ FUNCTION do_menu(l_logo STRING, l_user STRING)
 	WHILE NOT int_flag
 		DISPLAY CURRENT,":Dialog Started."
 
-			DISPLAY ARRAY m_menu TO menu.* ATTRIBUTE(FOCUSONFIELD)
+			DISPLAY ARRAY m_menu TO menu.* ATTRIBUTE(FOCUSONFIELD, CANCEL=FALSE, ACCEPT=FALSE)
 				BEFORE DISPLAY
 					IF m_curMenu > 1 THEN
 						CALL DIALOG.setActionActive("back",TRUE)
@@ -61,9 +61,6 @@ FUNCTION do_menu(l_logo STRING, l_user STRING)
 
 				ON ACTION logout
 					CALL lib_login.logout( )
-					IF quit() THEN LET int_flag = TRUE EXIT DISPLAY END IF
-
-				ON ACTION exit 
 					IF quit() THEN LET int_flag = TRUE EXIT DISPLAY END IF
 
 				ON ACTION close 

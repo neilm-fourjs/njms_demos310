@@ -91,15 +91,17 @@
 	</Style>
 	<Style name="Window.centered">
 		<StyleAttribute name="windowType" value="normal" />
-		<StyleAttribute name="actionPanelPosition" value="none" />
-		<StyleAttribute name="ringMenuPosition" value="none" />
+		<StyleAttribute name="toolBarPosition" value="chrome" />
+		<StyleAttribute name="actionPanelPosition" value="chrome" />
+		<StyleAttribute name="ringMenuPosition" value="chrome" />
 		<StyleAttribute name="sizable" value="no" />
 		<StyleAttribute name="position" value="center" />
 	</Style>
 	<Style name="Window.main2">
 		<StyleAttribute name="windowType" value="normal" />
-		<StyleAttribute name="actionPanelPosition" value="none" />
-		<StyleAttribute name="ringMenuPosition" value="none" />
+		<StyleAttribute name="toolBarPosition" value="chrome" />
+		<StyleAttribute name="actionPanelPosition" value="chrome" />
+		<StyleAttribute name="ringMenuPosition" value="chrome" />
 	</Style>
 	<Style name="Window.dialog">
 		<StyleAttribute name="windowType" value="modal" />

@@ -1,6 +1,3 @@
 
 # SQLite
 dbi.default.driver = "dbmsqt"
-
-gui.rendering = "universal"
-#gui.rendering = "native"
