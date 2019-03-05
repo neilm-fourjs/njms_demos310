@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="31402" version="3.3">
+<Project defaultApplication="1773362531" gstVersion="31402" version="3.3">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -107,7 +107,7 @@
       <Application binaryName="dm_stock" commandLineArguments="S 1" dependencies="14000,-1557891896" id="476951290" label="dm_stock">
         <File filePath="src/app/dm_stock.4gl"/>
       </Application>
-      <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 customer customer_code" dependencies="14000,1986,-1090563702,-1557891896" id="1873655788" label="dynMaint">
+      <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 stock stock_code" dependencies="14000,1986,-1090563702,-1557891896" id="1873655788" label="dynMaint">
         <File filePath="src/gl_dynMaint/dynMaint.4gl"/>
       </Application>
       <Library binaryName="oe_lib" dependencies="14000,-400184264,1986" id="-272766546" label="oe_lib">

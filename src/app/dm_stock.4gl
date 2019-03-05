@@ -52,10 +52,12 @@ MAIN
 	CALL gl_lib.gl_titleWin( gl_progdesc )
 	CALL ui.Interface.setText( gl_progdesc )
 
--- start UI
+-- Setup Callback functions
 	LET glm_ui.m_before_inp_func = FUNCTION my_before_inp
 --	LET glm_ui.m_inpt_func = FUNCTION my_input
 	LET glm_ui.m_after_inp_func = FUNCTION my_after_inp
+
+-- start UI
 	CALL glm_ui.glm_menu(m_allowedActions)
 
 	CALL gl_lib.gl_exitProgram(0,%"Program Finished")

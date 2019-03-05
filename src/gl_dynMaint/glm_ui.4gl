@@ -3,6 +3,7 @@ IMPORT util
 IMPORT FGL gl_lib
 IMPORT FGL glm_sql
 IMPORT FGL glm_mkForm
+IMPORT FGL gl_lookup3
 
 &include "genero_lib.inc"
 &include "dynMaint.inc"
@@ -21,6 +22,8 @@ FUNCTION glm_menu(l_allowedActions STRING )
 		ON ACTION update		CALL m_inpt_func(FALSE)
 		ON ACTION delete		CALL glm_sql.glm_SQLdelete()
 		ON ACTION find			CALL glm_constrct()
+			CALL setActions(glm_sql.m_row_cur,glm_sql.m_row_count, l_allowedActions)
+		ON ACTION findlist			CALL glm_findList()
 			CALL setActions(glm_sql.m_row_cur,glm_sql.m_row_count, l_allowedActions)
 		ON ACTION firstrow	CALL glm_sql.glm_getRow(SQL_FIRST, TRUE)
 			CALL setActions(glm_sql.m_row_cur,glm_sql.m_row_count, l_allowedActions)
@@ -174,5 +177,27 @@ PRIVATE FUNCTION setActions(l_row INT, l_max INT,l_allowedActions CHAR(6))
 		CALL d.setActionActive("prevrow",TRUE)
 		CALL d.setActionActive("firstrow",TRUE)
 	END IF 
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION glm_findList() RETURNS ()
+	DEFINE l_cols, l_colts, l_key, l_sql STRING
+	DEFINE x SMALLINT
+	FOR x = 1 TO glm_mkForm.m_fld_props.getLength()
+		LET l_cols = l_cols.append(glm_mkForm.m_fld_props[x].colname)
+		IF x < 6 AND x < glm_mkForm.m_fld_props.getLength() THEN
+			LET l_cols = l_cols.append(",")
+		ELSE
+			EXIT FOR
+		END IF
+	END FOR
+	LET l_key = gl_lookup3( glm_mkForm.m_fld_props[1].tabname, l_cols, l_colts, "1=1", glm_mkForm.m_fld_props[1].colname )
+	IF l_key IS NOT NULL THEN
+		LET l_sql = SFMT("%1 = '%2'", 
+			glm_mkForm.m_fld_props[1].colname,
+			l_key )
+
+		CALL glm_sql.glm_mkSQL( glm_sql.m_cols, l_sql )
+		CALL glm_sql.glm_getRow(SQL_FIRST, TRUE)
+	END IF
 END FUNCTION
 --------------------------------------------------------------------------------

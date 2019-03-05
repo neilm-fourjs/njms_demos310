@@ -5,6 +5,7 @@
   <ToolBarItem name="cancel"/>
   <ToolBarSeparator/>
   <ToolBarItem name="find"/>
+  <ToolBarItem name="findlist"/>
   <ToolBarSeparator/>
   <ToolBarItem name="insert" image="new"/>
   <ToolBarItem name="sample" text="Sample" image="copy"/>
