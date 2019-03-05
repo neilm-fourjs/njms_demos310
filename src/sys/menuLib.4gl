@@ -25,7 +25,7 @@ DEFINE m_menus DYNAMIC ARRAY OF VARCHAR(6)
 --------------------------------------------------------------------------------
 FUNCTION do_menu(l_logo STRING, l_user STRING)
 
-	OPEN WINDOW menu WITH FORM "menu2"
+	OPEN WINDOW menu WITH FORM "menu"
 
 	DISPLAY l_logo TO logo
 	CALL ui.Interface.setText( gl_progdesc )
