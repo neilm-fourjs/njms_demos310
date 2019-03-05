@@ -9,9 +9,9 @@
       "uses": ["platform/desktop"]
     },
     {
-      "name": "hivis",
-      "title": "High Visibility",
-      "uses": ["platform/desktop", "colors/hivis"]
+      "name": "clean",
+      "title": "Clean",
+      "uses": ["platform/desktop", "colors/clean"]
     },
     {
       "name": "default_mobile",

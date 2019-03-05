@@ -6,6 +6,7 @@ VER=${2:-310}
 
 # Set the GAS environmment
 . /opt/fourjs/gas$VER/envas
+gasadmin -V
 
 # Define the command with custom .xcf file
 if [ -e $FGLASDIR/etc/isv_as$VER.xcf ]; then

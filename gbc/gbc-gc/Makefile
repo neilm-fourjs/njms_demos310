@@ -4,7 +4,7 @@ GBCBASE=..
 include ../makefile.inc
 
 CUSTOMNAME=$(shell basename $(PWD))
-THEME1=theme/colors/hivis
+THEME1=theme/colors/clean
 
 TARGET=$(DISTBIN)/$(CUSTOMNAME)-$(PACKVER).zip
 

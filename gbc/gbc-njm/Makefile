@@ -6,7 +6,8 @@ include ../makefile.inc
 CUSTOMNAME=$(shell basename $(PWD))
 THEME1=theme/colors/elite
 THEME2=theme/colors/hivis
-THEME3=theme/colors/gbc_default
+THEME3=theme/colors/clean
+THEME4=theme/colors/gbc_default
 
 TARGET=$(DISTBIN)/$(CUSTOMNAME)-$(PACKVER).zip
 
@@ -25,6 +26,9 @@ $(GBCBASE)/build/gbc-$(PACKVER)/$(THEME2):
 
 $(GBCBASE)/build/gbc-$(PACKVER)/$(THEME3):
 	ln -s $(PWD)/$(THEME3) $@
+
+$(GBCBASE)/build/gbc-$(PACKVER)/$(THEME4):
+	ln -s $(PWD)/$(THEME4) $@
 
 # Build our custom gbc
 $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME): $(GBCBASE)/build/gbc-$(PACKVER) $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME)
