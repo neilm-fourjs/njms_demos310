@@ -77,8 +77,13 @@ FUNCTION gl_lookup3( tabnam STRING, cols STRING, colts STRING, wher STRING, ordb
 
 -- Version 3.00 feature.
 	LET l_sql_handle = base.SqlHandle.create()
-	CALL l_sql_handle.prepare( l_sel_stmt )
-	CALL l_sql_handle.openScrollCursor()
+	TRY
+		CALL l_sql_handle.prepare( l_sel_stmt )
+		CALL l_sql_handle.openScrollCursor()
+	CATCH
+		CALL gl_lib.gl_errPopup(SFMT(%"Failed to prepare:\n%1\n%2",l_sel_stmt,SQLERRMESSAGE))
+		RETURN NULL
+	END TRY
 	CALL l_fields.clear()
 	FOR x = 1 TO l_sql_handle.getResultCount()
 		LET l_fields[x].name = l_sql_handle.getResultName(x)

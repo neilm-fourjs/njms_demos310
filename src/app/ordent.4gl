@@ -14,6 +14,7 @@ IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL app_lib
 IMPORT FGL oe_lib
+IMPORT FGL gl_lookup3
 
 &include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
 &include "app.inc"
@@ -516,46 +517,16 @@ FUNCTION printInv(l_what)
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Order Browse List
-#+
 FUNCTION getOrder()
-	DEFINE arr DYNAMIC ARRAY OF RECORD
-		order_number LIKE ord_head.order_number,
-		order_date LIKE ord_head.order_date,
-		customer_name LIKE customer.customer_name,
-		items INTEGER,
-		order_qty INTEGER,
-		order_value DECIMAL(12,2)
-	END RECORD
 	DEFINE l_oh RECORD LIKE ord_head.*
 
--- Declares
-	DECLARE cstnamcur CURSOR FOR SELECT customer_name FROM customer 
-		WHERE customer_code = l_oh.customer_code
-	DECLARE ordenqcur CURSOR FOR SELECT * FROM ord_head
-		ORDER BY order_number
-
-	FOREACH ordenqcur INTO l_oh.*
-		LET arr[ arr.getLength() + 1].order_number = l_oh.order_number
-		LET arr[ arr.getLength() ].order_date = l_oh.order_date
-		LET arr[ arr.getLength() ].items = l_oh.items
-		LET arr[ arr.getLength() ].order_qty = l_oh.total_qty
-		LET arr[ arr.getLength() ].order_value = l_oh.total_nett
-		OPEN cstnamcur
-		FETCH cstnamcur INTO arr[ arr.getLength() ].customer_name
-	END FOREACH
-
-	OPEN WINDOW getorder WITH FORM "getorder"
-	LET int_flag = FALSE
-	DISPLAY ARRAY arr TO arr.*
-		GL_ABOUT
-	END DISPLAY
-	CLOSE WINDOW getorder
-
-	IF int_flag THEN
-		LET int_flag = FALSE
-		RETURN NULL
-	END IF
-	RETURN arr[ arr_curr() ].order_number
+	LET l_oh.order_number =
+		gl_lookup3( "ord_head",
+			"order_number,order_date,customer_name,items,total_qty,total_nett",
+			"Ord No.,Date,Customer,Items,Qty,Value",
+			"1=1",
+			"order_number")
+	RETURN l_oh.order_number
 
 END FUNCTION
 --------------------------------------------------------------------------------
