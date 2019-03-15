@@ -12,7 +12,14 @@
 	<Style name=".noborder">
 		<StyleAttribute name="border" value="none" />
 	</Style>
-
+	<Style name="Group.collapsed" >
+		<StyleAttribute name="collapsible" value="yes" />
+		<StyleAttribute name="initiallyCollapsed" value="yes" />
+	</Style>
+	<Style name="Group.uncollapsed" >
+		<StyleAttribute name="collapsible" value="yes" />
+		<StyleAttribute name="initiallyCollapsed" value="no" />
+	</Style>
 	<Style name="Window">
 		<StyleAttribute name="windowType" value="normal" />
 	</Style>

@@ -126,10 +126,10 @@ GRID
  [slab6]
  [slab7]
 
-<G "Change Style"                 >
+<G chgsty                         >
  [   :sbut0:sbut1:sbut2:sbut3:   ]
  [            :dteed2:           ]
- [           :url:url2:           ]
+ [          :url:url2:           ]
 
 <G "Buttons"      ><G "Buttons"   >
  [win1           ]  [     :w:    ]
@@ -232,7 +232,7 @@ GRID
 [dlab3|d003         ] [mm     ]
 [okay:                   :canc]
 
-<G "New Fields"                >
+<G newflds                     >
 
 <G dyntab                      >
 }
@@ -368,8 +368,9 @@ END -- FOLDER
 END -- HBOX
 
 ATTRIBUTES                                                         -- Section
-GROUP grpsp : grsp, TEXT="Special Inputs", STYLE="wgt_yellow";
+GROUP grpsp : grsp, TEXT="Special Inputs",STYLE="collapsed";
 GROUP grpst : grst, TEXT="Styles", STYLE="styles";
+GROUP chgsty : chgsty, TEXT="Change Styles",STYLE="collapsed";
 BUTTON sbut0 : chgstyle0, TEXT="Default";
 BUTTON sbut1 : chgstyle1, TEXT="Style1";
 BUTTON sbut2 : chgstyle2, TEXT="Style2";
@@ -471,7 +472,8 @@ tabc2 = FORMONLY.tabc2,STYLE="col2";
 DATEEDIT tabc3 = FORMONLY.tabc3;
 
 -- Dynamic
-GROUP dyntab : dyntab, TEXT="Dynamic Table";
+GROUP dyntab : dyntab, TEXT="Dynamic Table",STYLE="collapsed";
+GROUP newflds : newflds, TEXT="New Fields",STYLE="collapsed";
 d001 = FORMONLY.field_name;
 COMBOBOX d002 = FORMONLY.field_type, ITEMS=("Edit", "DateEdit", "ComboBox");
 d003 = FORMONLY.field_size,HIDDEN=USER;
