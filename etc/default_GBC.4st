@@ -6,7 +6,14 @@
 		<!-- StyleAttribute name="fontFamily" value="Courier New" /-->
 		<StyleAttribute name="fontSize" value="1em" />
 	</Style>
-
+	<Style name="Group.collapsed" >
+		<StyleAttribute name="collapsible" value="yes" />
+		<StyleAttribute name="initiallyCollapsed" value="yes" />
+	</Style>
+	<Style name="Group.uncollapsed" >
+		<StyleAttribute name="collapsible" value="yes" />
+		<StyleAttribute name="initiallyCollapsed" value="no" />
+	</Style>
   <Style name="Folder.accordion">
 		<StyleAttribute name="position"  value="accordion" />
   </Style>
