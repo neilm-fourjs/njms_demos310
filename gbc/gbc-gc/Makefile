@@ -4,7 +4,6 @@ GBCBASE=..
 include ../makefile.inc
 
 CUSTOMNAME=$(shell basename $(PWD))
-THEME1=theme/colors/clean
 
 TARGET=$(DISTBIN)/$(CUSTOMNAME)-$(PACKVER).zip
 
@@ -13,10 +12,6 @@ all: $(GBCBASE)/build/gbc-$(PACKVER)/$(THEME1) $(GBCBASE)/build/gbc-$(PACKVER)/$
 # Create a symbolic link to our custom gbc files
 $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME): 
 	ln -s $(PWD) $@
-
-# Create a symbolic link to our custom themes files
-$(GBCBASE)/build/gbc-$(PACKVER)/$(THEME1): $(PWD)/$(THEME1)/theme.scss.json
-	ln -s $(PWD)/$(THEME1) $@
 
 # Build our custom gbc
 $(GBCBASE)/build/gbc-$(PACKVER)/dist/$(CUSTOMNAME): $(GBCBASE)/build/gbc-$(PACKVER) $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME)
