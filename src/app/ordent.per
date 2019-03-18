@@ -119,7 +119,7 @@ BUTTONEDIT order_n=formonly.order_number, action=getorder, tabIndex=4;
 LABEL ordd:orddate, TEXT=%"Date:", justify=right;
 order_datetime=ord_head.order_datetime, tabIndex=5, noEntry, scroll;
 LABEL due:due, TEXT=%"Del By:", justify=right;
-reqduedate = ord_head.req_del_date;
+DATEEDIT reqduedate = ord_head.req_del_date;
 PHANTOM ord_head.order_date;
 LABEL op:op, TEXT=%"Op:", justify=right;
 user=ord_head.username, tabIndex=6;
@@ -147,6 +147,7 @@ inv_postc=ord_head.inv_postcode, tabIndex=19;
 
 BUTTONEDIT stock_c=formonly.stock_code, action=getstock, tabIndex=20, title=%"P-Code", upShift, scroll, style="entry";
 PHANTOM stock.barcode;
+PHANTOM stock.img_url;
 description=stock.description, tabIndex=22, title=%"Description", noentry, scroll, style="noentry";
 PHANTOM stock.pack_flag;
 price=stock.price, tabIndex=23, title=%"Price", noEntry, style="noentry";
@@ -156,11 +157,10 @@ disc_p=formonly.disc_percent, tabIndex=26, title=%"Disc%", style="entry";
 disc_v=formonly.disc_value, tabIndex=27, title=%"Disc Val", noEntry, style="noentry";
 COMBOBOX tax_c=formonly.tax_code, tabIndex=38, title=%"Tax Code", items=(("0", "Rate 0"),("1", "Rate 1"),("2", "Rate 2"),("3", "Rate 3"));
 tax_r=formonly.tax_rate, tabIndex=35, title=%"Tax Rate", noEntry;
-tax_valu=formonly.tax_value, tabIndex=37, title=%"Tax Value", noEntry;
-PHANTOM ord_detail.nett_value;
+tax_valu=formonly.tax_value, tabIndex=37, title=%"Tax Value", NOENTRY;
 gross_va=ord_detail.gross_value, tabIndex=39, title=%"Total";
+PHANTOM ord_detail.nett_value;
 CHECKBOX a=formonly.accepted, tabIndex=29, title=%"Ok ", noEntry, valueChecked = 1, valueUnchecked = 0, style="noentry";
-
 
 LABEL ordt:ordtot, TEXT=%"Items:", justify=right;
 item=ord_head.items, tabIndex=30;
