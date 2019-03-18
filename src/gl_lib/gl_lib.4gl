@@ -88,8 +88,6 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	LET l_key = fgl_getEnv("FJS_STYLE")
 	IF l_key.getLength() < 2 THEN LET l_key = m_key END IF -- Style name taken from l_key
 
-	LET m_windowCenter = IIF( fgl_getEnv("WINDOWCENTER") = "FALSE", FALSE, TRUE)
-
 	LET m_universal_rendering = FALSE
 	LET gl_fe_typ = UPSHIFT(ui.interface.getFrontEndName())
 	LET gl_fe_ver = ui.interface.getFrontEndVersion()
@@ -303,8 +301,8 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	AND l_styl != "lookup" AND l_styl != "naked" AND l_styl != "about"  AND l_styl != "viewer"
 	AND l_styl != "wizard" THEN
 
-		IF ( gl_fe_typ = "GBC" OR m_universal_rendering ) AND m_windowCenter THEN	
-			CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
+		IF ( gl_fe_typ = "GBC" OR m_universal_rendering ) AND m_windowCenter THEN
+-- NEED current gl_win_res value - but frontCall here crashes the client :(
 			LET gl_scr_width = gl_getWidth( gl_win_res )
 			GL_DBGMSG(1,SFMT("Window Width: %1",gl_scr_width) )
 			IF gl_scr_width > C_DEF_SCR_WIDTH THEN

@@ -50,7 +50,7 @@ ToolBar ToolBar1
 	Item help
 END -- ToolBar
 
-LAYOUT(TEXT=%"Order Entry",WINDOWSTYLE="main2")
+LAYOUT(TEXT=%"Order Entry ( Tree )",WINDOWSTYLE="main2")
 VBOX VBox1 (STYLE="formborder")
 GRID head (STYLE="center")
 {
@@ -119,7 +119,7 @@ BUTTONEDIT order_n=formonly.order_number, action=getorder, tabIndex=4;
 LABEL ordd:orddate, TEXT=%"Date:", justify=right;
 order_datetime=ord_head.order_datetime, tabIndex=5, noEntry, scroll;
 LABEL due:due, TEXT=%"Del By:", justify=right;
-reqduedate = ord_head.req_del_date;
+DATEEDIT reqduedate = ord_head.req_del_date;
 PHANTOM ord_head.order_date;
 LABEL op:op, TEXT=%"Op:", justify=right;
 user=ord_head.username, tabIndex=6;

@@ -33,7 +33,9 @@ FUNCTION gl_about(l_ver STRING) --{{{
 	CALL ui.interface.frontCall("standard","feinfo",[ "feName" ], [ l_fe_typ ])
 	CALL ui.interface.frontCall("standard","feinfo",[ "feVersion" ], [ l_fe_ver ])
 	IF l_fe_ver IS NULL THEN LET l_fe_ver = "unknown" END IF
-	CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
+	IF gl_win_res.getLength() < 2 THEN
+		CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
+	END IF
 	LET gl_scr_width = gl_getWidth( gl_win_res )
 
 	IF gl_app_name IS NULL THEN CALL gl_setAppInfo( NULL, NULL ) END IF
