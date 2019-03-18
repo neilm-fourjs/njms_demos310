@@ -52,7 +52,7 @@ END -- ToolBar
 
 LAYOUT(TEXT=%"Order Entry",windowStyle="main2")
 VBOX VBox1 (STYLE="border")
-GRID head
+GRID head (STYLE="center")
 {
  [: :welcome                                                    : :]
  [cust|custome][cus1|customer_name                      ]
@@ -60,12 +60,12 @@ GRID head
  [ordr|order_ref                                        ]
 }
 END
-GRID addr2 (HIDDEN)
+GRID addr2 (HIDDEN, STYLE="center")
 {
 [y] [showaddr              ]
 }
 END 
-GRID addr
+GRID addr (STYLE="center")
 {
 [x] <G del                        ><G inv                      >
      [del_address1               ]  [inv_address1             ]
