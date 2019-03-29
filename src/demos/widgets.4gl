@@ -98,7 +98,7 @@ MAIN
 	DEFINE f ui.Form
 
 	CALL gl_lib.gl_setInfo(C_VER, C_PRGSPLASH, C_PRGICON, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-	CALL gl_init(ARG_VAL(1),"widgets",TRUE)
+	CALL gl_lib.gl_init(ARG_VAL(1),"widgets",TRUE)
 
 	GL_DBGMSG(2,"init_genero, done.")
 	GL_MODULE_ERROR_HANDLER
@@ -118,7 +118,7 @@ MAIN
 
 	CALL gl_splash.gl_splash( 4 )
 
---	CALL ui.Interface.loadStartMenu("widgets")	
+	CALL ui.Interface.loadStartMenu("widgets")	
 
 	GL_DBGMSG(4,"before - open window.")
 	OPEN WINDOW widgets WITH FORM "widgets"
