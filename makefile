@@ -15,5 +15,8 @@ export GBCPROJDIR=/opt/fourjs/gbc-current
 
 export LANG=is_IS.utf8
 
+all:
+	gsmake njms_demos320.4pw
+
 run: 
 	cd $(BIN); fglrun menu.42r
