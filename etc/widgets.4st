@@ -1,9 +1,10 @@
 <StyleList>
 
-  <!--Style name='StartMenu.startmenu'> Do not work!
+  <Style name='StartMenu'>
+<!-- Do not work! -->
     <StyleAttribute name="backgroundColor" value="red"/>
     <StyleAttribute name="textColor" value="red"/>
-  </Style-->
+  </Style>
 
   <Style name="Folder.accordion">
 		<StyleAttribute name="position"  value="accordion" />

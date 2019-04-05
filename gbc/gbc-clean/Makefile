@@ -7,7 +7,7 @@ CUSTOMNAME=$(shell basename $(PWD))
 
 TARGET=$(DISTBIN)/$(CUSTOMNAME)-$(PACKVER).zip
 
-all: $(GBCBASE)/build/gbc-$(PACKVER)/$(THEME1) $(GBCBASE)/build/gbc-$(PACKVER)/$(THEME2) $(TARGET) 
+all: $(TARGET)
 
 # Create a symbolic link to our custom gbc files
 $(GBCBASE)/build/gbc-$(PACKVER)/customization/$(CUSTOMNAME): 

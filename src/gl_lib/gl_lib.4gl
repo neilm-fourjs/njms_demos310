@@ -210,20 +210,20 @@ END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ On Application Close
 FUNCTION gl_appClose()
-  GL_DBGMSG(1,"gl_appClose")
-  CALL gl_errPopup("Application Closed!")
-  CALL gl_exitProgram(0, "Closed")
+	GL_DBGMSG(1,"gl_appClose")
+	CALL gl_errPopup("Application Closed!")
+	CALL gl_exitProgram(0, "Closed")
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ On Application Terminalate ( kill -15 )
 FUNCTION gl_appTerm()
-  GL_DBGMSG(1,"gl_appTerm")
-  TRY
-    ROLLBACK WORK
-  CATCH
-  END TRY
-  CALL gl_errPopup("Application Terminated!")
-  CALL gl_exitProgram(0, "Terminated")
+	GL_DBGMSG(1,"gl_appTerm")
+	TRY
+		ROLLBACK WORK
+	CATCH
+	END TRY
+	CALL gl_errPopup("Application Terminated!")
+	CALL gl_exitProgram(0, "Terminated")
 END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Set the gl variables for version / splash / progname etc

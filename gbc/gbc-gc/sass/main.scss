@@ -34,12 +34,8 @@ footer {
 	background: linear-gradient( #F2F2F9, #B7B7CC );
 }
 
-.gbc_style_style2 {
-	background-color: $gbc-primary-medium-color;
-}
-
 .gbc_style_grad {
-	background: linear-gradient( #F2F2F9, #B7B7CC );
+	background: linear-gradient( $palette-primary-200, $palette-primary-600 );
 }
 
 /* we don't want a border on the graphs */
@@ -60,7 +56,7 @@ footer {
 	display: none;
 }
 .mt-tab-titles-container[__FolderWidget=top] .mt-tab-title.mt-tab-current {
-	background-color: $gbc-primary-background-color;
+	border-bottom: solid 4px;
 }
 
 .vmLink {

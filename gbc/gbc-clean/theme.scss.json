@@ -1,5 +1,6 @@
 {
 	"palette-primary": "$mt-blue-grey",
+	"palette-secondary": "$mt-grey",
 	"palette-text-secondary": "$mt-black",
 	"theme-primary-background-color": "$palette-primary-700",
 	"theme-primary-emphasis-background-color": "$palette-primary-500",
