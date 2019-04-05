@@ -10,7 +10,7 @@
 	"theme-disable-ending-popup"  : false,
 
 	"palette-primary": "$mt-deep-purple",
-	"palette-secondary": "$mt-deep-purple",
+	"palette-secondary": "$mt-indigo",
 	"palette-disabled": "$mt-grey",
 	"palette-text-primary": "$mt-white",
 	"palette-text-secondary": "$mt-black"

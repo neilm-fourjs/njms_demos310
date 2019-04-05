@@ -1,17 +1,18 @@
 {
-  "compile": {
-    "mode": "cdev",
-    "customization": "customization/default"
-  },
   "themes": [{
       "name": "default",
-      "title": "Genero Platform as a Service",
+      "title": "Genero PaaS",
       "uses": ["platform/desktop"]
     },
     {
       "name": "clean",
-      "title": "Clean",
+      "title": "Clean Light",
       "uses": ["platform/desktop", "colors/clean"]
+    },
+    {
+      "name": "dark",
+      "title": "Clean Dark",
+      "uses": ["platform/desktop", "colors/dark"]
     },
     {
       "name": "default_mobile",

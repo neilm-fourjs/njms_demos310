@@ -1,8 +1,4 @@
 {
-  "compile": {
-    "mode": "cdev",
-    "customization": "customization/default"
-  },
   "themes": [{
       "name": "default",
       "title": "NJM Blue",
@@ -15,8 +11,13 @@
     },
     {
       "name": "clean",
-      "title": "Clean",
+      "title": "Clean Light",
       "uses": ["platform/desktop", "colors/clean"]
+    },
+    {
+      "name": "dark",
+      "title": "Clean Dark",
+      "uses": ["platform/desktop", "colors/dark"]
     },
     {
       "name": "hivis",

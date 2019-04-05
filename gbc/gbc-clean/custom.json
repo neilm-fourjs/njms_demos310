@@ -1,8 +1,4 @@
 {
-  "compile": {
-    "mode": "cdev",
-    "customization": "customization/default"
-  },
   "themes": [{
       "name": "default",
       "title": "Clean Light",
