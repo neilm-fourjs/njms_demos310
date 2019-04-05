@@ -25,6 +25,7 @@ BODY {
 	display: none !important;
 }
 
+// allow a window to center in the browser
 .gbc_style_center {
 	width: fit-content;
 	margin-left: auto;
@@ -33,9 +34,21 @@ BODY {
 	background-position: center !important;
 }
 
-
+// add a border to the form
 .gbc_style_formborder {
 	margin: 10px;
 	box-shadow: 4px 4px 6px $theme-primary-emphasis-background-color;
 	border-radius: 2.4px;
+}
+
+// get the toolbar to center in the browser tab with a min width
+.gbc_WindowWidget .gbc_WindowToolbarContainer {
+	margin-left: auto;
+	margin-right: auto;
+	min-width: 1024px;
+}
+
+// set a min width for forms to line up with the toolbar
+.gbc_WindowWidget_position_center .gbc_FormWidget.notOverflownX > .containerElement > *, .gbc_WindowWidget_position_center2 .gbc_FormWidget.notOverflownX > .containerElement > * {
+	min-width: 1024px;
 }

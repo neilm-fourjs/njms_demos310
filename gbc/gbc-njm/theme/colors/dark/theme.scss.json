@@ -4,7 +4,8 @@
 	"palette-text-primary": "$mt-black",
 
 	"theme-primary-color": "$mt-white",
-	"theme-primary-emphasis-background-color": "$palette-primary-50",
+	"theme-primary-background-color": "$mt-black-200",
+	"theme-primary-emphasis-background-color": "$palette-primary-900",
 	"theme-primary-faded-background-color": "$palette-primary-800",
 
 	"palette-secondary": "$mt-black",
@@ -15,7 +16,7 @@
 	"theme-secondary-background-color": "$palette-secondary-400",
 	"theme-secondary-alternative-background-color": "$palette-secondary-300",
 
-	"theme-header-color": "$palette-primary-900",
+	"theme-header-color": "$palette-primary-800",
 	"theme-separator-color": "$palette-secondary-800",
 
 	"theme-field-background-color": "$mt-black-600",

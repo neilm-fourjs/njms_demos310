@@ -10,6 +10,11 @@
       "uses": ["platform/desktop", "colors/dark"]
     },
     {
+      "name": "hivis",
+      "title": "HiVis",
+      "uses": ["platform/desktop", "colors/hivis"]
+    },
+    {
       "name": "helper",
       "title": "Helper for themes",
       "uses": ["platform/desktop", "colors/helper"]

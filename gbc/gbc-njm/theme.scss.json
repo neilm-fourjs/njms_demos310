@@ -18,6 +18,8 @@
 	"theme-primary-background-color": "$palette-primary-700",
 	"theme-primary-emphasis-background-color": "$palette-primary-900",
 	"theme-primary-faded-background-color": "$palette-primary-100",
+
+	"theme-secondary-color": "$palette-primary-700",
 	"theme-secondary-faded-color": "$palette-primary-300",
 
 	"mt-button-primary-color": "$theme-primary-emphasis-background-color",
