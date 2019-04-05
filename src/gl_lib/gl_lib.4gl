@@ -113,6 +113,7 @@ FUNCTION gl_init( l_mdi_sdi CHAR(1), l_key STRING, l_use_fi BOOLEAN) --{{{
 	LET gl_cli_osver = "?"
 	LET gl_cli_res = "?"
 	LET gl_cli_dir = "?"
+	IF fgl_getEnv("WINDOWCENTER") = "TRUE" THEN LET m_windowCenter = TRUE END IF
 	IF gl_fe_typ = "GBC" THEN LET gl_cli_os = "WWW" END IF
 	IF m_mdi != "M" AND m_mdi != "C" AND gl_fe_typ != "GGC" THEN
 		GL_DBGMSG(1,"Getting feinfo ...")
@@ -312,10 +313,10 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 	AND l_styl != "wizard" THEN
 
 		IF ( gl_fe_typ = "GBC" OR m_universal_rendering ) AND m_windowCenter THEN	
-			CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
+--			CALL ui.interface.frontCall("standard","feinfo",[ "windowSize" ], [ gl_win_res ])
 			LET gl_scr_width = gl_getWidth( gl_win_res )
 			GL_DBGMSG(1,SFMT("Window Width: %1",gl_scr_width) )
-			IF gl_scr_width > C_DEF_SCR_WIDTH THEN
+--			IF gl_scr_width > C_DEF_SCR_WIDTH THEN
 				IF m_windowCenter THEN
 					IF l_styl = "main2" OR l_styl = "NULL" THEN LET l_newstyl = "centered" END IF
 				END IF
@@ -327,7 +328,7 @@ FUNCTION gl_formInit(l_fm ui.Form) --{{{
 					CALL l_fn.setAttribute("windowStyle",l_newstyl)
 					GL_DBGMSG(1, SFMT("gl_formInit: new style='%1'",l_newstyl))
 				END IF
-			END IF
+--			END IF
 		END IF
 
 		LET l_nl = l_fn.selectByTagName("ToolBar")

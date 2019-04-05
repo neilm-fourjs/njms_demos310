@@ -63,8 +63,8 @@
   </Settings>
   <LanguageList version="1.0"/>
   <PlatformList version="1.0"/>
-  <Group label="GBC" language="Genero">
-    <Library binaryName="gbc-njm" id="-1375686528" label="gbc-njm" language="GBC" srcDirectory="$(ProjectDir)/gbc/gbc-njm" targetDirectory="$(ProjectDir)/distbin">
+  <Group excludeFromBuild="true" label="GBC" language="Genero">
+    <Library binaryName="gbc-njm" excludeFromBuild="true" id="-1375686528" label="gbc-njm" language="GBC" srcDirectory="$(ProjectDir)/gbc/gbc-njm" targetDirectory="$(ProjectDir)/distbin">
       <VirtualFolder label="js">
         <File filePath="gbc/gbc-njm/js/MyFormWidget.js"/>
         <File filePath="gbc/gbc-njm/js/MyFormWidget.tpl.html"/>
@@ -355,7 +355,7 @@
         <File filePath="src/gl_dynMaint/glm_sql.4gl"/>
         <File filePath="src/gl_dynMaint/glm_ui.4gl"/>
       </Library>
-      <Library binaryName="gl_lib" dependencies="1986" id="14000" label="gl_lib">
+      <Library binaryName="gl_lib" dependencies="1986,-400184264" id="14000" label="gl_lib">
         <File filePath="src/gl_lib/genero_lib.inc"/>
         <File filePath="src/gl_lib/gl_about.4gl"/>
         <File filePath="src/gl_lib/gl_calendar.4gl"/>
@@ -400,6 +400,7 @@
       <Application binaryName="menu" commandLineArguments="S" dependencies="-1090563702,2135194580,14000" id="1554019048" label="menu">
         <File filePath="src/sys/menu.4gl"/>
         <File filePath="src/sys/menu.per"/>
+        <File filePath="src/sys/menu_gbc.per"/>
         <File filePath="src/sys/menuLib.4gl"/>
         <File filePath="src/sys/new_acct.4gl"/>
         <File filePath="src/sys/new_acct.per"/>

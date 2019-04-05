@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ManagedForm databaseName="njm_demo310" fileVersion="30a00" gstVersion="30a0a" name="ManagedForm" uid="{28a6dfc8-0000-4000-a8ee-e81b63978086}">
-  <AGSettings>
-    <DynamicProperties version="2"/>
-  </AGSettings>
+  <AGSettings/>
   <Record additionalTables="" joinLeft="" joinOperator="" joinRight="" name="cust_rec" order="" uid="{14601740-0000-4000-b9dd-460e90268dd6}" where="">
     <RecordField colName="customer_code" fieldIdRef="1" fieldType="TABLE_COLUMN" name="customer.customer_code" sqlTabName="customer" sqlType="VARCHAR" table_alias_name="" uid="{cbe842ca-0000-4000-b77f-d791933640a4}"/>
     <RecordField colName="customer_name" fieldIdRef="2" fieldType="TABLE_COLUMN" name="customer.customer_name" sqlTabName="customer" sqlType="VARCHAR" table_alias_name="" uid="{a90fdc29-0000-4000-a80e-253023f080b4}"/>
@@ -59,7 +57,7 @@
         <Group gridHeight="11" gridWidth="41" name="Group1" posX="1" posY="6" text="Deliverly">
           <Label gridHeight="1" gridWidth="7" hidden="true" justify="right" name="Label4" posX="1" posY="1" text="del_addr"/>
           <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="del_addr" fieldId="8" fieldType="TABLE_COLUMN" gridHeight="1" gridWidth="11" hidden="true" name="customer.del_addr" noEntry="true" posX="9" posY="1" sqlTabName="customer" sqlType="INTEGER" tabIndex="8" table_alias_name="" title="del_addr" widget="Edit"/>
-          <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="rec_key" fieldId="9" fieldType="TABLE_COLUMN" gridHeight="1" gridWidth="11" hidden="true" name="addresses.rec_key" notNull="true" posX="27" posY="1" sqlTabName="addresses" sqlType="SERIAL" tabIndex="9" table_alias_name="" title="rec_key" widget="Edit"/>
+          <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="rec_key" fieldId="9" fieldType="TABLE_COLUMN" gridHeight="1" gridWidth="11" hidden="true" name="addresses.rec_key" notNull="true" posX="28" posY="1" sqlTabName="addresses" sqlType="SERIAL" tabIndex="9" table_alias_name="" title="rec_key" widget="Edit"/>
           <Label gridHeight="1" gridWidth="7" justify="right" name="Label11" posX="1" posY="3" text="Address:"/>
           <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="line1" fieldId="10" fieldType="TABLE_COLUMN" gridHeight="1" gridWidth="30" name="addresses.line1" posX="9" posY="3" scroll="true" sqlTabName="addresses" sqlType="VARCHAR" tabIndex="10" table_alias_name="" title="line1" widget="Edit"/>
           <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="line2" fieldId="11" fieldType="TABLE_COLUMN" gridHeight="1" gridWidth="30" name="addresses.line2" posX="9" posY="4" scroll="true" sqlTabName="addresses" sqlType="VARCHAR" tabIndex="11" table_alias_name="" title="line2" widget="Edit"/>
@@ -74,8 +72,7 @@
         <Group gridHeight="11" gridWidth="41" name="Group2" posX="43" posY="6" text="Invoice">
           <Label gridHeight="1" gridWidth="7" hidden="true" justify="right" name="Label5" posX="1" posY="1" text="inv_addr"/>
           <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="inv_addr" fieldId="17" fieldType="TABLE_COLUMN" gridHeight="1" gridWidth="11" hidden="true" name="customer.inv_addr" noEntry="true" posX="9" posY="1" sqlTabName="customer" sqlType="INTEGER" tabIndex="17" table_alias_name="" title="del_addr" widget="Edit"/>
-          <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="" fieldId="18" fieldType="NON_DATABASE" gridHeight="1" gridWidth="11" hidden="true" length="1" name="rec_key" notNull="true" posX="27" posY="1" sqlTabName="" sqlType="INTEGER" tabIndex="18" table_alias_name="" title="rec_key" widget="Edit"/>
-          <Button gridHeight="1" gridWidth="10" name="sameaddr" posX="1" posY="2" tabIndex="26"/>
+          <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="" fieldId="18" fieldType="NON_DATABASE" gridHeight="1" gridWidth="11" hidden="true" length="1" name="rec_key" notNull="true" posX="28" posY="1" sqlTabName="" sqlType="INTEGER" tabIndex="18" table_alias_name="" title="rec_key" widget="Edit"/>
           <Label gridHeight="1" gridWidth="7" justify="right" name="Label19" posX="1" posY="3" text="Address:"/>
           <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="" fieldId="19" fieldType="NON_DATABASE" gridHeight="1" gridWidth="30" length="1" name="line1" posX="9" posY="3" scroll="true" sqlTabName="" sqlType="VARCHAR" tabIndex="19" table_alias_name="" title="line1" widget="Edit"/>
           <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="" fieldId="20" fieldType="NON_DATABASE" gridHeight="1" gridWidth="30" length="1" name="line2" posX="9" posY="4" scroll="true" sqlTabName="" sqlType="VARCHAR" tabIndex="20" table_alias_name="" title="line2" widget="Edit"/>
@@ -86,11 +83,12 @@
           <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="" fieldId="25" fieldType="NON_DATABASE" gridHeight="1" gridWidth="8" length="1" name="postal_code" posX="9" posY="8" scroll="true" sqlTabName="" sqlType="VARCHAR" tabIndex="25" table_alias_name="" title="postal_code" widget="Edit"/>
           <Label gridHeight="1" gridWidth="7" justify="right" name="Label24" posX="1" posY="9" text="Country:"/>
           <Edit aggregateColName="" aggregateName="" aggregateTableAliasName="" aggregateTableName="" colName="" fieldId="24" fieldType="NON_DATABASE" gridHeight="1" gridWidth="3" length="1" name="country_code" posX="9" posY="9" sqlTabName="" sqlType="CHAR" tabIndex="24" table_alias_name="" title="country_code" widget="Edit"/>
+          <Button gridHeight="1" gridWidth="6" name="sameaddr" posX="33" posY="9" tabIndex="26" text="Default"/>
         </Group>
       </Grid>
     </VBox>
   </Form>
   <DiagramLayout>
-    <![CDATA[AAAAAgAAAEwAewBjAGMAMABhAGQAZgA5AGYALQAwADAAMAAwAC0ANAAwADAAMAAtAGIAOAAxADcALQA2ADUANQAyADIANAA4AGQAZgBiADcAOAB9wGygAA1Fz0JALAAAfmG+CD+CbpeNT988AQAAAEwAewAxADQANgAwADEANwA0ADAALQAwADAAMAAwAC0ANAAwADAAMAAtAGIAOQBkAGQALQA0ADYAMABlADkAMAAyADYAOABkAGQANgB9wHwwAB/qKBhAMAAAEh2bBT9wYk3S8an8AQAAAEwAewBiAGYAYgBiADkAMwA0AGMALQAwADAAMAAwAC0ANAAwADAAMAAtADkAZAAyAGUALQBhAGQAYwAxADAANwBmADYAMABlADYAYgB9wFWAAAKwAABAOAAAAwAAAD+EeuFHrhR8AQ==]]>
+    <![CDATA[AAAAAgAAAEwAewBjAGMAMABhAGQAZgA5AGYALQAwADAAMAAwAC0ANAAwADAAMAAtAGIAOAAxADcALQA2ADUANQAyADIANAA4AGQAZgBiADcAOAB9wGygABDZz0RALAAAgeG+Fz+CbpeNT988AQAAAEwAewBiAGYAYgBiADkAMwA0AGMALQAwADAAMAAwAC0ANAAwADAAMAAtADkAZAAyAGUALQBhAGQAYwAxADAANwBmADYAMABlADYAYgB9wFWAAAVgAABAOAAABgAAAD+EeuFHrhR8AQAAAEwAewAxADQANgAwADEANwA0ADAALQAwADAAMAAwAC0ANAAwADAAMAAtAGIAOQBkAGQALQA0ADYAMABlADkAMAAyADYAOABkAGQANgB9wHwwACNwKBxAMAAAFB2bBz9wYk3S8an8AQ==]]>
   </DiagramLayout>
 </ManagedForm>
