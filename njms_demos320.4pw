@@ -353,7 +353,9 @@
     </Group>
     <Group id="863353152" label="GL2_Lib">
       <Library binaryName="gl2_lib" id="-310428106" label="gl2_lib">
-        <File filePath="src/gl2_lib/gl2_helpers.4gl"/>
+        <File filePath="src/gl2_lib/gl2_about.4gl"/>
+        <File filePath="src/gl2_lib/gl2_lib.4gl"/>
+        <File filePath="src/gl2_lib/gl2_lib_aui.4gl"/>
         <File filePath="src/gl2_lib/gl2_logging.4gl"/>
       </Library>
     </Group>

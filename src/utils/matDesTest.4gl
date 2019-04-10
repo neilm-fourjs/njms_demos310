@@ -4,7 +4,7 @@
 
 IMPORT os
 IMPORT FGL gl2_logging
-IMPORT FGL gl_lib
+IMPORT FGL gl2_about
 
 CONSTANT C_VER="3.1"
 CONSTANT C_PRGDESC = "Material Design Test"
@@ -96,7 +96,7 @@ MAIN
 		ON ACTION pg50 CALL pg(DIALOG.getForm(), (PG_MAX / 2) )
 		ON ACTION showform CALL showForm()
 		ON ACTION inactive CALL dummy()
---		GL_ABOUT
+		ON ACTION about CALL gl2_about.gl2_about(C_VER)
 		ON ACTION close EXIT DIALOG
 		ON ACTION quit EXIT DIALOG
 		BEFORE DIALOG
@@ -146,7 +146,7 @@ FUNCTION gbc_replaceHTML(l_obj STRING, l_txt STRING)
 	IF ui.interface.getFrontEndName() = "GBC" THEN
 		CALL ui.Interface.frontCall("mymodule","replace_html",[ l_obj, l_txt ], l_ret)
 	ELSE
-		CALL gl_winMessage("Error","GBC Test only!","exclamation")
+		CALL gl2_winMessage("Error","GBC Test only!","exclamation")
 	END IF
 	DISPLAY "l_ret:",l_ret
 END FUNCTION
