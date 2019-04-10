@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="31402" version="3.3">
+<Project defaultApplication="1848127715" gstVersion="31402" version="3.3">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -351,6 +351,12 @@
         <File filePath="src/demos/wc_richtext.per"/>
       </Application>
     </Group>
+    <Group id="863353152" label="GL2_Lib">
+      <Library binaryName="gl2_lib" id="-310428106" label="gl2_lib">
+        <File filePath="src/gl2_lib/gl2_helpers.4gl"/>
+        <File filePath="src/gl2_lib/gl2_logging.4gl"/>
+      </Library>
+    </Group>
     <Group id="-922183004" label="GL_Lib" language="Genero">
       <Library binaryName="gl_dynMaint" dependencies="14000" id="-1557891896" label="gl_dynMaint">
         <File filePath="src/gl_dynMaint/dynMaint.inc"/>
@@ -403,6 +409,7 @@
       <Application binaryName="menu" commandLineArguments="S" dependencies="-1463189462,2135194580,14000,-1090563702" id="1554019048" label="menu">
         <File filePath="src/sys/menu.4gl"/>
         <File filePath="src/sys/menu.per"/>
+        <File filePath="src/sys/menu_gbc.per"/>
         <File filePath="src/sys/menuLib.4gl"/>
         <File filePath="src/sys/new_acct.4gl"/>
         <File filePath="src/sys/new_acct.per"/>
@@ -443,7 +450,7 @@
       <Application binaryName="icon_2_image2font" id="381716529" label="icon_2_image2font">
         <File filePath="src/utils/icons_2_image2font.4gl"/>
       </Application>
-      <Application binaryName="materialDesignTest" dependencies="14000,-400184264,528729868" id="1848127715" label="materialDesignTest">
+      <Application binaryName="materialDesignTest" dependencies="-400184264,528729868,-310428106" id="1848127715" label="materialDesignTest">
         <File filePath="src/utils/matDesTest.4gl"/>
         <File filePath="src/utils/matDesTest.per"/>
         <File filePath="src/utils/matDesTest_forms.per"/>

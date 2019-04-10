@@ -3,8 +3,9 @@
 -- By: Neil J Martin ( neilm@4js.com )
 
 IMPORT os
+IMPORT FGL gl2_logging
 IMPORT FGL gl_lib
-&include "genero_lib.inc"
+
 CONSTANT C_VER="3.1"
 CONSTANT C_PRGDESC = "Material Design Test"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
@@ -38,19 +39,12 @@ MAIN
 		img STRING
 	END RECORD
 	DEFINE x SMALLINT
+	DEFINE gl2_log logger
+	DEFINE gl2_err logger
 
-	CALL gl_lib.gl_setInfo(C_VER, NULL, C_PRGICON, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-
-{	IF ARG_VAL(1) = "C" THEN
-		CALL ui.Interface.loadStyles("default_"||UPSHIFT(ui.interface.getFrontEndName()))
-		CALL ui.Interface.setType("child")
-		CALL ui.Interface.setContainer("mycontain")
-	ELSE}
-		CALL gl_lib.gl_init( ARG_VAL(1) ,"matDesTest",TRUE)
---	END IF
-
-	CALL ui.Interface.setText( gl_progdesc )
-	--RUN "env | sort > env.txt"
+	CALL gl2_log.init(NULL, NULL, "log", "TRUE")
+	CALL gl2_err.init(NULL, NULL, "err", "TRUE")
+	CALL STARTLOG( gl2_err.fullLogPath )
 
 	FOR X = 1 TO 15
 		LET l_arr[x].col1 = "Row "||x
@@ -102,7 +96,7 @@ MAIN
 		ON ACTION pg50 CALL pg(DIALOG.getForm(), (PG_MAX / 2) )
 		ON ACTION showform CALL showForm()
 		ON ACTION inactive CALL dummy()
-		GL_ABOUT
+--		GL_ABOUT
 		ON ACTION close EXIT DIALOG
 		ON ACTION quit EXIT DIALOG
 		BEFORE DIALOG
