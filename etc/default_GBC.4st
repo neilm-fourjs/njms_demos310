@@ -99,16 +99,16 @@
 	<Style name="Window.centered">
 		<StyleAttribute name="windowType" value="normal" />
 		<StyleAttribute name="toolBarPosition" value="top" />
-		<StyleAttribute name="actionPanelPosition" value="right" />
-		<StyleAttribute name="ringMenuPosition" value="right" />
+		<StyleAttribute name="actionPanelPosition" value="bottom" />
+		<StyleAttribute name="ringMenuPosition" value="bottom" />
 		<StyleAttribute name="sizable" value="no" />
 		<StyleAttribute name="position" value="center" />
 	</Style>
 	<Style name="Window.main2">
 		<StyleAttribute name="windowType" value="normal" />
 		<StyleAttribute name="toolBarPosition" value="top" />
-		<StyleAttribute name="actionPanelPosition" value="right" />
-		<StyleAttribute name="ringMenuPosition" value="right" />
+		<StyleAttribute name="actionPanelPosition" value="bottom" />
+		<StyleAttribute name="ringMenuPosition" value="botom" />
 	</Style>
 	<Style name="Window.dialog">
 		<StyleAttribute name="windowType" value="modal" />
