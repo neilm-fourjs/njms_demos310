@@ -3,13 +3,16 @@
 -- By: Neil J Martin ( neilm@4js.com )
 
 IMPORT os
+IMPORT FGL gl2_lib
 IMPORT FGL gl2_logging
 IMPORT FGL gl2_about
+IMPORT FGL gl2_appInfo
 
-CONSTANT C_VER="3.1"
 CONSTANT C_PRGDESC = "Material Design Test"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGVER="3.1"
 CONSTANT C_PRGICON = "njm_demo_icon"
+
 CONSTANT C_IMG = "smiley"
 
 CONSTANT PG_MAX=1000
@@ -41,10 +44,12 @@ MAIN
 	DEFINE x SMALLINT
 	DEFINE gl2_log logger
 	DEFINE gl2_err logger
-
+	DEFINE l_appInfo appInfo
+	CALL l_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON )
 	CALL gl2_log.init(NULL, NULL, "log", "TRUE")
-	CALL gl2_err.init(NULL, NULL, "err", "TRUE")
+	CALL gl2_log.init(NULL, NULL, "err", "TRUE")
 	CALL STARTLOG( gl2_err.fullLogPath )
+	CALL gl2_lib.gl2_loadStyles("default")
 
 	FOR X = 1 TO 15
 		LET l_arr[x].col1 = "Row "||x
@@ -96,7 +101,7 @@ MAIN
 		ON ACTION pg50 CALL pg(DIALOG.getForm(), (PG_MAX / 2) )
 		ON ACTION showform CALL showForm()
 		ON ACTION inactive CALL dummy()
-		ON ACTION about CALL gl2_about.gl2_about(C_VER)
+		ON ACTION about CALL gl2_about(l_appInfo)
 		ON ACTION close EXIT DIALOG
 		ON ACTION quit EXIT DIALOG
 		BEFORE DIALOG

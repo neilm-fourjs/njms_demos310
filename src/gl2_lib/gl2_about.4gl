@@ -11,30 +11,13 @@
 #+ No includes required.
 IMPORT os
 IMPORT FGL gl2_lib_aui
-GLOBALS
-	DEFINE gl_progdesc, 
-				gl_app_name, 
-				gl_splashImage,
-				gl_app_build,
-				gl_progname,
-				gl_progauth,
-				gl_userName,
-				gl_fe_typ,
-				gl_fe_ver,
-				gl_os,
-				gl_cli_os, 
-				gl_cli_osver, 
-				gl_cli_res, 
-				gl_cli_dir,
-				gl_cli_un
- 					STRING
-END GLOBALS
+IMPORT FGL gl2_appInfo
 --------------------------------------------------------------------------------
 #+ Dynamic About Window
 #+
 #+ @param l_ver a version string
 #+ @return Nothing.
-FUNCTION gl2_about(l_ver STRING)
+FUNCTION gl2_about(l_appInfo appInfo INOUT)
 	DEFINE f,n,g,w om.DomNode
 	DEFINE nl om.nodeList
 	DEFINE gver, servername, info, txt STRING
@@ -43,30 +26,25 @@ FUNCTION gl2_about(l_ver STRING)
 
 	IF os.Path.pathSeparator() = ";" THEN -- Windows
 		LET servername = fgl_getEnv("COMPUTERNAME")
-	ELSE -- Unix / Linux / Mac / Android
+	ELSE -- Unix / Linux<builtin>.fgl_getenvndroid
 		LET servername = fgl_getEnv("HOSTNAME")
 	END IF
 	LET gver = "build ",fgl_getVersion()
 
-	IF gl_cli_os = "?" THEN
-		CALL ui.interface.frontcall("standard","feinfo",[ "ostype" ], [ gl_cli_os ] )
-		CALL ui.interface.frontcall("standard","feinfo",[ "osversion" ], [ gl_cli_osver ] )
-		CALL ui.interface.frontCall("standard","feinfo",[ "screenresolution" ], [ gl_cli_res ])
-		CALL ui.interface.frontCall("standard","feinfo",[ "fePath" ], [ gl_cli_dir ])
+	IF l_appInfo.fe_typ IS NULL THEN
+		CALL l_appInfo.getClientInfo()
 	END IF
-	CALL ui.interface.frontCall("standard","feinfo",[ "feName" ], [ l_fe_typ ])
-	CALL ui.interface.frontCall("standard","feinfo",[ "feVersion" ], [ l_fe_ver ])
 	IF l_fe_ver IS NULL THEN LET l_fe_ver = "unknown" END IF
 
 	OPEN WINDOW about AT 1,1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE="naked")
 	LET n = gl2_getWinNode(NULL)
-	CALL n.setAttribute("text",gl_progdesc)
+	CALL n.setAttribute("text", l_appInfo.progdesc)
 	LET f = gl2_genForm("about")
 	LET n = f.createChild("VBox")
 	CALL n.setAttribute("posY","0" )
 	CALL n.setAttribute("posX","0" )
 
-	IF gl_splashImage IS NOT NULL AND gl_splashImage != " " THEN
+	IF l_appInfo.splashImage IS NOT NULL AND l_appInfo.splashImage != " " THEN
 		LET g = n.createChild("HBox")
 		CALL g.setAttribute("posY",y)
 		CALL g.setAttribute("gridWidth",36)
@@ -80,7 +58,7 @@ FUNCTION gl2_about(l_ver STRING)
 		CALL w.setAttribute("stretch","both" )
 		CALL w.setAttribute("autoScale","1" )
 		CALL w.setAttribute("gridWidth","12" )
-		CALL w.setAttribute("image",gl_splashImage )
+		CALL w.setAttribute("image",l_appInfo.splashImage )
 		CALL w.setAttribute("height","100px" )
 		CALL w.setAttribute("width", "290px" )
 
@@ -96,19 +74,19 @@ FUNCTION gl2_about(l_ver STRING)
 	CALL g.setAttribute("posX","0" )
 	CALL g.setAttribute("style","about")
 
-	IF gl_app_build IS NOT NULL THEN
+	IF l_appInfo.appBuild IS NOT NULL THEN
 		CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Application"),"right","black")
-		CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_app_name||" - "||gl_app_build,NULL,NULL) LET y = y + 1
+		CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.appName||" - "||l_appInfo.appBuild,NULL,NULL) LET y = y + 1
 	END IF
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Program")||":","right","black")
-	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_progname||" - "||l_ver,NULL,"black") LET y = y + 1
+	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.progname||" - "||l_appInfo.progversion,NULL,"black") LET y = y + 1
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Description")||":","right","black")
-	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_progdesc,NULL,"black") LET y = y + 1
+	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.progdesc,NULL,"black") LET y = y + 1
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Author")||":","right","black")
-	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_progauth,NULL,"black") LET y = y + 1
+	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.progauth,NULL,"black") LET y = y + 1
 
 	LET w = g.createChild("HLine")
 	CALL w.setAttribute("posY",y) LET y = y + 1
@@ -119,13 +97,13 @@ FUNCTION gl2_about(l_ver STRING)
 	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gver,NULL,"black") LET y = y + 1
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Server OS")||":","right","black")
-	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_os,NULL,"black") LET y = y + 1
+	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.os,NULL,"black") LET y = y + 1
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Server Name")||":","right","black")
 	CALL gl2_lib_aui.gl2_addLabel(g,10,y,servername,NULL,"black") LET y = y + 1
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("OS User")||":","right","black")
-	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_userName,NULL,"black") LET y = y + 1
+	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.userName,NULL,"black") LET y = y + 1
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Server Time:")||":","right","black")
 	CALL gl2_lib_aui.gl2_addLabel(g,10,y,TODAY||" "||TIME,NULL,"black") LET y = y + 1
@@ -145,29 +123,29 @@ FUNCTION gl2_about(l_ver STRING)
 	CALL w.setAttribute("gridWidth",25)
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Client OS")||":","right","black")
-	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_cli_os||" / "||gl_cli_osver,NULL,"black") LET y = y + 1
+	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.cli_os||" / "||l_appInfo.cli_osver,NULL,"black") LET y = y + 1
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Clint OS User")||":","right","black")
-	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_cli_un,NULL,"black") LET y = y + 1
+	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.cli_un, NULL, "black") LET y = y + 1
 
 	{IF m_user_agent.getLength() > 1 THEN
 		CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("User Agent")||":","right","black")
-		CALL gl2_lib_aui.gl2_addLabel(g,10,y,m_user_agent,NULL,"black") LET y = y + 1
+		CALL gl2_lib_aui.gl2_addLabel(g,10,y,m_u<builtin>.fgl_getenvNULL,"black") LET y = y + 1
 	END IF}
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("FrontEnd Version")||":","right","black")
-	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_fe_typ||" "||gl_fe_ver,NULL,"black") LET y = y + 1
+	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.fe_typ||" "||l_appInfo.fe_ver,NULL,"black") LET y = y + 1
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("FrontEnd Version-FEinfo")||":","right","black")
 	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_fe_typ||" "||l_fe_ver,NULL,"black") LET y = y + 1
 
-	IF gl_cli_dir.getLength() > 1 THEN
+	IF l_appInfo.cli_dir.getLength() > 1 THEN
 		CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Client Directory")||":","right","black")
-		CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_cli_dir,NULL,"black") LET y = y + 1
+		CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.cli_dir,NULL,"black") LET y = y + 1
 	END IF
 
 	CALL gl2_lib_aui.gl2_addLabel(g, 0,y,LSTR("Screen Resolution")||":","right","black")
-	CALL gl2_lib_aui.gl2_addLabel(g,10,y,gl_cli_res,NULL,"black") LET y = y + 1
+	CALL gl2_lib_aui.gl2_addLabel(g,10,y,l_appInfo.cli_res,NULL,"black") LET y = y + 1
 
 	LET g = g.createChild("HBox")
 	CALL g.setAttribute("posY",y)

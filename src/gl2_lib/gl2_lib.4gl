@@ -20,6 +20,14 @@ GLOBALS
 	DEFINE gl_dbgLev SMALLINT
 END GLOBALS
 
+FUNCTION gl2_loadStyles(l_sty STRING) RETURNS()
+	DEFINE l_fe STRING
+	LET l_fe = UPSHIFT( ui.Interface.getFrontEndName() )
+	IF fgl_getResource("gui.rendering") = "universal" THEN
+		LET l_fe = "GBC"
+	END IF
+	CALL ui.interface.loadStyles(l_sty||"_"||l_fe)
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Generic Windows message Dialog.  NOTE: This handles messages when there is 
 #+ no window!
