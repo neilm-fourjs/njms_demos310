@@ -117,13 +117,17 @@ FUNCTION gl_gdcupd()
   LET l_newFile = l_tmp || gl_lib_gdcupd.m_ret.upd_file
   DISPLAY "Put:", l_localFile, " to ", l_newFile
   CALL gl_lib_aui.gl_winInfo(
-      1, SFMT(% "%1\nClient Downloading Update File\nPlease Wait ...", gl_lib_gdcupd.m_ret.reply), "information")
+      1,
+      SFMT(% "%1\nClient Downloading Update File\nPlease Wait ...", gl_lib_gdcupd.m_ret.reply),
+      "information")
   TRY
     CALL fgl_putfile(l_localFile, l_tmp || gl_lib_gdcupd.m_ret.upd_file)
   CATCH
     CALL abortGDCUpdate(
         SFMT(% "Copy of GDC auto update file failed!\nSource:%1\nDest:%2\nErr:%3",
-            os.path.join(gl_lib_gdcupd.m_ret.upd_dir, gl_lib_gdcupd.m_ret.upd_file), l_newFile, err_get(STATUS)))
+            os.path.join(gl_lib_gdcupd.m_ret.upd_dir, gl_lib_gdcupd.m_ret.upd_file),
+            l_newFile,
+            err_get(STATUS)))
     RETURN
   END TRY
 

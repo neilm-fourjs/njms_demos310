@@ -164,7 +164,8 @@ FUNCTION glm_updateJsonRec()
     IF glm_mkForm.m_fld_props[x].formFieldNode IS NOT NULL THEN
       LET glm_mkForm.m_fld_props[x].value = m_dialog.getFieldValue(glm_mkForm.m_fld_props[x].name)
     END IF
-    CALL glm_mkForm.m_json_rec.put(glm_mkForm.m_fld_props[x].colname, glm_mkForm.m_fld_props[x].value)
+    CALL glm_mkForm.m_json_rec.put(
+        glm_mkForm.m_fld_props[x].colname, glm_mkForm.m_fld_props[x].value)
   END FOR
   DISPLAY glm_mkForm.m_json_rec.toString()
 

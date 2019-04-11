@@ -67,7 +67,10 @@ MAIN
         OTHERWISE
           DISPLAY "Not GET!"
           CALL gl_lib_restful.gl_setError(
-              "Unknown request:\n" || gl_lib_restful.m_reqInfo.path || "\n" || gl_lib_restful.m_reqInfo.method)
+              "Unknown request:\n"
+                  || gl_lib_restful.m_reqInfo.path
+                  || "\n"
+                  || gl_lib_restful.m_reqInfo.method)
           LET gl_lib_restful.m_err.code = -3
           LET gl_lib_restful.m_err.desc = ERR_METHOD
           LET l_str = util.JSON.stringify(gl_lib_restful.m_err)

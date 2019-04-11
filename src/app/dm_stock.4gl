@@ -49,7 +49,12 @@ MAIN
     LET l_style = "main2"
   END IF
   CALL glm_mkForm.init_form(
-      m_dbname, glm_sql.m_tab, glm_sql.m_key_fld, 20, glm_sql.m_fields, l_style) -- 10 fields by folder page
+      m_dbname,
+      glm_sql.m_tab,
+      glm_sql.m_key_fld,
+      20,
+      glm_sql.m_fields,
+      l_style) -- 10 fields by folder page
   CALL gl_lib.gl_titleWin(gl_progdesc)
   CALL ui.Interface.setText(gl_progdesc)
 
