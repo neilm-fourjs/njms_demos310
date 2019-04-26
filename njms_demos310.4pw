@@ -157,6 +157,7 @@
     </Group>
     <Group label="Configs">
       <Library binaryName="etc" id="-400184264" label="etc">
+        <File filePath="../../../tos_ext_encrypted/in/FullID/Linda_Andrew_Bonnington_aka_58M/Pics/Car2/DCP_0903.jpg"/>
         <File filePath="etc/default.4ad"/>
         <File filePath="etc/default_GBC.4st"/>
         <File filePath="etc/default_GDC.4st"/>
