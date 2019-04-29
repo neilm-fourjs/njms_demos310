@@ -13,8 +13,7 @@
 
 IMPORT os
 IMPORT util
-&define GL_DBGMSG( lev, msg ) \
- CALL gl2_dbgMsg( __FILE__, __LINE__, lev, NVL(msg,"NULL!"))
+&include "gl2_debug.inc"
 
 DEFINE m_gl_winInfo BOOLEAN
 --------------------------------------------------------------------------------

@@ -9,7 +9,7 @@ IMPORT FGL gl2_appInfo
 
 CONSTANT C_PRGDESC = "Material Design Test"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
-CONSTANT C_PRGVER = "3.1"
+CONSTANT C_PRGVER = "3.2"
 CONSTANT C_PRGICON = "njm_demo_icon"
 CONSTANT C_IMG = "smiley"
 

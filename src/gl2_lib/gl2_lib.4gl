@@ -11,13 +11,47 @@
 
 IMPORT os
 IMPORT util
-&define GL_DBGMSG( lev, msg ) \
- CALL gl2_dbgMsg( __FILE__, __LINE__, lev, NVL(msg,"NULL!"))
 
-GLOBALS
-  DEFINE gl_dbgLev SMALLINT
-END GLOBALS
+&include "gl2_debug.inc"
 
+PUBLIC DEFINE m_mdi CHAR(1)
+--------------------------------------------------------------------------------
+#+ Set MDI or not
+#+ C = child
+#+ M = MDI Container
+#+ S = Not MDI
+#+ @param l_mdi_sdi S/C/M = default is 'S'
+FUNCTION gl2_mdisdi(l_mdi_sdi CHAR(1))
+	DEFINE l_container, l_desc STRING
+  IF l_mdi_sdi IS NULL OR l_mdi_sdi = " " THEN
+    LET l_mdi_sdi = "S"
+  END IF
+	LET m_mdi = l_mdi_sdi
+
+  LET l_container = fgl_getEnv("FJS_MDICONT")
+  IF l_container IS NULL OR l_container = " " THEN
+    LET l_container = "container"
+  END IF
+  LET l_desc = fgl_getEnv("FJS_MDITITLE")
+  IF l_desc IS NULL OR l_desc = " " THEN
+    LET l_desc = "MDI Container:" || l_container
+  END IF
+  CASE m_mdi
+    WHEN "C" -- Child
+      GL_DBGMSG(2, "gl_init: Child")
+      CALL ui.Interface.setType("child")
+      CALL ui.Interface.setContainer(l_container)
+    WHEN "M" -- MDI Container
+      GL_DBGMSG(2, "gl_init: Container:" || l_container)
+      CALL ui.Interface.setText(l_desc)
+      CALL ui.Interface.setType("container")
+      CALL ui.Interface.setName(l_container)
+		OTHERWISE
+			GL_DBGMSG(2, "gl_init: Not MDI")
+  END CASE
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ Load the style file depending on the client
 FUNCTION gl2_loadStyles(l_sty STRING) RETURNS()
   DEFINE l_fe STRING
   LET l_fe = UPSHIFT(ui.Interface.getFrontEndName())
@@ -148,6 +182,13 @@ END FUNCTION
 FUNCTION gl2_errPopup(l_msg STRING)
   CALL gl2_winMessage(% "Error!", l_msg, "exclamation")
 END FUNCTION
+--------------------------------------------------------------------------------
+#+ Simple error message
+#+
+#+ @return Nothing
+FUNCTION gl2_warnPopup(l_msg STRING) --{{{
+  CALL gl2_winMessage(% "Warning!", l_msg, "exclamation")
+END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Display an error message in a window, console & logfile.
 #+
@@ -401,3 +442,46 @@ FUNCTION gl2_getCallingModuleName() RETURNS STRING
   LET l_fil = NVL(l_fil, "FILE?") || "." || NVL(l_mod, "MOD?") || ":" || NVL(l_lin, "LINE?")
   RETURN l_fil
 END FUNCTION
+--------------------------------------------------------------------------------
+#+ Splash Screen
+#+
+#+ @param l_dur > 0 for sleep then close, 0=just open window, -1=close window
+#+ @param l_splashImage Image file name
+#+ @return Nothing.
+FUNCTION gl2_splash(l_dur SMALLINT, l_splashImage STRING) --{{{
+  DEFINE f, g, n om.DomNode
+
+  IF l_dur = -1 THEN
+    CLOSE WINDOW splash
+    RETURN
+  END IF
+
+  GL_DBGMSG(4, "Doing splash.")
+  OPEN WINDOW splash
+      AT 1, 1
+      WITH 1 ROWS, 1 COLUMNS
+      ATTRIBUTE(STYLE = "default noborder dialog2 bg_white")
+  LET f = gl_genForm("splash")
+  LET g = f.createChild("Grid")
+  LET n = g.createChild("Image")
+  CALL n.setAttribute("name", "logo")
+  CALL n.setAttribute("style", "noborder")
+  CALL n.setAttribute("width", "36")
+  CALL n.setAttribute("height", "8")
+  CALL n.setAttribute("image", l_splashImage)
+  CALL n.setAttribute("posY", "0")
+  CALL n.setAttribute("posX", "0")
+  CALL n.setAttribute("gridWidth", "40")
+  CALL n.setAttribute("gridHeight", "8")
+  CALL n.setAttribute("height", "200px")
+  CALL n.setAttribute("width", "570px")
+  CALL n.setAttribute("stretch", "both")
+  CALL n.setAttribute("autoScale", "1")
+  CALL ui.interface.refresh()
+
+  IF l_dur > 0 THEN
+    SLEEP l_dur
+    CLOSE WINDOW splash
+  END IF
+  GL_DBGMSG(4, "Done splash.")
+END FUNCTION --}}}

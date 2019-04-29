@@ -1,56 +1,68 @@
 -- A Simple demo program with a login and menu system.
 
-IMPORT FGL gl_lib
-IMPORT FGL gl_splash
-IMPORT FGL gl_db
-IMPORT FGL gl_gdcupd
+IMPORT FGL gl2_lib
+IMPORT FGL gl2_logging
+IMPORT FGL gl2_about
+IMPORT FGL gl2_appInfo
+
 IMPORT FGL lib_login
 IMPORT FGL menuLib
 IMPORT FGL new_acct
-&include "genero_lib.inc"
 &include "schema.inc"
 &include "app.inc"
 
 CONSTANT C_TITLE = "NJM's Demos"
 CONSTANT C_SPLASH = "logo_dark"
-CONSTANT C_ICON = "njm_demo_icon"
-CONSTANT C_PRGDESC = "NJM's Demos Menu System v2"
+CONSTANT C_PRGDESC = "NJM's Demos Menu System v3"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGVER = "3.2"
 
 DEFINE m_user STRING
 DEFINE m_user_id INT
 
 MAIN
-  CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, C_TITLE, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, FALSE)
-  CALL ui.Interface.setText(gl_progdesc)
+  DEFINE gl2_log logger
+  DEFINE gl2_err logger
+  DEFINE l_appInfo appInfo
+
+  CALL l_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL gl2_log.init(NULL, NULL, "log", "TRUE")
+  CALL gl2_log.init(NULL, NULL, "err", "TRUE")
+  CALL STARTLOG(gl2_err.fullLogPath)
+  CALL gl2_lib.gl2_loadStyles("default")
+
+	CALL gl2_lib.gl2_mdisdi(ARG_VAL(1))
+
+--  CALL gl_lib.gl_setInfo(C_VER, C_SPLASH, C_ICON, C_TITLE, C_PRGDESC, C_PRGAUTH)
+--  CALL gl_lib.gl_init(arg_val(1), NULL, FALSE)
+  CALL ui.Interface.setText(C_PRGDESC)
 
   CLOSE WINDOW SCREEN
 
-  IF gl_lib.m_mdi = "M" THEN
-    LET gl_lib.m_mdi = "C"
+  IF gl2_lib.m_mdi = "M" THEN
+    LET gl2_lib.m_mdi = "C"
   END IF -- if MDI container set so child programs are children
 
   IF do_dbconnect_and_login() THEN
     CALL gl_gdcupd.gl_gdcupd()
     CALL menuLib.do_menu(C_SPLASH, m_user)
   END IF
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL gl2_lib.gl2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 -- Connect to the database to do the login process
 FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 
-  IF gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
-    LET gl_splashImage = C_SPLASH
-    CALL gl_splash.gl_splash(0) -- open splash
+  IF gl_fe_typ != "GBC" AND gl2_lib.m_mdi = "S" THEN
+    CALL gl2_lib.gl2_splash(0, C_SPLASH) -- open splash
   END IF
 
   CALL gl_db.gldb_connect(NULL)
 
-  IF gl_fe_typ != "GBC" AND gl_lib.m_mdi = "S" THEN
+  IF gl_fe_typ != "GBC" AND gl2_lib.m_mdi = "S" THEN
     SLEEP 2
-    CALL gl_splash.gl_splash(-1) -- close splash
+    CALL gl2_lib.gl2_splash(-1, NULL) -- close splash
   END IF
 
   LET lib_login.m_logo_image = C_SPLASH
@@ -68,7 +80,7 @@ FUNCTION do_dbconnect_and_login() RETURNS BOOLEAN
 
   SELECT user_key INTO m_user_id FROM sys_users WHERE email = m_user
 
-  LET menuLib.m_args = gl_lib.m_mdi, " ", m_user_id
+  LET menuLib.m_args = gl2_lib.m_mdi, " ", m_user_id
 
   RETURN TRUE
 END FUNCTION
