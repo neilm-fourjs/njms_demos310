@@ -11,7 +11,6 @@ CONSTANT C_PRGDESC = "Material Design Test"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGICON = "njm_demo_icon"
-
 CONSTANT C_IMG = "smiley"
 
 CONSTANT PG_MAX = 1000
@@ -44,6 +43,7 @@ MAIN
   DEFINE gl2_log logger
   DEFINE gl2_err logger
   DEFINE l_appInfo appInfo
+
   CALL l_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
   CALL gl2_log.init(NULL, NULL, "log", "TRUE")
   CALL gl2_log.init(NULL, NULL, "err", "TRUE")
@@ -117,7 +117,7 @@ MAIN
     ON ACTION inactive
       CALL dummy()
     ON ACTION about
-      CALL gl2_about(l_appInfo)
+      CALL gl2_about.gl2_about(l_appInfo)
     ON ACTION close
       EXIT DIALOG
     ON ACTION quit

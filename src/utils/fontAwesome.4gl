@@ -1,10 +1,16 @@
+-- This program is for viewing the fontAwesome fonts.
+-- By: Neil J Martin ( neilm@4js.com )
+
 IMPORT os
-IMPORT FGL gl_lib
-IMPORT FGL gl_about
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+IMPORT FGL gl2_lib
+IMPORT FGL gl2_logging
+IMPORT FGL gl2_about
+IMPORT FGL gl2_appInfo
+
 CONSTANT C_PRGDESC = "FontAwesome Viewer"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGVER = "3.1"
+CONSTANT C_PRGICON = "njm_demo_icon"
 
 TYPE t_rec RECORD
   img STRING,
@@ -54,9 +60,15 @@ DEFINE m_img STRING
 MAIN
   DEFINE l_ret SMALLINT
   DEFINE l_filter STRING
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(ARG_VAL(1), NULL, TRUE)
-  CALL ui.Interface.setText(gl_progdesc)
+  DEFINE gl2_log logger
+  DEFINE gl2_err logger
+  DEFINE l_appInfo appInfo
+
+  CALL l_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL gl2_log.init(NULL, NULL, "log", "TRUE")
+  CALL gl2_log.init(NULL, NULL, "err", "TRUE")
+  CALL STARTLOG(gl2_err.fullLogPath)
+  CALL gl2_lib.gl2_loadStyles("default")
 
   OPEN FORM f FROM "fontAwesome"
   DISPLAY FORM f
@@ -123,7 +135,8 @@ MAIN
       LET l_filter = NULL
       CALL load_arr3(l_filter)
       NEXT FIELD l_filter
-    GL_ABOUT
+    ON ACTION about
+      CALL gl2_about.gl2_about(l_appInfo)
     ON ACTION quit
       EXIT DIALOG
     ON ACTION close
