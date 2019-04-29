@@ -357,7 +357,7 @@
         <File filePath="src/gl2_lib/gl2_appInfo.4gl"/>
         <File filePath="src/gl2_lib/gl2_db.4gl"/>
         <File filePath="src/gl2_lib/gl2_debug.4gl"/>
-        <File filePath="src/gl2_lib/gl2_debug.inc"/>
+        <File excludeFromCompilation="true" filePath="src/gl2_lib/gl2_debug.inc"/>
         <File filePath="src/gl2_lib/gl2_lib.4gl"/>
         <File filePath="src/gl2_lib/gl2_lib_aui.4gl"/>
         <File filePath="src/gl2_lib/gl2_logging.4gl"/>
