@@ -96,7 +96,7 @@
   </Group>
   <Group environment="value:FGLGBCDIR=$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-clean,value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_DB_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_DB_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_DB_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_DB_mdb=$(ProjectDir)/etc/mdb/profile,file:FGLPROFILE_DB_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_UI_NAT=$(ProjectDir)/etc/profile.nat,file:FGLPROFILE_UI_UR=$(ProjectDir)/etc/profile.ur,file:FGLPROFILE=$(FGLPROFILE_DB_sqt):$(FGLPROFILE_UI_UR),value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" id="1812115377" label="njms_demos320" language="Genero" targetDirectory="$(ProjectDir)/bin320">
     <Group id="1174162370" label="Business Apps" language="Genero">
-      <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
+      <Library binaryName="App_Lib" dependencies="1986,-310428106" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
         <File filePath="src/app/app_lib.4gl"/>
       </Library>
@@ -351,18 +351,18 @@
         <File filePath="src/demos/wc_richtext.per"/>
       </Application>
     </Group>
-    <Group id="863353152" label="GL2_Lib">
-      <Library binaryName="gl2_lib" id="-310428106" label="gl2_lib">
-        <File filePath="src/gl2_lib/gl2_about.4gl"/>
-        <File filePath="src/gl2_lib/gl2_appInfo.4gl"/>
-        <File filePath="src/gl2_lib/gl2_db.4gl"/>
-        <File filePath="src/gl2_lib/gl2_debug.4gl"/>
-        <File excludeFromCompilation="true" filePath="src/gl2_lib/gl2_debug.inc"/>
-        <File filePath="src/gl2_lib/gl2_gdcUpdate.4gl"/>
-        <File filePath="src/gl2_lib/gl2_lib.4gl"/>
-        <File filePath="src/gl2_lib/gl2_lib_aui.4gl"/>
-        <File filePath="src/gl2_lib/gl2_lib_gdcUpdate.4gl"/>
-        <File filePath="src/gl2_lib/gl2_logging.4gl"/>
+    <Group id="863353152" label="G2_Lib">
+      <Library binaryName="g2_lib" id="-310428106" label="g2_lib">
+        <File filePath="src/g2_lib/g2_about.4gl"/>
+        <File filePath="src/g2_lib/g2_appInfo.4gl"/>
+        <File filePath="src/g2_lib/g2_lib.4gl"/>
+        <File filePath="src/g2_lib/g2_db.4gl"/>
+        <File filePath="src/g2_lib/g2_debug.4gl"/>
+        <File excludeFromCompilation="true" filePath="src/g2_lib/g2_debug.inc"/>
+        <File filePath="src/g2_lib/g2_gdcUpdate.4gl"/>
+        <File filePath="src/g2_lib/g2_gdcUpdateCommon.4gl"/>
+        <File filePath="src/g2_lib/g2_aui.4gl"/>
+        <File filePath="src/g2_lib/g2_logging.4gl"/>
       </Library>
     </Group>
     <Group id="-922183004" label="GL_Lib" language="Genero">
