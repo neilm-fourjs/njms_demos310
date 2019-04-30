@@ -43,7 +43,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING, l_appInfo appInfo INOUT) R
   DEFINE l_login, l_pass, l_theme, l_cur_theme, l_old_theme STRING
   DEFINE l_allow_new BOOLEAN
   DEFINE f ui.Form
-
+  WHENEVER ANY ERROR CALL gl2_lib.gl2_error
   LET l_login = checkForSession() -- check to see if they have already logged in
   IF l_login IS NOT NULL THEN
     RETURN l_login

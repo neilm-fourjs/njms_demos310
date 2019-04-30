@@ -23,7 +23,7 @@ DEFINE m_menus DYNAMIC ARRAY OF VARCHAR(6)
 
 --------------------------------------------------------------------------------
 FUNCTION do_menu(l_logo STRING, l_appInfo appInfo INOUT)
-
+  WHENEVER ANY ERROR CALL gl2_lib.gl2_error
   OPEN WINDOW menu WITH FORM "menu_gbc"
 
   DISPLAY l_logo TO logo

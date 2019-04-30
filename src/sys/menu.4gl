@@ -24,6 +24,7 @@ MAIN
 
   CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
 	CALL gl2_lib.gl2_init( ARG_VAL(1), "default")
+  WHENEVER ANY ERROR CALL gl2_lib.gl2_error
   CALL ui.Interface.setText(C_PRGDESC)
 
   CLOSE WINDOW SCREEN

@@ -26,14 +26,15 @@ FUNCTION gl2_init(l_mdi CHAR(1), l_styles STRING)
 	CALL gl2_log.init(NULL, NULL, "err", "TRUE")
 
   CALL STARTLOG(gl2_err.fullLogPath)
-
-  CALL gl2_loadStyles(l_styles)
-  CALL gl2_mdisdi(l_mdi)
+  WHENEVER ANY ERROR CALL gl2_error
 
 	LET m_isGDC = FALSE
 	LET m_isUniversal = FALSE
 	IF ui.Interface.getFrontEndName() = "GDC" THEN LET m_isGDC = TRUE END IF
 	IF ui.Interface.getUniversalClientName() = "GBC" THEN LET m_isUniversal = TRUE END IF
+
+  CALL gl2_loadStyles(l_styles)
+  CALL gl2_mdisdi(l_mdi)
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Set MDI or not
@@ -74,8 +75,10 @@ END FUNCTION
 #+ Load the style file depending on the client
 FUNCTION gl2_loadStyles(l_sty STRING) RETURNS()
   DEFINE l_fe STRING
+
   IF m_isGDC THEN LET l_fe = "GDC" END IF
   IF m_isUniversal THEN LET l_fe = "GBC" END IF
+
 	TRY
  		CALL ui.interface.loadStyles(l_sty || "_" || l_fe)
 	CATCH
