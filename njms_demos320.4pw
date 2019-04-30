@@ -406,7 +406,7 @@
         <File filePath="src/sys/container.per"/>
       </Application>
       <Library binaryName="lib_login" dependencies="1986,-1463189462,-1090563702,-1690651403,-310428106" id="2135194580" label="lib_login">
-        <File filePath="src/gl_lib/lib_login.4gl"/>
+        <File filePath="src/sys/lib_login.4gl"/>
         <File filePath="src/gl_lib/lib_secure.4gl"/>
         <File filePath="src/sys/login.per"/>
       </Library>
