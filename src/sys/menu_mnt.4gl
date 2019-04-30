@@ -1,13 +1,19 @@
 #+ Menu Maintenance Demo - by N.J.Martin neilm@4js.com
 
-IMPORT FGL gl_lib
-IMPORT FGL gl_db
+IMPORT FGL gl2_lib
+IMPORT FGL gl2_appInfo
+IMPORT FGL gl2_about
+IMPORT FGL gl2_db
+
 IMPORT FGL app_lib
 &include "schema.inc"
-&include "genero_lib.inc"
+
 &include "app.inc"
 CONSTANT C_PRGDESC = "Menu Maintenance Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGVER = "3.2"
+
 &define RECNAME sys_menus.*
 &define TABNAMEQ "sys_menus"
 &define TABNAME sys_menus
@@ -39,14 +45,18 @@ DEFINE m_drag_source STRING
 DEFINE m_menu_key LIKE sys_menus.menu_key
 DEFINE m_save BOOLEAN
 DEFINE m_user_key INTEGER
+DEFINE m_appInfo gl2_appInfo.appInfo
+DEFINE m_db gl2_db.dbInfo
 MAIN
   DEFINE dnd ui.DragDrop
-  LET gl_toolbar = "dynmaint"
-  LET gl_topMenu = "dynmaint"
-  LET gl_lib.gl_noToolBar = FALSE
-  CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), "default", TRUE)
-  WHENEVER ANY ERROR CALL gl_lib.gl_error
+
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+
+	CALL ui.Interface.loadToolBar( "dynmaint" )
+	CALL ui.Interface.loadTopMenu( "dynmaint" )
+
+  CALL gl2_lib.gl2_init(ARG_VAL(1), "default")
+  WHENEVER ANY ERROR CALL gl2_lib.gl2_error
   LET m_user_key = arg_val(2)
   LET m_allowedActions = arg_val(3)
   LET m_allowedActions = (m_allowedActions CLIPPED), "YYYYY"
@@ -55,7 +65,7 @@ MAIN
   OPEN FORM frm FROM "menu_mnt"
   DISPLAY FORM frm
 
-  CALL gl_db.gldb_connect(NULL)
+  CALL m_db.gl2_connect(NULL)
 
   IF NOT app_lib.checkUserRoles(m_user_key, "System Admin", TRUE) THEN
     EXIT PROGRAM
@@ -77,7 +87,7 @@ MAIN
     DISPLAY ARRAY m_recs TO m_arr.*
       BEFORE DISPLAY
         IF m_save THEN
-          IF gl_lib.gl_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question")
+          IF gl2_lib.gl2_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question")
                   = "Yes"
               THEN
             CALL saveRoles_menu()
@@ -96,7 +106,7 @@ MAIN
 
     DISPLAY ARRAY m_mroles TO mr_arr.*
       ON ACTION dblclick
-        IF gl_lib.gl_winQuestion(
+        IF gl2_lib.gl2_winQuestion(
                     "Confirm", "Toggle activate state for users role?", "No", "Yes|No", "question")
                 = "Yes"
             THEN
@@ -192,9 +202,10 @@ MAIN
     ON ACTION lastrow
       CALL showRow(m_recs.getLength())
       CALL app_lib.setActions(m_row, m_recs.getLength(), m_allowedActions)
-    GL_ABOUT
+    ON ACTION about
+			CALL gl2_about.gl2_about(m_appInfo)
   END DIALOG
-  CALL gl_lib.gl_exitProgram(0, "Program Finished")
+  CALL gl2_lib.gl2_exitProgram(0, "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION query()
@@ -280,11 +291,11 @@ FUNCTION delete()
 
   LET l_stmt = "SELECT * FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || m_rec.KEYFLD || "'"
   LET m_rec_o.KEYFLD = m_rec.KEYFLD
-  IF NOT gl_db.gldb_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
+  IF NOT gl2_db.gl2_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
     RETURN FALSE
   END IF
 
-  IF gl_lib.gl_winQuestion(
+  IF gl2_lib.gl2_winQuestion(
               "Confirm",
               "Are you sure you want to delete this menu item?",
               "No",
@@ -295,7 +306,7 @@ FUNCTION delete()
     LET l_stmt = "DELETE FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = ?"
     PREPARE pre_del FROM l_stmt
     EXECUTE pre_del USING RECKEY
-    RETURN gl_db.gldb_sqlStatus(
+    RETURN gl2_db.gl2_sqlStatus(
         __LINE__,
         __FILE__,
         "DELETE FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || RECKEY || "'")
@@ -320,27 +331,27 @@ FUNCTION update()
   END IF
   LET l_stmt = "SELECT * FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || m_rec.KEYFLD || "'"
   LET m_rec_o.KEYFLD = m_rec.KEYFLD
-  IF NOT gl_db.gldb_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
+  IF NOT gl2_db.gl2_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
     RETURN FALSE
   END IF
 
   LET l_wher = KEYFLDQ || " = ?"
   LET l_stmt =
-      gl_db.gldb_genUpdate(
+      gl2_db.gl2_genUpdate(
           TABNAMEQ, l_wher, base.typeInfo.create(m_rec), base.typeInfo.create(m_rec_o), 0, TRUE)
 --	DISPLAY "Update:",l_stmt CLIPPED
   TRY
     PREPARE pre_upd FROM l_stmt CLIPPED
   CATCH
-    RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+    RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
   END TRY
 
   TRY
     EXECUTE pre_upd USING m_rec_o.KEYFLD
     LET m_recs[m_row].key = m_rec.KEYFLD
-    RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+    RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
   CATCH
-    RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+    RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
   END TRY
   RETURN FALSE
 
@@ -354,22 +365,22 @@ FUNCTION insert()
 
   LET l_stmt = "SELECT * FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || m_rec.KEYFLD || "'"
   LET m_rec_o.KEYFLD = m_rec.KEYFLD
-  IF NOT gl_db.gldb_checkRec(FALSE, m_rec.KEYFLD, l_stmt) THEN
+  IF NOT gl2_db.gl2_checkRec(FALSE, m_rec.KEYFLD, l_stmt) THEN
     RETURN FALSE
   END IF
 
-  IF gl_lib.gl_winQuestion("Confirm", "Insert new user?", "No", "Yes|No", "question") = "Yes" THEN
-    LET l_stmt = gl_db.gldb_genInsert(TABNAMEQ, base.typeInfo.create(m_rec), TRUE)
+  IF gl2_lib.gl2_winQuestion("Confirm", "Insert new user?", "No", "Yes|No", "question") = "Yes" THEN
+    LET l_stmt =gl2_db.gl2_genInsert(TABNAMEQ, base.typeInfo.create(m_rec), TRUE)
     TRY
       PREPARE pre_ins FROM l_stmt
     CATCH
-      RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
     TRY
       EXECUTE pre_ins
-      RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
     CATCH
-      RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
   END IF
   RETURN FALSE
@@ -464,7 +475,7 @@ REPORT trad_rpt(l_row, l_rec)
 
   FORMAT
     FIRST PAGE HEADER
-      LET l_rpt_user = gl_userName
+      LET l_rpt_user = m_appInfo.userName
       LET l_print_date = TODAY
       LET l_head2 = "Printed:", l_print_date, " By:", l_rpt_user.trim()
       LET x = 132 - length(l_head2)

@@ -74,11 +74,13 @@ END FUNCTION
 #+ Load the style file depending on the client
 FUNCTION gl2_loadStyles(l_sty STRING) RETURNS()
   DEFINE l_fe STRING
-  LET l_fe = UPSHIFT(ui.Interface.getFrontEndName())
-  IF fgl_getResource("gui.rendering") = "universal" THEN
-    LET l_fe = "GBC"
-  END IF
-  CALL ui.interface.loadStyles(l_sty || "_" || l_fe)
+  IF m_isGDC THEN LET l_fe = "GDC" END IF
+  IF m_isUniversal THEN LET l_fe = "GBC" END IF
+	TRY
+ 		CALL ui.interface.loadStyles(l_sty || "_" || l_fe)
+	CATCH
+ 		CALL ui.interface.loadStyles(l_sty)
+	END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Generic Windows message Dialog.  NOTE: This handles messages when there is

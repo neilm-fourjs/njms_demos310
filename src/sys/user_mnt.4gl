@@ -1,14 +1,20 @@
 #+ User Maintenance Demo - by N.J.Martin neilm@4js.com
 
+IMPORT FGL gl2_lib
+IMPORT FGL gl2_appInfo
+IMPORT FGL gl2_about
+IMPORT FGL gl2_db
+
 IMPORT FGL app_lib
-IMPORT FGL gl_lib
-IMPORT FGL gl_db
 IMPORT FGL lib_secure
+
 &include "schema.inc"
-&include "genero_lib.inc"
 &include "app.inc"
+
 CONSTANT C_PRGDESC = "User Maintenance Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGVER = "3.2"
 
 DEFINE m_user DYNAMIC ARRAY OF RECORD LIKE sys_users.*
 DEFINE m_roles DYNAMIC ARRAY OF RECORD LIKE sys_roles.*
@@ -23,21 +29,27 @@ DEFINE m_fullname DYNAMIC ARRAY OF STRING
 DEFINE m_drag_source STRING
 DEFINE m_save, m_saveUser, m_saveRoles BOOLEAN
 DEFINE m_user_key, m_this_user_key LIKE sys_users.user_key
+DEFINE m_appInfo gl2_appInfo.appInfo
+DEFINE m_db gl2_db.dbInfo
 MAIN
   DEFINE dnd ui.DragDrop
   DEFINE l_rules STRING
 
-  LET gl_topMenu = "dynmaint"
-  CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, TRUE)
-  WHENEVER ANY ERROR CALL gl_lib.gl_error
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+
+--	CALL ui.Interface.loadToolBar( "dynmaint" )
+	CALL ui.Interface.loadTopMenu( "dynmaint" )
+
+  CALL gl2_lib.gl2_init(ARG_VAL(1), "default")
+  WHENEVER ANY ERROR CALL gl2_lib.gl2_error
+
   LET m_this_user_key = arg_val(2)
 
   LET m_saveUser = FALSE
   OPEN FORM um FROM "user_mnt"
   DISPLAY FORM um
 
-  CALL gl_db.gldb_connect(NULL)
+  CALL m_db.gl2_connect(NULL)
 
   DISPLAY "Env AppUser:", fgl_getenv("APPUSER")
 
@@ -70,7 +82,7 @@ MAIN
     DISPLAY ARRAY m_fullname TO u_arr.*
       BEFORE DISPLAY
         IF m_save THEN
-          IF gl_lib.gl_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question")
+          IF gl2_lib.gl2_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question")
                   = "Yes"
               THEN
             CALL saveRoles_user()
@@ -108,7 +120,7 @@ MAIN
 
     DISPLAY ARRAY m_uroles TO ur_arr.*
       ON ACTION dblclick
-        IF gl_lib.gl_winQuestion(
+        IF gl2_lib.gl2_winQuestion(
                     "Confirm", "Toggle activate state for users role?", "No", "Yes|No", "question")
                 = "Yes"
             THEN
@@ -130,7 +142,7 @@ MAIN
     END DISPLAY
     DISPLAY ARRAY m_roles TO r_arr.*
       ON ACTION dblclick
-        IF gl_lib.gl_winQuestion(
+        IF gl2_lib.gl2_winQuestion(
                     "Confirm", "Toggle activate state for this role?", "No", "Yes|No", "question")
                 = "Yes"
             THEN
@@ -220,9 +232,10 @@ MAIN
       EXIT DIALOG
     ON ACTION close
       EXIT DIALOG
-    GL_ABOUT
+    ON ACTION about
+			CALL gl2_about.gl2_about(m_appInfo)
   END DIALOG
-  CALL gl_lib.gl_exitProgram(0, "Program Finished")
+  CALL gl2_lib.gl2_exitProgram(0, "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION removeRoles_user(d)
@@ -270,7 +283,7 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION checkSave()
   IF m_save THEN
-    IF gl_lib.gl_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question") = "Yes"
+    IF gl2_lib.gl2_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question") = "Yes"
         THEN
       IF m_saveUser THEN
         CALL saveUser()
@@ -331,7 +344,7 @@ FUNCTION del_user(x)
   IF m_user[x].user_key IS NULL THEN
     RETURN
   END IF
-  IF gl_lib.gl_winQuestion(
+  IF gl2_lib.gl2_winQuestion(
               "Confirm", "Are you sure you want to delete this user?", "No", "Yes|No", "question")
           = "Yes"
       THEN

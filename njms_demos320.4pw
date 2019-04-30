@@ -422,7 +422,7 @@
         <File filePath="src/sys/new_acct.4gl"/>
         <File filePath="src/sys/new_acct.per"/>
       </Application>
-      <Application binaryName="menu_mnt" commandLineArguments="S 1" dependencies="14000,-1090563702,1835393312,1986" id="1001967872" label="menu_mnt">
+      <Application binaryName="menu_mnt" commandLineArguments="S 1" dependencies="-1090563702,1835393312,1986,-310428106" id="1001967872" label="menu_mnt">
         <File filePath="src/sys/menu_mnt.4gl"/>
         <File filePath="src/sys/menu_mnt.per"/>
       </Application>
@@ -433,7 +433,7 @@
         <File filePath="src/OpenIdLogin/OpenIdLogin.per"/>
         <File filePath="src/OpenIdLogin/OpenIdLogin.xcf"/>
       </Application>
-      <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,14000" id="-1334009856" label="user_mnt">
+      <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,-310428106" id="-1334009856" label="user_mnt">
         <File filePath="src/sys/user_mnt.4gl"/>
         <File filePath="src/sys/user_mnt.per"/>
       </Application>
