@@ -4,9 +4,9 @@
 
 IMPORT os
 IMPORT util
-IMPORT FGL gl2_lib
-IMPORT FGL gl2_appInfo
-IMPORT FGL gl2_about
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
 
 IMPORT FGL lib_secure
 
@@ -43,7 +43,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING, l_appInfo appInfo INOUT) R
   DEFINE l_login, l_pass, l_theme, l_cur_theme, l_old_theme STRING
   DEFINE l_allow_new BOOLEAN
   DEFINE f ui.Form
-  WHENEVER ANY ERROR CALL gl2_lib.gl2_error
+  WHENEVER ANY ERROR CALL g2_lib.g2_error
   LET l_login = checkForSession() -- check to see if they have already logged in
   IF l_login IS NOT NULL THEN
     RETURN l_login
@@ -54,7 +54,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING, l_appInfo appInfo INOUT) R
     LET l_allow_new = FALSE
   END IF
   LET INT_FLAG = FALSE
-  CALL gl2_lib.gl2_log.logIt("Allow New:" || l_allow_new || " Ver:" || l_ver)
+  CALL g2_lib.g2_log.logIt("Allow New:" || l_allow_new || " Ver:" || l_ver)
   OPTIONS INPUT NO WRAP
 
   OPEN WINDOW login WITH FORM "login"
@@ -64,12 +64,12 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING, l_appInfo appInfo INOUT) R
     CALL ui.window.getCurrent().getForm().setElementHidden("logo_grid", FALSE)
     DISPLAY BY NAME m_logo_image
   END IF
-  IF gl2_lib.m_isUniversal THEN
+  IF g2_lib.m_isUniversal THEN
     CALL ui.Interface.frontCall("theme", "getCurrentTheme", [], [l_cur_theme])
     LET l_theme = l_cur_theme
   END IF
   LET l_login = fgl_getenv("OPENID_email")
-  CALL gl2_lib.gl2_log.logIt("before input for login")
+  CALL g2_lib.g2_log.logIt("before input for login")
   INPUT BY NAME l_login, l_pass, l_theme ATTRIBUTES(UNBUFFERED, WITHOUT DEFAULTS)
     BEFORE INPUT
       LET f = DIALOG.getForm()
@@ -126,7 +126,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING, l_appInfo appInfo INOUT) R
         EXIT INPUT
       END IF
     ON ACTION about
-      CALL gl2_about.gl2_about(l_appInfo)
+      CALL g2_about.g2_about(l_appInfo)
   END INPUT
   CLOSE WINDOW login
 
@@ -134,7 +134,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING, l_appInfo appInfo INOUT) R
     CALL lib_secure.glsec_saveSession(C_SESSION_KEY, l_login)
   END IF
 
-  IF gl2_lib.m_isUniversal THEN
+  IF g2_lib.m_isUniversal THEN
     SELECT gbc_theme INTO l_old_theme FROM sys_users WHERE email = l_login
     IF l_old_theme IS NOT NULL AND l_cur_theme != l_old_theme THEN
       CALL ui.Interface.frontCall("theme", "setTheme", [l_old_theme.trim()], [])
@@ -144,7 +144,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING, l_appInfo appInfo INOUT) R
     END IF
   END IF
 
-  CALL gl2_lib.gl2_log.logIt("after input for login:" || l_login)
+  CALL g2_lib.g2_log.logIt("after input for login:" || l_login)
   CALL fgl_setenv("APPUSER", l_login)
 	CALL l_appInfo.setUserName(l_login)
   RETURN l_login
@@ -182,7 +182,7 @@ PRIVATE FUNCTION validate_login(
 -- does account exist?
   SELECT * INTO l_acc.* FROM sys_users WHERE email = l_login
   IF STATUS = NOTFOUND THEN
-    CALL gl2_lib.gl2_log.logIt("No account for:" || l_login)
+    CALL g2_lib.g2_log.logIt("No account for:" || l_login)
     CALL audit_login(l_login, "A")
     RETURN FALSE
   END IF
@@ -207,8 +207,8 @@ PRIVATE FUNCTION validate_login(
 -- Has the password expired?
   IF l_acc.pass_expire IS NOT NULL AND l_acc.pass_expire > DATE("01/01/1990") THEN
     IF l_acc.pass_expire <= TODAY THEN
-      CALL gl2_lib.gl2_log.logIt("Password has expired:" || l_acc.pass_expire)
-      CALL gl2_lib.gl2_errPopup(% "Your password has expired!\nYou will need to create a new one!")
+      CALL g2_lib.g2_log.logIt("Password has expired:" || l_acc.pass_expire)
+      CALL g2_lib.g2_errPopup(% "Your password has expired!\nYou will need to create a new one!")
       LET l_acc.forcepwchg = "Y"
     END IF
   END IF
@@ -234,16 +234,16 @@ PRIVATE FUNCTION forgotten(l_login LIKE sys_users.email)
   DEFINE l_ret SMALLINT
 
   IF l_login IS NULL OR l_login = " " THEN
-    CALL gl2_lib.gl2_errPopup(% "You must enter your email address!")
+    CALL g2_lib.g2_errPopup(% "You must enter your email address!")
     RETURN
   END IF
 
   IF NOT sql_checkEmail(l_login) THEN
-    CALL gl2_lib.gl2_errPopup(% "Email address not registered!")
+    CALL g2_lib.g2_errPopup(% "Email address not registered!")
     RETURN
   END IF
 
-  IF gl2_lib.gl2_winQuestion(
+  IF g2_lib.g2_winQuestion(
               % "Confirm",
               % "Are you sure you want to reset your password?\n\nA link will be emailed to you,\nyou will then be able to change and clicking the link.",
               % "No",
@@ -254,7 +254,7 @@ PRIVATE FUNCTION forgotten(l_login LIKE sys_users.email)
     RETURN
   END IF
 
-  CALL gl2_lib.gl2_log.logIt("Password regenerated for:" || l_login)
+  CALL g2_lib.g2_log.logIt("Password regenerated for:" || l_login)
 
   LET l_acc.pass_expire = TODAY + 2
   LET l_acc.login_pass = lib_secure.glsec_genPassword()
@@ -284,20 +284,20 @@ PRIVATE FUNCTION forgotten(l_login LIKE sys_users.email)
           || "\" \""
           || NVL(l_body, "NULLBODY")
           || "\" 2> "
-          || os.path.join(gl2_lib.gl2_log.getLogDir(), "sendemail.err")
+          || os.path.join(g2_lib.g2_log.getLogDir(), "sendemail.err")
   --DISPLAY "CMD:",NVL(l_cmd,"NULL")
   ERROR "Sending Email, please wait ..."
   CALL ui.interface.refresh()
   RUN l_cmd RETURNING l_ret
-  CALL gl2_lib.gl2_log.logIt("Sendmail return:" || NVL(l_ret, "NULL"))
+  CALL g2_lib.g2_log.logIt("Sendmail return:" || NVL(l_ret, "NULL"))
   IF l_ret = 0 THEN -- email send okay
     UPDATE sys_users
         SET (salt, pass_hash, forcepwchg, pass_expire)
         = (l_acc.salt, l_acc.pass_hash, l_acc.forcepwchg, l_acc.pass_expire)
         WHERE email = l_login
-    CALL gl2_lib.gl2_winMessage(% "Password Reset", % "A Link has been emailed to you", "information")
+    CALL g2_lib.g2_winMessage(% "Password Reset", % "A Link has been emailed to you", "information")
   ELSE -- email send failed
-    CALL gl2_lib.gl2_winMessage(
+    CALL g2_lib.g2_winMessage(
         % "Password Reset", % "Reset Email failed to send!\nProcess aborted", "information")
   END IF
 
@@ -364,7 +364,7 @@ PRIVATE FUNCTION passchg(l_login LIKE sys_users.email) RETURNS BOOLEAN
       = (l_acc.salt, l_acc.pass_hash, l_acc.forcepwchg, l_acc.pass_expire, l_acc.hash_type)
       WHERE email = l_login
 
-  CALL gl2_lib.gl2_warnPopup(
+  CALL g2_lib.g2_warnPopup(
       % "Your password has be updated, please don't forget it.\nWe cannot retrieve this password, only reset it.\n")
 
   RETURN TRUE
@@ -399,7 +399,7 @@ PRIVATE FUNCTION openId() RETURNS STRING
 -- Ignore the error if it doesn't exist
   END TRY
   LET l_loop = 10
-  IF NOT gl2_lib.m_isGDC THEN
+  IF NOT g2_lib.m_isGDC THEN
     MENU "OpenID Login"
         ATTRIBUTE(STYLE = "dialog",
             COMMENT
@@ -447,7 +447,7 @@ PRIVATE FUNCTION openId() RETURNS STRING
   TRY
     CALL util.JSON.parse(l_store, l_oidc)
   CATCH
-    CALL gl2_lib.gl2_winMessage(
+    CALL g2_lib.g2_winMessage(
         "OpenID Error", SFMT("Failed to Parse JSON!\n%1", l_store), "exclamation")
     DISPLAY "OpenID JSON:", l_store
     RETURN NULL
@@ -470,7 +470,7 @@ PRIVATE FUNCTION checkForSession()
   END IF
 
   IF l_id = "expired" THEN
-    CALL gl2_lib.gl2_winMessage(% "Login", % "Your Session has expired.", "information")
+    CALL g2_lib.g2_winMessage(% "Login", % "Your Session has expired.", "information")
     CALL lib_secure.glsec_removeSession(C_SESSION_KEY)
     RETURN NULL
   END IF
@@ -516,7 +516,7 @@ FUNCTION cb_gbc_theme(l_cb ui.Combobox)
   DEFINE l_result STRING
   DEFINE x SMALLINT
 
-  IF gl2_lib.m_isUniversal THEN
+  IF g2_lib.m_isUniversal THEN
     CALL ui.Window.getCurrent().getForm().setElementHidden("ltheme", TRUE)
     CALL ui.Window.getCurrent().getForm().setFieldHidden("formonly.l_theme", TRUE)
     RETURN

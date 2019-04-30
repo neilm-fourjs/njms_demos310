@@ -1,4 +1,4 @@
-IMPORT FGL gl_lib
+IMPORT FGL gl2_lib
 &include "schema.inc"
 
 PUBLIC DEFINE m_user RECORD LIKE sys_users.*
@@ -13,8 +13,8 @@ FUNCTION getUser(l_key LIKE sys_users.user_key, l_email LIKE sys_users.email)
   IF l_email IS NOT NULL THEN
     SELECT * INTO m_user.* FROM sys_users WHERE email = l_email
     IF STATUS = NOTFOUND THEN
-      CALL gl_lib.gl_errPopup(SFMT(% "Invalid User Email '%1'!", l_email))
-      CALL gl_lib.gl_exitProgram(1, SFMT("Invalid User Email '%1'!", l_email))
+      CALL gl2_lib.gl2_errPopup(SFMT(% "Invalid User Email '%1'!", l_email))
+      CALL gl2_lib.gl2_exitProgram(1, SFMT("Invalid User Email '%1'!", l_email))
     ELSE
       RETURN
     END IF
@@ -24,13 +24,13 @@ FUNCTION getUser(l_key LIKE sys_users.user_key, l_email LIKE sys_users.email)
     LET l_key = arg_val(2)
   END IF
   IF l_key IS NULL OR l_key = 0 THEN
-    CALL gl_lib.gl_exitProgram(1, "Invalid User Id passed")
+    CALL gl2_lib.gl2_exitProgram(1, "Invalid User Id passed")
   END IF
 
   SELECT * INTO m_user.* FROM sys_users WHERE user_key = l_key
   IF STATUS = NOTFOUND THEN
-    CALL gl_lib.gl_errPopup(SFMT(% "Invalid User Key '%1'!", l_key))
-    CALL gl_lib.gl_exitProgram(1, SFMT("Invalid User Key '%1'!", l_key))
+    CALL gl2_lib.gl2_errPopup(SFMT(% "Invalid User Key '%1'!", l_key))
+    CALL gl2_lib.gl2_exitProgram(1, SFMT("Invalid User Key '%1'!", l_key))
   END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -73,13 +73,13 @@ FUNCTION checkUserRoles(l_user_key, l_role, l_verb)
   SELECT u.active, u.surname INTO l_u_act, l_user FROM sys_users u WHERE u.user_key = l_user_key
   IF STATUS = NOTFOUND THEN
     LET l_err = SFMT(% "User key '%1' not found!", l_user_key)
-    CALL gl_lib.gl_errPopup(l_err)
+    CALL gl2_lib.gl2_errPopup(l_err)
     RETURN FALSE
   END IF
   IF NOT l_u_act THEN
     LET l_err = SFMT("User '%1' not active!", l_user)
     IF l_verb THEN
-      CALL gl_lib.gl_errPopup(l_err)
+      CALL gl2_lib.gl2_errPopup(l_err)
     END IF
     RETURN FALSE
   END IF
@@ -87,13 +87,13 @@ FUNCTION checkUserRoles(l_user_key, l_role, l_verb)
   SELECT r.active, role_key INTO l_r_act, l_role_key FROM sys_roles r WHERE r.role_name = l_role
   IF STATUS = NOTFOUND THEN
     LET l_err = SFMT("Role '%1' not found!", l_role)
-    CALL gl_lib.gl_errPopup(l_err)
+    CALL gl2_lib.gl2_errPopup(l_err)
     RETURN FALSE
   END IF
   IF l_r_act != "Y" THEN
     LET l_err = SFMT("Role '%1' not longer active!", l_role)
     IF l_verb THEN
-      CALL gl_lib.gl_errPopup(l_err)
+      CALL gl2_lib.gl2_errPopup(l_err)
     END IF
     RETURN FALSE
   END IF
@@ -108,7 +108,7 @@ FUNCTION checkUserRoles(l_user_key, l_role, l_verb)
       LET l_err =
           SFMT(% "You don't have permission to do that\nPlease contact your system administrator\nRole:",
               l_role)
-      CALL gl_lib.gl_errPopup(l_err)
+      CALL gl2_lib.gl2_errPopup(l_err)
     END IF
     RETURN FALSE
   END IF
@@ -117,7 +117,7 @@ FUNCTION checkUserRoles(l_user_key, l_role, l_verb)
   IF NOT l_ur_act THEN
     LET l_err = SFMT(% "Role '%1' not active for this user!", l_role)
     IF l_verb THEN
-      CALL gl_lib.gl_errPopup(l_err)
+      CALL gl2_lib.gl2_errPopup(l_err)
     END IF
     RETURN FALSE
   END IF

@@ -1,9 +1,9 @@
 #+ User Maintenance Demo - by N.J.Martin neilm@4js.com
 
-IMPORT FGL gl2_lib
-IMPORT FGL gl2_appInfo
-IMPORT FGL gl2_about
-IMPORT FGL gl2_db
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+IMPORT FGL g2_db
 
 IMPORT FGL app_lib
 IMPORT FGL lib_secure
@@ -29,8 +29,8 @@ DEFINE m_fullname DYNAMIC ARRAY OF STRING
 DEFINE m_drag_source STRING
 DEFINE m_save, m_saveUser, m_saveRoles BOOLEAN
 DEFINE m_user_key, m_this_user_key LIKE sys_users.user_key
-DEFINE m_appInfo gl2_appInfo.appInfo
-DEFINE m_db gl2_db.dbInfo
+DEFINE m_appInfo g2_appInfo.appInfo
+DEFINE m_db g2_db.dbInfo
 MAIN
   DEFINE dnd ui.DragDrop
   DEFINE l_rules STRING
@@ -40,8 +40,8 @@ MAIN
 --	CALL ui.Interface.loadToolBar( "dynmaint" )
 	CALL ui.Interface.loadTopMenu( "dynmaint" )
 
-  CALL gl2_lib.gl2_init(ARG_VAL(1), "default")
-  WHENEVER ANY ERROR CALL gl2_lib.gl2_error
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+  WHENEVER ANY ERROR CALL g2_lib.g2_error
 
   LET m_this_user_key = arg_val(2)
 
@@ -49,7 +49,7 @@ MAIN
   OPEN FORM um FROM "user_mnt"
   DISPLAY FORM um
 
-  CALL m_db.gl2_connect(NULL)
+  CALL m_db.g2_connect(NULL)
 
   DISPLAY "Env AppUser:", fgl_getenv("APPUSER")
 
@@ -82,7 +82,7 @@ MAIN
     DISPLAY ARRAY m_fullname TO u_arr.*
       BEFORE DISPLAY
         IF m_save THEN
-          IF gl2_lib.gl2_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question")
+          IF g2_lib.g2_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question")
                   = "Yes"
               THEN
             CALL saveRoles_user()
@@ -120,7 +120,7 @@ MAIN
 
     DISPLAY ARRAY m_uroles TO ur_arr.*
       ON ACTION dblclick
-        IF gl2_lib.gl2_winQuestion(
+        IF g2_lib.g2_winQuestion(
                     "Confirm", "Toggle activate state for users role?", "No", "Yes|No", "question")
                 = "Yes"
             THEN
@@ -142,7 +142,7 @@ MAIN
     END DISPLAY
     DISPLAY ARRAY m_roles TO r_arr.*
       ON ACTION dblclick
-        IF gl2_lib.gl2_winQuestion(
+        IF g2_lib.g2_winQuestion(
                     "Confirm", "Toggle activate state for this role?", "No", "Yes|No", "question")
                 = "Yes"
             THEN
@@ -233,9 +233,9 @@ MAIN
     ON ACTION close
       EXIT DIALOG
     ON ACTION about
-			CALL gl2_about.gl2_about(m_appInfo)
+			CALL g2_about.g2_about(m_appInfo)
   END DIALOG
-  CALL gl2_lib.gl2_exitProgram(0, "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION removeRoles_user(d)
@@ -283,7 +283,7 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION checkSave()
   IF m_save THEN
-    IF gl2_lib.gl2_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question") = "Yes"
+    IF g2_lib.g2_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question") = "Yes"
         THEN
       IF m_saveUser THEN
         CALL saveUser()
@@ -344,7 +344,7 @@ FUNCTION del_user(x)
   IF m_user[x].user_key IS NULL THEN
     RETURN
   END IF
-  IF gl2_lib.gl2_winQuestion(
+  IF g2_lib.g2_winQuestion(
               "Confirm", "Are you sure you want to delete this user?", "No", "Yes|No", "question")
           = "Yes"
       THEN

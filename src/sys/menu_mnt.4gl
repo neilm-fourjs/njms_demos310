@@ -1,9 +1,9 @@
 #+ Menu Maintenance Demo - by N.J.Martin neilm@4js.com
 
-IMPORT FGL gl2_lib
-IMPORT FGL gl2_appInfo
-IMPORT FGL gl2_about
-IMPORT FGL gl2_db
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+IMPORT FGL g2_db
 
 IMPORT FGL app_lib
 &include "schema.inc"
@@ -45,8 +45,8 @@ DEFINE m_drag_source STRING
 DEFINE m_menu_key LIKE sys_menus.menu_key
 DEFINE m_save BOOLEAN
 DEFINE m_user_key INTEGER
-DEFINE m_appInfo gl2_appInfo.appInfo
-DEFINE m_db gl2_db.dbInfo
+DEFINE m_appInfo g2_appInfo.appInfo
+DEFINE m_db g2_db.dbInfo
 MAIN
   DEFINE dnd ui.DragDrop
 
@@ -55,8 +55,8 @@ MAIN
 	CALL ui.Interface.loadToolBar( "dynmaint" )
 	CALL ui.Interface.loadTopMenu( "dynmaint" )
 
-  CALL gl2_lib.gl2_init(ARG_VAL(1), "default")
-  WHENEVER ANY ERROR CALL gl2_lib.gl2_error
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+  WHENEVER ANY ERROR CALL g2_lib.g2_error
   LET m_user_key = arg_val(2)
   LET m_allowedActions = arg_val(3)
   LET m_allowedActions = (m_allowedActions CLIPPED), "YYYYY"
@@ -65,7 +65,7 @@ MAIN
   OPEN FORM frm FROM "menu_mnt"
   DISPLAY FORM frm
 
-  CALL m_db.gl2_connect(NULL)
+  CALL m_db.g2_connect(NULL)
 
   IF NOT app_lib.checkUserRoles(m_user_key, "System Admin", TRUE) THEN
     EXIT PROGRAM
@@ -87,7 +87,7 @@ MAIN
     DISPLAY ARRAY m_recs TO m_arr.*
       BEFORE DISPLAY
         IF m_save THEN
-          IF gl2_lib.gl2_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question")
+          IF g2_lib.g2_winQuestion("Confirm", "Save these changes?", "No", "Yes|No", "question")
                   = "Yes"
               THEN
             CALL saveRoles_menu()
@@ -106,7 +106,7 @@ MAIN
 
     DISPLAY ARRAY m_mroles TO mr_arr.*
       ON ACTION dblclick
-        IF gl2_lib.gl2_winQuestion(
+        IF g2_lib.g2_winQuestion(
                     "Confirm", "Toggle activate state for users role?", "No", "Yes|No", "question")
                 = "Yes"
             THEN
@@ -182,7 +182,7 @@ MAIN
       END IF
 
 {	 	ON ACTION list
-			LET RECKEY = gl2_fldChoose( TABNAMEQ, base.typeInfo.create( m_rec ) )
+			LET RECKEY = g2_fldChoose( TABNAMEQ, base.typeInfo.create( m_rec ) )
 			DISPLAY "key:",RECKEY
 			LET m_wher = KEYFLDQ||"='"||RECKEY||"'"
 			IF getRec() THEN CALL showRow(1) END IF}
@@ -203,9 +203,9 @@ MAIN
       CALL showRow(m_recs.getLength())
       CALL app_lib.setActions(m_row, m_recs.getLength(), m_allowedActions)
     ON ACTION about
-			CALL gl2_about.gl2_about(m_appInfo)
+			CALL g2_about.g2_about(m_appInfo)
   END DIALOG
-  CALL gl2_lib.gl2_exitProgram(0, "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION query()
@@ -291,11 +291,11 @@ FUNCTION delete()
 
   LET l_stmt = "SELECT * FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || m_rec.KEYFLD || "'"
   LET m_rec_o.KEYFLD = m_rec.KEYFLD
-  IF NOT gl2_db.gl2_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
+  IF NOT g2_db.g2_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
     RETURN FALSE
   END IF
 
-  IF gl2_lib.gl2_winQuestion(
+  IF g2_lib.g2_winQuestion(
               "Confirm",
               "Are you sure you want to delete this menu item?",
               "No",
@@ -306,7 +306,7 @@ FUNCTION delete()
     LET l_stmt = "DELETE FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = ?"
     PREPARE pre_del FROM l_stmt
     EXECUTE pre_del USING RECKEY
-    RETURN gl2_db.gl2_sqlStatus(
+    RETURN g2_db.g2_sqlStatus(
         __LINE__,
         __FILE__,
         "DELETE FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || RECKEY || "'")
@@ -331,27 +331,27 @@ FUNCTION update()
   END IF
   LET l_stmt = "SELECT * FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || m_rec.KEYFLD || "'"
   LET m_rec_o.KEYFLD = m_rec.KEYFLD
-  IF NOT gl2_db.gl2_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
+  IF NOT g2_db.g2_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
     RETURN FALSE
   END IF
 
   LET l_wher = KEYFLDQ || " = ?"
   LET l_stmt =
-      gl2_db.gl2_genUpdate(
+      g2_db.g2_genUpdate(
           TABNAMEQ, l_wher, base.typeInfo.create(m_rec), base.typeInfo.create(m_rec_o), 0, TRUE)
 --	DISPLAY "Update:",l_stmt CLIPPED
   TRY
     PREPARE pre_upd FROM l_stmt CLIPPED
   CATCH
-    RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
+    RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
   END TRY
 
   TRY
     EXECUTE pre_upd USING m_rec_o.KEYFLD
     LET m_recs[m_row].key = m_rec.KEYFLD
-    RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
+    RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
   CATCH
-    RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
+    RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
   END TRY
   RETURN FALSE
 
@@ -365,22 +365,22 @@ FUNCTION insert()
 
   LET l_stmt = "SELECT * FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || m_rec.KEYFLD || "'"
   LET m_rec_o.KEYFLD = m_rec.KEYFLD
-  IF NOT gl2_db.gl2_checkRec(FALSE, m_rec.KEYFLD, l_stmt) THEN
+  IF NOT g2_db.g2_checkRec(FALSE, m_rec.KEYFLD, l_stmt) THEN
     RETURN FALSE
   END IF
 
-  IF gl2_lib.gl2_winQuestion("Confirm", "Insert new user?", "No", "Yes|No", "question") = "Yes" THEN
-    LET l_stmt =gl2_db.gl2_genInsert(TABNAMEQ, base.typeInfo.create(m_rec), TRUE)
+  IF g2_lib.g2_winQuestion("Confirm", "Insert new user?", "No", "Yes|No", "question") = "Yes" THEN
+    LET l_stmt =g2_db.g2_genInsert(TABNAMEQ, base.typeInfo.create(m_rec), TRUE)
     TRY
       PREPARE pre_ins FROM l_stmt
     CATCH
-      RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
     TRY
       EXECUTE pre_ins
-      RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
     CATCH
-      RETURN gl2_db.gl2_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
   END IF
   RETURN FALSE

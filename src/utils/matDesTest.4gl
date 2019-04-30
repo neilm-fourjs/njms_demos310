@@ -2,9 +2,9 @@
 -- By: Neil J Martin ( neilm@4js.com )
 
 IMPORT os
-IMPORT FGL gl2_lib
-IMPORT FGL gl2_about
-IMPORT FGL gl2_appInfo
+IMPORT FGL g2_lib
+IMPORT FGL g2_about
+IMPORT FGL g2_appInfo
 
 CONSTANT C_PRGDESC = "Material Design Test"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
@@ -39,10 +39,10 @@ MAIN
     img STRING
   END RECORD
   DEFINE x SMALLINT
-  DEFINE l_appInfo gl2_appInfo.appInfo
+  DEFINE l_appInfo g2_appInfo.appInfo
 
   CALL l_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
-  CALL gl2_lib.gl2_init(ARG_VAL(1), "default")
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
 
   FOR X = 1 TO 15
     LET l_arr[x].col1 = "Row " || x
@@ -111,7 +111,7 @@ MAIN
     ON ACTION inactive
       CALL dummy()
     ON ACTION about
-      CALL gl2_about.gl2_about(l_appInfo)
+      CALL g2_about.g2_about(l_appInfo)
     ON ACTION close
       EXIT DIALOG
     ON ACTION quit
@@ -163,7 +163,7 @@ FUNCTION gbc_replaceHTML(l_obj STRING, l_txt STRING)
   IF ui.interface.getFrontEndName() = "GBC" THEN
     CALL ui.Interface.frontCall("mymodule", "replace_html", [l_obj, l_txt], l_ret)
   ELSE
-    CALL gl2_winMessage("Error", "GBC Test only!", "exclamation")
+    CALL g2_winMessage("Error", "GBC Test only!", "exclamation")
   END IF
   DISPLAY "l_ret:", l_ret
 END FUNCTION

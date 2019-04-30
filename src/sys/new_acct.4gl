@@ -1,4 +1,4 @@
-IMPORT FGL gl_lib
+IMPORT FGL g2_lib
 IMPORT FGL lib_login
 IMPORT FGL lib_secure
 &include "schema.inc"
@@ -28,7 +28,7 @@ FUNCTION new_acct(l_email STRING, l_family STRING, l_given STRING, l_photo STRIN
   INPUT BY NAME l_acc.* ATTRIBUTES(WITHOUT DEFAULTS, FIELD ORDER FORM, UNBUFFERED)
     AFTER FIELD email
       IF lib_login.sql_checkEmail(l_acc.email) THEN
-        CALL gl_lib.gl_errPopup(% "This Email is already registered.")
+        CALL g2_lib.g2_errPopup(% "This Email is already registered.")
         NEXT FIELD email
       ELSE
         --LET l_acc.login_pass = lib_secure.glsec_genPassword()
@@ -54,7 +54,7 @@ FUNCTION new_acct(l_email STRING, l_family STRING, l_given STRING, l_photo STRIN
       CALL DIALOG.setFieldActive("sys_users.acct_type", FALSE)
     ON ACTION generate
       LET l_acc.login_pass = lib_secure.glsec_genPassword()
-      CALL gl_lib.gl_winMessage(
+      CALL g2_lib.g2_winMessage(
           % "Password",
           SFMT(% "Your Generated Password is:\n%1\nDon't forget it!", l_acc.login_pass),
           "information")

@@ -1,7 +1,7 @@
 IMPORT os
-IMPORT FGL gl2_lib
-IMPORT FGL gl2_about
-IMPORT FGL gl2_appInfo
+IMPORT FGL g2_lib
+IMPORT FGL g2_about
+IMPORT FGL g2_appInfo
 IMPORT FGL lib_login
 
 &include "schema.inc"
@@ -23,7 +23,7 @@ DEFINE m_menus DYNAMIC ARRAY OF VARCHAR(6)
 
 --------------------------------------------------------------------------------
 FUNCTION do_menu(l_logo STRING, l_appInfo appInfo INOUT)
-  WHENEVER ANY ERROR CALL gl2_lib.gl2_error
+  WHENEVER ANY ERROR CALL g2_lib.g2_error
   OPEN WINDOW menu WITH FORM "menu_gbc"
 
   DISPLAY l_logo TO logo
@@ -32,7 +32,7 @@ FUNCTION do_menu(l_logo STRING, l_appInfo appInfo INOUT)
   LET m_curMenu = 1
   LET m_menus[m_curMenu] = "main"
   IF NOT populate_menu(m_menus[m_curMenu]) THEN -- should not happen!
-    CALL gl2_lib.gl2_exitProgram(0, "'main' menu not found!")
+    CALL g2_lib.g2_exitProgram(0, "'main' menu not found!")
   END IF
 
   DISPLAY l_appInfo.userName TO userName
@@ -56,7 +56,7 @@ FUNCTION do_menu(l_logo STRING, l_appInfo appInfo INOUT)
         END IF
 
 			ON ACTION about
-				CALL gl2_about.gl2_about(l_appInfo)
+				CALL g2_about.g2_about(l_appInfo)
 
       ON ACTION logout
         CALL lib_login.logout()
@@ -113,30 +113,30 @@ FUNCTION process_menu_item(x SMALLINT)
 
     WHEN "F" -- Run a standard 42r - with defaults args
       CALL progArgs(m_menu[x].m_item) RETURNING l_prog, l_args
-      CALL gl2_lib.gl2_log.logit("RUN:fglrun " || l_prog || " " || m_args || " " || l_args)
+      CALL g2_lib.g2_log.logit("RUN:fglrun " || l_prog || " " || m_args || " " || l_args)
       --DISPLAY "l_prog:",l_prog," m_args:",m_args, " l_args:",l_args
       --DISPLAY "Run: fglrun "||l_prog||" "||m_args||" "||l_args
       IF NOT os.path.exists(l_prog) THEN
-        CALL gl2_lib.gl2_errPopup(SFMT(% "This program '%1' appears to not be installed!", l_prog))
+        CALL g2_lib.g2_errPopup(SFMT(% "This program '%1' appears to not be installed!", l_prog))
       END IF
       RUN "fglrun " || l_prog || " " || m_args || " " || l_args WITHOUT WAITING
 
     WHEN "S" -- Run a simple 42r - no args
-      CALL gl2_lib.gl2_log.logit("RUN:fglrun " || m_menu[x].m_item)
+      CALL g2_lib.g2_log.logit("RUN:fglrun " || m_menu[x].m_item)
       IF NOT os.path.exists(m_menu[x].m_item) THEN
-        CALL gl2_lib.gl2_errPopup(
+        CALL g2_lib.g2_errPopup(
             SFMT(% "This program '%1' appears to not be installed!", m_menu[x].m_item))
       END IF
       RUN "fglrun " || m_menu[x].m_item WITHOUT WAITING
 
     WHEN "P"
       CALL progArgs(m_menu[x].m_item) RETURNING l_prog, l_args
-      CALL gl2_lib.gl2_log.logit("RUN:" || l_prog || " " || l_args)
+      CALL g2_lib.g2_log.logit("RUN:" || l_prog || " " || l_args)
       DISPLAY "Run: " || l_prog || " " || l_args
       RUN l_prog || " " || l_args WITHOUT WAITING
 
     WHEN "O"
-      CALL gl2_lib.gl2_log.logit("OSRUN:" || m_menu[x].m_item)
+      CALL g2_lib.g2_log.logit("OSRUN:" || m_menu[x].m_item)
       DISPLAY "exec: " || m_menu[x].m_item
       RUN m_menu[arr_curr()].m_item WITHOUT WAITING
 
@@ -229,7 +229,7 @@ END FUNCTION
 FUNCTION quit() RETURNS BOOLEAN
   IF ARG_VAL(1) = "MDI" THEN
     IF ui.Interface.getChildCount() > 0 THEN
-      CALL gl2_lib.gl2_warnPopup(% "Must close child windows first!")
+      CALL g2_lib.g2_warnPopup(% "Must close child windows first!")
       RETURN FALSE
     END IF
   END IF
