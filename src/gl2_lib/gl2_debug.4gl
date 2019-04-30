@@ -3,8 +3,6 @@ IMPORT os
 &define GL2_DEBUG
 &include "gl2_debug.inc"
 
-&ifndef GL2_DBGMSG
-&define GL2_DBGMSG
 --------------------------------------------------------------------------------
 #+ Display debug messages to console.
 #+
@@ -36,4 +34,3 @@ FUNCTION gl2_dbgMsg(l_fil STRING, l_lno INT, l_lev STRING, l_msg STRING)
   END IF
 
 END FUNCTION
-&endif

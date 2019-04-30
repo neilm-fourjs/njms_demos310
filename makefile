@@ -18,5 +18,8 @@ export LANG=is_IS.utf8
 all:
 	gsmake njms_demos$(GENVER).4pw
 
+clean:
+	find . -name \*.42? -delete
+
 run: 
 	cd $(BIN); fglrun menu.42r

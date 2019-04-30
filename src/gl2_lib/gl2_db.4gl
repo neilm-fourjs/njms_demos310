@@ -21,7 +21,7 @@ CONSTANT DEF_DBSPACE = "dbs1"
 #CONSTANT DEF_DBDRIVER="dbmsqt3xx"
 CONSTANT DEF_DBDIR = "../db"
 
-TYPE dbInfo RECORD
+PUBLIC TYPE dbInfo RECORD
 	name STRING,
 	type STRING,
 	desc STRING,
@@ -33,7 +33,7 @@ TYPE dbInfo RECORD
 	create_db BOOLEAN
 END RECORD
 
-FUNCTION (this dbInfo ) gl2_db_connect(l_dbName STRING)
+PUBLIC FUNCTION (this dbInfo) gl2_connect(l_dbName STRING) RETURNS ()
   DEFINE l_msg STRING
   DEFINE l_lockMode, l_fglprofile BOOLEAN
 
@@ -67,14 +67,14 @@ FUNCTION (this dbInfo ) gl2_db_connect(l_dbName STRING)
   END IF
 
 -- setup stuff from fglprofile
-  LET l_msg = fgl_getresource("dbi.database." || this.name || ".source")
+  LET l_msg = fgl_getResource("dbi.database." || this.name || ".source")
   IF l_msg IS NOT NULL AND l_msg != " " THEN
     LET this.source = l_msg
     LET l_fglprofile = TRUE
   END IF
-  LET l_msg = fgl_getresource("dbi.database." || this.name || ".driver")
+  LET l_msg = fgl_getResource("dbi.database." || this.name || ".driver")
   IF l_msg IS NULL OR l_msg = " " THEN
-    LET l_msg = fgl_getresource("dbi.default.driver")
+    LET l_msg = fgl_getResource("dbi.default.driver")
   END IF
   IF l_msg IS NOT NULL AND l_msg != " " THEN
     LET this.driver = l_msg
@@ -101,7 +101,7 @@ FUNCTION (this dbInfo ) gl2_db_connect(l_dbName STRING)
       WHEN "sqt"
         IF NOT os.path.EXISTS(this.dir) THEN
           IF NOT os.path.mkdir(this.dir) THEN
-            CALL gl_winMessage(
+            CALL gl2_lib.gl2_winMessage(
                 "Error",
                 SFMT("Failed to create dbdir '%1' !\n%2", this.dir, ERR_GET(STATUS)),
                 "exclamation")
@@ -112,7 +112,7 @@ FUNCTION (this dbInfo ) gl2_db_connect(l_dbName STRING)
           LET this.source = this.dir || "/" || this.name || ".db"
         END IF
         IF NOT os.path.EXISTS(this.source) THEN
-          CALL gl_winMessage(
+          CALL gl2_lib.gl2_winMessage(
               "Error", SFMT("Database file is missing? '%1' !\n", this.source), "exclamation")
         ELSE
           DISPLAY "Database file exists:", this.source
@@ -142,15 +142,15 @@ FUNCTION (this dbInfo ) gl2_db_connect(l_dbName STRING)
         SQLERRMESSAGE
     DISPLAY l_msg
     IF this.create_db AND SQLCA.SQLCODE = -329 AND this.type = "ifx" THEN
-      CALL gl2_db_ifx_createdb()
+      CALL this.gl2_ifx_createdb()
       LET l_msg = NULL
     END IF
     IF this.create_db AND SQLCA.SQLCODE = -6372 AND (this.type = "mdb" OR this.type = "mys") THEN
-      CALL gl2_db_mdb_createdb()
+      CALL this.gl2_mdb_createdb()
       LET l_msg = NULL
     END IF
     IF this.create_db AND SQLCA.SQLCODE = -6372 AND this.type = "sqt" THEN
-      CALL gl2_db_sqt_createdb(this.dir, this.source)
+      CALL this.gl2_sqt_createdb(this.dir, this.source)
       LET l_msg = NULL
     END IF
     IF SQLCA.SQLCODE = -6366 THEN
@@ -158,7 +158,7 @@ FUNCTION (this dbInfo ) gl2_db_connect(l_dbName STRING)
     END IF
     IF l_msg IS NOT NULL THEN
       CALL gl2_lib.gl2_errPopup(SFMT(% "Fatal Error %1", l_msg))
-      EXIT PROGRAM
+			CALL gl2_lib.gl2_exitProgram(1, l_msg)
     END IF
   END TRY
 
@@ -170,7 +170,7 @@ FUNCTION (this dbInfo ) gl2_db_connect(l_dbName STRING)
 
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION (this dbInfo ) gl2_db_getDBType() RETURNS STRING
+FUNCTION (this dbInfo) gl2_getType() RETURNS STRING
   DEFINE drv STRING
   IF this.type IS NULL THEN
     LET drv = fgl_getenv("DBDRIVER")
@@ -183,7 +183,7 @@ FUNCTION (this dbInfo ) gl2_db_getDBType() RETURNS STRING
 END FUNCTION
 --------------------------------------------------------------------------------
 -- create file and folder for the empty sqlite db and then call the db_connect again
-FUNCTION (this dbInfo ) gl2_db_sqt_createdb(l_dir STRING, l_file STRING)
+FUNCTION (this dbInfo) gl2_sqt_createdb(l_dir STRING, l_file STRING) RETURNS ()
   DEFINE c base.Channel
   LET c = base.Channel.create()
   IF NOT os.path.exists(l_dir) THEN
@@ -194,18 +194,18 @@ FUNCTION (this dbInfo ) gl2_db_sqt_createdb(l_dir STRING, l_file STRING)
   CALL c.openFile(l_file, "w")
   CALL c.close()
   LET this.create_db = FALSE -- avoid infintate loop!
-  CALL gl2_db_connect(this.name)
+  CALL this.gl2_connect(this.name)
 END FUNCTION
 --------------------------------------------------------------------------------
 -- create file and folder for the empty sqlite db and then call the db_connect again
-FUNCTION (this dbInfo ) gl2_db_mdb_createdb()
+FUNCTION (this dbInfo) gl2_mdb_createdb() RETURNS ()
   DEFINE l_sql_stmt STRING
   LET l_sql_stmt =
       "CREATE DATABASE " || this.name || " default character set utf8mb4 collate utf8mb4_unicode_ci"
   TRY
     EXECUTE IMMEDIATE l_sql_stmt
   CATCH
-    IF NOT gl2_db_sqlStatus(__LINE__, "gl_db", l_sql_stmt) THEN
+    IF NOT gl2_sqlStatus(__LINE__, "gl_db", l_sql_stmt) THEN
       CALL gl2_lib.gl2_exitProgram(STATUS, "DB Creation Failed!")
     END IF
   END TRY
@@ -213,18 +213,18 @@ FUNCTION (this dbInfo ) gl2_db_mdb_createdb()
 END FUNCTION
 --------------------------------------------------------------------------------
 -- create a new informix database and then call the db_connect again
-FUNCTION (this dbInfo ) gl2_db_ifx_createdb()
+FUNCTION (this dbInfo) gl2_ifx_createdb() RETURNS ()
   DEFINE l_sql_stmt STRING
   LET l_sql_stmt = "CREATE DATABASE " || this.name || " IN " || this.dbspace
   TRY
     EXECUTE IMMEDIATE l_sql_stmt
   CATCH
-    IF NOT gl2_db_sqlStatus(__LINE__, "gl_db", l_sql_stmt) THEN
+    IF NOT gl2_sqlStatus(__LINE__, "gl_db", l_sql_stmt) THEN
       CALL gl2_lib.gl2_exitProgram(STATUS, "DB Creation Failed!")
     END IF
   END TRY
   LET this.create_db = FALSE -- avoid infintate loop!
-  CALL gl2_db_connect(this.name)
+  CALL this.gl2_connect(this.name)
 END FUNCTION
 
 --------------------------------------------------------------------------------
@@ -232,7 +232,7 @@ END FUNCTION
 #+
 #+ @param stat Status
 #+ @param dbname Database Name
-FUNCTION (this dbInfo ) gl2_db_showInfo(stat INTEGER) --{{{
+FUNCTION (this dbInfo) gl2_showInfo(stat INTEGER) RETURNS ()
 
   OPEN WINDOW info WITH FORM "gl2_dbinfo"
 
@@ -285,7 +285,7 @@ FUNCTION (this dbInfo ) gl2_db_showInfo(stat INTEGER) --{{{
 
   CLOSE WINDOW info
 
-END FUNCTION --}}}
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Process the status after an SQL Statement.
 #+
@@ -295,7 +295,7 @@ END FUNCTION --}}}
 #+ @param l_mod Module name - should be __FILE__
 #+ @param l_stmt = String: The SQL Statement / Message, Can be NULL.
 #+ @return TRUE/FALSE.  Success / Failed
-FUNCTION gl2_db_sqlStatus(l_line, l_mod, l_stmt) RETURNS BOOLEAN --{{{
+FUNCTION gl2_sqlStatus(l_line, l_mod, l_stmt) RETURNS BOOLEAN
   DEFINE l_mod, l_stmt STRING
   DEFINE l_line, l_stat INTEGER
 
@@ -334,7 +334,7 @@ FUNCTION gl2_db_sqlStatus(l_line, l_mod, l_stmt) RETURNS BOOLEAN --{{{
 
   RETURN FALSE
 
-END FUNCTION --}}}
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Generate an insert statement.
 #+
@@ -342,7 +342,7 @@ END FUNCTION --}}}
 #+ @param rec_n TypeInfo Node for record to udpate
 #+ @param fixQuote Mask single quote with another single quote for GeneroDB!
 #+ @return SQL Statement
-FUNCTION gl2_db_genInsert(tab STRING, rec_n om.domNode, fixQuote BOOLEAN) RETURNS STRING --{{{
+FUNCTION gl2_genInsert(tab STRING, rec_n om.domNode, fixQuote BOOLEAN) RETURNS STRING
   DEFINE n om.domNode
   DEFINE nl om.nodeList
   DEFINE l_stmt, val STRING
@@ -354,7 +354,7 @@ FUNCTION gl2_db_genInsert(tab STRING, rec_n om.domNode, fixQuote BOOLEAN) RETURN
   LET comma = " "
   FOR x = 1 TO nl.getLength()
     LET n = nl.item(x)
-    CALL gl2_db_getType(n.getAttribute("type")) RETURNING typ, len
+    CALL gl2_getColumnType(n.getAttribute("type")) RETURNING typ, len
     LET val = n.getAttribute("value")
     IF val IS NULL THEN
       LET l_stmt = l_stmt.append(comma || "NULL")
@@ -363,7 +363,7 @@ FUNCTION gl2_db_genInsert(tab STRING, rec_n om.domNode, fixQuote BOOLEAN) RETURN
         LET l_stmt = l_stmt.append(comma || val)
       ELSE
         IF fixQuote THEN
-          LET val = gl2_db_fixQuote(val)
+          LET val = gl2_fixQuote(val)
         END IF
         LET l_stmt = l_stmt.append(comma || "'" || val || "'")
       END IF
@@ -373,7 +373,7 @@ FUNCTION gl2_db_genInsert(tab STRING, rec_n om.domNode, fixQuote BOOLEAN) RETURN
   LET l_stmt = l_stmt.append(")")
 
   RETURN l_stmt
-END FUNCTION --}}}
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Generate an update statement.
 #+
@@ -384,7 +384,7 @@ END FUNCTION --}}}
 #+ @param ser_col Serial Column number or 0 ( colNo of the column that is a serial )
 #+ @param fixQuote Mask single quote with another single quote for GeneroDB!
 #+ @return SQL Statement
-FUNCTION gl2_db_genUpdate(tab, wher, rec_n, rec_o, ser_col, fixQuote) --{{{
+FUNCTION gl2_genUpdate(tab, wher, rec_n, rec_o, ser_col, fixQuote)
   DEFINE tab, wher STRING
   DEFINE ser_col, fixQuote SMALLINT
   DEFINE rec_n, rec_o, n, o om.domNode
@@ -403,7 +403,7 @@ FUNCTION gl2_db_genUpdate(tab, wher, rec_n, rec_o, ser_col, fixQuote) --{{{
     END IF -- Skip Serial Column
     LET n = nl_n.item(x)
     LET o = nl_o.item(x)
-    CALL gl2_db_getType(n.getAttribute("type")) RETURNING typ, len
+    CALL gl2_getColumnType(n.getAttribute("type")) RETURNING typ, len
     LET val_o = o.getAttribute("value")
     LET val = n.getAttribute("value")
     IF (val_o IS NULL AND val IS NULL) OR val_o = val THEN
@@ -426,7 +426,7 @@ FUNCTION gl2_db_genUpdate(tab, wher, rec_n, rec_o, ser_col, fixQuote) --{{{
         LET l_stmt = l_stmt.append(val)
       ELSE
         IF fixQuote THEN
-          LET val = gl2_db_fixQuote(val)
+          LET val = gl2_fixQuote(val)
         END IF
         LET l_stmt = l_stmt.append("'" || val || "'")
       END IF
@@ -436,19 +436,19 @@ FUNCTION gl2_db_genUpdate(tab, wher, rec_n, rec_o, ser_col, fixQuote) --{{{
   LET l_stmt = l_stmt.append(" WHERE " || wher)
 
   RETURN l_stmt
-END FUNCTION --}}}
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Fix single quote
 #+
 #+ @param l_in String to be fixed
 #+ @returns fixed string
-FUNCTION gl2_db_fixQuote(l_in STRING) RETURNS STRING --{{{
+FUNCTION gl2_fixQuote(l_in STRING) RETURNS STRING
   DEFINE y SMALLINT
   DEFINE sb base.StringBuffer
 
   LET y = l_in.getIndexOf("'", 1)
   IF y > 0 THEN
-    GL_DBGMSG(0, "Single Quote Found!")
+    GL_DBGMSG(0, "Single Quote Found and fixed!")
     LET sb = base.StringBuffer.create()
     CALL sb.append(l_in)
     CALL sb.replace("'", "''", 0)
@@ -456,14 +456,14 @@ FUNCTION gl2_db_fixQuote(l_in STRING) RETURNS STRING --{{{
   END IF
 
   RETURN l_in
-END FUNCTION --}}}
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Get the database column type and return a simple char and len value.
 #+ NOTE: SMALLINT INTEGER SERIAL DECIMAL=N, DATE=D, CHAR VARCHAR=C
 #+
 #+ @param l_typ Type
 #+ @return CHAR(1),SMALLINT
-FUNCTION gl2_db_getType(l_typ STRING) RETURNS(STRING, STRING) --{{{
+FUNCTION gl2_getColumnType(l_typ STRING) RETURNS(STRING, STRING)
   DEFINE l_len SMALLINT
 
 --TODO: Use I for smallint, integer, serial, N for numeric, decimal
@@ -486,20 +486,20 @@ FUNCTION gl2_db_getType(l_typ STRING) RETURNS(STRING, STRING) --{{{
       LET l_len = 10
     WHEN "CHA"
       LET l_typ = "C"
-      LET l_len = gl2_db_getLength(l_typ)
+      LET l_len = gl2_getColumnLength(l_typ)
     WHEN "VAR"
       LET l_typ = "C"
-      LET l_len = gl2_db_getLength(l_typ)
+      LET l_len = gl2_getColumnLength(l_typ)
   END CASE
 
   RETURN l_typ, l_len
-END FUNCTION --}}}
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Get the length from a type definiation ie CHAR(10) returns 10
 #+
 #+ @param s_typ Type
 #+ @return Length from type or defaults to 10
-FUNCTION gl2_db_getLength(l_typ STRING) RETURNS SMALLINT --{{{
+FUNCTION gl2_getColumnLength(l_typ STRING) RETURNS SMALLINT
   DEFINE x, y, l_len SMALLINT
   LET l_len = 1 -- default
 --TODO: Handle decimal, numeric ie values with , in.
@@ -509,7 +509,7 @@ FUNCTION gl2_db_getLength(l_typ STRING) RETURNS SMALLINT --{{{
     LET l_len = l_typ.subString(x + 1, y - 1)
   END IF
   RETURN l_len
-END FUNCTION --}}}
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Check a record for valid update/insert
 #+
@@ -517,7 +517,7 @@ END FUNCTION --}}}
 #+ @param l_key Key value
 #+ @param l_sql SQL to select using
 #+ @returns true/false
-FUNCTION gl2_db_checkRec(l_ex BOOLEAN, l_key STRING, l_sql STRING) RETURNS BOOLEAN
+FUNCTION gl2_checkRec(l_ex BOOLEAN, l_key STRING, l_sql STRING) RETURNS BOOLEAN
   DEFINE l_exists BOOLEAN
 
   LET l_key = l_key.trim()

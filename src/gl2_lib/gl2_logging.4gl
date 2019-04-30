@@ -13,8 +13,6 @@
 
 IMPORT os
 
-IMPORT FGL gl2_lib
-
 CONSTANT C_DEFAULT_LOGDIR = "../logs/" -- Default logdir if nothing set
 
 PUBLIC TYPE logger RECORD
@@ -58,7 +56,7 @@ FUNCTION (this logger) logIt(l_mess STRING) --{{{
 
   CALL c.openFile(this.fullLogPath, "a")
 
-  LET l_module = gl2_lib.gl2_getCallingModuleName()
+  LET l_module = getCallingModuleName()
   IF l_module MATCHES "cloud_gl_lib.gl_dbgMsg:*" THEN
     LET l_mess = CURRENT || "|" || NVL(l_mess, "NULL")
   ELSE
@@ -185,3 +183,39 @@ FUNCTION (this logger) getLogExt() RETURNS STRING
   RETURN this.fileExt
 END FUNCTION
 --------------------------------------------------------------------------------
+#+ Gets sourcefile.module:line from a stacktrace.
+#+
+#+ @return sourcefile.module:line
+FUNCTION getCallingModuleName() RETURNS STRING
+  DEFINE l_fil, l_mod, l_lin STRING
+  DEFINE x, y SMALLINT
+  LET l_fil = base.Application.getStackTrace()
+  IF l_fil IS NULL THEN
+    DISPLAY "Failed to get getStackTrace!!"
+    RETURN "getStackTrace-failed!"
+  END IF
+
+  LET x = l_fil.getIndexOf("#", 2) -- skip passed this func
+  LET x = l_fil.getIndexOf("#", x + 1) -- skip passed func that called this func
+  LET x = l_fil.getIndexOf(" ", x) + 1
+  LET y = l_fil.getIndexOf("(", x) - 1
+  LET l_mod = l_fil.subString(x, y)
+
+  LET x = l_fil.getIndexOf(" ", y) + 4
+  LET y = l_fil.getIndexOf("#", x + 1) - 2
+  IF y < 1 THEN
+    LET y = (l_fil.getLength() - 1)
+  END IF
+  LET l_fil = l_fil.subString(x, y)
+
+  -- strip the .4gl from the fil name
+  LET x = l_fil.getIndexOf(".", 1)
+  IF x > 0 THEN
+    LET y = l_fil.getIndexOf(":", x)
+    LET l_lin = l_fil.subString(y + 1, l_fil.getLength())
+    LET l_fil = l_fil.subString(1, x - 1)
+  END IF
+
+  LET l_fil = NVL(l_fil, "FILE?") || "." || NVL(l_mod, "MOD?") || ":" || NVL(l_lin, "LINE?")
+  RETURN l_fil
+END FUNCTION

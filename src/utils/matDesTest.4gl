@@ -3,7 +3,6 @@
 
 IMPORT os
 IMPORT FGL gl2_lib
-IMPORT FGL gl2_logging
 IMPORT FGL gl2_about
 IMPORT FGL gl2_appInfo
 
@@ -40,15 +39,10 @@ MAIN
     img STRING
   END RECORD
   DEFINE x SMALLINT
-  DEFINE gl2_log logger
-  DEFINE gl2_err logger
-  DEFINE l_appInfo appInfo
+  DEFINE l_appInfo gl2_appInfo.appInfo
 
   CALL l_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
-  CALL gl2_log.init(NULL, NULL, "log", "TRUE")
-  CALL gl2_log.init(NULL, NULL, "err", "TRUE")
-  CALL STARTLOG(gl2_err.fullLogPath)
-  CALL gl2_lib.gl2_loadStyles("default")
+  CALL gl2_lib.gl2_init(ARG_VAL(1), "default")
 
   FOR X = 1 TO 15
     LET l_arr[x].col1 = "Row " || x

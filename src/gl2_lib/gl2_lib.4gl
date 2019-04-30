@@ -11,10 +11,30 @@
 
 IMPORT os
 IMPORT util
+IMPORT FGL gl2_logging
 
 &include "gl2_debug.inc"
 
+PUBLIC DEFINE gl2_log gl2_logging.logger
+PUBLIC DEFINE gl2_err gl2_logging.logger
 PUBLIC DEFINE m_mdi CHAR(1)
+PUBLIC DEFINE m_isUniversal BOOLEAN
+PUBLIC DEFINE m_isGDC BOOLEAN
+
+FUNCTION gl2_init(l_mdi CHAR(1), l_styles STRING)
+	CALL gl2_log.init(NULL, NULL, "log", "TRUE")
+	CALL gl2_log.init(NULL, NULL, "err", "TRUE")
+
+  CALL STARTLOG(gl2_err.fullLogPath)
+
+  CALL gl2_loadStyles(l_styles)
+  CALL gl2_mdisdi(l_mdi)
+
+	LET m_isGDC = FALSE
+	LET m_isUniversal = FALSE
+	IF ui.Interface.getFrontEndName() = "GDC" THEN LET m_isGDC = TRUE END IF
+	IF ui.Interface.getUniversalClientName() = "GBC" THEN LET m_isUniversal = TRUE END IF
+END FUNCTION
 --------------------------------------------------------------------------------
 #+ Set MDI or not
 #+ C = child
@@ -373,43 +393,6 @@ FUNCTION gl2_getLinuxVer() RETURNS STRING
   LET l_ver = c.readLine()
   CALL c.close()
   RETURN l_ver
-END FUNCTION
---------------------------------------------------------------------------------
-#+ Gets sourcefile.module:line from a stacktrace.
-#+
-#+ @return sourcefile.module:line
-FUNCTION gl2_getCallingModuleName() RETURNS STRING
-  DEFINE l_fil, l_mod, l_lin STRING
-  DEFINE x, y SMALLINT
-  LET l_fil = base.Application.getStackTrace()
-  IF l_fil IS NULL THEN
-    DISPLAY "Failed to get getStackTrace!!"
-    RETURN "getStackTrace-failed!"
-  END IF
-
-  LET x = l_fil.getIndexOf("#", 2) -- skip passed this func
-  LET x = l_fil.getIndexOf("#", x + 1) -- skip passed func that called this func
-  LET x = l_fil.getIndexOf(" ", x) + 1
-  LET y = l_fil.getIndexOf("(", x) - 1
-  LET l_mod = l_fil.subString(x, y)
-
-  LET x = l_fil.getIndexOf(" ", y) + 4
-  LET y = l_fil.getIndexOf("#", x + 1) - 2
-  IF y < 1 THEN
-    LET y = (l_fil.getLength() - 1)
-  END IF
-  LET l_fil = l_fil.subString(x, y)
-
-  -- strip the .4gl from the fil name
-  LET x = l_fil.getIndexOf(".", 1)
-  IF x > 0 THEN
-    LET y = l_fil.getIndexOf(":", x)
-    LET l_lin = l_fil.subString(y + 1, l_fil.getLength())
-    LET l_fil = l_fil.subString(1, x - 1)
-  END IF
-
-  LET l_fil = NVL(l_fil, "FILE?") || "." || NVL(l_mod, "MOD?") || ":" || NVL(l_lin, "LINE?")
-  RETURN l_fil
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Splash Screen
