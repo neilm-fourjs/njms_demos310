@@ -3,22 +3,40 @@
 IMPORT xml
 IMPORT security
 
-IMPORT FGL gl_lib
+IMPORT FGL g2_lib
 
-PUBLIC DEFINE m_cert, m_privateKey, m_err STRING
+PUBLIC TYPE encrypt RECORD
+		certFile STRING,
+		privateKey STRING,
+		errorMessage STRING
+	END RECORD
 
-FUNCTION gl_encryptInit(l_cert STRING, l_key STRING)
-  LET m_cert = l_cert
-  LET m_privateKey = l_key
+
+FUNCTION (this encrypt) init(l_cert STRING, l_key STRING)
+  LET this.certFile = l_cert
+  LET this.privateKey = l_key
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION gl_encrypt(l_str STRING)
+#+ Encrypt a string using a certificate
+#+
+#+ @param l_str String to encrypt
+#+ @returns NULL is fails
+FUNCTION (this encrypt) encrypt(l_str STRING) RETURNS STRING
   DEFINE l_doc xml.DomDocument
   DEFINE l_root, l_str_node xml.DomNode
   DEFINE l_enc xml.Encryption
   DEFINE l_symkey xml.CryptoKey
   DEFINE l_kek xml.CryptoKey
   DEFINE l_cert xml.CryptoX509
+
+	IF this.certFile IS NULL THEN
+		CALL this.g2_encryptError("Certificate file name is NULL!")
+		RETURN NULL
+	END IF
+	IF this.privateKey IS NULL THEN
+		CALL this.g2_encryptError("Private key is NULL!")
+		RETURN NULL
+	END IF
 
   LET l_doc = xml.DomDocument.CreateDocument("encrypedxml")
   # Notice that whitespaces are significants in crytography,
@@ -31,19 +49,19 @@ FUNCTION gl_encrypt(l_str STRING)
     CALL l_str_node.appendChild(l_doc.createTextNode(l_str))
     CALL l_root.appendChild(l_str_node)
   CATCH
-    CALL gl_encryptError(
+    CALL this.g2_encryptError(
         SFMT(% "Error building XML from '%1':%2:%3", l_str, STATUS, err_get(STATUS)))
     RETURN NULL
   END TRY
   TRY
     # Load the X509 certificate and retrieve the public RSA key for key-encryption purpose
     LET l_cert = xml.CryptoX509.Create()
-    CALL l_cert.loadPEM(m_cert)
+    CALL l_cert.loadPEM(this.certFile)
     LET l_kek = l_cert.createPublicKey("http://www.w3.org/2001/04/xmlenc#rsa-1_5")
     # Generate symmetric key for XML l_encryption purpose
   CATCH
-    CALL gl_encryptError(
-        SFMT(% "Error with certificate '%1':%2:%3", m_cert, STATUS, err_get(STATUS)))
+    CALL this.g2_encryptError(
+        SFMT(% "Error with certificate '%1':%2:%3", this.certFile, STATUS, err_get(STATUS)))
     RETURN NULL
   END TRY
   TRY
@@ -57,12 +75,17 @@ FUNCTION gl_encrypt(l_str STRING)
     CALL l_enc.encryptElement(l_root) # Encrypt
     RETURN security.Base64.FromString(l_doc.saveToString())
   CATCH
-    CALL gl_encryptError(SFMT(% "Unable to l_encrypt XML file %1:%2", STATUS, err_get(STATUS)))
+    CALL this.g2_encryptError(SFMT(% "Unable to l_encrypt XML file %1:%2", STATUS, err_get(STATUS)))
     RETURN NULL
   END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION gl_decrypt(l_str STRING)
+#+ Decrypt a string using a private key
+#+
+#+ @param l_str String to decrypt
+#+ @returns NULL is fails
+--------------------------------------------------------------------------------
+FUNCTION (this encrypt) decrypt(l_str STRING) RETURNS STRING
   DEFINE l_doc xml.DomDocument
   DEFINE l_root xml.DomNode
   DEFINE l_enc xml.Encryption
@@ -80,17 +103,17 @@ FUNCTION gl_decrypt(l_str STRING)
     LET l_root = l_doc.getFirstDocumentNode()
 --		DISPLAY "Decrypt XML:",l_root.toString()
   CATCH
-    CALL gl_encryptError(
+    CALL this.g2_encryptError(
         SFMT(% "Error Loading XML from '%1':%2:%3", l_str, STATUS, err_get(STATUS)))
     RETURN NULL
   END TRY
   TRY
     # Load the private RSA key
     LET l_kek = xml.CryptoKey.create("http://www.w3.org/2001/04/xmlenc#rsa-1_5")
-    CALL l_kek.loadPEM(m_privateKey)
+    CALL l_kek.loadPEM(this.privateKey)
   CATCH
-    CALL gl_encryptError(
-        SFMT(% "Error with private key '%1':%2:%3", m_privateKey, STATUS, err_get(STATUS)))
+    CALL this.g2_encryptError(
+        SFMT(% "Error with private key '%1':%2:%3", this.privateKey, STATUS, err_get(STATUS)))
     RETURN NULL
   END TRY
   TRY
@@ -100,21 +123,21 @@ FUNCTION gl_decrypt(l_str STRING)
         l_kek) # Set the key-encryption key to decrypted the protected symmetric key
     CALL l_enc.decryptElement(l_root) # Decrypt
   CATCH
-    CALL gl_encryptError(SFMT(% "Unable to decrypt XML file %1:%2", STATUS, err_get(STATUS)))
+    CALL this.g2_encryptError(SFMT(% "Unable to decrypt XML file %1:%2", STATUS, err_get(STATUS)))
     RETURN NULL
   END TRY
   LET l_list = l_doc.getElementsByTagName("Value")
   IF l_list.getCount() = 1 THEN
     RETURN l_list.getItem(1).getFirstChild().getNodeValue()
   ELSE
-    CALL gl_encryptError("No Value found")
+    CALL this.g2_encryptError("No Value found")
   END IF
   RETURN NULL
 
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION gl_encryptError(l_msg STRING)
-  LET m_err = l_msg
-  CALL gl_lib.gl_logIt(l_msg)
+FUNCTION (this encrypt) g2_encryptError(l_msg STRING)
+  LET this.errorMessage = l_msg
+  CALL g2_lib.g2_log.logIt(l_msg)
 END FUNCTION
 --------------------------------------------------------------------------------

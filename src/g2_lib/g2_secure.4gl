@@ -21,16 +21,15 @@ IMPORT xml
 IMPORT os
 IMPORT security
 IMPORT util
-IMPORT FGL gl_lib
-IMPORT FGL gl_encrypt
 
--- For Genero 3.10 we are going to default to BCRYPT
-&define G310
+IMPORT FGL g2_lib
+IMPORT FGL g2_encrypt
 
 -- Private variables:
 DEFINE m_doc xml.domDocument
 DEFINE m_user_node, m_pass_node xml.domNode
 DEFINE m_file STRING
+DEFINE m_enc encrypt
 
 CONSTANT C_DEFPASSLEN = 8
 CONSTANT C_SYMBOLS = "!$%^&*,.;@#?<>"
@@ -42,7 +41,7 @@ CONSTANT C_SHA_ITERATIONS = 64
 #+ Password must contain at least one symbol
 #+
 #+ @return String - password
-FUNCTION glsec_genPassword() RETURNS STRING
+FUNCTION g2_genPassword() RETURNS STRING
   DEFINE l_pass CHAR(C_DEFPASSLEN)
   DEFINE x, y SMALLINT
 -- because it's base64 encoded it will return 16 chars or larger!!
@@ -67,41 +66,35 @@ END FUNCTION
 #+ Get the hash type
 #+
 #+ @return string
-FUNCTION glsec_getHashType() RETURNS STRING
-&ifdef G310
+FUNCTION g2_getHashType() RETURNS STRING
   RETURN "BCRYPT"
-&else
- RETURN "SHA512"
-&endif
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Generate a salt string
 #+
 #+ @param  l_hashtype - String -The type of hash to use ( can be NULL for default )
 #+ @returns String - salt value
-FUNCTION glsec_genSalt(l_hashtype STRING) RETURNS STRING
+FUNCTION g2_genSalt(l_hashtype STRING) RETURNS STRING
   DEFINE l_salt STRING
   IF l_hashtype IS NULL THEN
-    LET l_hashtype = glsec_getHashType()
+    LET l_hashtype = g2_getHashType()
   END IF
   CASE l_hashtype
-&ifdef G310
     WHEN "BCRYPT"
-      CALL gl_lib.gl_logIt("Generating BCrypt Salt")
+      CALL g2_lib.g2_log.logIt("Generating BCrypt Salt")
       TRY
         LET l_salt = security.BCrypt.GenerateSalt(12)
       CATCH
-        CALL gl_lib.gl_logIt("ERROR:" || STATUS || ":" || SQLCA.SQLERRM)
+        CALL g2_lib.g2_log.logIt("ERROR:" || STATUS || ":" || SQLCA.SQLERRM)
       END TRY
-&endif
     WHEN "SHA512"
-      CALL gl_lib.gl_logIt("Generating Random Salt")
+      CALL g2_lib.g2_log.logIt("Generating Random Salt")
       LET l_salt = security.RandomGenerator.CreateRandomString(16)
     OTHERWISE
-      CALL gl_lib.gl_errPopup(% "Unsupported Encryption Type Requested!")
+      CALL g2_lib.g2_errPopup(% "Unsupported Encryption Type Requested!")
       EXIT PROGRAM
   END CASE
-  CALL gl_lib.gl_logIt("Salt Generated:" || l_salt || " (" || l_salt.getLength() || ")")
+  CALL g2_lib.g2_log.logIt("Salt Generated:" || l_salt || " (" || l_salt.getLength() || ")")
   RETURN l_salt
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -111,7 +104,7 @@ END FUNCTION
 #+ @param l_salt - String - The salt value ( optional for Genero 3.10 )
 #+ @param  l_hashtype - String -The type of hash to use ( can be NULL for default )
 #+ @return String - An Encrypted string using SHA512 or BCrypt( Genero 3.10 )
-FUNCTION glsec_genPasswordHash(l_pass STRING, l_salt STRING, l_hashtype STRING) RETURNS STRING
+FUNCTION g2_genPasswordHash(l_pass STRING, l_salt STRING, l_hashtype STRING) RETURNS STRING
   DEFINE l_hash STRING
   DEFINE l_dgst security.Digest
   DEFINE x SMALLINT
@@ -119,20 +112,18 @@ FUNCTION glsec_genPasswordHash(l_pass STRING, l_salt STRING, l_hashtype STRING) 
   LET l_pass = l_pass.trim()
   LET l_salt = l_salt.trim()
   IF l_hashtype IS NULL THEN
-    LET l_hashtype = glsec_getHashType()
+    LET l_hashtype = g2_getHashType()
   END IF
   IF l_salt IS NULL THEN
-    LET l_salt = glsec_genSalt(l_hashtype)
+    LET l_salt = g2_genSalt(l_hashtype)
   END IF
   TRY
     CASE l_hashtype
-&ifdef G310
       WHEN "BCRYPT"
-        CALL gl_lib.gl_logIt("Generating BCrypt HashPassword")
+        CALL g2_lib.g2_log.logIt("Generating BCrypt HashPassword")
         LET l_hash = Security.BCrypt.HashPassword(l_pass, l_salt)
-&endif
       WHEN "SHA512"
-        CALL gl_lib.gl_logIt("Generating " || l_hashtype || " HashPassword")
+        CALL g2_lib.g2_log.logIt("Generating " || l_hashtype || " HashPassword")
         LET l_hash = l_pass || l_salt
         FOR x = 1 TO C_SHA_ITERATIONS
           LET l_dgst = security.Digest.CreateDigest(l_hashtype)
@@ -140,12 +131,12 @@ FUNCTION glsec_genPasswordHash(l_pass STRING, l_salt STRING, l_hashtype STRING) 
           LET l_hash = l_dgst.DoBase64Digest()
         END FOR
       OTHERWISE
-        CALL gl_lib.gl_errPopup(% "Unsupported Encryption Type Requested!")
+        CALL g2_lib.g2_errPopup(% "Unsupported Encryption Type Requested!")
         EXIT PROGRAM
     END CASE
-    CALL gl_lib.gl_logIt("Hash created:" || l_hash || " (" || l_hash.getLength() || ")")
+    CALL g2_lib.g2_log.logIt("Hash created:" || l_hash || " (" || l_hash.getLength() || ")")
   CATCH
-    CALL gl_lib.gl_logIt("ERROR:" || STATUS || ":" || SQLCA.SQLERRM)
+    CALL g2_lib.g2_log.logIt("ERROR:" || STATUS || ":" || SQLCA.SQLERRM)
   END TRY
 
   RETURN l_hash
@@ -158,7 +149,7 @@ END FUNCTION
 #+ @param l_salt - String - The salt value ( not required for BCRYPT )
 #+ @param  l_hashtype - String -The type of hash to use ( can be NULL for default )
 #+ @return boolean
-FUNCTION glsec_chkPassword(
+FUNCTION g2_chkPassword(
     l_pass STRING, l_passhash STRING, l_salt STRING, l_hashtype STRING)
     RETURNS BOOLEAN
   DEFINE l_hash STRING
@@ -166,34 +157,32 @@ FUNCTION glsec_chkPassword(
   LET l_pass = l_pass.trim()
   LET l_passhash = l_passhash.trim()
   IF l_hashtype IS NULL THEN
-    LET l_hashtype = glsec_getHashType()
+    LET l_hashtype = g2_getHashType()
   END IF
   CASE l_hashtype
-&ifdef G310
     WHEN "BCRYPT"
-      CALL gl_lib.gl_logIt("checking password using BCRYPT")
+      CALL g2_lib.g2_log.logIt("checking password using BCRYPT")
       TRY
         IF Security.BCrypt.CheckPassword(l_pass, l_passhash) THEN
-          CALL gl_lib.gl_logIt("Password checked okay.")
+          CALL g2_lib.g2_log.logIt("Password checked okay.")
           RETURN TRUE
         END IF
       CATCH
-        CALL gl_lib.gl_logIt("ERROR:" || STATUS || ":" || SQLCA.SQLERRM)
+        CALL g2_lib.g2_log.logIt("ERROR:" || STATUS || ":" || SQLCA.SQLERRM)
       END TRY
-&endif
     WHEN "SHA512"
-      CALL gl_lib.gl_logIt("checking password using " || l_hashtype)
-      LET l_hash = glsec_genPasswordHash(l_pass, l_salt, l_hashtype)
+      CALL g2_lib.g2_log.logIt("checking password using " || l_hashtype)
+      LET l_hash = g2_genPasswordHash(l_pass, l_salt, l_hashtype)
       IF l_hash = l_passhash THEN
-        CALL gl_lib.gl_logIt("Password checked okay.")
+        CALL g2_lib.g2_log.logIt("Password checked okay.")
         RETURN TRUE
       END IF
     OTHERWISE
-      CALL gl_lib.gl_errPopup(% "Unsupported Encryption Type Requested!")
+      CALL g2_lib.g2_errPopup(% "Unsupported Encryption Type Requested!")
       EXIT PROGRAM
   END CASE
 
-  CALL gl_lib.gl_logIt("Password checked failed.")
+  CALL g2_lib.g2_log.logIt("Password checked failed.")
   RETURN FALSE
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -201,7 +190,7 @@ END FUNCTION
 #+
 #+ @param l_max Max length of the password as stored in DB.
 #+ @returns string of the rules
-FUNCTION glsec_passwordRules(l_max INTEGER) RETURNS STRING
+FUNCTION g2_passwordRules(l_max INTEGER) RETURNS STRING
   RETURN SFMT(% "The password must confirm to the following rules:\n"
           || "At least %1 characters, max is %2\n"
           || "At least 1 lower case letter and 1 upper case letter\n"
@@ -213,7 +202,7 @@ END FUNCTION
 #+
 #+ @param l_pass Password to validate.
 #+ @returns String with "Okay" or an Error message is the password is not legal.
-FUNCTION glsec_isPasswordLegal(l_pass STRING) RETURNS STRING
+FUNCTION g2_isPasswordLegal(l_pass STRING) RETURNS STRING
   DEFINE l_gotUp, l_gotLow, l_gotNum, l_gotSym BOOLEAN
   DEFINE x, y SMALLINT
 
@@ -272,7 +261,7 @@ END FUNCTION
 #+
 #+ @param l_str - String
 #+ @return String or NULL if failed.
-FUNCTION glsec_fromBase64(l_str STRING) RETURNS STRING
+FUNCTION g2_fromBase64(l_str STRING) RETURNS STRING
 
   IF l_str IS NULL THEN
     RETURN NULL
@@ -280,7 +269,7 @@ FUNCTION glsec_fromBase64(l_str STRING) RETURNS STRING
   TRY
     LET l_str = security.Base64.toString(l_str)
   CATCH
-    CALL gl_lib.gl_errPopup(% "Error in security module!\n" || SQLCA.SQLERRM)
+    CALL g2_lib.g2_errPopup(% "Error in security module!\n" || SQLCA.SQLERRM)
     LET l_str = NULL
   END TRY
 
@@ -291,7 +280,7 @@ END FUNCTION
 #+
 #+ @param l_str - String
 #+ @return String or NULL if failed.
-FUNCTION glsec_toBase64(l_str STRING) RETURNS STRING
+FUNCTION g2_toBase64(l_str STRING) RETURNS STRING
 
   IF l_str IS NULL THEN
     RETURN NULL
@@ -299,7 +288,7 @@ FUNCTION glsec_toBase64(l_str STRING) RETURNS STRING
   TRY
     LET l_str = security.Base64.fromString(l_str)
   CATCH
-    CALL gl_lib.gl_errPopup(% "Error in security module!\n" || SQLCA.SQLERRM)
+    CALL g2_lib.g2_errPopup(% "Error in security module!\n" || SQLCA.SQLERRM)
     LET l_str = NULL
   END TRY
 
@@ -310,7 +299,7 @@ END FUNCTION
 #+
 #+ @param l_typ - String - The type of the data to return, eg: EMAIL / SMS provider creds
 #+ @returns - Strings : username, password
-FUNCTION glsec_getCreds(l_typ STRING) RETURNS(STRING, STRING)
+FUNCTION g2_getCreds(l_typ STRING) RETURNS(STRING, STRING)
   DEFINE l_user, l_pwd STRING
   DEFINE l_node xml.DomNode
   DEFINE l_enc xml.Encryption
@@ -337,7 +326,7 @@ FUNCTION glsec_getCreds(l_typ STRING) RETURNS(STRING, STRING)
     IF l_list.getCount() == 1 THEN
       LET l_node = l_list.getItem(1)
     ELSE
-      CALL gl_lib.gl_logIt("No encrypted l_node found")
+      CALL g2_lib.g2_log.logIt("No encrypted l_node found")
       EXIT PROGRAM 210
     END IF
     # Check if symmetric key name matches the expected "MySecretKey" (Not mandatory)
@@ -348,11 +337,11 @@ FUNCTION glsec_getCreds(l_typ STRING) RETURNS(STRING, STRING)
             "dsig",
             "http://www.w3.org/2000/09/xmldsig#")
     IF l_list.getCount() != 1 THEN
-      CALL gl_lib.gl_logIt("Key name doesn't match")
+      CALL g2_lib.g2_log.logIt("Key name doesn't match")
       EXIT PROGRAM 211
     END IF
   CATCH
-    CALL gl_lib.gl_logIt("Unable to load / process XML file :" || STATUS || ":" || err_get(STATUS))
+    CALL g2_lib.g2_log.logIt("Unable to load / process XML file :" || STATUS || ":" || err_get(STATUS))
     EXIT PROGRAM 212
   END TRY
 
@@ -370,7 +359,7 @@ FUNCTION glsec_getCreds(l_typ STRING) RETURNS(STRING, STRING)
     --DISPLAY l_doc.saveToString()
     --DISPLAY "Successful decrypted"
   CATCH
-    CALL gl_lib.gl_logIt("Unable to decrypt XML file :" || STATUS || ":" || err_get(STATUS))
+    CALL g2_lib.g2_log.logIt("Unable to decrypt XML file :" || STATUS || ":" || err_get(STATUS))
     EXIT PROGRAM 213
   END TRY
 
@@ -403,7 +392,7 @@ END FUNCTION
 #+ @param l_user - String - Username
 #+ @param l_pass - String - Password
 #+ @returns boolean
-FUNCTION glsec_updCreds(l_typ STRING, l_user STRING, l_pass STRING) RETURNS BOOLEAN
+FUNCTION g2_updCreds(l_typ STRING, l_user STRING, l_pass STRING) RETURNS BOOLEAN
   DEFINE l_old_usr, l_old_pass STRING
   DEFINE l_root xml.DomNode
   DEFINE enc xml.Encryption
@@ -411,7 +400,7 @@ FUNCTION glsec_updCreds(l_typ STRING, l_user STRING, l_pass STRING) RETURNS BOOL
   DEFINE l_myKey CHAR(32)
   DEFINE l_dte STRING
 
-  CALL glsec_getCreds(l_typ) RETURNING l_old_usr, l_old_pass
+  CALL g2_getCreds(l_typ) RETURNING l_old_usr, l_old_pass
 
   LET l_myKey = seclogit()
 
@@ -422,7 +411,7 @@ FUNCTION glsec_updCreds(l_typ STRING, l_user STRING, l_pass STRING) RETURNS BOOL
     CALL m_pass_node.setNodeValue(l_pass)
     # CALL m_doc.save("DecryptedXMLFile.xml")
     IF NOT os.Path.rename(m_file, m_file || l_dte) THEN
-      CALL gl_lib.gl_logIt("Failed to backup creds file:" || STATUS || ":" || err_get(STATUS))
+      CALL g2_lib.g2_log.logIt("Failed to backup creds file:" || STATUS || ":" || err_get(STATUS))
       RETURN FALSE
     END IF
     # Create symmetric AES256 key for XML encryption purposes
@@ -437,51 +426,52 @@ FUNCTION glsec_updCreds(l_typ STRING, l_user STRING, l_pass STRING) RETURNS BOOL
     # Save encrypted document back to disk
     CALL m_doc.save(m_file)
   CATCH
-    CALL gl_lib.gl_logIt("Unable to encrypt XML file :" || STATUS || ":" || err_get(STATUS))
+    CALL g2_lib.g2_log.logIt("Unable to encrypt XML file :" || STATUS || ":" || err_get(STATUS))
     RETURN FALSE
   END TRY
   RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION glsec_saveSession(l_id STRING, l_user STRING)
+FUNCTION g2_saveSession(l_id STRING, l_user STRING) RETURNS ()
   DEFINE l_val STRING
+
   IF ui.interface.getFrontEndName() = "GGC" THEN
     RETURN
   END IF
-  IF NOT gl_lib.gl_chkClientVer("GDC", "3.10.18", "localeStorage") THEN
+  IF NOT g2_lib.g2_chkClientVer("GDC", "3.10.18", "localeStorage") THEN
     RETURN
   END IF
-  CALL gl_encrypt.gl_encryptInit("../etc/publickey.crt", "../etc/private.key")
-  LET l_val = gl_encrypt.gl_encrypt(CURRENT YEAR TO MINUTE || "|" || l_user)
+  CALL m_enc.init("../etc/publickey.crt", "../etc/private.key")
+  LET l_val = m_enc.encrypt(CURRENT YEAR TO MINUTE || "|" || l_user)
   IF l_val IS NOT NULL THEN
-    CALL gl_lib.gl_logIt(SFMT("Save Session id=%1 val=%2", l_id, l_val))
+    CALL g2_lib.g2_log.logIt(SFMT("Save Session id=%1 val=%2", l_id, l_val))
     CALL ui.Interface.frontCall("localStorage", "setItem", [l_id, l_val], [])
   END IF
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION glsec_getSession(l_id STRING, l_age INTEGER) RETURNS STRING
+FUNCTION g2_getSession(l_id STRING, l_age INTEGER) RETURNS STRING
   DEFINE l_val STRING
   DEFINE l_ts DATETIME YEAR TO MINUTE
   DEFINE x SMALLINT
   IF ui.interface.getFrontEndName() = "GGC" THEN
     RETURN NULL
   END IF
-  IF NOT gl_lib.gl_chkClientVer("GDC", "3.10.18", "localeStorage") THEN
+  IF NOT g2_lib.g2_chkClientVer("GDC", "3.10.18", "localeStorage") THEN
     RETURN NULL
   END IF
   IF NOT os.Path.readable("../etc/private.key") THEN
-    CALL gl_lib.gl_winMessage(
+    CALL g2_lib.g2_winMessage(
         "Warning", "Private key file can not be read!\nAuto login not available.", "information")
     RETURN NULL
   END IF
-  CALL gl_encrypt.gl_encryptInit("../etc/publickey.crt", "../etc/private.key")
+  CALL m_enc.init("../etc/publickey.crt", "../etc/private.key")
   CALL ui.Interface.frontCall("localStorage", "getItem", l_id, l_val)
-  CALL gl_lib.gl_logIt(SFMT("Get Session id=%1 val=%2", l_id, l_val))
+  CALL g2_lib.g2_log.logIt(SFMT("Get Session id=%1 val=%2", l_id, l_val))
   IF l_val IS NULL THEN
     RETURN NULL
   END IF
-  LET l_val = gl_encrypt.gl_decrypt(l_val)
---	CALL gl_lib.gl_logIt(SFMT("Get Session val=%1",l_val))
+  LET l_val = m_enc.decrypt(l_val)
+--	CALL g2_lib.g2_logIt(SFMT("Get Session val=%1",l_val))
   LET x = l_val.getIndexOf("|", 1)
   LET l_ts = l_val.subString(1, x - 1)
   IF l_ts IS NULL THEN
@@ -495,12 +485,12 @@ FUNCTION glsec_getSession(l_id STRING, l_age INTEGER) RETURNS STRING
   RETURN l_id
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION glsec_removeSession(l_id STRING)
+FUNCTION g2_removeSession(l_id STRING)
 
   IF ui.interface.getFrontEndName() = "GGC" THEN
     RETURN
   END IF
-  IF NOT gl_lib.gl_chkClientVer("GDC", "3.10.18", "localeStorage") THEN
+  IF NOT g2_lib.g2_chkClientVer("GDC", "3.10.18", "localeStorage") THEN
     RETURN
   END IF
 
@@ -614,11 +604,11 @@ PRIVATE FUNCTION b(s STRING) RETURNS STRING
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Sets the m_file module variable and validates that the file exists.
-PRIVATE FUNCTION get_credFile()
+PRIVATE FUNCTION get_credFile() RETURNS ()
   LET m_file = "../etc/.creds.xml"
   IF NOT os.Path.exists(m_file) THEN
-    CALL gl_lib.gl_logIt("Creditials File is Missing!")
+    CALL g2_lib.g2_log.logIt("Creditials File is Missing!")
   ELSE
-    CALL gl_lib.gl_logIt("Creditials File is " || m_file)
+    CALL g2_lib.g2_log.logIt("Creditials File is " || m_file)
   END IF
 END FUNCTION

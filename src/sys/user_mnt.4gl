@@ -4,9 +4,9 @@ IMPORT FGL g2_lib
 IMPORT FGL g2_appInfo
 IMPORT FGL g2_about
 IMPORT FGL g2_db
+IMPORT FGL g2_secure
 
 IMPORT FGL app_lib
-IMPORT FGL lib_secure
 
 &include "schema.inc"
 &include "app.inc"
@@ -166,9 +166,9 @@ MAIN
           LET m_user_rec.active = TRUE
           LET m_user_rec.login_pass = "rubbish" -- an invalid password
           LET m_user_rec.forcepwchg = "N"
-          LET m_user_rec.hash_type = lib_secure.glsec_getHashType()
+          LET m_user_rec.hash_type = g2_secure.g2_getHashType()
           LET m_user_rec.salt =
-              lib_secure.glsec_genSalt(
+              g2_secure.g2_genSalt(
                   m_user_rec.hash_type) -- NOTE: for Genero 3.10 we don't need to store this
           LET m_user_rec.pass_expire = (TODAY + 6 UNITS MONTH)
           CALL DIALOG.setFieldActive("login_pass", TRUE)
@@ -187,7 +187,7 @@ MAIN
         CALL checkSave()
 
       AFTER FIELD login_pass
-        LET l_rules = lib_secure.glsec_isPasswordLegal(m_user_rec.login_pass CLIPPED)
+        LET l_rules = g2_secure.g2_isPasswordLegal(m_user_rec.login_pass CLIPPED)
         IF l_rules != "Okay" THEN
           ERROR l_rules
         END IF
@@ -197,13 +197,13 @@ MAIN
           CONTINUE DIALOG
         ELSE
           IF m_user_rec.login_pass IS NOT NULL THEN
-            LET l_rules = lib_secure.glsec_isPasswordLegal(m_user_rec.login_pass CLIPPED)
+            LET l_rules = g2_secure.g2_isPasswordLegal(m_user_rec.login_pass CLIPPED)
             IF l_rules != "Okay" THEN
               ERROR l_rules
               NEXT FIELD login_pass
             END IF
             LET m_user_rec.pass_hash =
-                lib_secure.glsec_genPasswordHash(
+                g2_secure.g2_genPasswordHash(
                     m_user_rec.login_pass, m_user_rec.salt, m_user_rec.hash_type)
             LET m_user_rec.login_pass =
                 "PasswordEncrypted!" -- we don't store their clear text password!

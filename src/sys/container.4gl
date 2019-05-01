@@ -1,3 +1,5 @@
+#+ A simple container program for MDI
+
 MAIN
   DEFINE l_children SMALLINT
   CALL ui.Interface.loadStyles("container") --"||UPSHIFT(ui.interface.getFrontEndName()))

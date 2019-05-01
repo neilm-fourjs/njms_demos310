@@ -7,8 +7,7 @@ IMPORT util
 IMPORT FGL g2_lib
 IMPORT FGL g2_appInfo
 IMPORT FGL g2_about
-
-IMPORT FGL lib_secure
+IMPORT FGL g2_secure
 
 &include "schema.inc"
 &include "app.inc"
@@ -131,7 +130,7 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING, l_appInfo appInfo INOUT) R
   CLOSE WINDOW login
 
   IF l_login IS NOT NULL AND l_login != "Cancelled" THEN
-    CALL lib_secure.glsec_saveSession(C_SESSION_KEY, l_login)
+    CALL g2_secure.g2_saveSession(C_SESSION_KEY, l_login)
   END IF
 
   IF g2_lib.m_isUniversal THEN
@@ -163,7 +162,7 @@ PUBLIC FUNCTION sql_checkEmail(l_email VARCHAR(80)) RETURNS BOOLEAN
 END FUNCTION
 --------------------------------------------------------------------------------
 PUBLIC FUNCTION logout()
-  CALL lib_secure.glsec_removeSession(C_SESSION_KEY)
+  CALL g2_secure.g2_removeSession(C_SESSION_KEY)
   CALL audit_logout()
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -193,7 +192,7 @@ PRIVATE FUNCTION validate_login(
   END IF
 
 -- is password correct?
-  IF NOT lib_secure.glsec_chkPassword(l_pass, l_acc.pass_hash, l_acc.salt, l_acc.hash_type) THEN
+  IF NOT g2_secure.g2_chkPassword(l_pass, l_acc.pass_hash, l_acc.salt, l_acc.hash_type) THEN
     DISPLAY "Hash wrong for:",
         l_login,
         " PasswordHash:",
@@ -257,13 +256,13 @@ PRIVATE FUNCTION forgotten(l_login LIKE sys_users.email)
   CALL g2_lib.g2_log.logIt("Password regenerated for:" || l_login)
 
   LET l_acc.pass_expire = TODAY + 2
-  LET l_acc.login_pass = lib_secure.glsec_genPassword()
-  LET l_acc.hash_type = lib_secure.glsec_getHashType()
-  LET l_acc.salt = lib_secure.glsec_genSalt(l_acc.hash_type)
+  LET l_acc.login_pass = g2_secure.g2_genPassword()
+  LET l_acc.hash_type = g2_secure.g2_getHashType()
+  LET l_acc.salt = g2_secure.g2_genSalt(l_acc.hash_type)
   LET l_acc.pass_hash =
-      lib_secure.glsec_genPasswordHash(l_acc.login_pass, l_acc.salt, l_acc.hash_type)
+      g2_secure.g2_genPasswordHash(l_acc.login_pass, l_acc.salt, l_acc.hash_type)
   LET l_acc.forcepwchg = "Y"
-  LET l_b64 = lib_secure.glsec_toBase64(l_acc.pass_hash)
+  LET l_b64 = g2_secure.g2_toBase64(l_acc.pass_hash)
 -- Need to actually send email!!
   LET l_subj = % "Password Reset"
   LET l_body =
@@ -323,7 +322,7 @@ PRIVATE FUNCTION passchg(l_login LIKE sys_users.email) RETURNS BOOLEAN
   DEFINE l_acc RECORD LIKE sys_users.*
 
   LET l_pass1 = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  LET l_rules = lib_secure.glsec_passwordRules(length(l_pass1))
+  LET l_rules = g2_secure.g2_passwordRules(length(l_pass1))
 
   CALL ui.window.getCurrent().getForm().setElementHidden("grp2", FALSE)
   DISPLAY BY NAME l_rules, l_login
@@ -331,7 +330,7 @@ PRIVATE FUNCTION passchg(l_login LIKE sys_users.email) RETURNS BOOLEAN
   WHILE TRUE
     INPUT BY NAME l_pass1, l_pass2
       AFTER FIELD l_pass1
-        LET l_rules = lib_secure.glsec_isPasswordLegal(l_pass1 CLIPPED)
+        LET l_rules = g2_secure.g2_isPasswordLegal(l_pass1 CLIPPED)
         IF l_rules != "Okay" THEN
           ERROR l_rules
           NEXT FIELD l_pass1
@@ -352,10 +351,10 @@ PRIVATE FUNCTION passchg(l_login LIKE sys_users.email) RETURNS BOOLEAN
   END WHILE
 
   LET l_acc.login_pass = l_pass1
-  LET l_acc.hash_type = lib_secure.glsec_getHashType()
-  LET l_acc.salt = lib_secure.glsec_genSalt(l_acc.hash_type)
+  LET l_acc.hash_type = g2_secure.g2_getHashType()
+  LET l_acc.salt = g2_secure.g2_genSalt(l_acc.hash_type)
   LET l_acc.pass_hash =
-      lib_secure.glsec_genPasswordHash(l_acc.login_pass, l_acc.salt, l_acc.hash_type)
+      g2_secure.g2_genPasswordHash(l_acc.login_pass, l_acc.salt, l_acc.hash_type)
   LET l_acc.forcepwchg = "N"
   LET l_acc.pass_expire = NULL
   --DISPLAY "New Hash:",l_acc.pass_hash
@@ -464,14 +463,14 @@ END FUNCTION
 -- Check to see if we have already logged in recently.
 PRIVATE FUNCTION checkForSession()
   DEFINE l_id STRING
-  LET l_id = lib_secure.glsec_getSession(C_SESSION_KEY, C_SESSION_MINS)
+  LET l_id = g2_secure.g2_getSession(C_SESSION_KEY, C_SESSION_MINS)
   IF l_id IS NULL THEN
     RETURN NULL
   END IF
 
   IF l_id = "expired" THEN
     CALL g2_lib.g2_winMessage(% "Login", % "Your Session has expired.", "information")
-    CALL lib_secure.glsec_removeSession(C_SESSION_KEY)
+    CALL g2_secure.g2_removeSession(C_SESSION_KEY)
     RETURN NULL
   END IF
 

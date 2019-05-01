@@ -3,12 +3,13 @@
 
 IMPORT os
 IMPORT util
-IMPORT FGL gl_lib
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+
 CONSTANT C_PRGDESC = "GBC Themes"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGVER = "3.2"
 
 DEFINE rec DYNAMIC ARRAY OF RECORD
   name STRING,
@@ -32,10 +33,11 @@ DEFINE rec DYNAMIC ARRAY OF RECORD
   END RECORD
 END RECORD
 MAIN
+  DEFINE l_appInfo g2_appInfo.appInfo
 
-  CALL gl_lib.gl_setInfo(C_VER, NULL, C_PRGICON, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, TRUE)
-  CALL ui.Interface.setText(gl_progdesc)
+  CALL l_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+  CALL ui.Interface.setText(C_PRGDESC)
 
   OPEN FORM f FROM "gbc_theme"
   DISPLAY FORM f
@@ -52,7 +54,7 @@ FUNCTION open_main_json(l_jsonFile STRING) RETURNS BOOLEAN
   DEFINE x, y, z SMALLINT
 
   IF NOT os.path.exists(l_jsonFile) THEN
-    CALL gl_lib.gl_winMessage("Error", SFMT("%1 doesn't exist!", l_jsonFile), "exclamation")
+    CALL g2_lib.g2_winMessage("Error", SFMT("%1 doesn't exist!", l_jsonFile), "exclamation")
     RETURN FALSE
   END IF
 

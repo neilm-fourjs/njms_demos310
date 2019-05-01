@@ -1,6 +1,8 @@
+
 IMPORT FGL g2_lib
+IMPORT FGL g2_secure
 IMPORT FGL lib_login
-IMPORT FGL lib_secure
+
 &include "schema.inc"
 --------------------------------------------------------------------------------
 #+ Create a new account.
@@ -20,7 +22,7 @@ FUNCTION new_acct(l_email STRING, l_family STRING, l_given STRING, l_photo STRIN
   OPEN WINDOW new_acct WITH FORM "new_acct"
 
   LET l_acc.login_pass = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  LET l_rules = lib_secure.glsec_passwordRules(length(l_acc.login_pass))
+  LET l_rules = g2_secure.g2_passwordRules(length(l_acc.login_pass))
   DISPLAY BY NAME l_rules
   DISPLAY BY NAME l_photo
 
@@ -31,7 +33,7 @@ FUNCTION new_acct(l_email STRING, l_family STRING, l_given STRING, l_photo STRIN
         CALL g2_lib.g2_errPopup(% "This Email is already registered.")
         NEXT FIELD email
       ELSE
-        --LET l_acc.login_pass = lib_secure.glsec_genPassword()
+        --LET l_acc.login_pass = g2_secure.g2_genPassword()
       END IF
     AFTER FIELD pass_expire
       IF l_acc.pass_expire < (TODAY + 1 UNITS MONTH) THEN
@@ -39,7 +41,7 @@ FUNCTION new_acct(l_email STRING, l_family STRING, l_given STRING, l_photo STRIN
         NEXT FIELD pass_expire
       END IF
     AFTER FIELD login_pass
-      LET l_rules = lib_secure.glsec_isPasswordLegal(l_acc.login_pass CLIPPED)
+      LET l_rules = g2_secure.g2_isPasswordLegal(l_acc.login_pass CLIPPED)
       IF l_rules != "Okay" THEN
         ERROR l_rules
         NEXT FIELD login_pass
@@ -53,7 +55,7 @@ FUNCTION new_acct(l_email STRING, l_family STRING, l_given STRING, l_photo STRIN
       CALL DIALOG.setFieldActive("sys_users.active", FALSE)
       CALL DIALOG.setFieldActive("sys_users.acct_type", FALSE)
     ON ACTION generate
-      LET l_acc.login_pass = lib_secure.glsec_genPassword()
+      LET l_acc.login_pass = g2_secure.g2_genPassword()
       CALL g2_lib.g2_winMessage(
           % "Password",
           SFMT(% "Your Generated Password is:\n%1\nDon't forget it!", l_acc.login_pass),
@@ -64,12 +66,12 @@ FUNCTION new_acct(l_email STRING, l_family STRING, l_given STRING, l_photo STRIN
 
   IF NOT int_flag THEN
     LET l_email = l_acc.email
-    LET l_acc.hash_type = lib_secure.glsec_getHashType()
+    LET l_acc.hash_type = g2_secure.g2_getHashType()
     LET l_acc.salt =
-        lib_secure.glsec_genSalt(
+        g2_secure.g2_genSalt(
             l_acc.hash_type) -- NOTE: for Genero 3.10 we don't need to store this
     LET l_acc.pass_hash =
-        lib_secure.glsec_genPasswordHash(l_acc.login_pass, l_acc.salt, l_acc.hash_type)
+        g2_secure.g2_genPasswordHash(l_acc.login_pass, l_acc.salt, l_acc.hash_type)
     LET l_acc.login_pass = "PasswordEncrypted!" -- we don't store their clear text password!
     INSERT INTO sys_users VALUES l_acc.*
   END IF

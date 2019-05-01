@@ -353,16 +353,18 @@
     </Group>
     <Group id="863353152" label="G2_Lib">
       <Library binaryName="g2_lib" id="-310428106" label="g2_lib">
+        <File filePath="src/g2_lib/g2_lib.4gl"/>
+        <File filePath="src/g2_lib/g2_aui.4gl"/>
         <File filePath="src/g2_lib/g2_about.4gl"/>
         <File filePath="src/g2_lib/g2_appInfo.4gl"/>
-        <File filePath="src/g2_lib/g2_lib.4gl"/>
         <File filePath="src/g2_lib/g2_db.4gl"/>
         <File filePath="src/g2_lib/g2_debug.4gl"/>
         <File excludeFromCompilation="true" filePath="src/g2_lib/g2_debug.inc"/>
         <File filePath="src/g2_lib/g2_gdcUpdate.4gl"/>
         <File filePath="src/g2_lib/g2_gdcUpdateCommon.4gl"/>
-        <File filePath="src/g2_lib/g2_aui.4gl"/>
+        <File filePath="src/g2_lib/g2_encrypt.4gl"/>
         <File filePath="src/g2_lib/g2_logging.4gl"/>
+        <File filePath="src/g2_lib/g2_secure.4gl"/>
       </Library>
     </Group>
     <Group id="-922183004" label="GL_Lib" language="Genero">
@@ -385,6 +387,7 @@
         <File filePath="src/gl_lib/gl_lib_gdcupd.4gl"/>
         <File filePath="src/gl_lib/gl_lookup3.4gl"/>
         <File filePath="src/gl_lib/gl_splash.4gl"/>
+        <File filePath="src/gl_lib/lib_secure.4gl"/>
       </Library>
       <Library binaryName="gl_rpt" dependencies="14000,-400184264" externalDependencies="libgre.42x" id="923654133" label="gl_rpt">
         <File filePath="src/gl_rpt/gl_grw.4gl"/>
@@ -407,7 +410,6 @@
       </Application>
       <Library binaryName="lib_login" dependencies="1986,-1463189462,-1090563702,-1690651403,-310428106" id="2135194580" label="lib_login">
         <File filePath="src/sys/lib_login.4gl"/>
-        <File filePath="src/gl_lib/lib_secure.4gl"/>
         <File filePath="src/sys/login.per"/>
       </Library>
       <Application binaryName="login_hist" dependencies="1986,-1090563702,-310428106" id="-1384381362" label="login_hist">
@@ -446,7 +448,7 @@
       <Library binaryName="gbc_config" id="528729868" label="gbc_config">
         <File filePath="gbc_config/materialDesignTest.xcf"/>
       </Library>
-      <Application binaryName="gbc_theme" dependencies="-400184264,14000" id="-1722719568" label="gbc_theme">
+      <Application binaryName="gbc_theme" dependencies="-400184264,-310428106" id="-1722719568" label="gbc_theme">
         <File filePath="src/utils/gbc_theme.4gl"/>
         <File filePath="src/utils/gbc_theme.per"/>
       </Application>
