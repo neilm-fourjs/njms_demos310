@@ -1,9 +1,10 @@
-IMPORT FGL gl_lib
-IMPORT FGL gl_db
+IMPORT FGL g2_lib
+IMPORT FGL g2_db
 IMPORT FGL mk_db_sys_data
 IMPORT FGL mk_db_app_data
 &include "schema.inc"
 DEFINE m_stat STRING
+DEFINE m_db g2_db.dbInfo
 MAIN
   DEFINE l_arg STRING
 
@@ -19,11 +20,11 @@ MAIN
     LET l_arg = "ALL"
   END IF
 
-  LET gl_db.m_cre_db = TRUE
-  CALL gl_db.gldb_connect(NULL)
-  CALL mkdb_progress(SFMT(% "Connected to %1 db '%2' okay", gl_db.m_dbtyp, gl_db.m_dbnam))
+  LET m_db.create_db = TRUE
+  CALL m_db.g2_connect(NULL)
+  CALL mkdb_progress(SFMT(% "Connected to %1 db '%2' okay", m_db.type, m_db.name))
 
-  IF gl_lib.gl_winQuestion(
+  IF g2_lib.g2_winQuestion(
               "Confirm",
               "This will delete and recreate all the database tables!\n\nAre you sure you want to do this?",
               "No",
@@ -36,13 +37,13 @@ MAIN
 
   CALL mkdb_progress(
       SFMT("typ:%1 nam:%2 des:%3 src:%4 drv:%5 dir:%6 con:%7",
-          gl_db.m_dbtyp,
-          gl_db.m_dbnam,
-          gl_db.m_dbdes,
-          gl_db.m_dbsrc,
-          gl_db.m_dbdrv,
-          gl_db.m_dbdir,
-          gl_db.m_dbcon))
+          m_db.type,
+          m_db.name,
+          m_db.desc,
+          m_db.source,
+          m_db.driver,
+          m_db.dir,
+          m_db.connection))
 
   IF l_arg = "SYS" OR l_arg = "ALL" THEN
     CALL drop_sys()
@@ -56,7 +57,7 @@ MAIN
     CALL mk_db_app_data.insert_app_data()
   END IF
 
-  CALL gl_lib.gl_winMessage("Info", SFMT("mk_db program finished Arg:%1", l_arg), "information")
+  CALL g2_lib.g2_winMessage("Info", SFMT("mk_db program finished Arg:%1", l_arg), "information")
 
 END MAIN
 --------------------------------------------------------------------------------

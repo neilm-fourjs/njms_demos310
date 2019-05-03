@@ -102,7 +102,7 @@ FUNCTION ifx_create_app_tables()
       payment_amount DECIMAL(12, 2),
       del_amount DECIMAL(6, 2));
 
-  CREATE TABLE ord_head(
+  CREATE TABLE ord_head (
       order_number SERIAL,
       order_datetime DATETIME YEAR TO SECOND,
       order_date DATE,
@@ -128,17 +128,18 @@ FUNCTION ifx_create_app_tables()
       total_nett DECIMAL(12, 2),
       total_tax DECIMAL(12, 2),
       total_gross DECIMAL(12, 2),
-      total_disc DECIMAL(12, 3));
+      total_disc DECIMAL(12, 3),
+			PRIMARY KEY(order_number) );
   CASE gl_db.m_dbtyp
-    WHEN "ifx"
-      EXECUTE IMMEDIATE "ALTER TABLE ord_head MODIFY( order_number SERIAL PRIMARY KEY )"
+  --  WHEN "ifx"
+  --    EXECUTE IMMEDIATE "ALTER TABLE ord_head MODIFY( order_number SERIAL PRIMARY KEY )"
     WHEN "pgs"
       EXECUTE IMMEDIATE "ALTER TABLE ord_head ADD PRIMARY KEY (order_number)"
     WHEN "snc"
       EXECUTE IMMEDIATE "ALTER TABLE ord_head ADD PRIMARY KEY (order_number)"
   END CASE
 
-  CREATE TABLE ord_detail(
+  CREATE TABLE ord_detail (
       order_number INTEGER,
       line_number SMALLINT,
       stock_code VARCHAR(8),
@@ -153,7 +154,7 @@ FUNCTION ifx_create_app_tables()
       nett_value DECIMAL(10, 2),
       gross_value DECIMAL(10, 2),
       PRIMARY KEY(order_number, line_number),
-      FOREIGN KEY(order_number) REFERENCES ord_head(order_number));
+      FOREIGN KEY(order_number) REFERENCES ord_head(order_number) );
 
   CALL mkdb_progress("Done.")
 END FUNCTION

@@ -96,6 +96,9 @@ PUBLIC FUNCTION (this dbInfo) g2_connect(l_dbName STRING) RETURNS ()
         LET this.desc = "Informix " || this.driver.subString(7, 9)
         LET this.source = fgl_getEnv("INFORMIXSERVER")
         LET this.connection = this.name
+				DISPLAY "INFORMIXDIR:",fgl_getEnv("INFORMIXDIR")
+				DISPLAY "INFORMIXSERVER:",fgl_getEnv("INFORMIXSERVER")
+				DISPLAY "INFORMIXSQLHOSTS:",fgl_getEnv("INFORMIXSQLHOSTS")
       WHEN "mdb"
         LET l_lockMode = FALSE
       WHEN "sqt"
