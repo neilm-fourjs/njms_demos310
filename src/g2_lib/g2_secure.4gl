@@ -31,6 +31,8 @@ DEFINE m_user_node, m_pass_node xml.domNode
 DEFINE m_file STRING
 DEFINE m_enc encrypt
 
+CONSTANT C_CERTFILE = "../etc/publickey.crt"
+CONSTANT C_PRIVATEKEY = "../etc/private.key"
 CONSTANT C_DEFPASSLEN = 8
 CONSTANT C_SYMBOLS = "!$%^&*,.;@#?<>"
 CONSTANT C_SHA_ITERATIONS = 64
@@ -441,7 +443,7 @@ FUNCTION g2_saveSession(l_id STRING, l_user STRING) RETURNS ()
   IF NOT g2_lib.g2_chkClientVer("GDC", "3.10.18", "localeStorage") THEN
     RETURN
   END IF
-  CALL m_enc.init("../etc/publickey.crt", "../etc/private.key")
+  CALL m_enc.init(C_CERTFILE, C_PRIVATEKEY)
   LET l_val = m_enc.encrypt(CURRENT YEAR TO MINUTE || "|" || l_user)
   IF l_val IS NOT NULL THEN
     CALL g2_lib.g2_log.logIt(SFMT("Save Session id=%1 val=%2", l_id, l_val))
@@ -459,13 +461,20 @@ FUNCTION g2_getSession(l_id STRING, l_age INTEGER) RETURNS STRING
   IF NOT g2_lib.g2_chkClientVer("GDC", "3.10.18", "localeStorage") THEN
     RETURN NULL
   END IF
-  IF NOT os.Path.readable("../etc/private.key") THEN
+  IF NOT os.Path.readable(C_PRIVATEKEY) THEN
     CALL g2_lib.g2_winMessage(
         "Warning", "Private key file can not be read!\nAuto login not available.", "information")
     RETURN NULL
   END IF
-  CALL m_enc.init("../etc/publickey.crt", "../etc/private.key")
-  CALL ui.Interface.frontCall("localStorage", "getItem", l_id, l_val)
+  CALL m_enc.init(C_CERTFILE, C_PRIVATEKEY)
+	TRY
+		DISPLAY "localStorage - getItem..."
+		CALL ui.Interface.frontCall("localStorage", "getItem", l_id, l_val)
+		DISPLAY "localStorage - getItem done"
+	CATCH
+		CALL g2_lib.g2_errPopup("localStorage - getItem Failed!")
+		RETURN NULL
+	END TRY
   CALL g2_lib.g2_log.logIt(SFMT("Get Session id=%1 val=%2", l_id, l_val))
   IF l_val IS NULL THEN
     RETURN NULL

@@ -48,6 +48,8 @@ PUBLIC FUNCTION login(l_appname STRING, l_ver STRING, l_appInfo appInfo INOUT) R
     RETURN l_login
   END IF
 
+	CALL ui.Interface.refresh()
+
   LET l_allow_new = TRUE
   IF m_new_acc_func IS NULL THEN
     LET l_allow_new = FALSE
@@ -515,7 +517,7 @@ FUNCTION cb_gbc_theme(l_cb ui.Combobox)
   DEFINE l_result STRING
   DEFINE x SMALLINT
 
-  IF g2_lib.m_isUniversal THEN
+  IF NOT g2_lib.m_isUniversal THEN
     CALL ui.Window.getCurrent().getForm().setElementHidden("ltheme", TRUE)
     CALL ui.Window.getCurrent().getForm().setFieldHidden("formonly.l_theme", TRUE)
     RETURN
