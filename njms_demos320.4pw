@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="31402" version="3.3">
+<Project defaultApplication="-1334009856" gstVersion="31402" version="3.3">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -366,6 +366,9 @@
         <File filePath="src/g2_lib/g2_logging.4gl"/>
         <File filePath="src/g2_lib/g2_secure.4gl"/>
       </Library>
+      <Library binaryName="g2_rpt" externalDependencies="libgre.42x" id="-1155424042" label="g2_rpt">
+        <File filePath="src/g2_lib/g2_grw.4gl"/>
+      </Library>
     </Group>
     <Group id="-922183004" label="GL_Lib" language="Genero">
       <Library binaryName="gl_dynMaint" dependencies="14000" id="-1557891896" label="gl_dynMaint">
@@ -435,9 +438,10 @@
         <File filePath="src/OpenIdLogin/OpenIdLogin.per"/>
         <File filePath="src/OpenIdLogin/OpenIdLogin.xcf"/>
       </Application>
-      <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,-310428106" id="-1334009856" label="user_mnt">
-        <File filePath="src/sys/user_mnt.4gl"/>
+      <Application binaryName="user_mnt" commandLineArguments="S 1" dependencies="1835393312,1986,-1090563702,-310428106,-1155424042" id="-1334009856" label="user_mnt">
+        <File compilerOptions="--build-rdd" filePath="src/sys/user_mnt.4gl"/>
         <File filePath="src/sys/user_mnt.per"/>
+        <File filePath="etc/users.4rp"/>
       </Application>
     </Group>
     <Group id="388215811" label="Utils">

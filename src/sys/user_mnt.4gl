@@ -5,6 +5,7 @@ IMPORT FGL g2_appInfo
 IMPORT FGL g2_about
 IMPORT FGL g2_db
 IMPORT FGL g2_secure
+IMPORT FGL g2_grw
 
 IMPORT FGL app_lib
 
@@ -230,6 +231,8 @@ MAIN
     ON ACTION quit
       CALL checkSave()
       EXIT DIALOG
+		ON ACTION rpt
+			CALL user_rpt()
     ON ACTION close
       EXIT DIALOG
     ON ACTION about
@@ -355,3 +358,28 @@ FUNCTION del_user(x)
   MESSAGE "User Deleted"
 END FUNCTION
 --------------------------------------------------------------------------------
+FUNCTION user_rpt()
+	DEFINE l_user RECORD LIKE sys_users.*
+	DEFINE l_rpt greRpt
+
+	LET l_rpt.pageWidth = 132
+	IF NOT l_rpt.init("users", TRUE, "SVG") THEN
+		CALL g2_lib.g2_winMessage("Error","Failed to start report","exclamation")
+		RETURN
+	END IF
+
+	START REPORT rpt TO XML HANDLER l_rpt.handle
+  FOREACH u_cur INTO l_user.*
+		OUTPUT TO REPORT rpt( l_user.*, "System Users" )
+	END FOREACH
+	FINISH REPORT rpt
+	CALL l_rpt.finish()
+END FUNCTION
+--------------------------------------------------------------------------------
+REPORT rpt( l_user RECORD LIKE sys_users.* , l_title STRING )
+	FORMAT
+		FIRST PAGE HEADER
+			PRINT l_title
+		ON EVERY ROW
+			PRINT l_user.*
+END REPORT
