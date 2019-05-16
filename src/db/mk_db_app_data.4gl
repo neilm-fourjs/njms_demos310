@@ -10,6 +10,7 @@ DEFINE m_ordDet RECORD LIKE ord_detail.*
 DEFINE m_cust RECORD LIKE customer.*
 
 CONSTANT MAX_ORDERS = 50
+CONSTANT MAX_QUOTES = 50
 CONSTANT MAX_LINES = 20
 CONSTANT MAX_QTY = 25
 
@@ -152,7 +153,11 @@ FUNCTION insert_app_data()
   INSERT INTO disc VALUES("DD", "CC", 1.45)
   INSERT INTO disc VALUES("DD", "DD", 1.55)
 
+	CALL insColours()
   CALL insSupp()
+
+  CALL genQuotes()
+
   CALL genOrders()
 
   CALL mkdb_progress("Done.")
@@ -616,4 +621,132 @@ FUNCTION tidy_name(l_nam STRING) RETURNS STRING
     LET l_nam = l_nam.append(l_word CLIPPED || " ")
   END WHILE
   RETURN l_nam.trim()
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION insColours()
+	DEFINE c base.Channel
+	DEFINE l_col RECORD
+		colour_name VARCHAR(30),
+		colour_hex CHAR(7)
+	END RECORD
+	DEFINE l_cnt SMALLINT
+	DELETE FROM colours
+  CALL mkdb_progress("Loading Colours ...")
+	LET c = base.Channel.create()
+	CALL c.openFile("../etc/colour_names.txt","r")
+	WHILE NOT c.isEof()
+		IF c.read( [ l_col.* ] ) THEN
+			INSERT INTO colours VALUES(0, l_col.colour_name, l_col.colour_hex )
+		END IF
+	END WHILE
+	CALL C.close()
+	SELECT COUNT(*) INTO l_cnt FROM colours
+  CALL mkdb_progress(SFMT("Loaded %1 Colours.", l_cnt ) )
+END FUNCTION
+--------------------------------------------------------------------------------
+FUNCTION genQuotes()
+  DEFINE l_cst DYNAMIC ARRAY OF VARCHAR(8)
+  DEFINE l_stk DYNAMIC ARRAY OF VARCHAR(8)
+  DEFINE l_dets DYNAMIC ARRAY OF RECORD
+    sc CHAR(8),
+    qt SMALLINT
+  END RECORD
+	DEFINE l_quote RECORD LIKE quotes.*
+	DEFINE l_quote_det RECORD LIKE quote_detail.*
+  DEFINE z, x, y, q, c, s, l, l_colrs SMALLINT
+  DEFINE l_dte DATE
+
+	SELECT COUNT(*) INTO l_colrs FROM colours
+
+  DECLARE qcstcur CURSOR FOR SELECT customer_code FROM customer
+  DECLARE qstkcur CURSOR FOR SELECT stock_code FROM stock
+  FOREACH qcstcur INTO l_cst[l_cst.getLength() + 1]
+  END FOREACH
+  FOREACH qstkcur INTO l_stk[l_stk.getLength() + 1]
+  END FOREACH
+  CALL l_cst.deleteElement(l_cst.getLength())
+  CALL l_stk.deleteElement(l_stk.getLength())
+
+  CALL mkdb_progress("Generating " || MAX_QUOTES || " Quotes")
+  FOR x = 1 TO MAX_ORDERS
+		INITIALIZE l_quote.* TO NULL
+    LET c = util.math.rand(l_cst.getLength())
+    IF c = 0 OR c > l_cst.getLength() THEN
+      LET c = l_cst.getLength()
+    END IF
+    LET l_dte = TODAY - 182
+    LET l_dte = l_dte + util.math.rand(182)
+		CASE  util.math.rand(5)
+			WHEN 1 LET l_quote.status = "W"
+			WHEN 2 LET l_quote.status = "R"
+			OTHERWISE LET l_quote.status = "Q"
+		END CASE
+		LET l_quote.quote_number = 0
+		LET l_quote.quote_ref = "GenQ"||(x USING "&&&")
+		LET l_quote.raised_by = "MKDB"
+		LET l_quote.customer_code = l_cst[c]
+		LET l_quote.expiration_date = l_dte+60
+		IF l_quote.status = "W" THEN
+			LET l_quote.ordered_date = l_dte+util.math.rand(30)
+		END IF
+		LET l_quote.quote_date = l_dte
+		LET l_quote.description = "Generate "||x
+		LET l_quote.project = "Test"
+		LET l_quote.quote_total = 0
+
+    LET l = util.math.rand(MAX_LINES + 1)
+    CALL l_dets.clear()
+    IF l >= l_stk.getLength() THEN
+      LET l = l_stk.getLength() - 1
+    END IF
+    IF l < 2 THEN LET l = 2 END IF -- Min lines
+    FOR y = 1 TO l
+      LET q = util.math.rand(MAX_QTY)
+      IF q = 0 OR q > MAX_QTY THEN
+        LET q = 5
+      END IF
+      --DISPLAY "Details Line:",y," of",l," qty:",q," stklen:",stk.getLength()
+      WHILE TRUE -- loop till we find a stock item that hasn't already be used.
+        LET s = util.math.rand(l_stk.getLength())
+        IF s = 0 OR s > l_stk.getLength() THEN
+          CONTINUE WHILE
+        END IF
+        FOR z = 1 TO l_dets.getLength()
+          IF l_dets[z].sc = l_stk[s] THEN
+            CONTINUE WHILE
+          END IF
+        END FOR
+        EXIT WHILE
+      END WHILE
+      --DISPLAY "stk:",stk[s]
+      LET l_dets[y].qt = q
+      LET l_dets[y].sc = l_stk[s]
+    END FOR
+    INSERT INTO quotes VALUES l_quote.*
+		LET l_quote.quote_number = SQLCA.SQLERRD[2] -- Fetch SERIAL num
+    FOR y = 1 TO l_dets.getLength()
+			LET l_quote_det.quote_number =  l_quote.quote_number
+			LET l_quote_det.item_num = y
+			LET l_quote_det.discount = 0
+			LET l_quote_det.quantity = l_dets[y].qt
+			LET l_quote_det.stock_code = l_dets[y].sc
+			LET l_quote_det.colour_key = util.math.rand(l_colrs-1)+1
+			SELECT price INTO l_quote_det.unit_rrp
+				FROM stock
+				WHERE stock_code = l_quote_det.stock_code
+			LET l_quote_det.unit_net = l_quote_det.unit_rrp
+{
+			SELECT * FROM quotes WHERE quote_number = l_quote_det.quote_number
+			DISPLAY "Quote:",STATUS, ":", l_quote_det.quote_number, ":",l_quote_det.item_num
+			SELECT * FROM stock WHERE stock_code = l_quote_det.stock_code
+			DISPLAY "Stock:",STATUS, ":", l_quote_det.stock_code
+			SELECT * FROM colours WHERE colour_key = l_quote_det.colour_key
+			DISPLAY "Colour:",STATUS, ":", l_quote_det.colour_key
+}
+      INSERT INTO quote_detail VALUES l_quote_det.*
+			LET l_quote.quote_total = l_quote.quote_total + ( l_quote_det.quantity * l_quote_det.unit_rrp )
+			DISPLAY  l_quote_det.quote_number, ":", l_quote.quote_total
+    END FOR
+ 		UPDATE quotes SET quote_total = l_quote.quote_total WHERE quote_number = l_quote.quote_number
+  END FOR
 END FUNCTION

@@ -1,8 +1,13 @@
 IMPORT os
-IMPORT FGL gl_lib
-CONSTANT C_VER = "3.1"
-CONSTANT C_PRGDESC = "WC Aircraft Demo"
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGVER = "3.2"
+CONSTANT C_PRGDESC = "WC Aircraft Demo"
+
 CONSTANT c_wc_images = "../pics/webcomponents/aircraft/"
 DEFINE l_breadcrumbs DYNAMIC ARRAY OF STRING
 DEFINE m_bc SMALLINT
@@ -17,13 +22,12 @@ DEFINE m_tray DYNAMIC ARRAY OF STRING
 DEFINE m_galley, m_pos STRING
 DEFINE m_drag_source STRING
 DEFINE m_dnd ui.DragDrop
-
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
   DEFINE l_wc, l_data STRING
-  DEFINE l_f ui.Form
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, TRUE)
-  LET gl_lib.gl_noToolBar = TRUE
+	DEFINE l_f ui.Form
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
 
   OPEN FORM f FROM "wc_aircraft"
   DISPLAY FORM f
@@ -59,6 +63,10 @@ MAIN
 
     ON ACTION b_panela
       CALL showPanel(l_f, "panela", 1)
+
+    ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
+
     ON ACTION quit
       EXIT DIALOG
     ON ACTION close

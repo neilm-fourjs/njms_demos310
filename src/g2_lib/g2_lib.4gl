@@ -22,6 +22,7 @@ PUBLIC DEFINE m_isUniversal BOOLEAN
 PUBLIC DEFINE m_isGDC BOOLEAN
 
 FUNCTION g2_init(l_mdi CHAR(1), l_styles STRING)
+	DEFINE l_ucn STRING
 	CALL g2_log.init(NULL, NULL, "log", "TRUE")
 	CALL g2_log.init(NULL, NULL, "err", "TRUE")
 
@@ -29,9 +30,11 @@ FUNCTION g2_init(l_mdi CHAR(1), l_styles STRING)
   WHENEVER ANY ERROR CALL g2_error
 
 	LET m_isGDC = FALSE
-	LET m_isUniversal = FALSE
+	LET m_isUniversal = TRUE
+	LET l_ucn = ui.Interface.getUniversalClientName()
+	IF l_ucn.getLength() < 3 THEN LET l_ucn = "?" END IF
 	IF ui.Interface.getFrontEndName() = "GDC" THEN LET m_isGDC = TRUE END IF
-	IF ui.Interface.getUniversalClientName() = "GBC" THEN LET m_isUniversal = TRUE END IF
+	IF l_ucn != "GBC" THEN LET m_isUniversal = FALSE END IF
 
   CALL g2_loadStyles(l_styles)
   CALL g2_mdisdi(l_mdi)
@@ -76,11 +79,12 @@ END FUNCTION
 FUNCTION g2_loadStyles(l_sty STRING) RETURNS()
   DEFINE l_fe STRING
 
+	LET l_fe = "GBC"
   IF m_isGDC THEN LET l_fe = "GDC" END IF
   IF m_isUniversal THEN LET l_fe = "GBC" END IF
-
+  GL_DBGMSG(0, SFMT("g2_loadStyles: styleFile=%1 ", l_sty||"_"||l_fe ))
 	TRY
- 		CALL ui.interface.loadStyles(l_sty || "_" || l_fe)
+ 		CALL ui.interface.loadStyles(l_sty||"_"||l_fe)
 	CATCH
  		CALL ui.interface.loadStyles(l_sty)
 	END TRY
@@ -159,7 +163,7 @@ FUNCTION g2_winQuestion(
   LET l_dum = FALSE
   IF ui.window.getCurrent() IS NULL THEN
     OPEN WINDOW dummy AT 1, 1 WITH 1 ROWS, 2 COLUMNS ATTRIBUTE(STYLE = "naked")
-    CALL fgl_settitle(l_title)
+    CALL ui.window.getCurrent().setText(l_title)
     LET l_dum = TRUE
   END IF
 
