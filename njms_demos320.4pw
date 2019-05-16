@@ -193,13 +193,13 @@
         <File filePath="etc/njm_demo310.4db"/>
         <File filePath="src/schema.inc"/>
       </Library>
-      <Application binaryName="mk_db" commandLineArguments="ALL" dependencies="1986,-1463189462,14000,726830537,-1090563702,-310428106" id="1521876251" label="mk_db">
+      <Application binaryName="mk_db" commandLineArguments="ALL" dependencies="1986,-1463189462,726830537,-1090563702,-310428106" id="1521876251" label="mk_db">
         <File filePath="src/db/mk_db.4gl"/>
         <File filePath="src/db/mk_db.per"/>
         <File filePath="src/db/mk_db_sys_data.4gl"/>
         <File filePath="src/db/mk_db_sys_ifx.4gl"/>
       </Application>
-      <Library binaryName="mk_db_lib" dependencies="-400184264,1986" id="726830537" label="mk_db_lib">
+      <Library binaryName="mk_db_lib" dependencies="-400184264,1986,-310428106" id="726830537" label="mk_db_lib">
         <File filePath="src/db/mk_db_app_data.4gl"/>
         <File filePath="src/db/mk_db_app_ifx.4gl"/>
       </Library>

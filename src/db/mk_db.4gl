@@ -1,12 +1,15 @@
 IMPORT FGL g2_lib
 IMPORT FGL g2_db
 IMPORT FGL mk_db_sys_data
+IMPORT FGL mk_db_sys_ifx
 IMPORT FGL mk_db_app_data
+IMPORT FGL mk_db_app_ifx
 &include "schema.inc"
 DEFINE m_stat STRING
-DEFINE m_db g2_db.dbInfo
+
 MAIN
   DEFINE l_arg STRING
+	DEFINE l_db g2_db.dbInfo
 
   OPEN FORM f FROM "mk_db"
   DISPLAY FORM f
@@ -20,9 +23,9 @@ MAIN
     LET l_arg = "ALL"
   END IF
 
-  LET m_db.create_db = TRUE
-  CALL m_db.g2_connect(NULL)
-  CALL mkdb_progress(SFMT(% "Connected to %1 db '%2' okay", m_db.type, m_db.name))
+  LET l_db.create_db = TRUE
+  CALL l_db.g2_connect(NULL)
+  CALL mkdb_progress(SFMT(% "Connected to %1 db '%2' okay", l_db.type, l_db.name))
 
   IF g2_lib.g2_winQuestion(
               "Confirm",
@@ -37,23 +40,23 @@ MAIN
 
   CALL mkdb_progress(
       SFMT("typ:%1 nam:%2 des:%3 src:%4 drv:%5 dir:%6 con:%7",
-          m_db.type,
-          m_db.name,
-          m_db.desc,
-          m_db.source,
-          m_db.driver,
-          m_db.dir,
-          m_db.connection))
+          l_db.type,
+          l_db.name,
+          l_db.desc,
+          l_db.source,
+          l_db.driver,
+          l_db.dir,
+          l_db.connection))
 
   IF l_arg = "SYS" OR l_arg = "ALL" THEN
     CALL drop_sys()
-    CALL ifx_create_system_tables()
+    CALL mk_db_sys_ifx.ifx_create_system_tables()
     CALL mk_db_sys_data.insert_system_data()
   END IF
 
   IF l_arg = "APP" OR l_arg = "ALL" THEN
     CALL drop_app()
-    CALL ifx_create_app_tables()
+    CALL mk_db_app_ifx.ifx_create_app_tables(l_db)
     CALL mk_db_app_data.insert_app_data()
   END IF
 
@@ -77,6 +80,8 @@ END FUNCTION
 FUNCTION drop_app()
   CALL mkdb_progress("Dropping data tables...")
   WHENEVER ERROR CONTINUE
+	DROP TABLE quote_detail
+	DROP TABLE quotes
   DROP TABLE customer
   DROP TABLE addresses
   DROP TABLE countries
@@ -89,8 +94,6 @@ FUNCTION drop_app()
   DROP TABLE ord_payment
   DROP TABLE disc
 	DROP TABLE colours
-	DROP TABLE quotes
-	DROP TABLE quote_detail
   WHENEVER ERROR STOP
   CALL mkdb_progress("Done.")
 END FUNCTION

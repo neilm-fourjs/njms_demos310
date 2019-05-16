@@ -33,7 +33,7 @@ PUBLIC TYPE dbInfo RECORD
 	create_db BOOLEAN
 END RECORD
 
-PUBLIC FUNCTION (this dbInfo) g2_connect(l_dbName STRING) RETURNS ()
+FUNCTION (this dbInfo) g2_connect(l_dbName STRING) RETURNS ()
   DEFINE l_msg STRING
   DEFINE l_lockMode, l_fglprofile BOOLEAN
 
@@ -287,6 +287,27 @@ FUNCTION (this dbInfo) g2_showInfo(stat INTEGER) RETURNS ()
   END MENU
 
   CLOSE WINDOW info
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ Add a primary key to a table
+#+
+#+ @param l_tab Table name
+#+ @param l_col Column(s)
+FUNCTION (this dbInfo) g2_addPrimaryKey( l_tab STRING, l_col STRING ) RETURNS ()
+	DEFINE l_sql_stmt STRING
+	DEFINE l_cmd STRING
+	LET l_cmd = "PRIMARY KEY"
+	IF this.type = "sqt" THEN RETURN END IF -- can't add pk to sqlite!!
+	IF this.type = "ifx" THEN
+		LET l_cmd = "CONSTRAINT UNIQUE"
+	END IF
+	LET l_sql_stmt = SFMT("ALTER TABLE %1 ADD %2 (%3)", l_tab, l_cmd, l_col)
+	TRY
+		EXECUTE IMMEDIATE l_sql_stmt
+	CATCH
+    IF NOT g2_sqlStatus(__LINE__, "gl_db", l_sql_stmt) THEN
+    END IF
+	END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Process the status after an SQL Statement.
@@ -611,3 +632,4 @@ FUNCTION g2_checkRec(l_ex BOOLEAN, l_key STRING, l_sql STRING) RETURNS BOOLEAN
   END IF
   RETURN TRUE
 END FUNCTION
+--------------------------------------------------------------------------------

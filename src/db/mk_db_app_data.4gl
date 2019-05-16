@@ -2,7 +2,7 @@
 
 IMPORT util
 IMPORT os
-IMPORT FGL gl_db
+IMPORT FGL g2_db
 &include "schema.inc"
 
 DEFINE m_ordHead RECORD LIKE ord_head.*
@@ -18,6 +18,7 @@ DEFINE m_bc_cnt, m_prod_key INTEGER
 
 ---------------------------------------------------
 FUNCTION insert_app_data()
+	DEFINE l_add RECORD LIKE addresses.*
 
   CALL mkdb_progress("Inserting test data...")
   INSERT INTO customer
@@ -57,24 +58,26 @@ FUNCTION insert_app_data()
           0,
           0)
 
-  IF gl_db.m_dbtyp = "pgs" OR gl_db.m_dbtyp = "snc" THEN
-    INSERT INTO addresses(
-        line1, line2, line3, line4, line5, postal_code, country_code)
-        VALUES("The Road", "The Small Town", "Sussex", "U.K.", "", "BN12 XYZ", "GBR")
-    INSERT INTO addresses(
-        line1, line2, line3, line4, line5, postal_code, country_code)
-        VALUES("Some Road", "The Large Town", "London", "U.K.", "", "SW12", "GBR")
-    INSERT INTO addresses(
-        line1, line2, line3, line4, line5, postal_code, country_code)
-        VALUES("The Street", "The Village", "Surry", "U.K.", "", "RH1 XYZ", "GBR")
-  ELSE
-    INSERT INTO addresses
-        VALUES(1, "The Road", "The Small Town", "Sussex", "U.K.", "", "BN12 XYZ", "GBR")
-    INSERT INTO addresses
-        VALUES(2, "Some Road", "The Large Town", "London", "U.K.", "", "SW12", "GBR")
-    INSERT INTO addresses
-        VALUES(3, "The Street", "The Village", "Surry", "U.K.", "", "RH1 XYZ", "GBR")
-  END IF
+	LET l_add.rec_key = 0
+	LET l_add.country_code = "GBR"
+
+	LET l_add.line1 = "The Road"
+	LET l_add.line2 = "The Small Town"
+	LET l_add.line3 = "Sussex"
+	LET l_add.postal_code = "BN12 XYZ"
+	INSERT INTO addresses VALUES l_add.*
+
+	LET l_add.line1 = "Some Road"
+	LET l_add.line2 = "The Large Town"
+	LET l_add.line3 = "London"
+	LET l_add.postal_code = "SW12"
+	INSERT INTO addresses VALUES l_add.*
+
+	LET l_add.line1 = "The Street"
+	LET l_add.line2 = "The Village"
+	LET l_add.line3 = "Surrey"
+	LET l_add.postal_code = "RH1 XYZ"
+	INSERT INTO addresses VALUES l_add.*
 
   LET m_bc_cnt = 124212
   LET m_prod_key = 1
@@ -625,10 +628,7 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION insColours()
 	DEFINE c base.Channel
-	DEFINE l_col RECORD
-		colour_name VARCHAR(30),
-		colour_hex CHAR(7)
-	END RECORD
+	DEFINE l_col RECORD LIKE colours.*
 	DEFINE l_cnt SMALLINT
 	DELETE FROM colours
   CALL mkdb_progress("Loading Colours ...")
@@ -636,7 +636,7 @@ FUNCTION insColours()
 	CALL c.openFile("../etc/colour_names.txt","r")
 	WHILE NOT c.isEof()
 		IF c.read( [ l_col.* ] ) THEN
-			INSERT INTO colours VALUES(0, l_col.colour_name, l_col.colour_hex )
+			INSERT INTO colours VALUES l_col.*
 		END IF
 	END WHILE
 	CALL C.close()
@@ -670,6 +670,7 @@ FUNCTION genQuotes()
   CALL mkdb_progress("Generating " || MAX_QUOTES || " Quotes")
   FOR x = 1 TO MAX_ORDERS
 		INITIALIZE l_quote.* TO NULL
+		LET l_quote.revision = 1
     LET c = util.math.rand(l_cst.getLength())
     IF c = 0 OR c > l_cst.getLength() THEN
       LET c = l_cst.getLength()
@@ -678,7 +679,7 @@ FUNCTION genQuotes()
     LET l_dte = l_dte + util.math.rand(182)
 		CASE  util.math.rand(5)
 			WHEN 1 LET l_quote.status = "W"
-			WHEN 2 LET l_quote.status = "R"
+			WHEN 2 LET l_quote.status = "R" LET l_quote.revision = 2
 			OTHERWISE LET l_quote.status = "Q"
 		END CASE
 		LET l_quote.quote_number = 0
@@ -686,6 +687,7 @@ FUNCTION genQuotes()
 		LET l_quote.raised_by = "MKDB"
 		LET l_quote.customer_code = l_cst[c]
 		LET l_quote.expiration_date = l_dte+60
+		LET l_quote.account_manager = "Neil Martin"
 		IF l_quote.status = "W" THEN
 			LET l_quote.ordered_date = l_dte+util.math.rand(30)
 		END IF
