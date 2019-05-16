@@ -93,7 +93,7 @@
       <File filePath="gbc/gbc-njm/theme.scss.json"/>
     </Library>
   </Group>
-  <Group environment="value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" label="njms_demos310" language="Genero" targetDirectory="$(ProjectDir)/bin310">
+  <Group environment="value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,dir:GDCUPDATEDIR=../gdcupdate_local,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,value:MUSICDIR=$(HOME)/Music,file:FGLPROFILE_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_mdb=$(ProjectDir)/etc/mdb/profile,value:REPORTDIR=../etc,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" label="njms_demos310" language="Genero" targetDirectory="$(ProjectDir)/bin310">
     <Group label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,14000" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>

@@ -81,6 +81,9 @@ FUNCTION drop_app()
 	DROP TABLE ord_head
 	DROP TABLE ord_payment
 	DROP TABLE disc
+	DROP TABLE colours
+	DROP TABLE quotes
+	DROP TABLE quote_detail
 	WHENEVER ERROR STOP
 	CALL mkdb_progress( "Done." )
 END FUNCTION
