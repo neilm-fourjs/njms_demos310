@@ -70,6 +70,8 @@ END FUNCTION
 FUNCTION drop_app()
 	CALL mkdb_progress( "Dropping data tables..." )
 	WHENEVER ERROR CONTINUE
+	DROP TABLE quote_detail
+	DROP TABLE quotes
 	DROP TABLE customer
 	DROP TABLE addresses
 	DROP TABLE countries
@@ -82,8 +84,6 @@ FUNCTION drop_app()
 	DROP TABLE ord_payment
 	DROP TABLE disc
 	DROP TABLE colours
-	DROP TABLE quotes
-	DROP TABLE quote_detail
 	WHENEVER ERROR STOP
 	CALL mkdb_progress( "Done." )
 END FUNCTION
