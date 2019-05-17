@@ -18,66 +18,50 @@ DEFINE m_bc_cnt, m_prod_key INTEGER
 
 ---------------------------------------------------
 FUNCTION insert_app_data()
+	DEFINE l_jcust DYNAMIC ARRAY OF RECORD
+		name STRING,
+		email STRING,
+		addr STRING,
+		city STRING,
+		county STRING,
+		postcode STRING,
+		phone STRING,
+		contact STRING
+	END RECORD
+	DEFINE l_cust RECORD LIKE customer.*
 	DEFINE l_add RECORD LIKE addresses.*
+	DEFINE l_jsonData TEXT
+	DEFINE x SMALLINT
 
-  CALL mkdb_progress("Inserting test data...")
-  INSERT INTO customer
-      VALUES(1,
-          "NJM Software Projects Inc",
-          "Neil Martin",
-          "njm@njm-projects.com",
-          "12njm",
-          1,
-          1,
-          "CC",
-          10000,
-          0,
-          0)
-  INSERT INTO customer
-      VALUES(2,
-          "O'Meara Operations Ltd",
-          "Neil O'Meara",
-          "nom@nom-ltd.com",
-          "12neilom",
-          2,
-          2,
-          "BB",
-          8000,
-          0,
-          0)
-  INSERT INTO customer
-      VALUES(3,
-          "Gerrit Enterprises Co.",
-          "Gerrit Le Roux",
-          "glr@glr-ent.com",
-          "12gerrit",
-          3,
-          3,
-          "AA",
-          8000,
-          0,
-          0)
+  CALL mkdb_progress("Inserting test customer data...")
+	LOCATE l_jsonData IN MEMORY
+	CALL l_jsonData.readFile("../etc/customers.json")
+  CALL util.JSON.parse( l_jsonData, l_jcust )
 
-	LET l_add.rec_key = 0
 	LET l_add.country_code = "GBR"
+	FOR x = 1 TO l_jcust.getLength()
+		LET l_add.rec_key = 0
+		LET l_add.line1 = l_jcust[x].addr
+		LET l_add.line2 = l_jcust[x].city
+		--LET l_add.line3 =
+		LET l_add.postal_code = l_jcust[x].postcode
+		INSERT INTO addresses VALUES l_add.*
+		LET l_add.rec_key = SQLCA.sqlerrd[2]
+		LET l_cust.contact_name = l_jcust[x].contact
+		LET l_cust.credit_limit = 1000
+		LET l_cust.customer_code = "C"||(x USING "&&&&")
+		LET l_cust.customer_name = l_jcust[x].name
+		LET l_cust.del_addr = l_add.rec_key
+		LET l_cust.inv_addr = l_add.rec_key
+		LET l_cust.disc_code = "AA"
+		LET l_cust.email = l_jcust[x].email
+		LET l_cust.outstanding_amount = 0
+		LET l_cust.total_invoices = util.Math.rand(10000)
+		INSERT INTO customer VALUES l_cust.*
+	END FOR
 
-	LET l_add.line1 = "The Road"
-	LET l_add.line2 = "The Small Town"
-	LET l_add.line3 = "Sussex"
-	LET l_add.postal_code = "BN12 XYZ"
-	INSERT INTO addresses VALUES l_add.*
 
-	LET l_add.line1 = "Some Road"
-	LET l_add.line2 = "The Large Town"
-	LET l_add.line3 = "London"
-	LET l_add.postal_code = "SW12"
-	INSERT INTO addresses VALUES l_add.*
-
-	LET l_add.line1 = "The Street"
-	LET l_add.line2 = "The Village"
-	LET l_add.line3 = "Surrey"
-	LET l_add.postal_code = "RH1 XYZ"
-	INSERT INTO addresses VALUES l_add.*
+  CALL mkdb_progress("Inserting test stock data...")
 
   LET m_bc_cnt = 124212
   LET m_prod_key = 1
@@ -398,7 +382,7 @@ FUNCTION genOrders()
   FOR x = 1 TO MAX_ORDERS
     LET c = util.math.rand(cst.getLength())
     IF c = 0 OR c > cst.getLength() THEN
-      LET c = 3
+      LET c = cst.getLength()
     END IF
     LET dte = TODAY - 1825
     LET dte = dte + util.math.rand(1825)
@@ -449,6 +433,7 @@ FUNCTION orderHead(cst, dte)
   SELECT * INTO m_cust.* FROM customer WHERE customer_code = cst
   SELECT * INTO del_ad.* FROM addresses WHERE rec_key = m_cust.del_addr
   SELECT * INTO inv_ad.* FROM addresses WHERE rec_key = m_cust.inv_addr
+  LET m_ordHead.customer_code = cst
   LET m_ordHead.customer_name = m_cust.customer_name
   LET m_ordHead.del_address1 = del_ad.line1
   LET m_ordHead.del_address2 = del_ad.line2
@@ -469,8 +454,6 @@ FUNCTION orderHead(cst, dte)
   LET m_ordHead.total_nett = 0
   LET m_ordHead.total_tax = 0
 
-  LET m_ordHead.customer_code = cst
-  LET m_ordHead.customer_name = m_cust.contact_name
   LET dt = dte USING "YYYY-MM-DD"
   LET m_ordHead.order_date = dte
   LET m_ordHead.order_datetime = dte
