@@ -94,11 +94,12 @@
       <File filePath="gbc/gbc-njm/theme.scss.json"/>
     </Library>
   </Group>
-  <Group environment="value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,file:FGLPROFILE_DB_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_DB_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_DB_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_DB_mdb=$(ProjectDir)/etc/mdb/profile,file:FGLPROFILE_DB_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_UI_NAT=$(ProjectDir)/etc/profile.nat,file:FGLPROFILE_UI_UR=$(ProjectDir)/etc/profile.ur,file:FGLPROFILE=$(FGLPROFILE_DB_sqt):$(FGLPROFILE_UI_NAT),value:FGLGBCDIR=$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-clean,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,dir:GDCUPDATEDIR=../gdcupdate_local,value:REPORTDIR=../etc,value:MUSICDIR=$(HOME)/Music,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" id="1812115377" label="njms_demos320" language="Genero" targetDirectory="$(ProjectDir)/bin320">
+  <Group environment="value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,file:FGLPROFILE_DB_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_DB_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_DB_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_DB_mdb=$(ProjectDir)/etc/mdb/profile,file:FGLPROFILE_DB_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_UI_NAT=$(ProjectDir)/etc/profile.nat,file:FGLPROFILE_UI_UR=$(ProjectDir)/etc/profile.ur,file:FGLPROFILE=$(FGLPROFILE_DB_ifx):$(FGLPROFILE_UI_NAT),value:FGLGBCDIR=$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-clean,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,dir:GDCUPDATEDIR=../gdcupdate_local,value:REPORTDIR=../etc,value:MUSICDIR=$(HOME)/Music,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" id="1812115377" label="njms_demos320" language="Genero" targetDirectory="$(ProjectDir)/bin320">
     <Group id="1174162370" label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,-310428106" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
         <File filePath="src/app/app_lib.4gl"/>
+        <File filePath="src/app/combos.4gl"/>
       </Library>
       <Application binaryName="cust_mnt" commandLineArguments="S 1" dependencies="-400184264,1986,14000,-1090563702" id="-1273407208" label="cust_mnt">
         <File filePath="src/app/cust_mnt.4fd"/>
@@ -138,6 +139,14 @@
           <File filePath="etc/picklist.4rp"/>
         </VirtualFolder>
         <File filePath="src/app/printInvoices.4gl"/>
+      </Application>
+      <Application binaryName="quotemnt" dependencies="1986,-310428106,-1090563702" id="-527753430" label="quotemnt">
+        <File filePath="src/app/quotemnt.4gl"/>
+        <File filePath="src/app/quotemnt.per"/>
+      </Application>
+      <Application binaryName="quotes" dependencies="1986,-310428106,-1090563702" id="437366480" label="quotes">
+        <File filePath="src/app/quotelist.per"/>
+        <File filePath="src/app/quotes.4gl"/>
       </Application>
       <Application binaryName="webOE" dependencies="-272766546,14000,-1090563702,-400184264,1986" id="-559263813" label="webOE">
         <VirtualFolder label="etc">

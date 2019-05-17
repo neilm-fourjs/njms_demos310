@@ -636,10 +636,11 @@ FUNCTION genQuotes()
   END RECORD
 	DEFINE l_quote RECORD LIKE quotes.*
 	DEFINE l_quote_det RECORD LIKE quote_detail.*
-  DEFINE z, x, y, q, c, s, l, l_colrs SMALLINT
+  DEFINE z, x, y, q, c, s, l, l_colrs, l_users SMALLINT
   DEFINE l_dte DATE
 
 	SELECT COUNT(*) INTO l_colrs FROM colours
+	SELECT COUNT(*) INTO l_users FROM sys_users
 
   DECLARE qcstcur CURSOR FOR SELECT customer_code FROM customer
   DECLARE qstkcur CURSOR FOR SELECT stock_code FROM stock
@@ -667,10 +668,10 @@ FUNCTION genQuotes()
 		END CASE
 		LET l_quote.quote_number = 0
 		LET l_quote.quote_ref = "GenQ"||(x USING "&&&")
-		LET l_quote.raised_by = "MKDB"
+		LET l_quote.raised_by =  util.math.rand(l_users-1)+1
 		LET l_quote.customer_code = l_cst[c]
 		LET l_quote.expiration_date = l_dte+60
-		LET l_quote.account_manager = "Neil Martin"
+		LET l_quote.account_manager =  util.math.rand(l_users-1)+1
 		IF l_quote.status = "W" THEN
 			LET l_quote.ordered_date = l_dte+util.math.rand(30)
 		END IF

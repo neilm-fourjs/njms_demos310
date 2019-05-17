@@ -1,3 +1,4 @@
+IMPORT util
 IMPORT FGL g2_lib
 IMPORT FGL g2_db
 IMPORT FGL g2_secure
@@ -133,6 +134,14 @@ END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION mk_demo_account()
 	DEFINE l_user RECORD LIKE sys_users.*
+	DEFINE l_jsonData TEXT
+	DEFINE l_juser DYNAMIC ARRAY OF RECORD
+		salutation STRING,
+		forenames STRING,
+		surname STRING
+	END RECORD
+	DEFINE x SMALLINT
+	DEFINE l_passwd LIKE sys_users.login_pass
   CALL mkdb_progress(SFMT("Creating test account: %1 / %2", C_DEF_USER_EMAIL, C_DEF_USER_PASSWD))
 
   SELECT * FROM sys_users WHERE email = C_DEF_USER_EMAIL
@@ -165,6 +174,22 @@ FUNCTION mk_demo_account()
     CALL mkdb_progress("Insert test account failed!\n" || STATUS || ":" || SQLERRMESSAGE)
     EXIT PROGRAM
   END TRY
+
+	LOCATE l_jsonData IN MEMORY
+	CALL l_jsonData.readFile("../etc/sys_users.json")
+  CALL util.JSON.parse( l_jsonData, l_juser )
+  CALL mkdb_progress( SFMT("Inserting %1 test users ...",l_juser.getLength()))
+	FOR x = 1 TO l_juser.getLength()
+		LET l_user.salutation = l_juser[x].salutation
+		LET l_user.forenames = l_juser[x].forenames
+		LET l_user.surname = l_juser[x].surname
+		LET l_passwd = g2_secure.g2_genPassword()
+		LET l_user.email = DOWNSHIFT(l_user.forenames[1]||"."||l_user.surname CLIPPED||"@njmdemos.com")
+		DISPLAY "User:",l_user.salutation," ",l_user.forenames," ",l_user.surname," ", l_passwd," ", l_user.email
+		LET l_user.salt = g2_secure.g2_genSalt(l_user.hash_type)
+		LET l_user.pass_hash = g2_secure.g2_genPasswordHash(l_passwd, l_user.salt, l_user.hash_type)
+		INSERT INTO sys_users VALUES l_user.*
+	END FOR
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION addRole(l_type CHAR, l_name VARCHAR(30))
