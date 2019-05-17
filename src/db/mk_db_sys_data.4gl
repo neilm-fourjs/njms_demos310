@@ -1,3 +1,4 @@
+IMPORT util
 IMPORT FGL gl_lib
 IMPORT FGL gl_db
 IMPORT FGL lib_secure
@@ -132,83 +133,63 @@ FUNCTION insert_system_data()
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION mk_demo_account()
-  DEFINE l_hash_type, l_login_pass, l_salt, l_pass_hash, l_email VARCHAR(128)
-  DEFINE l_dte DATE
-
+	DEFINE l_user RECORD LIKE sys_users.*
+	DEFINE l_jsonData TEXT
+	DEFINE l_juser DYNAMIC ARRAY OF RECORD
+		salutation STRING,
+		forenames STRING,
+		surname STRING
+	END RECORD
+	DEFINE x SMALLINT
+	DEFINE l_passwd LIKE sys_users.login_pass
   CALL mkdb_progress(SFMT("Creating test account: %1 / %2", C_DEF_USER_EMAIL, C_DEF_USER_PASSWD))
-  LET l_email = C_DEF_USER_EMAIL
-  SELECT * FROM sys_users WHERE email = l_email
+
+  SELECT * FROM sys_users WHERE email = C_DEF_USER_EMAIL
   IF STATUS = 0 THEN
     RETURN
   END IF
 
-  LET l_login_pass = C_DEF_USER_PASSWD
-  LET l_hash_type = lib_secure.glsec_getHashType()
-  LET l_salt = lib_secure.glsec_genSalt(l_hash_type)
-  LET l_pass_hash = lib_secure.glsec_genPasswordHash(l_login_pass, l_salt, l_hash_type)
-  LET l_dte = TODAY + 365
-  TRY
-    IF gl_db.m_dbtyp = "pgs" OR gl_db.m_dbtyp = "snc" THEN
-      INSERT INTO sys_users(
-          salutation,
-          forenames,
-          surname,
-          position,
-          email,
-          comment,
-          acct_type,
-          active,
-          forcepwchg,
-          hash_type,
-          login_pass,
-          salt,
-          pass_hash,
-          pass_expire,
-          gbc_theme,
-          photo_uri)
-          VALUES("Mr",
-              "Test",
-              "Testing",
-              "Tester",
-              l_email,
-              "A test account",
-              0,
-              1,
-              "N",
-              l_hash_type,
-              "not stored",
-              l_salt,
-              l_pass_hash,
-              l_dte,
-              NULL,
-              NULL)
-    ELSE
-      INSERT INTO sys_users
-          VALUES(1,
-              "Mr",
-              "Test",
-              "Testing",
-              "Tester",
-              l_email,
-              "A test account",
-              0,
-              1,
-              "N",
-              l_hash_type,
-              "not stored",
-              l_salt,
-              l_pass_hash,
-              l_dte,
-              NULL,
-              NULL)
-    END IF
--- NOTE: we don't store the clear text password
+	LET l_user.salutation = "Mr"
+	LET l_user.forenames = "Fred"
+	LET l_user.surname = "Bloggs"
+	LET l_user.position = "Tester"
+	LET l_user.email = C_DEF_USER_EMAIL
+	LET l_user.comment = "A test account"
+	LET l_user.acct_type = 0
+	LET l_user.active = 1
+	LET l_user.forcepwchg = "N"
+	LET l_user.hash_type = lib_secure.glsec_getHashType()
+	LET l_user.login_pass = "not stored"
+	LET l_user.salt = lib_secure.glsec_genSalt( l_user.hash_type)
+	LET l_user.pass_hash = lib_secure.glsec_genPasswordHash(C_DEF_USER_PASSWD, l_user.salt, l_user.hash_type)
+	LET l_user.pass_expire = TODAY + 365
+	LET l_user.gbc_theme = NULL
+	LET l_user.photo_uri = NULL
+
+	TRY
+		INSERT INTO sys_users VALUES l_user.*
     CALL mkdb_progress(
-        SFMT("Test Account Inserted: %1 / %2 with %3 hash.", l_email, l_login_pass, l_hash_type))
+        SFMT("Test Account Inserted: %1 / %2 with %3 hash.",C_DEF_USER_EMAIL , C_DEF_USER_PASSWD, l_user.hash_type ))
   CATCH
     CALL mkdb_progress("Insert test account failed!\n" || STATUS || ":" || SQLERRMESSAGE)
     EXIT PROGRAM
   END TRY
+
+	LOCATE l_jsonData IN MEMORY
+	CALL l_jsonData.readFile("../etc/sys_users.json")
+  CALL util.JSON.parse( l_jsonData, l_juser )
+  CALL mkdb_progress( SFMT("Inserting %1 test users ...",l_juser.getLength()))
+	FOR x = 1 TO l_juser.getLength()
+		LET l_user.salutation = l_juser[x].salutation
+		LET l_user.forenames = l_juser[x].forenames
+		LET l_user.surname = l_juser[x].surname
+		LET l_passwd = lib_secure.glsec_genPassword()
+		LET l_user.email = DOWNSHIFT(l_user.forenames[1]||"."||l_user.surname CLIPPED||"@njmdemos.com")
+		DISPLAY "User:",l_user.salutation," ",l_user.forenames," ",l_user.surname," ", l_passwd," ", l_user.email
+		LET l_user.salt = lib_secure.glsec_genSalt(l_user.hash_type)
+		LET l_user.pass_hash = lib_secure.glsec_genPasswordHash(l_passwd, l_user.salt, l_user.hash_type)
+		INSERT INTO sys_users VALUES l_user.*
+	END FOR
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION addRole(l_type CHAR, l_name VARCHAR(30))
