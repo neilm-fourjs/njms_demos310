@@ -622,7 +622,7 @@ FUNCTION insColours()
 			INSERT INTO colours VALUES l_col.*
 		END IF
 	END WHILE
-	CALL C.close()
+	CALL c.close()
 	SELECT COUNT(*) INTO l_cnt FROM colours
   CALL mkdb_progress(SFMT("Loaded %1 Colours.", l_cnt ) )
 END FUNCTION
@@ -716,6 +716,7 @@ FUNCTION genQuotes()
 			LET l_quote_det.quantity = l_dets[y].qt
 			LET l_quote_det.stock_code = l_dets[y].sc
 			LET l_quote_det.colour_key = util.math.rand(l_colrs-1)+1
+			LET l_quote_det.colour_surcharge = util.math.rand(2)
 			SELECT price INTO l_quote_det.unit_rrp
 				FROM stock
 				WHERE stock_code = l_quote_det.stock_code
