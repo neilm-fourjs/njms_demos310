@@ -2,15 +2,12 @@
 <APPLICATION Parent="defaultgdc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://www.4js.com/ns/gas/3.00/cfextwa.xsd">
-	<RESOURCE Id="res.genver" Source="INTERNAL">310</RESOURCE>
-	<RESOURCE Id="res.gre" Source="INTERNAL">/opt/fourjs/gre$(res.genver)</RESOURCE>
+	<RESOURCE Id="res.genver" Source="INTERNAL">320</RESOURCE>
 	<RESOURCE Id="res.path.njm_demo" Source="INTERNAL">$(res.deployment.path)</RESOURCE>
 	<EXECUTION>
 		<ENVIRONMENT_VARIABLE Id="FGLRESOURCEPATH">$(res.path.njm_demo)/etc</ENVIRONMENT_VARIABLE>
 		<ENVIRONMENT_VARIABLE Id="FGLIMAGEPATH">$(res.path.njm_demo)/pics:$(res.path.njm_demo)/pics/fa5.txt</ENVIRONMENT_VARIABLE>
-		<ENVIRONMENT_VARIABLE Id="GREDIR">$(res.gre)</ENVIRONMENT_VARIABLE>
 		<ENVIRONMENT_VARIABLE Id="REPORTDIR">$(res.path.njm_demo)/etc/</ENVIRONMENT_VARIABLE>
-		<ENVIRONMENT_VARIABLE Id="FGLLDPATH">$(res.gre)/lib</ENVIRONMENT_VARIABLE>
 		<ENVIRONMENT_VARIABLE Id="FGLPROFILE">$(res.path.njm_demo)/etc/profile</ENVIRONMENT_VARIABLE>
 		<ENVIRONMENT_VARIABLE Id="DBPRINT">FGLSERVER</ENVIRONMENT_VARIABLE>
 		<ENVIRONMENT_VARIABLE Id="DBDATE">DMY4/</ENVIRONMENT_VARIABLE>

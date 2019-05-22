@@ -9,6 +9,7 @@ IMPORT FGL g2_gdcUpdate
 IMPORT FGL lib_login
 IMPORT FGL menuLib
 IMPORT FGL new_acct
+
 &include "schema.inc"
 &include "app.inc"
 

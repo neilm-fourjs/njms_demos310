@@ -64,6 +64,43 @@
   </Settings>
   <LanguageList version="1.0"/>
   <PlatformList version="1.0"/>
+  <Group id="1346150139" label="Configs" language="Genero">
+    <Group id="-1860471333" label="Configs">
+      <Library binaryName="etc" id="-400184264" label="etc">
+        <File filePath="etc/default.4ad"/>
+        <File filePath="etc/default_GBC.4st"/>
+        <File filePath="etc/default_GDC.4st"/>
+        <File filePath="etc/dynmaint.4tb"/>
+        <File filePath="etc/dynmaint.4tm"/>
+        <File filePath="etc/profile.nat"/>
+        <File filePath="etc/profile.ur"/>
+      </Library>
+      <Library binaryName="profile_ifx" id="-1049145178" label="profile_ifx">
+        <File filePath="etc/ifx/profile"/>
+      </Library>
+      <Library binaryName="profile_mdb" id="1811942608" label="profile_mdb">
+        <File filePath="etc/mdb/profile"/>
+      </Library>
+      <Library binaryName="profile_pgs" id="-1248408576" label="profile_pgs">
+        <File filePath="etc/pgs/profile"/>
+      </Library>
+      <Library binaryName="profile_snc" id="1518416784" label="profile_snc">
+        <File filePath="etc/snc/profile"/>
+      </Library>
+      <Library binaryName="profile_sqt" id="-1222789264" label="profile_sqt">
+        <File filePath="etc/sqt/profile"/>
+      </Library>
+      <Library binaryName="xcf_files" id="1211289508" label="xcf_files_local">
+        <File filePath="gas/demo310.xcf"/>
+        <File filePath="gas/matDesTest.xcf"/>
+        <File filePath="gas/weboe.xcf"/>
+        <File filePath="gas/weboe2.xcf"/>
+      </Library>
+    </Group>
+    <Library binaryName="README" id="-1076375655" label="README">
+      <File filePath="README.md"/>
+    </Library>
+  </Group>
   <Group id="344044899" label="GBC" language="Genero">
     <Library binaryName="gbc-njm" id="-1375686528" label="gbc-njm" language="GBC" srcDirectory="$(ProjectDir)/gbc/gbc-njm" targetDirectory="$(ProjectDir)/distbin">
       <VirtualFolder label="js">
@@ -94,7 +131,60 @@
       <File filePath="gbc/gbc-njm/theme.scss.json"/>
     </Library>
   </Group>
-  <Group environment="value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,file:FGLPROFILE_DB_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_DB_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_DB_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_DB_mdb=$(ProjectDir)/etc/mdb/profile,file:FGLPROFILE_DB_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_UI_NAT=$(ProjectDir)/etc/profile.nat,file:FGLPROFILE_UI_UR=$(ProjectDir)/etc/profile.ur,file:FGLPROFILE=$(FGLPROFILE_DB_ifx):$(FGLPROFILE_UI_NAT),value:FGLGBCDIR=$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-clean,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,dir:GDCUPDATEDIR=../gdcupdate_local,value:REPORTDIR=../etc,value:MUSICDIR=$(HOME)/Music,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" id="1812115377" label="njms_demos320" language="Genero" targetDirectory="$(ProjectDir)/bin320">
+  <Group id="-1642035280" label="LibrariesNEW" language="Genero" targetDirectory="$(ProjectDir)/bin320">
+    <Group id="863353152" label="G2_Lib">
+      <Library binaryName="g2_lib" id="-310428106" label="g2_lib">
+        <File filePath="src/g2_lib/g2_lib.4gl"/>
+        <File filePath="src/g2_lib/g2_aui.4gl"/>
+        <File filePath="src/g2_lib/g2_about.4gl"/>
+        <File filePath="src/g2_lib/g2_appInfo.4gl"/>
+        <File filePath="src/g2_lib/g2_db.4gl"/>
+        <File filePath="src/g2_lib/g2_debug.4gl"/>
+        <File excludeFromCompilation="true" filePath="src/g2_lib/g2_debug.inc"/>
+        <File filePath="src/g2_lib/g2_gdcUpdate.4gl"/>
+        <File filePath="src/g2_lib/g2_gdcUpdateCommon.4gl"/>
+        <File filePath="src/g2_lib/g2_encrypt.4gl"/>
+        <File filePath="src/g2_lib/g2_logging.4gl"/>
+        <File filePath="src/g2_lib/g2_secure.4gl"/>
+      </Library>
+      <Library binaryName="g2_rpt" externalDependencies="libgre.42x" id="-1155424042" label="g2_rpt">
+        <File filePath="src/g2_lib/g2_grw.4gl"/>
+      </Library>
+    </Group>
+  </Group>
+  <Group id="-593039400" label="LibrariesOLD" language="Genero" targetDirectory="$(ProjectDir)/bin320">
+    <Group id="-922183004" label="GL_Lib" language="Genero">
+      <Library binaryName="gl_dynMaint" dependencies="14000" id="-1557891896" label="gl_dynMaint">
+        <File filePath="src/gl_dynMaint/dynMaint.inc"/>
+        <File filePath="src/gl_dynMaint/glm_mkForm.4gl"/>
+        <File filePath="src/gl_dynMaint/glm_sql.4gl"/>
+        <File filePath="src/gl_dynMaint/glm_ui.4gl"/>
+      </Library>
+      <Library binaryName="gl_lib" dependencies="1986" id="14000" label="gl_lib">
+        <File filePath="src/gl_lib/genero_lib.inc"/>
+        <File filePath="src/gl_lib/gl_about.4gl"/>
+        <File filePath="src/gl_lib/gl_calendar.4gl"/>
+        <File filePath="src/gl_lib/gl_db.4gl"/>
+        <File filePath="src/gl_lib/gl_db.inc"/>
+        <File filePath="src/gl_lib/gl_encrypt.4gl"/>
+        <File filePath="src/gl_lib/gl_gdcupd.4gl"/>
+        <File filePath="src/gl_lib/gl_lib.4gl"/>
+        <File filePath="src/gl_lib/gl_lib_aui.4gl"/>
+        <File filePath="src/gl_lib/gl_lib_gdcupd.4gl"/>
+        <File filePath="src/gl_lib/gl_lookup3.4gl"/>
+        <File filePath="src/gl_lib/gl_splash.4gl"/>
+        <File filePath="src/gl_lib/lib_secure.4gl"/>
+      </Library>
+      <Library binaryName="gl_rpt" dependencies="14000,-400184264" externalDependencies="libgre.42x" id="923654133" label="gl_rpt">
+        <File filePath="src/gl_rpt/gl_grw.4gl"/>
+        <File filePath="src/gl_rpt/gl_grwCfg.per"/>
+      </Library>
+      <Library binaryName="gl_ws" id="654551740" label="gl_ws">
+        <File filePath="src/gl_lib/gl_lib_restful.4gl"/>
+      </Library>
+    </Group>
+  </Group>
+  <Group environment="value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,file:FGLPROFILE_DB_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_DB_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_DB_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_DB_mdb=$(ProjectDir)/etc/mdb/profile,file:FGLPROFILE_DB_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_UI_NAT=$(ProjectDir)/etc/profile.nat,file:FGLPROFILE_UI_UR=$(ProjectDir)/etc/profile.ur,file:FGLPROFILE=$(FGLPROFILE_DB_pgs):$(FGLPROFILE_UI_NAT),value:FGLGBCDIR=$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-clean,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,dir:GDCUPDATEDIR=../gdcupdate_local,value:REPORTDIR=../etc,value:MUSICDIR=$(HOME)/Music,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" id="1812115377" label="njms_demos320" language="Genero" targetDirectory="$(ProjectDir)/bin320">
     <Group id="1174162370" label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,-310428106" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -140,14 +230,6 @@
         </VirtualFolder>
         <File filePath="src/app/printInvoices.4gl"/>
       </Application>
-      <Application binaryName="quotemnt" dependencies="1986,-310428106,-1090563702" id="-527753430" label="quotemnt">
-        <File filePath="src/app/quotemnt.4gl"/>
-        <File filePath="src/app/quotemnt.per"/>
-      </Application>
-      <Application binaryName="quotes" dependencies="1986,-310428106,-1090563702" id="437366480" label="quotes">
-        <File filePath="src/app/quotelist.per"/>
-        <File filePath="src/app/quotes.4gl"/>
-      </Application>
       <Application binaryName="webOE" dependencies="-272766546,14000,-1090563702,-400184264,1986" id="-559263813" label="webOE">
         <VirtualFolder label="etc">
           <File filePath="etc/weboe.4ad"/>
@@ -165,37 +247,33 @@
         <File filePath="src/app/webOE2.per"/>
       </Application>
     </Group>
-    <Group id="-1860471333" label="Configs">
-      <Library binaryName="etc" id="-400184264" label="etc">
-        <File filePath="etc/default.4ad"/>
-        <File filePath="etc/default_GBC.4st"/>
-        <File filePath="etc/default_GDC.4st"/>
-        <File filePath="etc/dynmaint.4tb"/>
-        <File filePath="etc/dynmaint.4tm"/>
-        <File filePath="etc/profile.nat"/>
-        <File filePath="etc/profile.ur"/>
-      </Library>
-      <Library binaryName="profile_ifx" id="-1049145178" label="profile_ifx">
-        <File filePath="etc/ifx/profile"/>
-      </Library>
-      <Library binaryName="profile_mdb" id="1811942608" label="profile_mdb">
-        <File filePath="etc/mdb/profile"/>
-      </Library>
-      <Library binaryName="profile_pgs" id="-1248408576" label="profile_pgs">
-        <File filePath="etc/pgs/profile"/>
-      </Library>
-      <Library binaryName="profile_snc" id="1518416784" label="profile_snc">
-        <File filePath="etc/snc/profile"/>
-      </Library>
-      <Library binaryName="profile_sqt" id="-1222789264" label="profile_sqt">
-        <File filePath="etc/sqt/profile"/>
-      </Library>
-      <Library binaryName="xcf_files" id="1211289508" label="xcf_files_local">
-        <File filePath="gas/demo310.xcf"/>
-        <File filePath="gas/matDesTest.xcf"/>
-        <File filePath="gas/weboe.xcf"/>
-        <File filePath="gas/weboe2.xcf"/>
-      </Library>
+    <Group id="1831327960" label="Business WebApps">
+      <Application binaryName="custmnt" dependencies="-310428106,1986" id="-1670171360" label="custmnt">
+        <File filePath="src/app_web/custmnt.4gl"/>
+        <File filePath="src/app_web/custmnt.per"/>
+      </Application>
+      <Application binaryName="custs" dependencies="-1155424042,-310428106,1986" id="1106939540" label="custs">
+        <File filePath="src/app_web/custlist.per"/>
+        <File filePath="etc/custlist1.4rp"/>
+        <File filePath="src/app_web/custs.4gl"/>
+      </Application>
+      <Application binaryName="prodmnt" dependencies="-310428106,1986" id="-1277007627" label="prodmnt">
+        <File filePath="src/app_web/prodmnt.4gl"/>
+        <File filePath="src/app_web/prodmnt.per"/>
+      </Application>
+      <Application binaryName="prods" dependencies="-1155424042,-310428106,1986" id="-2006546962" label="prods">
+        <File filePath="src/app_web/prodlist.per"/>
+        <File filePath="etc/prodlist1.4rp"/>
+        <File filePath="src/app_web/prods.4gl"/>
+      </Application>
+      <Application binaryName="quotemnt" dependencies="1986,-310428106,-1090563702" id="-527753430" label="quotemnt">
+        <File filePath="src/app_web/quotemnt.4gl"/>
+        <File filePath="src/app_web/quotemnt.per"/>
+      </Application>
+      <Application binaryName="quotes" dependencies="1986,-310428106,-1090563702" id="437366480" label="quotes">
+        <File filePath="src/app_web/quotelist.per"/>
+        <File filePath="src/app_web/quotes.4gl"/>
+      </Application>
     </Group>
     <Group id="-441041544" label="Database" language="Genero">
       <Library binaryName="Databases" id="1986" label="Databases">
@@ -360,58 +438,6 @@
         <File filePath="src/demos/wc_richtext.per"/>
       </Application>
     </Group>
-    <Group id="863353152" label="G2_Lib">
-      <Library binaryName="g2_lib" id="-310428106" label="g2_lib">
-        <File filePath="src/g2_lib/g2_lib.4gl"/>
-        <File filePath="src/g2_lib/g2_aui.4gl"/>
-        <File filePath="src/g2_lib/g2_about.4gl"/>
-        <File filePath="src/g2_lib/g2_appInfo.4gl"/>
-        <File filePath="src/g2_lib/g2_db.4gl"/>
-        <File filePath="src/g2_lib/g2_debug.4gl"/>
-        <File excludeFromCompilation="true" filePath="src/g2_lib/g2_debug.inc"/>
-        <File filePath="src/g2_lib/g2_gdcUpdate.4gl"/>
-        <File filePath="src/g2_lib/g2_gdcUpdateCommon.4gl"/>
-        <File filePath="src/g2_lib/g2_encrypt.4gl"/>
-        <File filePath="src/g2_lib/g2_logging.4gl"/>
-        <File filePath="src/g2_lib/g2_secure.4gl"/>
-      </Library>
-      <Library binaryName="g2_rpt" externalDependencies="libgre.42x" id="-1155424042" label="g2_rpt">
-        <File filePath="src/g2_lib/g2_grw.4gl"/>
-      </Library>
-    </Group>
-    <Group id="-922183004" label="GL_Lib" language="Genero">
-      <Library binaryName="gl_dynMaint" dependencies="14000" id="-1557891896" label="gl_dynMaint">
-        <File filePath="src/gl_dynMaint/dynMaint.inc"/>
-        <File filePath="src/gl_dynMaint/glm_mkForm.4gl"/>
-        <File filePath="src/gl_dynMaint/glm_sql.4gl"/>
-        <File filePath="src/gl_dynMaint/glm_ui.4gl"/>
-      </Library>
-      <Library binaryName="gl_lib" dependencies="1986" id="14000" label="gl_lib">
-        <File filePath="src/gl_lib/genero_lib.inc"/>
-        <File filePath="src/gl_lib/gl_about.4gl"/>
-        <File filePath="src/gl_lib/gl_calendar.4gl"/>
-        <File filePath="src/gl_lib/gl_db.4gl"/>
-        <File filePath="src/gl_lib/gl_db.inc"/>
-        <File filePath="src/gl_lib/gl_encrypt.4gl"/>
-        <File filePath="src/gl_lib/gl_gdcupd.4gl"/>
-        <File filePath="src/gl_lib/gl_lib.4gl"/>
-        <File filePath="src/gl_lib/gl_lib_aui.4gl"/>
-        <File filePath="src/gl_lib/gl_lib_gdcupd.4gl"/>
-        <File filePath="src/gl_lib/gl_lookup3.4gl"/>
-        <File filePath="src/gl_lib/gl_splash.4gl"/>
-        <File filePath="src/gl_lib/lib_secure.4gl"/>
-      </Library>
-      <Library binaryName="gl_rpt" dependencies="14000,-400184264" externalDependencies="libgre.42x" id="923654133" label="gl_rpt">
-        <File filePath="src/gl_rpt/gl_grw.4gl"/>
-        <File filePath="src/gl_rpt/gl_grwCfg.per"/>
-      </Library>
-      <Library binaryName="gl_ws" id="654551740" label="gl_ws">
-        <File filePath="src/gl_lib/gl_lib_restful.4gl"/>
-      </Library>
-    </Group>
-    <Library binaryName="README" id="-1076375655" label="README">
-      <File filePath="README.md"/>
-    </Library>
     <Group id="1469027916" label="System" language="Genero">
       <Application binaryName="container" dependencies="-400184264" id="248425532" label="container">
         <File filePath="src/sys/container.4gl"/>
@@ -491,7 +517,7 @@
       </Application>
     </Group>
   </Group>
-  <Group id="252404927" label="Packages" language="Genero">
+  <Group id="252404927" label="Packages" language="Genero" targetDirectory="$(ProjectDir)/bin320">
     <Package binaryName="gbc-njm-current" dependencies="-1375686528" id="1075292224" label="gbc-njm-current" platform="GBC" rootDirectory="$(GBCPROJDIR)/dist/customization/gbc-njm">
       <DynamicProperty name="packageId" value="gbc-njm"/>
       <DynamicProperty name="packageLabel" value="gbc-njm"/>
@@ -583,7 +609,7 @@
       <File filePath="ggc/ggc_1.4gl"/>
     </Application>
   </Group>
-  <Group id="-213600251" label="Tests Programs" language="Genero">
+  <Group id="-213600251" label="Tests Programs" language="Genero" targetDirectory="$(ProjectDir)/bin320">
     <Application binaryName="genStock" id="248692011" label="genStock">
       <File filePath="test_app/genStock.4gl"/>
     </Application>

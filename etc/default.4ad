@@ -59,4 +59,14 @@ Property of Four Js*
 	<ActionDefault name="nextmonth" text="eh!" defaultView="no" contextMenu="no" />
 	<ActionDefault name="wc_debug" text="WC Debug" image="fa-bug" defaultView="yes" contextMenu="no" />
 
+
+  <ActionDefault name="prod" text="Products" image="fa-industry" contextMenu="no"/>
+  <ActionDefault name="cust" text="Customers" image="fa-cog" contextMenu="no"/>
+  <ActionDefault name="quote" text="Quotes" image="fa-bookmark" contextMenu="no"/>
+  <ActionDefault name="advanced" text="Advanced" image="fa-search" contextMenu="no"/>
+  <ActionDefault name="refresh" text="Refresh" image="fa-refresh" contextMenu="no"/>
+  <ActionDefault name="add" text="Add New" contextMenu="no"/>
+  <ActionDefault name="save" text="Save" contextMenu="no"/>
+  <ActionDefault name="clear" text="Clear changes" contextMenu="no"/>
+  <ActionDefault name="search" image="fa-search" contextMenu="no" acceleratorName="return"/>
 </ActionDefaultList>

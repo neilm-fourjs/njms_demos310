@@ -1,5 +1,5 @@
 
-LAYOUT (TEXT="Quotes", STYLE="main2")
+LAYOUT (TEXT="Quotes", STYLE="main2", IMAGE="fa-bookmark")
 VBOX
 GRID
 {
@@ -8,19 +8,20 @@ GRID
 END -- GRID
 TABLE ( DOUBLECLICK=select )
 {
- [f002    |f003      |f004    |f005       |f006         |f007          |f008    |f009      |f010      |f016    |f017        ]
+ [c|f002    |f003      |f004    |f005       |f006         |f007          |f008    |f009      |f010      |f016    |f017        ]
 }
 END -- TABLE
 END -- VBOX
 
 ATTRIBUTES
+IMAGE c = FORMONLY.currrow, AUTOSCALE, WIDTH=64 PIXELS, STYLE="currrow";
 f002 = FORMONLY.quote_ref, TITLE="Reference";
 f003 = FORMONLY.revision, TITLE="Revision";
 COMBOBOX f004 = FORMONLY.status, TITLE="Status", INITIALIZER=cb_status, STYLE="statcol";
 COMBOBOX f005 = FORMONLY.account_manager, TITLE="Account Manager", INITIALIZER=cb_users, JUSTIFY=LEFT;
 COMBOBOX f006 = FORMONLY.raised_by, TITLE="Raised By", INITIALIZER=cb_users, JUSTIFY=LEFT;
-f007 = FORMONLY.customer_code, TITLE="Customer";
-f008 = FORMONLY.division, TITLE="Division";
+f007 = FORMONLY.customer, TITLE="Customer";
+COMBOBOX f008 = FORMONLY.division, TITLE="Division", INITIALIZER=cb_division, JUSTIFY=LEFT;
 f009 = FORMONLY.quote_date, TITLE="Quote Date";
 f010 = FORMONLY.expiration_date, TITLE="Expiration Date";
 f016 = FORMONLY.registered_project, TITLE="Registered Project";
@@ -33,4 +34,4 @@ IMAGE sp1 : spacer, IMAGE="fa-fw", STRETCH=X, STYLE="noborder";
 BUTTON add : add, STYLE="rounded green";
 
 INSTRUCTIONS
-SCREEN RECORD list ( FORMONLY.quote_ref THRU FORMONLY.quote_total)
+SCREEN RECORD list ( FORMONLY.currrow THRU FORMONLY.quote_total)

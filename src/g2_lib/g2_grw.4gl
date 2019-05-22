@@ -1,6 +1,7 @@
 IMPORT os
 IMPORT FGL g2_lib
 
+-- From $GREDIR/lib
 IMPORT FGL libgreprops
 IMPORT FGL libgre
 
@@ -24,6 +25,7 @@ END FUNCTION
 FUNCTION ( this greRpt ) start(l_rptName STRING) RETURNS BOOLEAN
 	LET this.rptName = l_rptName
   IF this.preview IS NULL THEN LET this.preview = FALSE END IF
+	IF this.reportsDir IS NULL THEN LET this.reportsDir = fgl_getEnv("REPORTDIR") END IF
 	IF this.reportsDir IS NULL THEN LET this.reportsDir = "../etc" END IF
   IF this.rptName IS NOT NULL THEN
 		IF this.rptTitle IS NULL THEN LET this.rptTitle = l_rptName END IF
@@ -114,10 +116,10 @@ FUNCTION ( this greRpt ) progress(l_row INTEGER, l_max INTEGER, l_mod SMALLINT) 
 		CLOSE WINDOW progbar
 	END IF
 	IF NOT l_row MOD l_mod THEN
-		DISPLAY l_row,":Refresh"
+--		DISPLAY l_row,":Refresh"
   	CALL ui.Interface.refresh()
 	ELSE
-		DISPLAY l_row
+--		DISPLAY l_row
 	END IF
 END FUNCTION
 -------------------------------------------------------------------------------

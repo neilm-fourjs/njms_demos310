@@ -78,7 +78,7 @@ END FUNCTION
 #+ Load the style file depending on the client
 FUNCTION g2_loadStyles(l_sty STRING) RETURNS()
   DEFINE l_fe STRING
-
+	IF l_sty IS NULL THEN LET l_sty = "default" END IF
 	LET l_fe = "GBC"
   IF m_isGDC THEN LET l_fe = "GDC" END IF
   IF m_isUniversal THEN LET l_fe = "GBC" END IF
@@ -109,6 +109,7 @@ FUNCTION g2_winMessage(l_title STRING, l_message STRING, l_icon STRING) RETURNS(
   LET l_win = ui.window.getcurrent()
   IF l_win IS NULL THEN -- Needs a current window or dialog doesn't work!!
     OPEN WINDOW dummy AT 1, 1 WITH 1 ROWS, 1 COLUMNS
+		CALL ui.Window.getCurrent().setText(" ") -- clear default window title to avoid 'dummy' showing in gbc.
   END IF
   IF l_icon = "exclamation" THEN
     ERROR ""

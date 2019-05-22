@@ -13,7 +13,8 @@ export FGLPROFILE=$(PROJBASE)/etc/sqt/profile:$(PROJBASE)/etc/profile.$(RENDERER
 export WINDOWCENTER=FALSE
 export GBCPROJDIR=/opt/fourjs/gbc-current
 
-export LANG=is_IS.utf8
+#export LANG=is_IS.utf8
+export LANG=en_GB.utf8
 
 all:
 	gsmake njms_demos$(GENVER).4pw
