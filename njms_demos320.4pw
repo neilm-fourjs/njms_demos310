@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="31403" version="3.3">
+<Project defaultApplication="-1670171360" gstVersion="31403" version="3.3">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -146,6 +146,8 @@
         <File filePath="src/g2_lib/g2_encrypt.4gl"/>
         <File filePath="src/g2_lib/g2_logging.4gl"/>
         <File filePath="src/g2_lib/g2_secure.4gl"/>
+        <File filePath="src/g2_lib/g2_sql.4gl"/>
+        <File filePath="src/g2_lib/g2_ui.4gl"/>
       </Library>
       <Library binaryName="g2_rpt" externalDependencies="libgre.42x" id="-1155424042" label="g2_rpt">
         <File filePath="src/g2_lib/g2_grw.4gl"/>
@@ -248,7 +250,7 @@
       </Application>
     </Group>
     <Group id="1831327960" label="Business WebApps">
-      <Application binaryName="custmnt" dependencies="-310428106,1986" id="-1670171360" label="custmnt">
+      <Application binaryName="custmnt" commandLineArguments="S C0014" dependencies="-310428106,1986" id="-1670171360" label="custmnt">
         <File filePath="src/app_web/custmnt.4gl"/>
         <File filePath="src/app_web/custmnt.per"/>
       </Application>
