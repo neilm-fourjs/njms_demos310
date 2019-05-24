@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="-1670171360" gstVersion="31403" version="3.3">
+<Project defaultApplication="1554019048" gstVersion="31403" version="3.3">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -186,7 +186,7 @@
       </Library>
     </Group>
   </Group>
-  <Group environment="value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,file:FGLPROFILE_DB_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_DB_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_DB_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_DB_mdb=$(ProjectDir)/etc/mdb/profile,file:FGLPROFILE_DB_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_UI_NAT=$(ProjectDir)/etc/profile.nat,file:FGLPROFILE_UI_UR=$(ProjectDir)/etc/profile.ur,file:FGLPROFILE=$(FGLPROFILE_DB_pgs):$(FGLPROFILE_UI_NAT),value:FGLGBCDIR=$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-clean,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,dir:GDCUPDATEDIR=../gdcupdate_local,value:REPORTDIR=../etc,value:MUSICDIR=$(HOME)/Music,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" id="1812115377" label="njms_demos320" language="Genero" targetDirectory="$(ProjectDir)/bin320">
+  <Group environment="value:LANG_is=is_IS.utf8,value:WINDOWCENTER=TRUE,value:FJS_GL_DBGLEV=3,file:FGLPROFILE_DB_snc=$(ProjectDir)/etc/snc/profile,file:FGLPROFILE_DB_ifx=$(ProjectDir)/etc/ifx/profile,file:FGLPROFILE_DB_pgs=$(ProjectDir)/etc/pgs/profile,file:FGLPROFILE_DB_mdb=$(ProjectDir)/etc/mdb/profile,file:FGLPROFILE_DB_sqt=$(ProjectDir)/etc/sqt/profile,file:FGLPROFILE_UI_NAT=$(ProjectDir)/etc/profile.nat,file:FGLPROFILE_UI_UR=$(ProjectDir)/etc/profile.ur,file:FGLPROFILE=$(FGLPROFILE_DB_sqt):$(FGLPROFILE_UI_NAT),value:FGLGBCDIR=$(ProjectDir)/gbc/build/gbc-current/dist/customization/gbc-clean,value:GDCUPDATESERVER=https://generodemo.hopto.org/g/ws/r/gdc_update_srv,dir:GDCUPDATEDIR=../gdcupdate_local,value:REPORTDIR=../etc,value:MUSICDIR=$(HOME)/Music,value:DBNAME=njm_demo310,value:FGLIMAGEPATH=../pics:../pics/fa5.txt" id="1812115377" label="njms_demos320" language="Genero" targetDirectory="$(ProjectDir)/bin320">
     <Group id="1174162370" label="Business Apps" language="Genero">
       <Library binaryName="App_Lib" dependencies="1986,-310428106" id="-1090563702" label="App_Lib">
         <File filePath="src/app/app.inc"/>
@@ -259,7 +259,7 @@
         <File filePath="etc/custlist1.4rp"/>
         <File filePath="src/app_web/custs.4gl"/>
       </Application>
-      <Application binaryName="prodmnt" dependencies="-310428106,1986" id="-1277007627" label="prodmnt">
+      <Application binaryName="prodmnt" commandLineArguments="S FR01" dependencies="-310428106,1986" id="-1277007627" label="prodmnt">
         <File filePath="src/app_web/prodmnt.4gl"/>
         <File filePath="src/app_web/prodmnt.per"/>
       </Application>
@@ -598,6 +598,7 @@
     <Library binaryName="xcf_files_deploy" id="1211226226" label="xcf_files_deploy">
       <File filePath="gas_deploy/materialDesignTest.xcf"/>
       <File filePath="gas_deploy/njmdemo.xcf"/>
+      <File filePath="gas_deploy/njmdemo_web.xcf"/>
       <File filePath="gas_deploy/njmdemodb.xcf"/>
       <File filePath="gas_deploy/njmweb.xcf"/>
       <File filePath="gas_deploy/njmweb2.xcf"/>

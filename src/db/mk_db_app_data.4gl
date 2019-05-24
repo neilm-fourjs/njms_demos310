@@ -67,8 +67,8 @@ FUNCTION insert_app_data()
   LET m_prod_key = 1
   CALL insStock("FR01", NULL, "An Apple", NULL, 0.20, "AA", NULL)
   CALL insStock("FR01-10", NULL, "An Apple x 10", NULL, 1.90, "AA", NULL)
-  CALL insStock("FR02", NULL, "A Bannana", NULL, 0.30, "AA", NULL)
-  CALL insStock("FR02-5", NULL, "A Bunch of Bannanas(5)", NULL, 1.0, "AA", NULL)
+  CALL insStock("FR02", NULL, "A Banana", NULL, 0.30, "AA", NULL)
+  CALL insStock("FR02-5", NULL, "A Bunch of Bananas(5)", NULL, 1.0, "AA", NULL)
   CALL insStock("FR03", NULL, "A Peach", NULL, 0.30, "AA", NULL)
   CALL insStock("FR03-10", NULL, "A Peach x 10", NULL, 1.95, "AA", NULL)
 

@@ -5,7 +5,7 @@ MAIN
   CALL ui.Interface.loadStyles("container") --"||UPSHIFT(ui.interface.getFrontEndName()))
 
   CALL ui.Interface.setType("container")
-  CALL ui.Interface.setName("container1")
+  CALL ui.Interface.setName("container")
 
 --	CALL ui.Interface.loadToolBar("container")
   CALL ui.Interface.loadStartMenu("container") -- required for GBC!!!
@@ -15,11 +15,7 @@ MAIN
   DISPLAY FORM f
 
   MENU
-    COMMAND "menu"
-      RUN "fglrun menu.42r C" WITHOUT WAITING
-    COMMAND "matdestest"
-      RUN "fglrun materialDesignTest.42r C" WITHOUT WAITING
-    COMMAND "Quit"
+    ON ACTION close
       DISPLAY "Check for children!"
       LET l_children = childCount()
       IF l_children > 0 THEN
@@ -32,12 +28,16 @@ MAIN
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION childCount()
+{
   DEFINE l_num STRING
   IF ui.interface.getFrontEndName() = "GBC" THEN
     CALL ui.Interface.frontCall("mymodule", "appcount", [], [l_num])
     LET l_num = l_num - 1 -- the gbc count includes the container!
   ELSE
+}
     RETURN ui.Interface.getChildCount()
+{
   END IF
   RETURN l_num
+}
 END FUNCTION
