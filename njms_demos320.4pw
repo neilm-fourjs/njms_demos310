@@ -250,7 +250,7 @@
       </Application>
     </Group>
     <Group id="1831327960" label="Business WebApps">
-      <Application binaryName="custmnt" commandLineArguments="S C0014" dependencies="-310428106,1986" id="-1670171360" label="custmnt">
+      <Application binaryName="custmnt" commandLineArguments="S new" dependencies="-310428106,1986" id="-1670171360" label="custmnt">
         <File filePath="src/app_web/custmnt.4gl"/>
         <File filePath="src/app_web/custmnt.per"/>
       </Application>
