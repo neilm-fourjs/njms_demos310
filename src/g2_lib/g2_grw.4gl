@@ -75,6 +75,9 @@ FUNCTION ( this greRpt ) start(l_rptName STRING) RETURNS BOOLEAN
 	RETURN TRUE
 END FUNCTION
 -------------------------------------------------------------------------------
+-- @param l_row 0 = open / > 0 update = l_max close
+-- @param l_max max rows expected
+-- @param l_mod update count on mod
 FUNCTION ( this greRpt ) progress(l_row INTEGER, l_max INTEGER, l_mod SMALLINT) RETURNS ()
 	DEFINE l_win, l_frm, l_grid, l_frmf, l_pbar om.DomNode
 	IF l_row < 1 THEN

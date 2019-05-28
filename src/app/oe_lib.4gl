@@ -2,13 +2,13 @@
 #+
 #+ $Id: oe_lib.4gl 688 2011-05-31 09:58:14Z  $
 
-IMPORT FGL gl_lib
-&include "genero_lib.inc"
+IMPORT FGL g2_lib
+
 &include "schema.inc"
 &include "ordent.inc"
 
 FUNCTION oe_cursors()
-  GL_MODULE_ERROR_HANDLER
+  WHENEVER ANY ERROR CALL g2_lib.g2_error
   DECLARE cb_sc CURSOR FOR SELECT * FROM stock_cat
 
   DECLARE fetch_stock_cur CURSOR FROM " SELECT * FROM stock WHERE stock_code = ?"
@@ -52,7 +52,7 @@ FUNCTION getCust(l_custcode LIKE customer.customer_code) RETURNS BOOLEAN
         IF arr.getLength() > 0 THEN
           DISPLAY ARRAY arr TO arr.*
         ELSE
-          CALL gl_lib.gl_warnPopup(% "No rows found")
+          CALL g2_lib.g2_warnPopup(% "No rows found")
           CONTINUE WHILE
         END IF
       END IF
@@ -70,7 +70,7 @@ FUNCTION getCust(l_custcode LIKE customer.customer_code) RETURNS BOOLEAN
   END IF
   SELECT * INTO g_cust.* FROM customer WHERE customer_code = l_custcode
   IF STATUS = NOTFOUND THEN
-    CALL gl_lib.gl_errPopup(SFMT(% "Customer code '%1' not found", l_custcode))
+    CALL g2_lib.g2_errPopup(SFMT(% "Customer code '%1' not found", l_custcode))
     RETURN FALSE
   END IF
   RETURN TRUE
@@ -142,24 +142,24 @@ FUNCTION oe_getStockRec(l_row SMALLINT, l_verbose BOOLEAN) RETURNS BOOLEAN
     LET l_stat = STATUS
     DISPLAY "Failed:", l_stat
     IF l_stat = -263 THEN -- Row locked
-      CALL gl_lib.gl_errPopup(% "That Stock item is currently locked by another user.")
+      CALL g2_lib.g2_errPopup(% "That Stock item is currently locked by another user.")
       RETURN FALSE
     END IF
     IF l_stat != 0 THEN
-      CALL gl_lib.gl_errPopup(SFMT(% "Error reading record:\n%1.", SQLERRMESSAGE))
+      CALL g2_lib.g2_errPopup(SFMT(% "Error reading record:\n%1.", SQLERRMESSAGE))
       RETURN FALSE
     END IF
   END TRY
 
   FETCH fetch_stock_cur INTO l_stk.*
   IF STATUS = NOTFOUND THEN
-    CALL gl_lib.gl_errPopup(% "Item not found.")
+    CALL g2_lib.g2_errPopup(% "Item not found.")
     RETURN FALSE
   END IF
   CLOSE fetch_stock_cur
 
   IF l_stk.free_stock < 1 THEN
-    CALL gl_lib.gl_errPopup(% "Item out of stock.")
+    CALL g2_lib.g2_errPopup(% "Item out of stock.")
     RETURN FALSE
   END IF
 

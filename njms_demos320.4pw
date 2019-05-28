@@ -205,7 +205,7 @@
       <Application binaryName="dynMaint" commandLineArguments="S 1 njm_demo310 stock stock_code" dependencies="14000,1986,-1090563702,-1557891896" id="1873655788" label="dynMaint">
         <File filePath="src/gl_dynMaint/dynMaint.4gl"/>
       </Application>
-      <Library binaryName="oe_lib" dependencies="14000,-400184264,1986" id="-272766546" label="oe_lib">
+      <Library binaryName="oe_lib" dependencies="-400184264,1986,-310428106" id="-272766546" label="oe_lib">
         <File filePath="src/app/getcust.per"/>
         <File filePath="src/app/getorder.per"/>
         <File filePath="src/app/getstock.per"/>
@@ -217,12 +217,12 @@
         <File filePath="src/app/webOE_det.per"/>
         <File filePath="src/app/webOE_signin.per"/>
       </Library>
-      <Application binaryName="orderEntry" commandLineArguments="S 1" dependencies="1835393312,-1090563702,14000,1986,-272766546" id="1773362531" label="orderEntry">
+      <Application binaryName="orderEntry" commandLineArguments="S 1" dependencies="1835393312,-1090563702,1986,-272766546,-310428106" id="1773362531" label="orderEntry">
         <File filePath="src/app/ordent.4gl"/>
         <File filePath="src/app/ordent.per"/>
         <File filePath="src/app/ordent2.per"/>
       </Application>
-      <Application binaryName="printInvoices" commandLineArguments="S 1 0 ordent-5.4rp" compilerOptions="--build-rdd" dependencies="14000,1986,-272766546,923654133" id="-1350833088" label="printInvoices">
+      <Application binaryName="printInvoices" commandLineArguments="S 1 0 ordent-5" compilerOptions="--build-rdd" dependencies="1986,-272766546,-1155424042,-1090563702,-310428106" id="-1350833088" label="printInvoices">
         <VirtualFolder label="Reports">
           <File filePath="etc/ordent-1.4rp"/>
           <File filePath="etc/ordent-2.4rp"/>
@@ -234,7 +234,7 @@
         </VirtualFolder>
         <File filePath="src/app/printInvoices.4gl"/>
       </Application>
-      <Application binaryName="webOE" dependencies="-272766546,14000,-1090563702,-400184264,1986" id="-559263813" label="webOE">
+      <Application binaryName="webOE" dependencies="-272766546,-1090563702,-400184264,1986,-310428106" id="-559263813" label="webOE">
         <VirtualFolder label="etc">
           <File filePath="etc/weboe.4ad"/>
           <File filePath="etc/weboe.4st"/>
@@ -242,7 +242,7 @@
         <File filePath="src/app/webOE.4gl"/>
         <File filePath="src/app/webOE.per"/>
       </Application>
-      <Application binaryName="webOE2" dependencies="-272766546,14000,-1090563702,1986" id="2103145373" label="webOE2">
+      <Application binaryName="webOE2" dependencies="-272766546,-1090563702,1986,-310428106" id="2103145373" label="webOE2">
         <VirtualFolder label="etc">
           <File filePath="etc/weboe2.4ad"/>
           <File filePath="etc/weboe2.4st"/>

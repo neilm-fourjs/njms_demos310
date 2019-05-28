@@ -9,26 +9,34 @@
 #+ 4 = Order No to enquire on / R = Random(for benchmark only)
 
 IMPORT util
-IMPORT FGL gl_lib
-IMPORT FGL gl_db
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_db
+IMPORT FGL g2_about
+IMPORT FGL g2_lookup
 IMPORT FGL app_lib
 IMPORT FGL oe_lib
-IMPORT FGL gl_lookup3
-&include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
+
 &include "app.inc"
 &include "ordent.inc"
+
+CONSTANT C_PRGVER = "3.2"
 CONSTANT C_PRGDESC = "Order Entry Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "logo_dark"
 
+DEFINE m_appInfo g2_appInfo.appInfo
+DEFINE m_db g2_db.dbInfo
 MAIN
   DEFINE l_email STRING
   DEFINE l_key INTEGER
 
-  CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(ARG_VAL(1), NULL, TRUE)
-  GL_MODULE_ERROR_HANDLER
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+	CALL g2_lib.g2_init( ARG_VAL(1), "default")
+  WHENEVER ANY ERROR CALL g2_lib.g2_error
+  CALL ui.Interface.setText(C_PRGDESC)
 
-  CALL gl_db.gldb_connect(NULL) -- Library function.
+  CALL m_db.g2_connect(NULL)
 
   IF UPSHIFT(ui.Interface.getFrontEndName()) = "GBC" THEN
     CALL ui.Interface.FrontCall(
@@ -52,7 +60,7 @@ MAIN
   OPEN FORM ordent FROM "ordent"
   OPEN FORM ordent2 FROM "ordent2"
   DISPLAY FORM ordent2
-  CALL ui.Interface.setText(gl_progdesc)
+  CALL ui.Interface.setText(C_PRGDESC)
   DISPLAY SFMT(% "Welcome %1", m_fullname) TO welcome
   --CALL setTitle()
 
@@ -76,14 +84,15 @@ MAIN
         CALL oe_lib.getStock("") RETURNING m_stk.*
       ON ACTION help
         CALL showHelp(1)
-      GL_ABOUT
+			ON ACTION about
+				CALL g2_about.g2_about(m_appInfo)
       ON ACTION close
         EXIT MENU
       ON ACTION quit
         EXIT MENU
     END MENU
   END IF
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 #+ Create a new order
@@ -106,7 +115,8 @@ FUNCTION new()
       IF oe_lib.getCust(NULL) THEN
         CALL dispHead()
       END IF
-    GL_ABOUT
+		ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
   END INPUT
   IF int_flag THEN
     MESSAGE % "Order Cancelled."
@@ -221,7 +231,7 @@ FUNCTION new()
       END IF
 
     BEFORE DELETE
-      IF gl_lib.gl_winQuestion(
+      IF  g2_lib.g2_winQuestion(
                   % "Confirm",
                   % "Are you sure you want to remove this line?",
                   % "No",
@@ -252,21 +262,22 @@ FUNCTION new()
 
     AFTER INPUT
       IF NOT int_flag THEN
-        IF gl_lib.gl_winQuestion(
+        IF  g2_lib.g2_winQuestion(
                     % "Accept", % "Accept this order?", % "Yes", % "Yes|No", "question")
                 = "No"
             THEN
           CONTINUE INPUT
         END IF
       ELSE
-        IF gl_lib.gl_winQuestion(% "Cancel", % "Cancel this order?", % "No", % "Yes|No", "question")
+        IF  g2_lib.g2_winQuestion(% "Cancel", % "Cancel this order?", % "No", % "Yes|No", "question")
                 = "No"
             THEN
           LET int_flag = FALSE
           CONTINUE INPUT
         END IF
       END IF
-    GL_ABOUT
+		ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
   END INPUT
   IF int_flag THEN
     ROLLBACK WORK -- Rollback and end transaction.
@@ -321,7 +332,7 @@ FUNCTION updateStockLevel(l_pcode LIKE stock.stock_code, l_qty INT) RETURNS BOOL
         WHERE stock_code = l_pcode
   CATCH
     DISPLAY "Status:", STATUS, ":", SQLERRMESSAGE
-    CALL gl_lib.gl_errPopup(
+    CALL  g2_lib.g2_errPopup(
         % "Unable to allocate stock!\nMaybe try again in a few minutes\nOr try a smaller quantity.")
     RETURN FALSE
   END TRY
@@ -403,7 +414,8 @@ FUNCTION enquire()
           IF g_ordHead.order_number IS NOT NULL THEN
             EXIT INPUT
           END IF
-        GL_ABOUT
+				ON ACTION about
+					CALL g2_about.g2_about(m_appInfo)
       END INPUT
     END IF
     IF int_flag THEN
@@ -412,13 +424,13 @@ FUNCTION enquire()
     END IF
     SELECT * INTO g_ordHead.* FROM ord_head WHERE order_number = g_ordHead.order_number
     IF STATUS = NOTFOUND THEN
-      CALL gl_lib.gl_errPopup(% "Order not found.")
+      CALL  g2_lib.g2_errPopup(% "Order not found.")
       CONTINUE WHILE
     END IF
 
     SELECT * INTO g_cust.* FROM customer WHERE customer_code = g_ordHead.customer_code
     IF STATUS = NOTFOUND THEN
-      CALL gl_lib.gl_errPopup(% "customer not found\nCode=" || g_ordHead.customer_code)
+      CALL  g2_lib.g2_errPopup(% "customer not found\nCode=" || g_ordHead.customer_code)
     END IF
     CALL dispHead()
 
@@ -517,6 +529,8 @@ FUNCTION enquire()
       ON ACTION close
         EXIT DISPLAY
         --ON KEY (F12) DISPLAY "F12" LET int_flag = TRUE EXIT DISPLAY
+			ON ACTION about
+				CALL g2_about.g2_about(m_appInfo)
     END DISPLAY
 
     IF benchmark OR int_flag THEN
@@ -549,7 +563,7 @@ FUNCTION printInv(l_what)
         || g_ordHead.order_number
         || " "
         || l_what
-        || ".4rp PDF save 0 "
+        || " PDF save 0 "
         || fgl_getPID()
         || ".pdf"
     RETURN
@@ -570,7 +584,7 @@ FUNCTION printInv(l_what)
       || g_ordHead.order_number
       || " "
       || l_what
-      || ".4rp "
+      || " "
       || l_rptTo
       || " preview 1"
 
@@ -581,7 +595,7 @@ FUNCTION getOrder()
   DEFINE l_oh RECORD LIKE ord_head.*
 
   LET l_oh.order_number =
-      gl_lookup3(
+      g2_lookup.g2_lookup(
           "ord_head",
           "order_number,order_date,customer_name,items,total_qty,total_nett",
           "Ord No.,Date,Customer,Items,Qty,Value",

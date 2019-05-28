@@ -7,12 +7,12 @@ IMPORT FGL g2_db
 
 IMPORT FGL app_lib
 &include "schema.inc"
-
 &include "app.inc"
+
+CONSTANT C_PRGVER = "3.2"
 CONSTANT C_PRGDESC = "Menu Maintenance Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGICON = "logo_dark"
-CONSTANT C_PRGVER = "3.2"
 
 &define RECNAME sys_menus.*
 &define TABNAMEQ "sys_menus"

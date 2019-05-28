@@ -12,66 +12,63 @@
 
 IMPORT os
 
-IMPORT FGL gl_lib
-IMPORT FGL gl_db
-IMPORT FGL gl_grw
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+IMPORT FGL g2_db
+IMPORT FGL g2_grw
+IMPORT FGL g2_aui
 IMPORT FGL app_lib
-&include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
+
 &include "app.inc"
 &include "ordent.inc"
+
+CONSTANT C_PRGVER = "3.2"
 CONSTANT C_PRGDESC = "Invoice Print"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "logo_dark"
 
 CONSTANT m_logo = "../pics/logo_dark.png"
-
+DEFINE m_appInfo g2_appInfo.appInfo
+DEFINE m_db g2_db.dbInfo
+DEFINE m_rpt g2_grw.greRpt
 MAIN
   DEFINE l_row SMALLINT
   DEFINE l_stmt VARCHAR(200)
   DEFINE l_ordno INTEGER
-  DEFINE l_rptStart, l_preview BOOLEAN
+  DEFINE l_rptStart, l_preview, l_interactive BOOLEAN
   DEFINE l_report STRING
-  DEFINE l_handler om.saxdocumenthandler
   DEFINE l_pack t_packItem
   DEFINE l_packcode CHAR(8)
   DEFINE l_pack_qty INTEGER
+	DEFINE l_args, l_dev STRING
+	DEFINE x SMALLINT
 
-  LET gl_noToolBar = TRUE
-  CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(ARG_VAL(1), NULL, TRUE)
-  GL_MODULE_ERROR_HANDLER
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
 
-  CALL gl_db.gldb_connect(NULL)
-  DISPLAY "Arg1:", ARG_VAL(1), " 2:", ARG_VAL(2), " 3:", ARG_VAL(3), " 4:", ARG_VAL(4)
-  LET l_report = ARG_VAL(4)
+  CALL m_db.g2_connect(NULL)
+	FOR x  = 1 TO base.Application.getArgumentCount()
+		LET l_args = l_args.append(x||":"||base.Application.getArgument(x)||" ")
+		CASE x 
+			WHEN 3 LET l_ordno = base.Application.getArgument(x)
+			WHEN 4 LET l_report = base.Application.getArgument(x)
+			WHEN 5 LET l_dev = base.Application.getArgument(x)
+			WHEN 6 LET l_preview = (base.Application.getArgument(x)="preview")
+			WHEN 7 LET l_interactive = (base.Application.getArgument(x)="1")
+		END CASE
+	END FOR
+  DISPLAY "Arg1:", l_args
 
-  LET gl_grw.opts.r_action = ARG_VAL(6)
-  IF gl_grw.opts.r_action.getLength() < 2 THEN
-    LET gl_grw.opts.r_action = "preview"
-  END IF
-  IF opts.r_action = "preview" THEN
-    LET l_preview = TRUE
-  END IF
-
-  LET gl_grw.r_interactive = ARG_VAL(7) -- FALSE
-  IF gl_grw.r_interactive IS NULL THEN
-    LET gl_grw.r_interactive = TRUE
-  END IF
-
-  CALL gl_grw.glGRW_setOptions(
-      l_report, ARG_VAL(5), l_preview, ARG_VAL(8), "L", gl_grw.r_interactive)
-
-  TRY
-    LET l_ordno = ARG_VAL(3)
-  CATCH
-    LET l_ordno = NULL
-  END TRY
+	IF NOT m_rpt.init(l_report, l_preview, l_dev) THEN
+	END IF
 
   LET m_fullname = app_lib.getUserName()
   DISPLAY "l_ordNo:", l_ordno, ":", m_fullname
 
   IF l_ordno IS NULL THEN
-    CALL gl_lib.gl_errPopup(% "No valid order passed!")
-    CALL gl_lib.gl_exitProgram(1, "No valid order passed")
+    CALL g2_lib.g2_errPopup(% "No valid order passed!")
+    CALL g2_lib.g2_exitProgram(1, "No valid order passed")
   END IF
   LET l_stmt = "SELECT * FROM ord_head "
   IF l_ordno IS NOT NULL AND l_ordno > 0 THEN
@@ -110,12 +107,11 @@ MAIN
   LET l_rptStart = FALSE
   FOREACH cur INTO g_ordHead.*
     IF NOT l_rptStart THEN
-      LET l_handler = gl_grw.glGRW_rptStart(l_report)
-      IF l_handler IS NULL THEN
-        CALL gl_lib.gl_exitProgram(1, "Failed to start report")
+      IF m_rpt.handle IS NULL THEN
+        CALL g2_lib.g2_exitProgram(1, "Failed to start report")
       END IF
-      CALL gl_grw.glGRW_printMessage(% "Printing, please wait...")
-      START REPORT rpt TO XML HANDLER l_handler
+      CALL g2_aui.g2_winInfo(1,% "Printing, please wait...",NULL)
+      START REPORT rpt TO XML HANDLER m_rpt.handle
       LET l_rptStart = TRUE
     END IF
 
@@ -184,15 +180,15 @@ MAIN
 
   IF l_rptStart THEN
     FINISH REPORT rpt
-    CALL gl_grw.glGRW_printMessage(NULL)
-    CALL gl_grw.glGRW_rptFinish(l_row)
+    CALL g2_aui.g2_winInfo(3,NULL,NULL)
+    CALL m_rpt.finish()
   ELSE
-    CALL gl_grw.glGRW_printMessage(% "No Orders to print")
+    CALL g2_aui.g2_winInfo(1,% "No Orders to print",NULL)
     SLEEP 3
-    CALL gl_grw.glGRW_printMessage(NULL)
+    CALL g2_aui.g2_winInfo(3,NULL,NULL)
   END IF
 
-  CALL gl_lib.gl_exitProgram(0, "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION printInv()

@@ -1,4 +1,5 @@
-IMPORT FGL gl_lib
+
+IMPORT FGL g2_lib
 IMPORT FGL oe_lib
 &include "app.inc"
 &include "ordent.inc"
@@ -176,7 +177,7 @@ FUNCTION signin()
   DEFINE l_cookie STRING
 
   IF g_custcode != "Guest" THEN
-    IF gl_lib.gl_winQuestion(% "Confirm", % "Confirm signout", % "No", % "Yes|No", "question")
+    IF g2_lib.g2_winQuestion(% "Confirm", % "Confirm signout", % "No", % "Yes|No", "question")
             = % "No"
         THEN
       RETURN

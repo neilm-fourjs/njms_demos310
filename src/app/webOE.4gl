@@ -1,15 +1,19 @@
 #+ Web Order Entry Demo - by N.J.Martin neilm@4js.com
 #+
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+IMPORT FGL g2_db
 
-IMPORT FGL gl_lib
-IMPORT FGL gl_db
 IMPORT FGL oe_lib
 IMPORT FGL oeweb_lib
-&include "genero_lib.inc" -- Contains GL_DBGMSG & g_dbgLev
+
 &include "app.inc"
 &include "ordent.inc"
-CONSTANT C_PRGDESC = "Web Ordering Demo"
+CONSTANT C_PRGVER = "3.2"
+CONSTANT C_PRGDESC = "Web Ordering Demo #1"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "logo_dark"
 
 DEFINE m_vbox om.DomNode
 DEFINE m_dialog ui.Dialog
@@ -18,18 +22,18 @@ DEFINE m_fields DYNAMIC ARRAY OF RECORD
   type STRING
 END RECORD
 DEFINE m_csslayout BOOLEAN
+DEFINE m_appInfo g2_appInfo.appInfo
+DEFINE m_db g2_db.dbInfo
 MAIN
   DEFINE l_win ui.Window
   DEFINE l_form ui.Form
   DEFINE l_cat SMALLINT
 
-  CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(ARG_VAL(1), "weboe", TRUE)
-  GL_MODULE_ERROR_HANDLER
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "weboe")
 
-  CALL gl_db.gldb_connect(NULL)
-
-  CALL ui.Interface.setText(gl_progdesc)
+  WHENEVER ANY ERROR CALL g2_lib.g2_error
+  CALL m_db.g2_connect(NULL)
 
   LET m_csslayout = FALSE
   IF fgl_getEnv("GBC_CUSTOM") = "csslayout" THEN
@@ -59,7 +63,7 @@ MAIN
     CALL build_grids()
     LET l_cat = dynDiag()
   END WHILE
-
+  CALL g2_lib.g2_exitProgram(0, "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION build_grids()
@@ -182,7 +186,7 @@ FUNCTION build_grids()
 
 END FUNCTION
 --------------------------------------------------------------------------------
-FUNCTION dynDiag()
+FUNCTION dynDiag() RETURNS SMALLINT
   DEFINE x SMALLINT
   DEFINE l_field, l_evt STRING
 
@@ -263,7 +267,7 @@ FUNCTION dynDiag()
       WHEN "ON ACTION gotoco"
         CALL gotoco()
       WHEN "ON ACTION about"
-        CALL gl_about(C_VER)
+				CALL g2_about.g2_about(m_appInfo)
     END CASE
   END WHILE
   IF int_flag THEN
