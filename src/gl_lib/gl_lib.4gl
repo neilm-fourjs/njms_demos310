@@ -662,7 +662,7 @@ FUNCTION gl_winQuestion(
   LET l_dum = FALSE
   IF ui.window.getCurrent() IS NULL THEN
     OPEN WINDOW dummy AT 1, 1 WITH 1 ROWS, 2 COLUMNS ATTRIBUTE(STYLE = "naked")
-    CALL fgl_settitle(l_title)
+    CALL ui.window.getCurrent().setText(l_title)
     LET l_dum = TRUE
   END IF
 

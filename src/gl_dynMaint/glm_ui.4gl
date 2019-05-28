@@ -1,9 +1,12 @@
 IMPORT util
-IMPORT FGL gl_lib
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+IMPORT FGL g2_lookup
+
 IMPORT FGL glm_sql
 IMPORT FGL glm_mkForm
-IMPORT FGL gl_lookup3
-&include "genero_lib.inc"
+
 &include "dynMaint.inc"
 
 DEFINE m_dialog ui.Dialog
@@ -11,7 +14,7 @@ PUBLIC DEFINE m_before_inp_func t_before_inp_func -- callback function
 PUBLIC DEFINE m_after_inp_func t_after_inp_func -- callback function
 PUBLIC DEFINE m_inpt_func t_inpt_func -- input callback function
 --------------------------------------------------------------------------------
-FUNCTION glm_menu(l_allowedActions STRING)
+FUNCTION glm_menu(l_allowedActions STRING, l_appInfo appInfo INOUT )
   IF m_inpt_func IS NULL THEN
     LET m_inpt_func = FUNCTION glm_inpt
   END IF
@@ -46,7 +49,8 @@ FUNCTION glm_menu(l_allowedActions STRING)
       EXIT MENU
     ON ACTION close
       EXIT MENU
-    GL_ABOUT
+		ON ACTION about
+			CALL g2_about.g2_about(l_appInfo)
   END MENU
 
 END FUNCTION
@@ -224,7 +228,7 @@ FUNCTION glm_findList() RETURNS()
     END IF
   END FOR
   LET l_key =
-      gl_lookup3.gl_lookup3(
+      g2_lookup.g2_lookup(
           glm_mkForm.m_fld_props[1].tabname,
           l_cols,
           l_colts,

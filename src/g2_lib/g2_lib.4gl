@@ -92,18 +92,26 @@ FUNCTION g2_loadStyles(l_sty STRING) RETURNS()
 	END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
-#+ Load the style file depending on the client
-FUNCTION g2_loadActions(l_adnam STRING) RETURNS()
+#+ Load the Action Defaults file depending on the client
+FUNCTION g2_loadActions(l_adName STRING) RETURNS()
 	TRY
-		CALL ui.Interface.loadActionDefaults( l_adnam )
+		CALL ui.Interface.loadActionDefaults( l_adName )
 	CATCH
 	END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
-#+ Load the style file depending on the client
-FUNCTION g2_loadToolBar(l_tbnam STRING) RETURNS()
+#+ Load the ToolBar file depending on the client
+FUNCTION g2_loadToolBar(l_tbName STRING) RETURNS()
 	TRY
-		CALL ui.Interface.loadToolBar( l_tbnam )
+		CALL ui.Interface.loadToolBar( l_tbName )
+	CATCH
+	END TRY
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ Load the TopMenu file depending on the client
+FUNCTION g2_loadTopMenu(l_tmName STRING) RETURNS()
+	TRY
+		CALL ui.Interface.loadTopMenu( l_tmName )
 	CATCH
 	END TRY
 END FUNCTION

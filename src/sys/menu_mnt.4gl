@@ -51,11 +51,10 @@ MAIN
   DEFINE dnd ui.DragDrop
 
   CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
-
-	CALL ui.Interface.loadToolBar( "dynmaint" )
-	CALL ui.Interface.loadTopMenu( "dynmaint" )
-
   CALL g2_lib.g2_init(ARG_VAL(1), "default")
+	CALL g2_lib.g2_loadToolBar( "dynmaint" )
+	CALL g2_lib.g2_loadTopMenu( "dynmaint" )
+
   WHENEVER ANY ERROR CALL g2_lib.g2_error
   LET m_user_key = arg_val(2)
   LET m_allowedActions = arg_val(3)

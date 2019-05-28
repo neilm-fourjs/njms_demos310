@@ -9,34 +9,41 @@
 -- 4: Primary Key name
 -- 5: Allowed actions: Y/N > Find / Update / Insert / Delete / Sample / List  -- eg: YNNNNN = enquiry only.
 
-IMPORT FGL gl_lib
-IMPORT FGL gl_db
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+IMPORT FGL g2_db
+IMPORT FGL app_lib
 
 IMPORT FGL glm_mkForm
 IMPORT FGL glm_sql
 IMPORT FGL glm_ui
-&include "genero_lib.inc"
 &include "dynMaint.inc"
 
-CONSTANT C_VER = "3.1"
+&include "schema.inc"
+&include "app.inc"
+
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "Dynamic Maintenance Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
-CONSTANT C_APP_SPLASH = "njm_demo_logo_256"
-CONSTANT C_APP_ICON = "njm_demo_icon"
+CONSTANT C_PRGICON = "logo_dark"
+
 CONSTANT C_FIELDS_PER_PAGE = 10
 DEFINE m_dbname STRING
 DEFINE m_allowedActions CHAR(6)
+DEFINE m_appInfo g2_appInfo.appInfo
+DEFINE m_db g2_db.dbInfo
 MAIN
-  DEFINE l_style STRING
-  CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), "default", TRUE)
-  LET gl_toolBar = "dynmaint"
-  LET gl_topMenu = "dynmaint"
+
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+	CALL g2_lib.g2_loadToolBar( "dynmaint" )
+	CALL g2_lib.g2_loadTopMenu( "dynmaint" )
 
   CALL init_args()
 
 -- setup and connect to DB
-  CALL gl_db.gldb_connect(m_dbname)
+  CALL m_db.g2_connect(m_dbname)
 
 -- setup SQL
   LET glm_sql.m_key_fld = 0
@@ -45,24 +52,19 @@ MAIN
   CALL glm_sql.glm_mkSQL("*", "1=2") -- not fetching any data.
 
 -- create Form
-  LET l_style = "centered"
-  IF NOT gl_lib.m_windowCenter THEN
-    LET l_style = "main2"
-  END IF
   CALL glm_mkForm.init_form(
       m_dbname,
       glm_sql.m_tab,
       glm_sql.m_key_fld,
       C_FIELDS_PER_PAGE,
       glm_sql.m_fields,
-      l_style) -- 10 fields by folder page
-  CALL gl_lib.gl_titleWin(NULL)
-  CALL ui.Interface.setText(gl_progdesc)
+      "main2") -- 10 fields by folder page
+  CALL ui.window.getCurrent().setText(C_PRGDESC)
 
 -- start UI
-  CALL glm_ui.glm_menu(m_allowedActions)
+  CALL glm_ui.glm_menu(m_allowedActions, m_appInfo)
 
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION init_args()
@@ -73,16 +75,16 @@ FUNCTION init_args()
   LET glm_sql.m_key_nam = arg_val(5)
   LET m_allowedActions = arg_val(6)
   IF m_dbname IS NULL THEN
-    CALL gl_lib.gl_errPopup(SFMT(% "Invalid Database Name '%1'!", m_dbname))
-    CALL gl_lib.gl_exitProgram(1, % "invalid Database")
+    CALL g2_lib.g2_errPopup(SFMT(% "Invalid Database Name '%1'!", m_dbname))
+    CALL g2_lib.g2_exitProgram(1, % "invalid Database")
   END IF
   IF glm_sql.m_tab IS NULL THEN
-    CALL gl_lib.gl_errPopup(SFMT(% "Invalid Table '%1'!", glm_sql.m_tab))
-    CALL gl_lib.gl_exitProgram(1, % "invalid table")
+    CALL g2_lib.g2_errPopup(SFMT(% "Invalid Table '%1'!", glm_sql.m_tab))
+    CALL g2_lib.g2_exitProgram(1, % "invalid table")
   END IF
   IF glm_sql.m_key_nam IS NULL THEN
-    CALL gl_lib.gl_errPopup(SFMT(% "Invalid Key Name '%1'!", glm_sql.m_key_nam))
-    CALL gl_lib.gl_exitProgram(1, % "invalid key name")
+    CALL g2_lib.g2_errPopup(SFMT(% "Invalid Key Name '%1'!", glm_sql.m_key_nam))
+    CALL g2_lib.g2_exitProgram(1, % "invalid key name")
   END IF
   IF m_allowedActions IS NULL THEN
     LET m_allowedActions = "YYYYYY"

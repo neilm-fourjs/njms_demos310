@@ -1,13 +1,19 @@
 -- Customer Maintenance
 
-IMPORT FGL gl_lib
-IMPORT FGL gl_db
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+IMPORT FGL g2_db
+
 IMPORT FGL app_lib
 &include "schema.inc"
-&include "genero_lib.inc"
 &include "app.inc"
+
+CONSTANT C_PRGVER = "3.2"
 CONSTANT C_PRGDESC = "Customer Maintenance Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "logo_dark"
+
 &define RECNAME customer.*
 &define RECNAME2 addresses.*
 &define TABNAMEQ "customer"
@@ -41,21 +47,23 @@ DEFINE m_wher STRING
 DEFINE m_user_key LIKE sys_users.user_key
 DEFINE m_allowedActions CHAR(6) --Y/N for Find / List / Update / Insert / Delete / Sample
 -- NNYNNN = Only update allowed.
+DEFINE m_appInfo g2_appInfo.appInfo
+DEFINE m_db g2_db.dbInfo
 MAIN
-  LET gl_toolbar = "dynmaint"
-  LET gl_topMenu = "dynmaint"
-  CALL gl_lib.gl_setInfo(C_VER, C_APP_SPLASH, C_APP_ICON, NULL, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), "default", TRUE)
-  WHENEVER ANY ERROR CALL gl_lib.gl_error
-  LET m_user_key = arg_val(2)
-  LET m_allowedActions = arg_val(3)
-  LET m_allowedActions = (m_allowedActions CLIPPED), "YYYYY"
 
-  CALL gl_db.gldb_connect(NULL)
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+	CALL g2_lib.g2_loadToolBar( "dynmaint" )
+	CALL g2_lib.g2_loadTopMenu( "dynmaint" )
+
+  LET m_user_key = ARG_VAL(2)
+  LET m_allowedActions = ARG_VAL(3)
+  LET m_allowedActions = (m_allowedActions CLIPPED), "YYYYY"
 
   OPEN FORM frm FROM "cust_mnt"
   DISPLAY FORM frm
-  CALL ui.Interface.setText(gl_progdesc)
+
+  CALL m_db.g2_connect(NULL)
 
   TRY
     DECLARE fetch_row CURSOR FOR SELECT * FROM TABNAME, TABNAME2 WHERE KEYFLD = ? AND JOIN1
@@ -135,9 +143,10 @@ MAIN
     ON ACTION lastrow
       CALL showRow(m_recs.getLength())
       CALL app_lib.setActions(m_row, m_recs.getLength(), m_allowedActions)
-    GL_ABOUT
+    ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
   END MENU
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION query() RETURNS BOOLEAN
@@ -283,11 +292,11 @@ FUNCTION delete() RETURNS BOOLEAN
 
   LET l_stmt = "SELECT * FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || m_rec.KEYFLD || "'"
   LET m_rec_o.KEYFLD = m_rec.KEYFLD
-  IF NOT gl_db.gldb_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
+  IF NOT g2_db.g2_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
     RETURN FALSE
   END IF
 
-  IF gl_lib.gl_winQuestion(
+  IF g2_lib.g2_winQuestion(
               % "Confirm",
               % "Are you sure you want to delete this customer?",
               "No",
@@ -299,7 +308,7 @@ FUNCTION delete() RETURNS BOOLEAN
     PREPARE pre_del FROM l_stmt
     EXECUTE pre_del USING RECKEY
     MESSAGE % "Row deleted!"
-    RETURN gl_db.gldb_sqlStatus(
+    RETURN g2_db.g2_sqlStatus(
         __LINE__,
         __FILE__,
         "DELETE FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || RECKEY || "'")
@@ -331,11 +340,11 @@ FUNCTION update() RETURNS BOOLEAN
 
   LET l_stmt = "SELECT * FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || m_rec.KEYFLD || "'"
   LET m_rec_o.KEYFLD = m_rec.KEYFLD
-  IF NOT gl_db.gldb_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
+  IF NOT g2_db.g2_checkRec(TRUE, m_rec.KEYFLD, l_stmt) THEN
     RETURN FALSE
   END IF
 
-  IF gl_lib.gl_winQuestion(% "Confirm", % "Update this customer?", "No", "Yes|No", "question")
+  IF g2_lib.g2_winQuestion(% "Confirm", % "Update this customer?", "No", "Yes|No", "question")
           = "Yes"
       THEN
     RETURN FALSE
@@ -344,27 +353,27 @@ FUNCTION update() RETURNS BOOLEAN
   IF m_rec.* != m_rec_o.* THEN
     LET l_wher = KEYFLDQ || " = ?"
     LET l_stmt =
-        gl_db.gldb_genUpdate(
+        g2_db.g2_genUpdate(
             TABNAMEQ, l_wher, base.typeInfo.create(m_rec), base.typeInfo.create(m_rec_o), 0, TRUE)
     --	DISPLAY "Update:",l_stmt CLIPPED
     TRY
       PREPARE pre_upd FROM l_stmt CLIPPED
     CATCH
-      RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
     TRY
       EXECUTE pre_upd USING m_rec_o.KEYFLD
       LET m_recs[m_row].key = m_rec.KEYFLD
       MESSAGE SFMT(% "Row %1 updated.", TABNAMEQ)
     CATCH
-      RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
   END IF
 
   IF m_rec2.* != m_rec2_o.* THEN
     LET l_wher = KEYFLD2Q || " = ?"
     LET l_stmt =
-        gl_db.gldb_genUpdate(
+        g2_db.g2_genUpdate(
             TABNAME2Q,
             l_wher,
             base.typeInfo.create(m_rec2),
@@ -374,20 +383,20 @@ FUNCTION update() RETURNS BOOLEAN
     TRY
       PREPARE pre_upd2 FROM l_stmt CLIPPED
     CATCH
-      RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
     TRY
       EXECUTE pre_upd2 USING m_rec2_o.JOIN2_D
       MESSAGE SFMT(% "Row %1 updated.", TABNAMEQ)
     CATCH
-      RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
   END IF
 
   IF m_rec3.* = m_rec3_o.* THEN
     LET l_wher = KEYFLD2Q || " = ?"
     LET l_stmt =
-        gl_db.gldb_genUpdate(
+        g2_db.g2_genUpdate(
             TABNAME2Q,
             l_wher,
             base.typeInfo.create(m_rec3),
@@ -397,13 +406,13 @@ FUNCTION update() RETURNS BOOLEAN
     TRY
       PREPARE pre_upd3 FROM l_stmt CLIPPED
     CATCH
-      RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
     TRY
       EXECUTE pre_upd3 USING m_rec3_o.JOIN2_D
       MESSAGE "Row " || TABNAME2Q || " updated!"
     CATCH
-      RETURN gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt)
+      RETURN g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt)
     END TRY
   END IF
   RETURN FALSE
@@ -420,10 +429,10 @@ FUNCTION insert(l_ad_only BOOLEAN) RETURNS BOOLEAN
     LET l_stmt =
         "SELECT * FROM " || TABNAMEQ || " WHERE " || KEYFLDQ || " = '" || m_rec.KEYFLD || "'"
     LET m_rec_o.KEYFLD = m_rec.KEYFLD
-    IF NOT gl_db.gldb_checkRec(FALSE, m_rec.KEYFLD, l_stmt) THEN
+    IF NOT g2_db.g2_checkRec(FALSE, m_rec.KEYFLD, l_stmt) THEN
       RETURN FALSE
     END IF
-    IF gl_lib.gl_winQuestion(% "Confirm", % "Insert new customer?", "No", "Yes|No", "question")
+    IF g2_lib.g2_winQuestion(% "Confirm", % "Insert new customer?", "No", "Yes|No", "question")
             = "No"
         THEN
       RETURN FALSE
@@ -431,21 +440,21 @@ FUNCTION insert(l_ad_only BOOLEAN) RETURNS BOOLEAN
   END IF
 
   BEGIN WORK
-  LET l_stmt = gl_db.gldb_genInsert(TABNAME2Q, base.typeInfo.create(m_rec2), TRUE)
+  LET l_stmt = g2_db.g2_genInsert(TABNAME2Q, base.typeInfo.create(m_rec2), TRUE)
   TRY
     PREPARE pre_ins2 FROM l_stmt
   CATCH
-    IF NOT gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
+    IF NOT g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
       ROLLBACK WORK
       RETURN FALSE
     END IF
   END TRY
   IF m_rec3.rec_key IS NOT NULL THEN
-    LET l_stmt = gl_db.gldb_genInsert(TABNAME2Q, base.typeInfo.create(m_rec3), TRUE)
+    LET l_stmt = g2_db.g2_genInsert(TABNAME2Q, base.typeInfo.create(m_rec3), TRUE)
     TRY
       PREPARE pre_ins3 FROM l_stmt
     CATCH
-      IF NOT gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
+      IF NOT g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
         ROLLBACK WORK
         RETURN FALSE
       END IF
@@ -457,7 +466,7 @@ FUNCTION insert(l_ad_only BOOLEAN) RETURNS BOOLEAN
     LET m_rec2.rec_key = SQLCA.sqlerrd[2]
     MESSAGE % "Row Inserted!"
   CATCH
-    IF NOT gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
+    IF NOT g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
       ROLLBACK WORK
       RETURN FALSE
     END IF
@@ -468,7 +477,7 @@ FUNCTION insert(l_ad_only BOOLEAN) RETURNS BOOLEAN
       LET m_rec3.rec_key = SQLCA.sqlerrd[2]
       MESSAGE % "Row Inserted!"
     CATCH
-      IF NOT gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
+      IF NOT g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
         ROLLBACK WORK
         RETURN FALSE
       END IF
@@ -484,11 +493,11 @@ FUNCTION insert(l_ad_only BOOLEAN) RETURNS BOOLEAN
     --UPDATE customer SET (del_addr, inv_addr )= (m_rec2.rec_key,m_rec3.rec_key)
     --	WHERE customer.customer_code = m_rec.customer_code
   ELSE
-    LET l_stmt = gl_db.gldb_genInsert(TABNAMEQ, base.typeInfo.create(m_rec), TRUE)
+    LET l_stmt = g2_db.g2_genInsert(TABNAMEQ, base.typeInfo.create(m_rec), TRUE)
     TRY
       PREPARE pre_ins FROM l_stmt
     CATCH
-      IF NOT gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
+      IF NOT g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
         ROLLBACK WORK
         RETURN FALSE
       END IF
@@ -497,7 +506,7 @@ FUNCTION insert(l_ad_only BOOLEAN) RETURNS BOOLEAN
       EXECUTE pre_ins
       MESSAGE % "Row Inserted!"
     CATCH
-      IF NOT gl_db.gldb_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
+      IF NOT g2_db.g2_sqlStatus(__LINE__, __FILE__, l_stmt) THEN
         ROLLBACK WORK
         RETURN FALSE
       END IF
@@ -508,6 +517,7 @@ FUNCTION insert(l_ad_only BOOLEAN) RETURNS BOOLEAN
   RETURN TRUE
 END FUNCTION
 --------------------------------------------------------------------------------
+-- FIXME: use GRE!
 FUNCTION rpt1()
   DEFINE l_rec RECORD LIKE RECNAME
   DEFINE l_rec2 RECORD LIKE RECNAME2
@@ -554,9 +564,9 @@ REPORT trad_rpt(l_row, l_rec, l_rec2)
 
   FORMAT
     FIRST PAGE HEADER
-      LET l_rpt_user = gl_userName
+      LET l_rpt_user = m_appInfo.userName
       LET l_print_date = TODAY
-      LET l_head2 = SFMT(% "Printed: %! By:%2", l_print_date, l_rpt_user.trim())
+      LET l_head2 = SFMT(% "Printed: %1 By:%2", l_print_date, l_rpt_user.trim())
       LET x = 132 - length(l_head2)
       LET l_head1 = % "Customer Listing"
       PRINT l_head1, COLUMN x, l_head2

@@ -1,4 +1,5 @@
-IMPORT FGL gl_lib
+
+IMPORT FGL g2_lib
 IMPORT FGL glm_mkForm
 &include "dynMaint.inc"
 
@@ -24,7 +25,7 @@ FUNCTION glm_mkSQL(l_cols STRING, l_where STRING)
   TRY
     CALL m_sql_handle.prepare(l_sql)
   CATCH
-    CALL gl_lib.gl_errPopup(
+    CALL g2_lib.g2_errPopup(
         SFMT(% "Failed to doing prepare for select from '%1'\n%2!", m_tab, SQLERRMESSAGE))
     EXIT PROGRAM
   END TRY
@@ -38,7 +39,7 @@ FUNCTION glm_mkSQL(l_cols STRING, l_where STRING)
     END IF
   END FOR
   IF m_key_fld = 0 THEN
-    CALL gl_lib.gl_errPopup(
+    CALL g2_lib.g2_errPopup(
         SFMT(% "The key field '%1' doesn't appear to be in the table!", m_key_nam.trim()))
     EXIT PROGRAM
   END IF
@@ -131,7 +132,7 @@ FUNCTION glm_SQLupdate(l_dialog ui.Dialog)
     CALL glm_mkSQL(m_cols, m_where)
     CALL glm_getRow(m_row_cur, FALSE)
   ELSE
-    CALL gl_lib.gl_errPopup(SFMT(% "Failed to update record!\n%1!", SQLERRMESSAGE))
+    CALL g2_lib.g2_errPopup(SFMT(% "Failed to update record!\n%1!", SQLERRMESSAGE))
   END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -166,7 +167,7 @@ FUNCTION glm_SQLinsert(l_dialog ui.Dialog)
     CALL glm_mkSQL(m_cols, m_where)
     CALL glm_getRow(SQL_LAST, FALSE)
   ELSE
-    CALL gl_lib.gl_errPopup(SFMT(% "Failed to insert record!\n%1!", SQLERRMESSAGE))
+    CALL g2_lib.g2_errPopup(SFMT(% "Failed to insert record!\n%1!", SQLERRMESSAGE))
   END IF
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -174,7 +175,7 @@ FUNCTION glm_SQLdelete()
   DEFINE l_sql, l_val STRING
   LET l_val = m_sql_handle.getResultValue(m_key_fld)
   LET l_sql = "DELETE FROM " || m_tab || " WHERE " || m_key_nam || " = ?"
-  IF gl_lib.gl_winQuestion(
+  IF g2_lib.g2_winQuestion(
               % "Confirm",
               SFMT(% "Are you sure you want to delete this record?\n\n%1\nKey = %2", l_sql, l_val),
               % "No",
@@ -191,7 +192,7 @@ FUNCTION glm_SQLdelete()
       LET m_row_count = m_row_count - 1
       CALL glm_getRow(m_row_cur, FALSE)
     ELSE
-      CALL gl_lib.gl_errPopup(SFMT(% "Failed to delete record!\n%1!", SQLERRMESSAGE))
+      CALL g2_lib.g2_errPopup(SFMT(% "Failed to delete record!\n%1!", SQLERRMESSAGE))
     END IF
   ELSE
     MESSAGE % "Delete aborted."
