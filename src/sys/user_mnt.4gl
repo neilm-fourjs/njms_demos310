@@ -38,9 +38,6 @@ MAIN
 
   CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
 
---	CALL ui.Interface.loadToolBar( "dynmaint" )
-	CALL ui.Interface.loadTopMenu( "dynmaint" )
-
   CALL g2_lib.g2_init(ARG_VAL(1), "default")
   WHENEVER ANY ERROR CALL g2_lib.g2_error
 
@@ -49,6 +46,8 @@ MAIN
   LET m_saveUser = FALSE
   OPEN FORM um FROM "user_mnt"
   DISPLAY FORM um
+	CALL g2_lib.g2_loadToolBar( "dynmaint" )
+	CALL g2_lib.g2_loadTopMenu( "dynmaint" )
 
   CALL m_db.g2_connect(NULL)
 

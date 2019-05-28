@@ -78,22 +78,24 @@ FUNCTION g2_mdisdi(l_mdi_sdi CHAR(1))
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Load the style file depending on the client
-FUNCTION g2_loadStyles(l_sty STRING) RETURNS()
+FUNCTION g2_loadStyles(l_stName STRING) RETURNS()
   DEFINE l_fe STRING
-	IF l_sty IS NULL THEN LET l_sty = "default" END IF
+	IF l_stName IS NULL THEN LET l_stName = "default" END IF
 	LET l_fe = "GBC"
   IF m_isGDC THEN LET l_fe = "GDC" END IF
   IF m_isUniversal THEN LET l_fe = "GBC" END IF
-  GL_DBGMSG(0, SFMT("g2_loadStyles: styleFile=%1 ", l_sty||"_"||l_fe ))
+  GL_DBGMSG(0, SFMT("g2_loadStyles: file=%1 ", l_stName||"_"||l_fe ))
 	TRY
- 		CALL ui.interface.loadStyles(l_sty||"_"||l_fe)
+ 		CALL ui.interface.loadStyles(l_stName||"_"||l_fe)
 	CATCH
- 		CALL ui.interface.loadStyles(l_sty)
+ 		CALL ui.interface.loadStyles(l_stName)
 	END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Load the Action Defaults file depending on the client
 FUNCTION g2_loadActions(l_adName STRING) RETURNS()
+	IF l_adName IS NULL THEN LET l_adName = "default" END IF
+  GL_DBGMSG(0, SFMT("g2_loadActions: file=%1 ", l_adName ))
 	TRY
 		CALL ui.Interface.loadActionDefaults( l_adName )
 	CATCH
@@ -102,6 +104,8 @@ END FUNCTION
 --------------------------------------------------------------------------------
 #+ Load the ToolBar file depending on the client
 FUNCTION g2_loadToolBar(l_tbName STRING) RETURNS()
+	IF l_tbName IS NULL THEN LET l_tbName = "default" END IF
+  GL_DBGMSG(0, SFMT("g2_loadToolBar: file=%1 ", l_tbName ))
 	TRY
 		CALL ui.Interface.loadToolBar( l_tbName )
 	CATCH
@@ -110,8 +114,20 @@ END FUNCTION
 --------------------------------------------------------------------------------
 #+ Load the TopMenu file depending on the client
 FUNCTION g2_loadTopMenu(l_tmName STRING) RETURNS()
+	DEFINE l_w ui.Window
+	DEFINE l_f ui.Form
+	LET l_w = ui.Window.getCurrent()
+	IF l_w IS NOT NULL THEN	LET l_f = l_w.getForm() END IF
+
+	IF l_tmName IS NULL THEN LET l_tmName = "default" END IF
+	
+  GL_DBGMSG(0, SFMT("g2_loadTopMenu: file=%1 ", l_tmName ))
 	TRY
-		CALL ui.Interface.loadTopMenu( l_tmName )
+		IF l_f IS NOT NULL THEN
+			CALL l_f.loadTopMenu( l_tmName )
+		ELSE
+			CALL ui.Interface.loadTopMenu( l_tmName )
+		END IF
 	CATCH
 	END TRY
 END FUNCTION

@@ -32,8 +32,6 @@ MAIN
 
   CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
   CALL g2_lib.g2_init(ARG_VAL(1), "default")
-	CALL g2_lib.g2_loadToolBar( "dynmaint" )
-	CALL g2_lib.g2_loadTopMenu( "dynmaint" )
 
   CALL init_args()
 
@@ -54,7 +52,8 @@ MAIN
       glm_sql.m_fields,
       "main2") -- 10 fields by folder page
   CALL ui.window.getCurrent().setText(C_PRGDESC)
-
+	CALL g2_lib.g2_loadToolBar( "dynmaint" )
+	CALL g2_lib.g2_loadTopMenu( "dynmaint" )
 -- Setup Callback functions
   LET glm_ui.m_before_inp_func = FUNCTION my_before_inp
 --	LET glm_ui.m_inpt_func = FUNCTION my_input

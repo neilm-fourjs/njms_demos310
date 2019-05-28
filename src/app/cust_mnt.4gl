@@ -53,8 +53,6 @@ MAIN
 
   CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
   CALL g2_lib.g2_init(ARG_VAL(1), "default")
-	CALL g2_lib.g2_loadToolBar( "dynmaint" )
-	CALL g2_lib.g2_loadTopMenu( "dynmaint" )
 
   LET m_user_key = ARG_VAL(2)
   LET m_allowedActions = ARG_VAL(3)
@@ -62,6 +60,8 @@ MAIN
 
   OPEN FORM frm FROM "cust_mnt"
   DISPLAY FORM frm
+	CALL g2_lib.g2_loadToolBar( "dynmaint" )
+	CALL g2_lib.g2_loadTopMenu( "dynmaint" )
 
   CALL m_db.g2_connect(NULL)
 
