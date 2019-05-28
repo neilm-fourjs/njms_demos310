@@ -1,3 +1,6 @@
+
+IMPORT FGL g2_aui
+
 DEFINE attr_name STRING
 
 CONSTANT PMAX = 10000
@@ -18,7 +21,7 @@ FUNCTION startDocument()
 
   LET ignore_rest = FALSE
   LET p_cnt = 0
-  CALL gl_progBar(1, PMAX, "Load XML data,  please wait ...")
+  CALL g2_aui.g2_progBar(1, PMAX, "Load XML data,  please wait ...")
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION processingInstruction(name, data)
@@ -36,7 +39,7 @@ FUNCTION startElement(name, attr)
 
   LET p_cnt = p_cnt + 1
   IF NOT (p_cnt MOD 100) THEN
-    CALL gl_progBar(2, p_cnt, "")
+    CALL g2_aui.g2_progBar(2, p_cnt, "")
   END IF
   IF p_cnt = PMAX THEN
     LET p_cnt = 0
@@ -74,7 +77,7 @@ FUNCTION endDocument()
 --	CALL song_r.writeXML("songs.xml")
   CALL set_xml_n(song_r)
   DISPLAY CURRENT, ": SaxHandler - EndDocument"
-  CALL gl_progBar(3, 0, "")
+  CALL g2_aui.g2_progBar(3, 0, "")
 
 END FUNCTION
 --------------------------------------------------------------------------------

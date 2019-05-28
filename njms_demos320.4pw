@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Project defaultApplication="1554019048" gstVersion="31403" version="3.3">
+<Project defaultApplication="1663756762" gstVersion="31403" version="3.3">
   <Settings>
     <DynamicProperties version="2">
       <DynamicProperty description="Accent color (Android 5.0 and later)" initialValue="#9575CD" isDefaultInherited="false" isHidden="false" label="Accent color" name="gma-accent-color" readOnly="false" type="COLOR"/>
@@ -133,18 +133,20 @@
   </Group>
   <Group id="-1642035280" label="LibrariesNEW" language="Genero" targetDirectory="$(ProjectDir)/bin320">
     <Group id="863353152" label="G2_Lib">
-      <Library binaryName="g2_lib" id="-310428106" label="g2_lib">
+      <Library binaryName="g2_lib" dependencies="-400184264" id="-310428106" label="g2_lib">
+        <File filePath="src/g2_lib/g2_debug.4gl"/>
+        <File excludeFromCompilation="true" filePath="src/g2_lib/g2_debug.inc"/>
         <File filePath="src/g2_lib/g2_lib.4gl"/>
         <File filePath="src/g2_lib/g2_aui.4gl"/>
         <File filePath="src/g2_lib/g2_about.4gl"/>
         <File filePath="src/g2_lib/g2_appInfo.4gl"/>
+        <File filePath="src/g2_lib/g2_calendar.4gl"/>
         <File filePath="src/g2_lib/g2_db.4gl"/>
-        <File filePath="src/g2_lib/g2_debug.4gl"/>
-        <File excludeFromCompilation="true" filePath="src/g2_lib/g2_debug.inc"/>
         <File filePath="src/g2_lib/g2_gdcUpdate.4gl"/>
         <File filePath="src/g2_lib/g2_gdcUpdateCommon.4gl"/>
         <File filePath="src/g2_lib/g2_encrypt.4gl"/>
         <File filePath="src/g2_lib/g2_logging.4gl"/>
+        <File filePath="src/g2_lib/g2_lookup.4gl"/>
         <File filePath="src/g2_lib/g2_secure.4gl"/>
         <File filePath="src/g2_lib/g2_sql.4gl"/>
         <File filePath="src/g2_lib/g2_ui.4gl"/>
@@ -311,42 +313,42 @@
         <File filePath="src/demos/wizard_main_dnd.4gl"/>
         <File filePath="src/demos/wizard_ui_dnd.4gl"/>
       </Application>
-      <Library binaryName="wizard_lib" dependencies="-400184264,14000" id="-1757926610" label="wizard_lib">
+      <Library binaryName="wizard_lib" dependencies="-400184264" id="-1757926610" label="wizard_lib">
         <File filePath="src/demos/wizard_common.4gl"/>
         <File filePath="src/demos/wizard_glob.inc"/>
         <File filePath="src/demos/wizard_md.per"/>
       </Library>
     </Group>
     <Group id="-101414127" label="Demos UI" language="Genero">
-      <Application binaryName="dispArr" dependencies="14000" id="62326091" label="dispArr">
+      <Application binaryName="dispArr" dependencies="-310428106,-400184264" id="62326091" label="dispArr">
         <File filePath="src/demos/disp_arr.4gl"/>
         <File filePath="src/demos/disp_arr.per"/>
         <File filePath="src/demos/fglfind.4gl"/>
       </Application>
-      <Application binaryName="ipodTree" dependencies="14000" id="-217822240" label="ipodTree">
+      <Application binaryName="ipodTree" dependencies="-310428106" id="-217822240" label="ipodTree">
         <File filePath="src/demos/ipod.4gl"/>
         <File filePath="src/demos/ipod.per"/>
         <File filePath="src/demos/ipod_big_cover.per"/>
         <File filePath="src/demos/ipod_sax.4gl"/>
         <File filePath="etc/ipodtree.4st"/>
       </Application>
-      <Application binaryName="listView" dependencies="14000" id="1211711094" label="listView">
+      <Application binaryName="listView" dependencies="-310428106" id="1211711094" label="listView">
         <File filePath="src/demos/listView.4gl"/>
         <File filePath="src/demos/listView.per"/>
       </Application>
-      <Application binaryName="multi_cell_sel" dependencies="14000" id="1197855432" label="multi_cell_sel">
+      <Application binaryName="multi_cell_sel" dependencies="-310428106" id="1197855432" label="multi_cell_sel">
         <File filePath="src/demos/multi_cell_sel.4gl"/>
         <File filePath="src/demos/multi_cell_sel.per"/>
       </Application>
-      <Application binaryName="picFlow" commandLineArguments="S 1 ../pics" dependencies="14000" id="-183914303" label="picFlow">
+      <Application binaryName="picFlow" commandLineArguments="S 1 ../pics" dependencies="-310428106" id="-183914303" label="picFlow">
         <File filePath="src/demos/picflow.4gl"/>
         <File filePath="etc/picflow.4st"/>
         <File filePath="src/demos/picflow.per"/>
       </Application>
-      <Application binaryName="showfile" dependencies="14000" id="-1746016620" label="showfile">
+      <Application binaryName="showfile" id="-1746016620" label="showfile">
         <File filePath="src/demos/showfile.4gl"/>
       </Application>
-      <Application binaryName="widgets" dependencies="14000" id="1663756762" label="widgets">
+      <Application binaryName="widgets" dependencies="-310428106" id="1663756762" label="widgets">
         <VirtualFolder label="etc">
           <File filePath="etc/widgets.4ad"/>
           <File filePath="etc/widgets.4sm"/>
@@ -365,7 +367,7 @@
       </Application>
     </Group>
     <Group id="1028282104" label="Demos WC">
-      <Application binaryName="wc_aircraft" dependencies="-400184264,14000" id="252530810" label="wc_aircraft">
+      <Application binaryName="wc_aircraft" dependencies="-400184264,-310428106" id="252530810" label="wc_aircraft">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/aircraft/aircraft.css"/>
           <File filePath="pics/webcomponents/aircraft/aircraft.html"/>
@@ -375,14 +377,14 @@
         <File filePath="src/demos/wc_aircraft.per"/>
         <File filePath="src/demos/wc_aircraft_ud.per"/>
       </Application>
-      <Application binaryName="wc_amCharts" dependencies="14000" id="-1954675472" label="wc_amCharts">
+      <Application binaryName="wc_amCharts" dependencies="-310428106" id="-1954675472" label="wc_amCharts">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/amcharts/amcharts.html"/>
         </VirtualFolder>
         <File filePath="src/demos/wc_amcharts.4gl"/>
         <File filePath="src/demos/wc_amcharts.per"/>
       </Application>
-      <Library binaryName="wc_calendar" id="789344678" label="wc_calendar">
+      <Library binaryName="wc_calendar" dependencies="-310428106" id="789344678" label="wc_calendar">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/fglsvgcanvas_cal/fglsvgcanvas_cal.html"/>
         </VirtualFolder>
@@ -390,7 +392,7 @@
         <File filePath="src/demos/wc_calendar.per"/>
         <File filePath="src/demos/wc_fglsvgcalendar.4gl"/>
       </Library>
-      <Application binaryName="wc_calendar_demo" dependencies="789344678,-400184264,14000" id="1022451972" label="wc_calendar_demo">
+      <Application binaryName="wc_calendar_demo" dependencies="789344678,-400184264,-310428106" id="1022451972" label="wc_calendar_demo">
         <File filePath="src/demos/wc_calendar_demo.4gl"/>
         <File filePath="src/demos/wc_calendar_demo.per"/>
       </Application>
@@ -403,7 +405,7 @@
         <File filePath="src/demos/wc_d3charts.4gl"/>
         <File filePath="src/demos/wc_d3charts.per"/>
       </Library>
-      <Application binaryName="wc_d3charts_demo" dependencies="14000,-400184264,2068081444" id="-1072068994" label="wc_d3charts_demo">
+      <Application binaryName="wc_d3charts_demo" dependencies="-400184264,2068081444,-310428106" id="-1072068994" label="wc_d3charts_demo">
         <File filePath="src/demos/wc_d3charts_demo.4gl"/>
         <File filePath="src/demos/wc_d3charts_demo.per"/>
       </Application>
@@ -607,7 +609,7 @@
       <File filePath="gas_deploy_ws/gdc_update_srv.xcf"/>
     </Library>
   </Group>
-  <Group id="-692030966" label="Test GGC" language="Genero" targetDirectory="$(ProjectDir)/ggc">
+  <Group excludeFromBuild="true" id="-692030966" label="Test GGC" language="Genero" targetDirectory="$(ProjectDir)/ggc">
     <Application binaryName="ggc_1" id="-1028916705" label="ggc_1">
       <File filePath="ggc/ggc_1.4gl"/>
     </Application>

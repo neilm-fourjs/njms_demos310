@@ -7,11 +7,14 @@
 #+ 5) IIF used for message.
 
 IMPORT util -- used for rand function for testdata
-IMPORT FGL gl_lib
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+IMPORT FGL g2_lib
+IMPORT FGL g2_about
+IMPORT FGL g2_appInfo
+
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "Display Array Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
 
 DEFINE m_arr DYNAMIC ARRAY OF RECORD
   key INTEGER,
@@ -22,12 +25,13 @@ DEFINE m_arr DYNAMIC ARRAY OF RECORD
   chkd STRING,
   seld STRING
 END RECORD
-
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
 
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, TRUE)
-  CALL ui.Interface.setText(gl_progdesc)
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+
+  CALL ui.Interface.setText(C_PRGDESC)
 
   OPEN FORM f FROM "disp_arr"
   DISPLAY FORM f
@@ -80,7 +84,7 @@ FUNCTION disp_arr1()
     ON UPDATE
       CALL editRow(TRUE)
     ON DELETE
-      IF gl_lib.gl_winQuestion(
+      IF g2_lib.g2_winQuestion(
                   "Confirm",
                   "Delete this row?\n" || m_arr[arr_curr()].desc,
                   "No",
@@ -90,7 +94,8 @@ FUNCTION disp_arr1()
           THEN
         LET int_flag = TRUE
       END IF
-
+		ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
 -- Default actions to leave the statement
     ON ACTION close
       EXIT DISPLAY
@@ -137,7 +142,7 @@ FUNCTION disp_arr2()
     ON UPDATE
       CALL editRow(TRUE)
     ON DELETE
-      IF gl_lib.gl_winQuestion(
+      IF g2_lib.g2_winQuestion(
                   "Confirm",
                   "Delete this row?\n" || m_arr[arr_curr()].desc,
                   "No",
@@ -147,6 +152,8 @@ FUNCTION disp_arr2()
           THEN
         LET int_flag = TRUE
       END IF
+		ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
 
 -- Default actions to leave the statement
     ON ACTION close

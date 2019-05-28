@@ -1,6 +1,6 @@
 IMPORT util
 IMPORT FGL wc_fglsvgcalendar
-IMPORT FGL gl_calendar
+IMPORT FGL g2_calendar
 
 PUBLIC DEFINE rec RECORD
   curr_month SMALLINT,
@@ -121,25 +121,25 @@ PRIVATE FUNCTION set_type(c_id SMALLINT, l_type SMALLINT)
   CASE m_lang
     WHEN "IS"
       IF l_type = wc_fglsvgcalendar.FGLCALENDAR_TYPE_DEFAULT THEN
-        CALL wc_fglsvgcalendar.setDayNames(cid, gl_calendar.C_DAYS3_IS)
+        CALL wc_fglsvgcalendar.setDayNames(cid, g2_calendar.C_DAYS3_IS)
       ELSE
-        CALL wc_fglsvgcalendar.setDayNames(cid, gl_calendar.C_DAYS1_IS)
+        CALL wc_fglsvgcalendar.setDayNames(cid, g2_calendar.C_DAYS1_IS)
       END IF
-      CALL wc_fglsvgcalendar.setMonthNames(cid, gl_calendar.C_MONTHS_IS)
+      CALL wc_fglsvgcalendar.setMonthNames(cid, g2_calendar.C_MONTHS_IS)
     WHEN "ES"
       IF l_type = wc_fglsvgcalendar.FGLCALENDAR_TYPE_DEFAULT THEN
-        CALL wc_fglsvgcalendar.setDayNames(cid, gl_calendar.C_DAYS3_ES)
+        CALL wc_fglsvgcalendar.setDayNames(cid, g2_calendar.C_DAYS3_ES)
       ELSE
-        CALL wc_fglsvgcalendar.setDayNames(cid, gl_calendar.C_DAYS1_ES)
+        CALL wc_fglsvgcalendar.setDayNames(cid, g2_calendar.C_DAYS1_ES)
       END IF
-      CALL wc_fglsvgcalendar.setMonthNames(cid, gl_calendar.C_MONTHS_ES)
+      CALL wc_fglsvgcalendar.setMonthNames(cid, g2_calendar.C_MONTHS_ES)
     WHEN "PT"
       IF l_type = wc_fglsvgcalendar.FGLCALENDAR_TYPE_DEFAULT THEN
-        CALL wc_fglsvgcalendar.setDayNames(cid, gl_calendar.C_DAYS3_PT)
+        CALL wc_fglsvgcalendar.setDayNames(cid, g2_calendar.C_DAYS3_PT)
       ELSE
-        CALL wc_fglsvgcalendar.setDayNames(cid, gl_calendar.C_DAYS1_PT)
+        CALL wc_fglsvgcalendar.setDayNames(cid, g2_calendar.C_DAYS1_PT)
       END IF
-      CALL wc_fglsvgcalendar.setMonthNames(cid, gl_calendar.C_MONTHS_PT)
+      CALL wc_fglsvgcalendar.setMonthNames(cid, g2_calendar.C_MONTHS_PT)
   END CASE
 END FUNCTION
 --------------------------------------------------------------------------------

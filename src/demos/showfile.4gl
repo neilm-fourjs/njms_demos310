@@ -26,7 +26,7 @@ MAIN
   TRY
     CALL chl.openFile(m_filename, "r")
   CATCH
-    CALL gl_winMessage("Error", SFMT("Failed to open '%1'!", m_filename.trim()), "exclamation")
+    CALL fgl_winMessage("Error", SFMT("Failed to open '%1'!", m_filename.trim()), "exclamation")
     EXIT PROGRAM
   END TRY
   CALL chl.setDelimiter("")

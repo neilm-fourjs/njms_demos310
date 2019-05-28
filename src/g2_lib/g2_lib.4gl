@@ -21,7 +21,7 @@ PUBLIC DEFINE m_mdi CHAR(1)
 PUBLIC DEFINE m_isUniversal BOOLEAN
 PUBLIC DEFINE m_isGDC BOOLEAN
 
-FUNCTION g2_init(l_mdi CHAR(1), l_styles STRING)
+FUNCTION g2_init(l_mdi CHAR(1), l_cfgname STRING)
 	DEFINE l_ucn STRING
 	CALL g2_log.init(NULL, NULL, "log", "TRUE")
 	CALL g2_log.init(NULL, NULL, "err", "TRUE")
@@ -36,7 +36,9 @@ FUNCTION g2_init(l_mdi CHAR(1), l_styles STRING)
 	IF ui.Interface.getFrontEndName() = "GDC" THEN LET m_isGDC = TRUE END IF
 	IF l_ucn != "GBC" THEN LET m_isUniversal = FALSE END IF
 
-  CALL g2_loadStyles(l_styles)
+  CALL g2_loadStyles(l_cfgname)
+	CALL g2_loadToolBar(l_cfgname)
+	CALL g2_loadActions(l_cfgname)
   CALL g2_mdisdi(l_mdi)
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -87,6 +89,22 @@ FUNCTION g2_loadStyles(l_sty STRING) RETURNS()
  		CALL ui.interface.loadStyles(l_sty||"_"||l_fe)
 	CATCH
  		CALL ui.interface.loadStyles(l_sty)
+	END TRY
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ Load the style file depending on the client
+FUNCTION g2_loadActions(l_adnam STRING) RETURNS()
+	TRY
+		CALL ui.Interface.loadActionDefaults( l_adnam )
+	CATCH
+	END TRY
+END FUNCTION
+--------------------------------------------------------------------------------
+#+ Load the style file depending on the client
+FUNCTION g2_loadToolBar(l_tbnam STRING) RETURNS()
+	TRY
+		CALL ui.Interface.loadToolBar( l_tbnam )
+	CATCH
 	END TRY
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -207,6 +225,14 @@ FUNCTION g2_winQuestion(
   END IF
   RETURN l_result
 END FUNCTION
+--------------------------------------------------------------------------------
+#+ Simple message with ui refresh
+#+
+#+ @return Nothing
+FUNCTION g2_message(l_msg STRING) --{{{
+  MESSAGE NVL(l_msg,"NULL")
+	CALL ui.Interface.refresh()
+END FUNCTION --}}}
 --------------------------------------------------------------------------------
 #+ Simple error message
 #+

@@ -5,7 +5,7 @@
 
 IMPORT util
 IMPORT FGL fglsvgcanvas
-IMPORT FGL gl_calendar
+IMPORT FGL g2_calendar
 
 PUBLIC TYPE t_isHoliday FUNCTION(l_dte DATE) RETURNS(BOOLEAN, STRING)
 
@@ -492,7 +492,7 @@ PRIVATE FUNCTION _week_day_name(id SMALLINT, n SMALLINT)
   CALL _check_id(id)
   IF calendars[id].day_names.getLength() = 0 THEN
     FOR x = 1 TO 7
-      LET calendars[id].day_names[x] = gl_calendar.day_shortName(MDY(1, x, 2018))
+      LET calendars[id].day_names[x] = g2_calendar.day_shortName(MDY(1, x, 2018))
     END FOR
   END IF
   RETURN calendars[id].day_names[n]
@@ -1115,7 +1115,7 @@ PRIVATE FUNCTION _setMonthCombo(id SMALLINT)
   END IF
   IF calendars[id].month_names.getLength() = 0 THEN
     FOR x = 1 TO 12
-      LET calendars[id].month_names[x] = gl_calendar.month_fullName_int(x)
+      LET calendars[id].month_names[x] = g2_calendar.month_fullName_int(x)
     END FOR
   END IF
 

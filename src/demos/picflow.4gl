@@ -1,16 +1,20 @@
 IMPORT os
-IMPORT FGL gl_lib
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+
+IMPORT FGL g2_lib
+IMPORT FGL g2_about
+IMPORT FGL g2_appInfo
+
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "picFlow Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
 
 DEFINE max_images SMALLINT
 
-DEFINE pics DYNAMIC ARRAY OF RECORD
+DEFINE m_pics DYNAMIC ARRAY OF RECORD
   pic STRING
 END RECORD
-DEFINE pics_info DYNAMIC ARRAY OF RECORD
+DEFINE m_pics_info DYNAMIC ARRAY OF RECORD
   pth STRING,
   nam STRING,
   mod STRING,
@@ -20,14 +24,14 @@ DEFINE pics_info DYNAMIC ARRAY OF RECORD
 END RECORD
 DEFINE d, c INTEGER
 DEFINE m_base, path, html_start, html_end STRING
-
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
   DEFINE frm ui.Form
   DEFINE n om.domNode
 
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), "picflow", TRUE)
-  LET gl_lib.gl_noToolBar = TRUE
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "picflow")
+
 
   DISPLAY "FGLSERVER:", fgl_getenv("FGLSERVER")
   DISPLAY "FGLIMAGEPATH:", fgl_getenv("FGLIMAGEPATH")
@@ -43,20 +47,20 @@ MAIN
 
   CALL getImages("svg", "png")
 
-  DISPLAY "Image Found:", pics.getLength()
+  DISPLAY "Image Found:", m_pics.getLength()
 
   LET html_start = "<P ALIGN=\"CENTER\">"
   LET html_end = "<\P>"
 
   LET c = 1
   DIALOG ATTRIBUTE(UNBUFFERED)
-    DISPLAY ARRAY pics TO pics.*
+    DISPLAY ARRAY m_pics TO arr.*
       BEFORE ROW
         LET c = arr_curr()
         CALL refresh(c)
 --		ON IDLE 5
 --			LET c = c + 1
---			IF c > pics.getLength() THEN LET c = 1 END IF
+--			IF c > m_pics.getLength() THEN LET c = 1 END IF
 --			CALL DIALOG.setCurrentRow( "pics", c )
     END DISPLAY
 
@@ -70,7 +74,7 @@ MAIN
       LET frm = DIALOG.getForm()
       LET n = frm.findNode("FormField", "formonly.c")
       LET n = n.getFirstChild()
-      CALL n.setAttribute("valueMax", pics.getLength())
+      CALL n.setAttribute("valueMax", m_pics.getLength())
 
     ON ACTION quit
       EXIT DIALOG
@@ -80,11 +84,11 @@ MAIN
       CALL DIALOG.setCurrentRow("pics", c)
       CALL refresh(c)
     ON ACTION lastrow
-      LET c = pics.getLength()
+      LET c = m_pics.getLength()
       CALL DIALOG.setCurrentRow("pics", c)
       CALL refresh(c)
     ON ACTION nextrow
-      IF c < pics.getLength() THEN
+      IF c < m_pics.getLength() THEN
         CALL DIALOG.setCurrentRow("pics", (c + 1))
         CALL refresh(c + 1)
       END IF
@@ -93,11 +97,13 @@ MAIN
         CALL DIALOG.setCurrentRow("pics", (c - 1))
         CALL refresh(c - 1)
       END IF
-    GL_ABOUT
+		ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
+
     ON ACTION close
       EXIT DIALOG
   END DIALOG
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION refresh(l_c STRING)
@@ -105,22 +111,22 @@ FUNCTION refresh(l_c STRING)
   IF c < 1 THEN
     RETURN
   END IF
-  DISPLAY html_start || pics_info[c].nam || html_end TO nam
-  DISPLAY "Arr:", c, ":", pics[c].pic
+  DISPLAY html_start || m_pics_info[c].nam || html_end TO nam
+  DISPLAY "Arr:", c, ":", m_pics[c].pic
   DISPLAY c TO cur
-  DISPLAY pics.getLength() TO max
-  DISPLAY pics[c].pic TO img
-  IF os.path.exists(pics[c].pic) THEN
-    DISPLAY "Found:", pics[c].pic
+  DISPLAY m_pics.getLength() TO max
+  DISPLAY m_pics[c].pic TO img
+  IF os.path.exists( m_pics[c].pic ) THEN
+    DISPLAY "Found:", m_pics[c].pic
   ELSE
-    DISPLAY "Not Found:", pics[c].pic
+    DISPLAY "Not Found:", m_pics[c].pic
   END IF
-  DISPLAY pics_info[c].nam TO d1
-  DISPLAY pics_info[c].typ TO d2
-  DISPLAY pics_info[c].pth TO d3
-  DISPLAY pics_info[c].siz TO d4
-  DISPLAY pics_info[c].mod TO d5
-  DISPLAY pics_info[c].rwx TO d6
+  DISPLAY m_pics_info[c].nam TO d1
+  DISPLAY m_pics_info[c].typ TO d2
+  DISPLAY m_pics_info[c].pth TO d3
+  DISPLAY m_pics_info[c].siz TO d4
+  DISPLAY m_pics_info[c].mod TO d5
+  DISPLAY m_pics_info[c].rwx TO d6
 
   CALL ui.interface.refresh()
 END FUNCTION
@@ -168,17 +174,17 @@ FUNCTION getImages(p_ext STRING, p_ext2 STRING)
         CONTINUE WHILE
       END IF
 
-      LET pics[pics.getLength() + 1].pic = path
-      LET pics_info[pics.getLength()].nam = os.Path.rootName(path)
-      LET pics_info[pics.getLength()].pth = m_base
-      LET pics_info[pics.getLength()].mod = os.Path.mtime(pics[pics.getLength()].pic)
+      LET m_pics[ m_pics.getLength() + 1 ].pic = path
+      LET m_pics_info[ m_pics.getLength() ].nam = os.Path.rootName(path)
+      LET m_pics_info[ m_pics.getLength() ].pth = m_base
+      LET m_pics_info[ m_pics.getLength() ].mod = os.Path.mtime( m_pics[ m_pics.getLength()].pic )
       LET c = os.Path.size(m_base || path)
-      LET pics_info[pics.getLength()].siz = c USING "<<,<<<,<<<"
-      LET pics_info[pics.getLength()].pth = m_base
-      LET pics_info[pics.getLength()].typ = l_ext
-      LET pics_info[pics.getLength()].rwx = os.Path.rwx(m_base || path)
-      --DISPLAY pics.getLength(),": File:",path," Ext:",l_ext
-      IF pics.getLength() = max_images THEN
+      LET m_pics_info[ m_pics.getLength() ].siz = c USING "<<,<<<,<<<"
+      LET m_pics_info[ m_pics.getLength() ].pth = m_base
+      LET m_pics_info[ m_pics.getLength() ].typ = l_ext
+      LET m_pics_info[ m_pics.getLength() ].rwx = os.Path.rwx(m_base || path)
+      --DISPLAY m_pics.getLength(),": File:",path," Ext:",l_ext
+      IF m_pics.getLength() = max_images THEN
         EXIT WHILE
       END IF
     END WHILE

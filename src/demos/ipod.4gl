@@ -10,11 +10,15 @@
 IMPORT os
 IMPORT util
 IMPORT com
-IMPORT FGL gl_lib
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+IMPORT FGL g2_lib
+IMPORT FGL g2_aui
+IMPORT FGL g2_about
+IMPORT FGL g2_appInfo
+
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "TreeView Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
 
 CONSTANT IDLE_TIME = 300
 
@@ -98,14 +102,16 @@ DEFINE m_album_art_cover STRING
 DEFINE m_musicbrainz_url STRING
 DEFINE m_mb STRING
 DEFINE m_artist, m_prev_artist, m_album, m_prev_album STRING
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
   DEFINE l_file STRING
 
   OPTIONS ON CLOSE APPLICATION CALL tidyup
 
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), "ipodtree", TRUE)
-  CALL ui.Interface.setText(gl_progdesc)
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "ipodtree")
+
+  CALL ui.Interface.setText(C_PRGDESC)
 
   OPEN FORM win FROM "ipod"
   DISPLAY FORM win
@@ -132,7 +138,7 @@ MAIN
         CALL openXML(l_file)
         CALL loadMusic()
       ELSE
-        CALL gl_lib.gl_errPopup(
+        CALL g2_lib.g2_errPopup(
             % "'" || l_file || "' Doesn't Exist, try running again like this\nfglrun ipod.42r LOAD")
       END IF
     END IF
@@ -143,7 +149,7 @@ MAIN
   LET m_getAlbumArt = TRUE
   CALL dispInfo()
   CALL mainDialog()
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION mainDialog()
@@ -251,7 +257,8 @@ FUNCTION mainDialog()
       CALL openLibrary(NULL)
     ON ACTION close
       EXIT DIALOG
-    GL_ABOUT
+		ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
     ON ACTION quit
       EXIT DIALOG
 
@@ -308,7 +315,7 @@ FUNCTION openLibrary(file)
   END IF
 
   IF NOT os.path.exists(file) THEN
-    CALL gl_lib.gl_errPopup(% "'" || file || "' Doesn't Exist, can't do load")
+    CALL g2_lib.g2_errPopup(% "'" || file || "' Doesn't Exist, can't do load")
     RETURN
   END IF
 
@@ -334,13 +341,13 @@ FUNCTION openXML(file)
   DISPLAY CURRENT, ": Opening " || file || " ..."
   LET xml_d = om.domDocument.createFromXMLFile(file)
   IF xml_d IS NULL THEN
-    CALL gl_lib.gl_errPopup(
+    CALL g2_lib.g2_errPopup(
         % "Failed to open '" || file || "'!\nTry running like this: fglrun ipod.42r LOAD")
     EXIT PROGRAM
   END IF
   LET xml_r = xml_d.getDocumentElement()
   IF xml_r IS NULL THEN
-    CALL gl_lib.gl_errPopup(% "Failed to get root node!")
+    CALL g2_lib.g2_errPopup(% "Failed to get root node!")
     EXIT PROGRAM
   END IF
 
@@ -515,13 +522,13 @@ FUNCTION loadSongs()
   LET x = 0
   DISPLAY CURRENT, ": Loading from XML into array & sorting ..."
 
-  CALL gl_progBar(1, 100, "Processing XML - Phase 1 of 3")
+  CALL  g2_aui.g2_progBar(1, 100, "Processing XML - Phase 1 of 3")
   LET pavg = 0
   WHILE trck IS NOT NULL
     LET navg = ((x / song_a.getLength()) * 100)
     IF pavg != navg THEN
       LET pavg = navg
-      CALL gl_progBar(2, pavg, "")
+      CALL  g2_aui.g2_progBar(2, pavg, "")
     END IF
     LET song.title = trck.getAttribute("name")
     IF song.title IS NULL OR song.title = " " THEN
@@ -572,14 +579,14 @@ FUNCTION loadSongs()
 
   LET xml_d = om.domdocument.create("Music")
   LET xml_r = xml_d.getdocumentelement()
-  CALL gl_progBar(3, 0, "")
-  CALL gl_progBar(1, 100, "Processing XML - Phase 2 of 3")
+  CALL  g2_aui.g2_progBar(3, 0, "")
+  CALL  g2_aui.g2_progBar(1, 100, "Processing XML - Phase 2 of 3")
   LET pavg = 0
   FOR x = 1 TO song_a.getLength()
     LET navg = ((x / song_a.getLength()) * 100)
     IF pavg != navg THEN
       LET pavg = navg
-      CALL gl_progBar(2, pavg, "")
+      CALL  g2_aui.g2_progBar(2, pavg, "")
     END IF
     FOR gk = 1 TO genre_a.getLength()
       IF genre_a[gk].genre = song_a[x].genre THEN
@@ -661,7 +668,7 @@ FUNCTION loadSongs()
     LET tracks_a[tracks_a.getLength()].rating = song_a[x].rating
   END FOR
   CALL xml_r.writeXML("music.xml")
-  CALL gl_progBar(3, 0, "")
+  CALL  g2_aui.g2_progBar(3, 0, "")
   CALL buildTree()
 
 END FUNCTION
@@ -686,7 +693,7 @@ FUNCTION buildTree()
   DEFINE x, y, g, a, t_cnt, album_cnt INTEGER
   DEFINE prev_art STRING
 
-  CALL gl_progBar(1, genre_a.getLength(), "Processing XML - Phase 3 of 3")
+  CALL  g2_aui.g2_progBar(1, genre_a.getLength(), "Processing XML - Phase 3 of 3")
 
   CALL tree_a.clear()
 {	DISPLAY CURRENT,": Genre:"||genre_a.getLength()||
@@ -701,7 +708,7 @@ FUNCTION buildTree()
     LET genre_a[x].artist_cnt = 0
     LET t_cnt = t_cnt + 1
     LET prev_art = "."
-    CALL gl_progBar(2, x, "")
+    CALL  g2_aui.g2_progBar(2, x, "")
     FOR y = 1 TO album_a.getLength()
       IF album_a[y].genre = genre_a[x].genre THEN
         IF album_a[y].artist != prev_art THEN
@@ -739,7 +746,7 @@ FUNCTION buildTree()
 {	FOR x = 1 TO tree_a.getLength()
 		DISPLAY tree_a[ x ].id, " PID:", tree_a[ x ].pid, " NAME:",tree_a[ x ].name
 	END FOR}
-  CALL gl_progBar(3, 0, "")
+  CALL  g2_aui.g2_progBar(3, 0, "")
 END FUNCTION
 --------------------------------------------------------------------------------
 FUNCTION showBranch(g, ar, al, tf)
@@ -925,7 +932,7 @@ END FUNCTION
 --
 FUNCTION getAlbumArtURL(l_alb STRING)
   DEFINE l_album_id, l_img STRING
-  CALL gl_lib.gl_message("Getting album artwork...")
+  CALL g2_lib.g2_message("Getting album artwork...")
   LET m_album_art_cover = NULL
   LET m_musicbrainz_url = NULL
   DISPLAY "noimage" TO album_art
@@ -945,7 +952,7 @@ FUNCTION getAlbumArtURL(l_alb STRING)
     RETURN "noimage"
   END IF
 
-  CALL gl_lib.gl_message("Album art found: " || l_img)
+  CALL g2_lib.g2_message("Album art found: " || l_img)
   RETURN l_img
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -966,7 +973,7 @@ FUNCTION getArtworkURL(l_album_id STRING)
   DEFINE c base.channel
 
   LET l_url = 'http://coverartarchive.org/release/' || l_album_id.trim()
-  CALL gl_lib.gl_message("Getting Album artwork from:" || NVL(l_url, "NULL"))
+  CALL g2_lib.g2_message("Getting Album artwork from:" || NVL(l_url, "NULL"))
 
   -- redirection that happens causes a bug in gws library
   -- failing back to wget
@@ -985,7 +992,7 @@ FUNCTION getArtworkURL(l_album_id STRING)
 
   IF l_line IS NULL THEN
     RUN "cat tmp.out"
-    CALL gl_lib.gl_message("Failed to get album art!")
+    CALL g2_lib.g2_message("Failed to get album art!")
     RETURN NULL
   END IF
 
@@ -1054,7 +1061,7 @@ FUNCTION getAlbumID(l_alb STRING)
   DISPLAY "Found ", l_result.count, " Albums ..."
   IF l_result.count = 0 THEN
     DISPLAY "Line:", l_line
-    CALL gl_lib.gl_message("Album not found!")
+    CALL g2_lib.g2_message("Album not found!")
     RETURN NULL
   END IF
 
@@ -1084,7 +1091,7 @@ FUNCTION getAlbumID(l_alb STRING)
   END FOR
   DISPLAY "Album: ", NVL(l_id, "NULL"), " : ", l_title
   LET m_musicbrainz_url = "https://musicbrainz.org/release/" || l_id
-  CALL gl_lib.gl_message(SFMT("Album %1 Found, id:%2", l_title, l_id))
+  CALL g2_lib.g2_message(SFMT("Album %1 Found, id:%2", l_title, l_id))
   RETURN l_id
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -1123,7 +1130,7 @@ FUNCTION getArtistID(l_art STRING)
     RETURN NULL
   END TRY
   IF l_artist.count = 0 THEN
-    CALL gl_lib.gl_message("Artist not found!")
+    CALL g2_lib.g2_message("Artist not found!")
     RETURN NULL
   END IF
   CALL m_album_art_artist.clear()
@@ -1148,7 +1155,7 @@ FUNCTION getArtistID(l_art STRING)
   LET l_name = m_album_art_artist[1].name
   LET m_musicbrainz_url = "https://musicbrainz.org/artist/" || l_id
   DISPLAY "Artist: ", NVL(l_id, "NULL"), " : ", l_name
-  CALL gl_lib.gl_message(SFMT("Artist %1 Found, id:%2", l_name, l_id))
+  CALL g2_lib.g2_message(SFMT("Artist %1 Found, id:%2", l_name, l_id))
   RETURN l_id
 END FUNCTION
 --------------------------------------------------------------------------------
@@ -1221,7 +1228,7 @@ FUNCTION db_mk_tab()
   TRY
     CREATE TABLE ipod_genre(genre_key SERIAL, genre VARCHAR(40))
   CATCH
-    CALL gl_lib.gl_errPopup(% "failed to create 'ipod_genre'\n" || SQLERRMESSAGE)
+    CALL g2_lib.g2_errPopup(% "failed to create 'ipod_genre'\n" || SQLERRMESSAGE)
     EXIT PROGRAM
   END TRY
   DISPLAY "Created Table 'ipod_genre'"
@@ -1230,7 +1237,7 @@ FUNCTION db_mk_tab()
   TRY
     CREATE TABLE ipod_artists(artist_key SERIAL, artist VARCHAR(50))
   CATCH
-    CALL gl_lib.gl_errPopup(% "failed to create 'ipod_artists'\n" || SQLERRMESSAGE)
+    CALL g2_lib.g2_errPopup(% "failed to create 'ipod_artists'\n" || SQLERRMESSAGE)
     EXIT PROGRAM
   END TRY
   DISPLAY "Create Table 'ipod_artists'"
@@ -1240,7 +1247,7 @@ FUNCTION db_mk_tab()
     CREATE TABLE ipod_albums(
         album_key SERIAL, genre_key INTEGER, artist_key INTEGER, album VARCHAR(50), year CHAR(4))
   CATCH
-    CALL gl_lib.gl_errPopup(% "failed to create 'ipod_albums'\n" || SQLERRMESSAGE)
+    CALL g2_lib.g2_errPopup(% "failed to create 'ipod_albums'\n" || SQLERRMESSAGE)
     EXIT PROGRAM
   END TRY
   DISPLAY "Create Table 'ipod_albums'"
@@ -1257,7 +1264,7 @@ FUNCTION db_mk_tab()
         play_count SMALLINT,
         rating SMALLINT)
   CATCH
-    CALL gl_lib.gl_errPopup(% "failed to create 'ipod_tracks'\n" || SQLERRMESSAGE)
+    CALL g2_lib.g2_errPopup(% "failed to create 'ipod_tracks'\n" || SQLERRMESSAGE)
     EXIT PROGRAM
   END TRY
   DISPLAY "Create Table 'ipod_tracks'"

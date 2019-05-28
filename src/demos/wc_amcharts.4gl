@@ -1,12 +1,15 @@
 --https://www.amcharts.com/
 IMPORT util
 IMPORT os
-IMPORT FGL gl_lib
-IMPORT FGL gl_calendar
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+IMPORT FGL g2_lib
+IMPORT FGL g2_about
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_calendar
+
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "WC Charts Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
 
 DEFINE m_data DYNAMIC ARRAY OF RECORD
   labs STRING,
@@ -19,11 +22,11 @@ DEFINE m_data2 DYNAMIC ARRAY OF RECORD
   vals INTEGER
 END RECORD
 
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
   DEFINE l_data STRING
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, TRUE)
-  LET gl_lib.gl_noToolBar = TRUE
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
 
   DISPLAY "RT PATH:", fgl_getenv("PATH")
   CALL ui.Interface.frontCall("standard", "getenv", "PATH", l_data)
@@ -54,48 +57,49 @@ MAIN
       LET l_data = getData(0)
     ON ACTION close
       EXIT DIALOG
-    GL_ABOUT
+		ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
     ON ACTION quit
       EXIT DIALOG
     ON ACTION act1
       DISPLAY "Data:", l_data
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(1))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(1))
       LET l_data = getData(1)
     ON ACTION act2
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(2))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(2))
       LET l_data = getData(2)
     ON ACTION act3
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(3))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(3))
       LET l_data = getData(3)
     ON ACTION act4
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(4))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(4))
       LET l_data = getData(4)
     ON ACTION act5
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(5))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(5))
       LET l_data = getData(5)
     ON ACTION act6
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(6))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(6))
       LET l_data = getData(6)
     ON ACTION act7
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(7))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(7))
       LET l_data = getData(7)
     ON ACTION act8
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(8))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(8))
       LET l_data = getData(8)
     ON ACTION act9
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(9))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(9))
       LET l_data = getData(9)
     ON ACTION act10
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(10))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(10))
       LET l_data = getData(10)
     ON ACTION act11
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(11))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(11))
       LET l_data = getData(11)
     ON ACTION act12
-      CALL setGraphTitle("title", gl_calendar.month_fullName_int(12))
+      CALL setGraphTitle("title", g2_calendar.month_fullName_int(12))
       LET l_data = getData(12)
   END DIALOG
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 FUNCTION setGraphTitle(l_prop, l_val)
@@ -118,10 +122,10 @@ FUNCTION genRndData()
   CALL m_data.clear()
   FOR x = 1 TO 12
     LET m_data[x].labs = x
-    LET m_data[x].labs = gl_calendar.month_fullName_int(x)
+    LET m_data[x].labs = g2_calendar.month_fullName_int(x)
     LET m_data[x].vals = 0
     LET m_data2[x].labs = m_data[x].labs
-    FOR y = 1 TO gl_calendar.days_in_month(x)
+    FOR y = 1 TO g2_calendar.days_in_month(x)
       LET m_data[x].days[y] = util.math.rand(50)
       LET m_data[x].vals = m_data[x].vals + m_data[x].days[y]
     END FOR

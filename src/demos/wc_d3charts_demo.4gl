@@ -1,11 +1,14 @@
 IMPORT util
-IMPORT FGL gl_lib
-IMPORT FGL gl_calendar
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+IMPORT FGL g2_calendar
 IMPORT FGL wc_d3charts
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "WC Charts Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
 DEFINE m_data DYNAMIC ARRAY OF RECORD
   labs STRING,
   vals INTEGER,
@@ -13,11 +16,12 @@ DEFINE m_data DYNAMIC ARRAY OF RECORD
 END RECORD
 DEFINE m_graph_data DYNAMIC ARRAY OF wc_d3charts.t_d3_rec
 DEFINE m_monthView BOOLEAN
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
   DEFINE l_debug BOOLEAN
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, TRUE)
-  LET gl_lib.gl_noToolBar = TRUE
+
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
 
 -- Is the WC debug feature enabled?
   CALL ui.Interface.frontCall("standard", "getenv", ["QTWEBENGINE_REMOTE_DEBUGGING"], l_debug)
@@ -49,13 +53,14 @@ MAIN
       CALL setData(0)
     ON ACTION wc_debug
       CALL ui.Interface.frontCall("standard", "launchURL", "http://localhost:" || l_debug, [])
-    GL_ABOUT
+    ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
     ON ACTION quit
       EXIT DIALOG
     ON ACTION close
       EXIT DIALOG
   END DIALOG
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 -- My Click handler
@@ -76,8 +81,8 @@ FUNCTION setData(l_month SMALLINT)
   IF l_month > 0 THEN
     LET m_monthView = FALSE
     LET wc_d3charts.m_x_label = "Days"
-    LET wc_d3charts.m_title = "Sales for ", gl_calendar.month_fullName_int(l_month)
-    FOR x = 1 TO gl_calendar.days_in_month(l_month)
+    LET wc_d3charts.m_title = "Sales for ", g2_calendar.month_fullName_int(l_month)
+    FOR x = 1 TO g2_calendar.days_in_month(l_month)
       LET m_graph_data[x].labs = x
       LET m_graph_data[x].vals = m_data[l_month].days[x]
       LET m_graph_data[x].action_name = "back"
@@ -86,7 +91,7 @@ FUNCTION setData(l_month SMALLINT)
     LET m_monthView = TRUE
     LET wc_d3charts.m_x_label = "Months"
     FOR x = 1 TO 12
-      LET m_graph_data[x].labs = gl_calendar.month_fullName_int(x)
+      LET m_graph_data[x].labs = g2_calendar.month_fullName_int(x)
       LET m_graph_data[x].vals = m_data[x].vals
       LET m_graph_data[x].action_name = "item" || x
     END FOR
@@ -101,9 +106,9 @@ FUNCTION genRndData()
   CALL m_data.clear()
   DISPLAY "Generating Random Test Data ..."
   FOR x = 1 TO 12
-    LET m_data[x].labs = gl_calendar.month_fullName_int(x)
+    LET m_data[x].labs = g2_calendar.month_fullName_int(x)
     LET m_data[x].vals = 0
-    FOR y = 1 TO gl_calendar.days_in_month(x)
+    FOR y = 1 TO g2_calendar.days_in_month(x)
       LET m_data[x].days[y] = 5 + util.math.rand(50)
       LET m_data[x].vals = m_data[x].vals + m_data[x].days[y]
     END FOR

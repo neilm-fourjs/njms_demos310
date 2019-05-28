@@ -1,8 +1,11 @@
-IMPORT FGL gl_lib
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+
+IMPORT FGL g2_lib
+IMPORT FGL g2_about
+IMPORT FGL g2_appInfo
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "OnFocus Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "njm_demo_icon"
 
 TYPE t_matrix4 RECORD
   s1 STRING,
@@ -22,11 +25,13 @@ DEFINE m_col_matrix DYNAMIC ARRAY OF t_matrix4 -- colours & checkbox
 DEFINE m_attr_matrix DYNAMIC ARRAY OF t_matrix4 -- colours attributes for highlighting
 DEFINE m_sel_colours DYNAMIC ARRAY OF STRING -- selected colours
 DEFINE m_like BOOLEAN
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
 
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, TRUE)
-  CALL ui.Interface.setText(gl_progdesc)
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+
+  CALL ui.Interface.setText(C_PRGDESC)
 
   OPEN FORM f FROM "multi_cell_sel"
   DISPLAY FORM f
@@ -53,6 +58,8 @@ MAIN
 
     ON ACTION like
       CALL like(DIALOG.getForm())
+		ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
     ON ACTION close
       EXIT DIALOG
     ON ACTION quit

@@ -7,16 +7,19 @@
 -- todo: remove some legacy stuff.
 
 IMPORT util
-IMPORT FGL gl_lib
-IMPORT FGL gl_about
-IMPORT FGL gl_splash
-IMPORT FGL gl_lib_aui
-IMPORT FGL gl_lookup3
-IMPORT FGL gl_db
+
+IMPORT FGL g2_lib
+IMPORT FGL g2_about
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_db
+IMPORT FGL g2_aui
+IMPORT FGL g2_lookup
 IMPORT FGL widgets_charts
 IMPORT FGL widgets_clock
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.10"
+
+&include "g2_debug.inc"
+
+CONSTANT C_PRGVER = "3.10"
 CONSTANT C_PRGDESC = "Widgets Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGSPLASH = "widgetsdemo"
@@ -90,17 +93,20 @@ DEFINE cnt SMALLINT
 DEFINE scal SMALLINT
 DEFINE f_n om.domNode
 DEFINE m_dbname VARCHAR(20)
---------------------------------------------------------------------------------
+DEFINE m_appInfo g2_appInfo.appInfo
+DEFINE m_db g2_db.dbInfo
 MAIN
   DEFINE tmp STRING
   DEFINE stat SMALLINT
   DEFINE f ui.Form
 
-  CALL gl_lib.gl_setInfo(C_VER, C_PRGSPLASH, C_PRGICON, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(ARG_VAL(1), "widgets", TRUE)
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "widgets")
+
 
   GL_DBGMSG(2, "init_genero, done.")
-  GL_MODULE_ERROR_HANDLER
+  WHENEVER ANY ERROR CALL g2_lib.g2_error
+
   LET m_dbname = fgl_getEnv("DBNAME")
 
   CLOSE WINDOW SCREEN
@@ -115,14 +121,14 @@ MAIN
   END IF
   GL_DBGMSG(2, "done - fix_path.")
 
-  CALL gl_splash.gl_splash(4)
+--  CALL gl_splash.gl_splash(4)
 
   CALL ui.Interface.loadStartMenu("widgets")
 
   GL_DBGMSG(4, "before - open window.")
   OPEN WINDOW widgets WITH FORM "widgets"
   GL_DBGMSG(4, "after - open window.")
-  CALL ui.interface.setImage(gl_progIcon)
+  CALL ui.interface.setImage(C_PRGICON)
   CALL hide_item("Page", "arrays", 1)
   CALL hide_item("Page", "canvas", 1)
   CALL hide_item("Page", "colours", 1)
@@ -277,21 +283,21 @@ MAIN
         CALL clock2(FALSE)
 
       COMMAND "progbar" "Draw a progress bar."
-        CALL gl_lib_aui.gl_progBar(1, 100, "Processing random data ...")
+        CALL g2_aui.g2_progBar(1, 100, "Processing random data ...")
         CALL delay()
         FOR cnt = 1 TO 100
-          CALL gl_lib_aui.gl_progBar(2, cnt, "")
+          CALL g2_aui.g2_progBar(2, cnt, "")
           CALL delay()
         END FOR
-        CALL gl_lib_aui.gl_progBar(3, 0, "")
+        CALL g2_aui.g2_progBar(3, 0, "")
       COMMAND "progbar2" "Draw a progress bar - Doing something."
-        CALL gl_lib_aui.gl_progBar(1, -100, "Processing random data ...")
+        CALL g2_aui.g2_progBar(1, -100, "Processing random data ...")
         CALL delay()
         FOR cnt = 1 TO 100
-          CALL gl_lib_aui.gl_progBar(2, cnt, "")
+          CALL g2_aui.g2_progBar(2, cnt, "")
           CALL delay()
         END FOR
-        CALL gl_lib_aui.gl_progBar(3, 0, "")
+        CALL g2_aui.g2_progBar(3, 0, "")
 
       ON TIMER 2
         LET timeedit = CURRENT
@@ -301,14 +307,15 @@ MAIN
       ON ACTION url
         CALL ui.interface.frontCall("standard", "launchURL", "http://www.4js.com/", [tmp])
 
-      ON ACTION splash
-        CALL gl_splash.gl_splash(4)
+--      ON ACTION splash
+--        CALL gl_splash.gl_splash(4)
 
-      GL_ABOUT
+			ON ACTION about
+				CALL g2_about.g2_about(m_appInfo)
 
       ON ACTION gl_lookup
         IF NOT db_opened THEN
-          CALL gl_db.gldb_connect(m_dbname)
+          CALL m_db.g2_connect(m_dbname)
           MESSAGE "DB Open:", m_dbname
           LET db_opened = TRUE
         END IF
@@ -316,7 +323,7 @@ MAIN
         MENU "" ATTRIBUTES(STYLE = "popup")
           COMMAND "systables 3"
             LET tmp =
-                gl_lookup3.gl_lookup3(
+                g2_lookup.g2_lookup(
                     "systables",
                     "tabname,created,nrows,rowsize,(nrows*rowsize)",
                     "Name,Created,Rows,RowSize,Total",
@@ -324,7 +331,7 @@ MAIN
                     "tabname")
           COMMAND "Stock 3"
             LET tmp =
-                gl_lookup3.gl_lookup3(
+                g2_lookup.g2_lookup(
                     "stock",
                     "stock_code,description,stock_cat,pack_flag,supp_code,price,cost,physical_stock,allocated_stock,free_stock",
                     "Code,Description,Cat,Pack,Supplier,Price,Cost,Stock,Allocated,Free",
@@ -332,7 +339,7 @@ MAIN
                     "stock_code")
           COMMAND "Customers 3"
             LET tmp =
-                gl_lookup3.gl_lookup3(
+                g2_lookup.g2_lookup(
                     "customer",
                     "customer_code,customer_name,contact_name,total_invoices,outstanding_amount",
                     "_,Customer,Contact,Invoices,Balance",
@@ -356,17 +363,17 @@ MAIN
         RUN "fglrun editfile help.txt RH"
 --				CALL show_src("src", "help.txt", "")
 --				MESSAGE "Help!"
---				CALL gl_lib.gl_winmessage("Help", "No Help Available", "info")
+--				CALL g2_lib.g2_winmessage("Help", "No Help Available", "info")
 
       COMMAND KEY(F2)
-        CALL gl_lib.gl_winmessage("Information", "This is Information", "info")
+        CALL g2_lib.g2_winmessage("Information", "This is Information", "info")
       ON ACTION error
-        CALL gl_lib.gl_errPopup(% "This is an Error")
+        CALL g2_lib.g2_errPopup(% "This is an Error")
       ON ACTION error2
-        CALL gl_lib.gl_errPopup(% "This is another Error")
+        CALL g2_lib.g2_errPopup(% "This is another Error")
       COMMAND KEY(F19)
         LET m_answer =
-            gl_winquestion(
+            g2_lib.g2_winquestion(
                 "My Question",
                 "Did you really mean to ask this?",
                 "Yes",
@@ -466,15 +473,15 @@ MAIN
     CASE func
       WHEN "0"
         CALL chg_styles("widgets")
-        CALL ui.interface.setImage(gl_progicon)
+        CALL ui.interface.setImage(C_PRGICON)
         CONTINUE WHILE
       WHEN "1"
         CALL chg_styles("widgets1")
-        CALL ui.interface.setImage(gl_progicon)
+        CALL ui.interface.setImage(C_PRGICON)
         CONTINUE WHILE
       WHEN "2"
         CALL chg_styles("widgets2")
-        CALL ui.interface.setImage(gl_progicon)
+        CALL ui.interface.setImage(C_PRGICON)
         CONTINUE WHILE
       WHEN "3"
         CALL chg_styles("widgets3")
@@ -493,7 +500,7 @@ MAIN
     END CASE
   END WHILE
   CLOSE WINDOW widgets
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 -- Do an input by name on the all the widgets.
@@ -530,13 +537,13 @@ FUNCTION do1()
 
     ON ACTION isTouched
       IF DIALOG.getFieldTouched("formonly.norm") THEN
-        CALL gl_lib.gl_winmessage("Touched?", "norm was touched!", "information")
+        CALL g2_lib.g2_winmessage("Touched?", "norm was touched!", "information")
       ELSE
-        CALL gl_lib.gl_winmessage("Touched?", "norm remains untouched.", "information")
+        CALL g2_lib.g2_winmessage("Touched?", "norm remains untouched.", "information")
       END IF
 
     ON ACTION help
-      CALL gl_lib.gl_winmessage("Help", "No Help Available", "info")
+      CALL g2_lib.g2_winmessage("Help", "No Help Available", "info")
 
     BEFORE INPUT
       DISPLAY "---------- BEFORE INPUT"
@@ -637,9 +644,9 @@ FUNCTION do1()
       DISPLAY 11 TO progress
 
     ON KEY(F17)
-      CALL gl_lib.gl_winmessage("Information", "This is Information", "info")
+      CALL g2_lib.g2_winmessage("Information", "This is Information", "info")
     ON KEY(F18)
-      CALL gl_lib.gl_errPopup(% "This is an Error")
+      CALL g2_lib.g2_errPopup(% "This is an Error")
   END INPUT
 
 END FUNCTION
@@ -655,7 +662,7 @@ FUNCTION do2()
     BEFORE ROW, INSERT
       MESSAGE "Current Row", arr_curr(), " of ", arr_count(), " LastKey:", fgl_lastKey()
     ON ACTION help
-      CALL gl_lib.gl_winmessage("Help", "No Help Available", "info")
+      CALL g2_lib.g2_winmessage("Help", "No Help Available", "info")
 
     AFTER FIELD arr1
       DISPLAY oldarr[1].arr1 TO oldarr[1].arr1 ATTRIBUTE(RED)
@@ -674,7 +681,7 @@ FUNCTION do2()
     BEFORE ROW, INSERT
       MESSAGE "Current Row", arr_curr(), " of ", arr_count(), " LastKey:", fgl_lastKey()
     ON ACTION help
-      CALL gl_lib.gl_winmessage("Help", "No Help Available", "info")
+      CALL g2_lib.g2_winmessage("Help", "No Help Available", "info")
 
     ON KEY(F31)
       CALL sort(1, 2)
@@ -695,7 +702,7 @@ FUNCTION do2()
     AFTER DELETE
       DISPLAY "After Delete."
     ON ACTION help
-      CALL gl_lib.gl_winmessage("Help", "No Help Available", "info")
+      CALL g2_lib.g2_winmessage("Help", "No Help Available", "info")
 
     AFTER FIELD tabc1
       DISPLAY arr[1].tabc1 TO newarr[1].tabc1 ATTRIBUTE(RED)
@@ -1099,7 +1106,7 @@ FUNCTION textedit()
 
   OPEN WINDOW te AT 1, 1 WITH 1 ROWS, 1 COLUMNS ATTRIBUTE(STYLE = "naked")
 
-  LET w = gl_genForm("Textedit")
+  LET w = g2_aui.g2_genForm("Textedit")
   CALL w.setAttribute("text", "Textedit Demo")
   LET v = w.createChild("VBox")
   LET n = v.createChild("Grid")
@@ -1153,7 +1160,7 @@ FUNCTION textedit()
       '<TR BGCOLOR="cyan"><TD>Line 2</TD><TD ALIGN="RIGHT">12</TD><TD ALIGN="RIGHT">3.99</TD><TD ALIGN="RIGHT">47.88</TD></TR>'
   LET txt2 = txt2 CLIPPED, "</TABLE>"
   LET txt2 = txt2 CLIPPED, '</P>'
-  LET f = gl_getForm(NULL)
+  LET f = g2_aui.g2_getForm(NULL)
   DISPLAY BY NAME txt2
 --	WHILE TRUE
   LET edt = FALSE
