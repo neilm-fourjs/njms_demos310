@@ -1,11 +1,13 @@
 IMPORT util
 IMPORT os
-IMPORT FGL gl_lib
-IMPORT FGL gl_lib_aui
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+IMPORT FGL g2_aui
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "WC Music Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "logo_dark"
 DEFINE m_base STRING
 DEFINE m_songs DYNAMIC ARRAY OF RECORD
   genre STRING,
@@ -26,11 +28,12 @@ DEFINE m_tree DYNAMIC ARRAY OF RECORD
   img STRING
 END RECORD
 DEFINE m_songno SMALLINT
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
   DEFINE l_data STRING
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, TRUE)
-  LET gl_lib.gl_noToolBar = FALSE
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+
   LET m_base = fgl_getenv("MUSICDIR")
 
   CALL get_music(TRUE)
@@ -64,10 +67,11 @@ MAIN
       EXIT DIALOG
     ON ACTION refresh
       CALL get_music(FALSE)
-    GL_ABOUT
+    ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
   END DIALOG
 
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 #+ Change Song
@@ -176,17 +180,17 @@ FUNCTION get_music(l_useCache BOOLEAN)
   DEFINE d INTEGER
 
   IF NOT os.path.exists(m_base) THEN
-    CALL gl_lib.gl_winMessage("Error", SFMT("MUSICDIR '%1' Not Found!", m_base), "exclamation")
+    CALL g2_lib.g2_winMessage("Error", SFMT("MUSICDIR '%1' Not Found!", m_base), "exclamation")
     RETURN
   END IF
 
-  CALL gl_lib_aui.gl_winInfo(1, "Getting Music Info, please wait ...", "information")
+  CALL g2_aui.g2_winInfo(1, "Getting Music Info, please wait ...", "information")
 
   LET l_cache = os.Path.join(m_base, "musiccache.json")
   IF os.path.exists(l_cache) AND l_useCache THEN
-    CALL gl_lib_aui.gl_winInfo(2, "Reading cache file", "")
+    CALL g2_aui.g2_winInfo(2, "Reading cache file", "")
     CALL loadCache(l_cache)
-    CALL gl_lib_aui.gl_winInfo(3, "", "")
+    CALL g2_aui.g2_winInfo(3, "", "")
     RETURN
   END IF
 
@@ -210,7 +214,7 @@ FUNCTION get_music(l_useCache BOOLEAN)
       IF l_path = "Music_Vids" THEN
         CONTINUE WHILE
       END IF
-      CALL gl_lib_aui.gl_winInfo(
+      CALL g2_aui.g2_winInfo(
           2, "Getting Music Info, please wait ...\nDirectory: " || l_path, "")
       IF os.path.isDirectory(os.path.join(m_base, l_path)) THEN
         LET m_songs[m_songno].genre = l_path
@@ -221,12 +225,12 @@ FUNCTION get_music(l_useCache BOOLEAN)
       END IF
     END WHILE
   END IF
-  CALL gl_lib_aui.gl_winInfo(2, "Build Tree, please wait ...", "")
+  CALL g2_aui.g2_winInfo(2, "Build Tree, please wait ...", "")
   CALL buildTree()
 
-  CALL gl_lib_aui.gl_winInfo(2, "Saving music tree cache, please wait ...", "")
+  CALL g2_aui.g2_winInfo(2, "Saving music tree cache, please wait ...", "")
   CALL saveCache(l_cache)
-  CALL gl_lib_aui.gl_winInfo(3, "", "")
+  CALL g2_aui.g2_winInfo(3, "", "")
 END FUNCTION
 --------------------------------------------------------------------------------
 #+ Get a album folders
@@ -253,7 +257,7 @@ FUNCTION get_albums(l_path STRING)
       IF l_path = "mpd" THEN
         CONTINUE WHILE
       END IF
-      CALL gl_lib_aui.gl_winInfo(
+      CALL g2_aui.g2_winInfo(
           2, "Getting Music Info, please wait ...\nDirectory: " || l_path, "")
       IF os.path.isDirectory(os.path.join(l_dir, l_path)) THEN
         LET m_songs[m_songno].artist = l_path

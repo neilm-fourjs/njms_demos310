@@ -1,20 +1,24 @@
 -- Simple Google Maps Demo
 IMPORT util
-IMPORT FGL gl_lib
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "WC GoogleMaps Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
-
+CONSTANT C_PRGICON = "logo_dark"
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
   DEFINE wc_gm, in_data STRING
   DEFINE l_latlng_rec RECORD
     lat FLOAT,
     lng FLOAT
   END RECORD
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), NULL, TRUE)
-  LET gl_lib.gl_noToolBar = TRUE
+
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+
   OPEN FORM f FROM "wc_gm"
   DISPLAY FORM f
 
@@ -36,9 +40,10 @@ MAIN
     ON ACTION mapclicked
       LET in_data = wc_gm
       CALL util.JSONObject.parse(in_data).toFGL(l_latlng_rec) -- turn json string into fgl rec
-    GL_ABOUT
+    ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
   END INPUT
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 -- Set a Property in the AUI

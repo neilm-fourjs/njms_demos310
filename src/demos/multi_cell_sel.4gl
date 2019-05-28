@@ -2,10 +2,11 @@
 IMPORT FGL g2_lib
 IMPORT FGL g2_about
 IMPORT FGL g2_appInfo
+
 CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "OnFocus Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
-CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGICON = "logo_dark"
 
 TYPE t_matrix4 RECORD
   s1 STRING,

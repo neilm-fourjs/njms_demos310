@@ -8,7 +8,7 @@ IMPORT FGL g2_appInfo
 CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "List View Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
-CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGICON = "logo_dark"
 
 CONSTANT C_IMGPATH = "got"
 

@@ -9,7 +9,7 @@ IMPORT FGL g2_calendar
 CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "WC Charts Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
-CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGICON = "logo_dark"
 
 DEFINE m_data DYNAMIC ARRAY OF RECORD
   labs STRING,

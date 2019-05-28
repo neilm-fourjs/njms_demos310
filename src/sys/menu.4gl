@@ -17,7 +17,7 @@ CONSTANT C_TITLE = "NJM's Demos"
 CONSTANT C_SPLASH = "logo_dark"
 CONSTANT C_PRGDESC = "NJM's Demos Menu System v3"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
-CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGICON = "logo_dark"
 CONSTANT C_PRGVER = "3.2"
 
 DEFINE m_appInfo g2_appInfo.appInfo

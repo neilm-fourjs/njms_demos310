@@ -9,7 +9,7 @@ IMPORT FGL g2_about
 CONSTANT C_PRGDESC = "FontAwesome Viewer"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
 CONSTANT C_PRGVER = "3.2"
-CONSTANT C_PRGICON = "njm_demo_icon"
+CONSTANT C_PRGICON = "logo_dark"
 
 TYPE t_rec RECORD
   img STRING,

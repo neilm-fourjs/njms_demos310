@@ -4,9 +4,9 @@ IMPORT FGL g2_appInfo
 IMPORT FGL g2_about
 
 CONSTANT C_PRGAUTH = "Neil J.Martin"
-CONSTANT C_PRGICON = "njm_demo_icon"
 CONSTANT C_PRGVER = "3.2"
 CONSTANT C_PRGDESC = "WC Aircraft Demo"
+CONSTANT C_PRGICON = "logo_dark"
 
 CONSTANT c_wc_images = "../pics/webcomponents/aircraft/"
 DEFINE l_breadcrumbs DYNAMIC ARRAY OF STRING

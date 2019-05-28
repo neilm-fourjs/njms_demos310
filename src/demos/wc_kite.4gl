@@ -6,11 +6,13 @@
 
 IMPORT xml
 IMPORT os
-IMPORT FGL gl_lib
-&include "genero_lib.inc"
-CONSTANT C_VER = "3.1"
+IMPORT FGL g2_lib
+IMPORT FGL g2_appInfo
+IMPORT FGL g2_about
+CONSTANT C_PRGVER = "3.1"
 CONSTANT C_PRGDESC = "WC Kite Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "logo_dark"
 CONSTANT WC_KITE_PATH = "../pics/webcomponents/kite"
 
 DEFINE m_kites DYNAMIC ARRAY OF STRING
@@ -24,12 +26,11 @@ DEFINE m_rec RECORD
   END RECORD
 END RECORD
 DEFINE info STRING
-
+DEFINE m_appInfo g2_appInfo.appInfo
 MAIN
   DEFINE wc_data, panel, colour STRING
-  CALL gl_lib.gl_setInfo(C_VER, NULL, NULL, C_PRGDESC, C_PRGDESC, C_PRGAUTH)
-  CALL gl_lib.gl_init(arg_val(1), "wc_kite", TRUE)
-  LET gl_lib.gl_noToolBar = TRUE
+  CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
+  CALL g2_lib.g2_init(ARG_VAL(1), "wc_kite")
 
   OPEN FORM f FROM "wc_kite"
   DISPLAY FORM f
@@ -72,13 +73,14 @@ MAIN
       CALL openKite()
       CALL setSVG(m_rec.kitename)
       LET wc_data = serializePanels()
-    GL_ABOUT
+    ON ACTION about
+			CALL g2_about.g2_about(m_appInfo)
     ON ACTION EXIT
       EXIT DIALOG
     ON ACTION CLOSE
       EXIT DIALOG
   END DIALOG
-  CALL gl_lib.gl_exitProgram(0, % "Program Finished")
+  CALL g2_lib.g2_exitProgram(0, % "Program Finished")
 END MAIN
 --------------------------------------------------------------------------------
 #+ serialize panels to a web component value
@@ -161,13 +163,13 @@ FUNCTION saveKite()
   TRY
     CALL dd.save(l_tmpFile)
   CATCH
-    CALL gl_lib.gl_errPopup(
+    CALL g2_lib.g2_errPopup(
         SFMT(% "File Save Failed!\nStatus: %1 %2 Name:%3", STATUS, err_get(STATUS), l_tmpFile))
   END TRY
   TRY
     CALL fgl_putfile(l_tmpFile, l_fileName)
   CATCH
-    CALL gl_lib.gl_errPopup(SFMT(% "File Transfer Failed!\nStatus:%1 %2", STATUS, err_get(STATUS)))
+    CALL g2_lib.g2_errPopup(SFMT(% "File Transfer Failed!\nStatus:%1 %2", STATUS, err_get(STATUS)))
   END TRY
   IF NOT os.Path.delete(l_tmpFile) THEN
     -- Failed to delete temp file !

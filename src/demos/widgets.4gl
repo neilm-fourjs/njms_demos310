@@ -22,8 +22,9 @@ IMPORT FGL widgets_clock
 CONSTANT C_PRGVER = "3.10"
 CONSTANT C_PRGDESC = "Widgets Demo"
 CONSTANT C_PRGAUTH = "Neil J.Martin"
+CONSTANT C_PRGICON = "logo_dark"
+
 CONSTANT C_PRGSPLASH = "widgetsdemo"
-CONSTANT C_PRGICON = "widgetsdemo_icon"
 
 CONSTANT arrmax = 55
 
@@ -102,7 +103,6 @@ MAIN
 
   CALL m_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
   CALL g2_lib.g2_init(ARG_VAL(1), "widgets")
-
 
   GL_DBGMSG(2, "init_genero, done.")
   WHENEVER ANY ERROR CALL g2_lib.g2_error

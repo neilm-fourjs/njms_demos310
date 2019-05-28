@@ -367,7 +367,7 @@
       </Application>
     </Group>
     <Group id="1028282104" label="Demos WC">
-      <Application binaryName="wc_aircraft" dependencies="-400184264,-310428106" id="252530810" label="wc_aircraft">
+      <Application binaryName="wc_aircraft" dependencies="-310428106" id="252530810" label="wc_aircraft">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/aircraft/aircraft.css"/>
           <File filePath="pics/webcomponents/aircraft/aircraft.html"/>
@@ -409,7 +409,7 @@
         <File filePath="src/demos/wc_d3charts_demo.4gl"/>
         <File filePath="src/demos/wc_d3charts_demo.per"/>
       </Application>
-      <Application binaryName="wc_googleMaps" dependencies="14000" id="-2121135278" label="wc_googleMaps">
+      <Application binaryName="wc_googleMaps" dependencies="-310428106" id="-2121135278" label="wc_googleMaps">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/gm/gm.html"/>
           <File filePath="pics/webcomponents/gm/gm.js"/>
@@ -417,7 +417,7 @@
         <File filePath="src/demos/wc_gm.4gl"/>
         <File filePath="src/demos/wc_gm.per"/>
       </Application>
-      <Application binaryName="wc_kite" commandLineArguments="S 1" dependencies="14000" id="-2014604027" label="wc_kite">
+      <Application binaryName="wc_kite" commandLineArguments="S 1" dependencies="-310428106" id="-2014604027" label="wc_kite">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/kite/kite.html"/>
           <File filePath="pics/webcomponents/kite/kite.js"/>
@@ -427,7 +427,7 @@
         <File filePath="etc/wc_kite.4st"/>
         <File filePath="src/demos/wc_kite.per"/>
       </Application>
-      <Application binaryName="wc_music" dependencies="-1090563702,14000" id="1103957492" label="wc_music">
+      <Application binaryName="wc_music" dependencies="-310428106" id="1103957492" label="wc_music">
         <VirtualFolder label="wc">
           <File filePath="pics/webcomponents/music/main.js"/>
           <File filePath="pics/webcomponents/music/music.css"/>
@@ -437,7 +437,7 @@
         <File filePath="src/demos/wc_music.4gl"/>
         <File filePath="src/demos/wc_music.per"/>
       </Application>
-      <Application binaryName="wc_richtext" dependencies="14000" id="-132093204" label="wc_richtext">
+      <Application binaryName="wc_richtext" dependencies="-310428106" id="-132093204" label="wc_richtext">
         <File filePath="src/demos/wc_richtext.4gl"/>
         <File filePath="src/demos/wc_richtext.per"/>
       </Application>
