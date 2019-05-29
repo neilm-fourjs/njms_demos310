@@ -12,8 +12,8 @@
 		<StyleAttribute name="tabbedContainer" value="yes" />
 		<StyleAttribute name="tabbedContainerCloseMethod" value="both" />
 		<StyleAttribute name="windowMenu" value="yes" />
-		<StyleAttribute name="actionPanelPosition" value="top" />
-		<StyleAttribute name="ringMenuPosition" value="top" />
+		<StyleAttribute name="actionPanelPosition" value="none" />
+		<StyleAttribute name="ringMenuPosition" value="none" />
 	</Style>
 	<Style name="Window.dialog">
 		<StyleAttribute name="windowType" value="modal" />

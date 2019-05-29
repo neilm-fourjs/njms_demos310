@@ -42,7 +42,7 @@ MAIN
   DEFINE l_appInfo g2_appInfo.appInfo
 
   CALL l_appInfo.progInfo(C_PRGDESC, C_PRGAUTH, C_PRGVER, C_PRGICON)
-  CALL g2_lib.g2_init(ARG_VAL(1), "default")
+  CALL g2_lib.g2_init(ARG_VAL(1), "matDesTest")
 
   FOR X = 1 TO 15
     LET l_arr[x].col1 = "Row " || x

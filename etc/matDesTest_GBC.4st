@@ -30,7 +30,7 @@
 	<Style name="Window.main2">
 		<StyleAttribute name="windowType" value="normal" />
 		<StyleAttribute name="actionPanelPosition" value="none" />
-		<StyleAttribute name="ringMenuPosition" value="none" />
+		<StyleAttribute name="ringMenuPosition" value="right" />
 	</Style>
 	<Style name="Window.centered">
 		<StyleAttribute name="windowType" value="normal" />
