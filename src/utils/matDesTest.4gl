@@ -82,6 +82,8 @@ MAIN
         DISPLAY SFMT("On row %1 of %2", DIALOG.getCurrentRow("arr3"), l_listView.getLength())
             TO tab3info
     END DISPLAY
+    ON ACTION bomb
+      ERROR "Bang!"
     ON ACTION msg
       MESSAGE "Hello Message"
     ON ACTION err

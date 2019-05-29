@@ -180,6 +180,7 @@ FUNCTION get_music(l_useCache BOOLEAN)
   DEFINE d INTEGER
 
   IF NOT os.path.exists(m_base) THEN
+		ERROR SFMT("MUSICDIR '%1' Not Found!", m_base)
     CALL g2_lib.g2_winMessage("Error", SFMT("MUSICDIR '%1' Not Found!", m_base), "exclamation")
     RETURN
   END IF
