@@ -1,8 +1,0 @@
-{
-  "theme-field-disabled-background-color": "rgba(0,0,0,0.04)",
-  "theme-primary-background-color": "$palette-primary-500",
-  "theme-primary-emphasis-background-color": "$gbc-genero-blue",
-  "theme-primary-faded-background-color": "$gbc-genero-lightBlue",
-  "theme-message-display-time": 8,
-  "theme-error-display-time": 8
-}

@@ -1,1 +1,0 @@
-Put in this folder any static resource

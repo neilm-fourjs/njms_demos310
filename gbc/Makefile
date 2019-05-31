@@ -1,21 +1,13 @@
 
-GBCBASE=$(PWD)
+BASE=$(PWD)
+dirs=gbc_clean gbc_njm gbc_teal gbc_gc gbc_mdi
 
-include makefile.inc
-
-BASE=$(shell pwd)
-dirs=gbc-clean gbc-njm gbc-teal gbc-gc
-
-all: build/gbc-current subdirs
-
-# Setup the GBC build env
-build/gbc-current: 
-	./gbc-setup.sh
+all: subdirs
 
 subdirs: $(dirs)
 	@for dir in $^ ; do  \
-		cd $(BASE)/$$dir && make all; \
+		cd $(BASE)/$$dir && make; \
 	done
 
 clean:
-	rm $(DISTBIN)/gbc*.zip
+	find . -name \*.zip -delete
