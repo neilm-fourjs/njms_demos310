@@ -77,7 +77,7 @@ FUNCTION gl_about(l_ver STRING) --{{{
 	CALL g.setAttribute("style","about")
 
 	IF gl_app_build IS NOT NULL THEN
-		CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("Application"),"right","black")
+		CALL gl_lib_aui.gl_addLabel(g, 0,y,LSTR("lib.about.application"),"right","black")
 		CALL gl_lib_aui.gl_addLabel(g,10,y,gl_app_name||" - "||gl_app_build,NULL,NULL) LET y = y + 1
 	END IF
 

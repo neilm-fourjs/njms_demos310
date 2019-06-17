@@ -1,0 +1,6 @@
+
+fglrun.localization.warnKeyNotFound = false
+
+fglrun.localization.file.count = 2
+fglrun.localization.file.1.name = "en_genero_lib"
+fglrun.localization.file.2.name = "en_std_rpts"

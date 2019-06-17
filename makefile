@@ -17,3 +17,7 @@ all:
 
 run: 
 	cd $(BIN); fglrun menu.42r
+
+clean:
+	find . -name \*.42? -delete
+	find . -name \*.gar -delete
